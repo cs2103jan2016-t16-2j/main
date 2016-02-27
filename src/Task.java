@@ -1,9 +1,10 @@
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class Task {
-	private boolean isFloating, isImportant;
+	private boolean isFloating, isImportant, isFinished;
 	private Date startDate, endDate;
 	private String content, venue, detail;
 	
@@ -13,8 +14,13 @@ public class Task {
 	private final String DEFAULT_DETAIL = "NA";
 	private final boolean DEFAULT_IS_FLOATING = true;
 	private final boolean DEFAULT_IS_IMPORTANT = false;
+	private final boolean DEFAULT_IS_FINISHED = false;
 	private final Date DEFAULT_END_DATE = null;
-	
+	private final String KEY_CONTENT = "content";
+	private final String KEY_TYPE = "type";
+	private final String KEY_START_DATE = "startDate";
+	private final String KEY_END_DATE = "endDate";
+
 	private final String TO_STRING = "Task [ content: %s | venue: %s | detail: %s | isFloating: %b | "
 										+ "isImportant: %b | startDate: %s | endDate: %s ]";
 	
@@ -30,9 +36,27 @@ public class Task {
 		detail = DEFAULT_DETAIL;
 		isFloating = DEFAULT_IS_FLOATING;
 		isImportant = DEFAULT_IS_IMPORTANT;
+		isFinished = DEFAULT_IS_FINISHED;
 		startDate = getCurrentDate();
 		endDate = DEFAULT_END_DATE;
 	}
+	
+	public Task(HashMap<String,String> cmdTable) throws Exception{
+		content = cmdTable.get(KEY_CONTENT);
+		venue = cmdTable.get(KEY_CONTENT);
+		detail = cmdTable.get(KEY_CONTENT);
+		isFloating = true;
+		isImportant = false;
+		isFinished = false;
+		try{
+			startDate = sdf.parse(cmdTable.get(KEY_START_DATE));
+			endDate = sdf.parse(cmdTable.get(KEY_END_DATE));
+		} finally {
+			startDate = getCurrentDate();
+			endDate = DEFAULT_END_DATE;
+		}
+	}
+	
 	public boolean getIsFloating(){
 		return isFloating;
 	}
@@ -47,6 +71,14 @@ public class Task {
 	
 	public void setIsImportant(boolean input){
 		isImportant = input;
+	}
+
+	public boolean getIsFinished(){
+		return isFinished;
+	}
+	
+	public void setIsFinished(boolean input){
+		isFinished = input;
 	}
 	
 	public Date getStartDate(){

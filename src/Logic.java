@@ -75,7 +75,7 @@ class Logic{
 	public Logic(){
 		storage = new Storage();
 		parser = new Parser(); // processInput
-		taskList = storage.getTaskList();
+		taskList = storage.loadCurrentTasks();
 	}
 	
 	public TreeSet<Task> getList(){

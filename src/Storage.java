@@ -5,6 +5,14 @@ public class Storage {
 	public Storage(){
 	}
 	
+	enum CommandType {
+		ADD, UPDATE, DELETE, CLEAR, TICK;
+	};
+	
+	public boolean accessStorage(String cmdString, Task task) {
+		
+		return false;
+	}
 	public boolean save(Task obj){
 		// code for saving
 		return false; // saving unsuccessful
@@ -24,7 +32,7 @@ public class Storage {
 	
 
 	public boolean delete(Task obj){
-		// code for delete obj
+		// code for delete tasks
 		return false;
 	}
 	
@@ -33,7 +41,7 @@ public class Storage {
 		return false;
 	}
 	
-	public boolean update(Task obj){
+	public boolean accessStorage(Task obj){
 		// code for moving tasks from current to complete
 		return false;
 	}

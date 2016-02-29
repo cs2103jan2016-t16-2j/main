@@ -22,17 +22,14 @@ public class Storage {
 		return tasks;
 	}
 	
-	public TreeSet<Task> loadArchiveTask(){
-		// read the files, store in data structure
-		TreeSet<Task> tasks = new TreeSet<Task>();
-		return tasks;
-	}
 
 	public boolean delete(Task obj){
 		// code for delete obj
 		return false;
 	}
 	
-	public 
+	public boolean archive(Task obj){
+		
+	}
 
 }

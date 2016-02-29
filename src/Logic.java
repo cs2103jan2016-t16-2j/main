@@ -48,12 +48,7 @@ class Logic{
 	private final String SUCCESSFUL_MESSAGE = "success";
 	private final String FAILURE_INDEX_OUT_OF_BOUND = "Invalid Input: Index out of bound";
 
-	
-	enum CommandType {
-		ADD, UPDATE, DELETE, CLEAR, TICK, ERROR;
-	};
-	
-	
+
 	private boolean stringToBoolean(String str){
 		if(str.equals(VALUE_TRUE)){
 			return true;

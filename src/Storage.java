@@ -5,10 +5,6 @@ public class Storage {
 	public Storage(){
 	}
 	
-	enum CommandType {
-		ADD, UPDATE, DELETE, CLEAR, TICK, ERROR;
-	};
-	
 	public boolean accessStorage(CommandType commandType, Task task) {
 		if (commandType == CommandType.ERROR) {
 			return false;

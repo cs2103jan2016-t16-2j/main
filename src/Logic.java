@@ -48,6 +48,12 @@ class Logic{
 	private final String SUCCESSFUL_MESSAGE = "success";
 	private final String FAILURE_INDEX_OUT_OF_BOUND = "Invalid Input: Index out of bound";
 
+	
+	enum CommandType {
+		ADD, UPDATE, DELETE, CLEAR, TICK, ERROR;
+	};
+	
+	
 	private boolean stringToBoolean(String str){
 		if(str.equals(VALUE_TRUE)){
 			return true;
@@ -120,12 +126,35 @@ class Logic{
 		return result;
 	}
 
+	private CommandType determineCommandType(String commandTypeString) {
+		if (commandTypeString == null) {
+			throw new Error("command type string cannot be null!");
+		}
+		
+		if (commandTypeString.equalsIgnoreCase("add")) {
+			return CommandType.ADD;
+		} else if (commandTypeString.equalsIgnoreCase("delete")) {
+			return CommandType.DELETE;
+		} else if (commandTypeString.equalsIgnoreCase("update")) {
+			return CommandType.UPDATE;
+		} else if (commandTypeString.equalsIgnoreCase("clear")) {
+			return CommandType.CLEAR;
+		} else if (commandTypeString.equalsIgnoreCase("tick")) {
+			return CommandType.TICK;
+		}
+		return CommandType.ERROR;
+	}
+	
+	
+	
+	
 	private String cmdAdd(HashMap<String,String> cmdTable){
 		try {
 			Task newTask;
 			newTask = new Task(cmdTable);
 			taskList.add(newTask);
-			storage.accessStorage(VALUE_COMMAND_ADD, newTask);
+			CommandType commandType = determineCommandType(VALUE_COMMAND_ADD);
+			storage.accessStorage(commandType, newTask);
 			return SUCCESSFUL_MESSAGE;
 		} catch (Exception e){
 			return EXCEPTION_FAIL_TO_INSTANTIATE_TASK;
@@ -144,7 +173,8 @@ class Logic{
 			}
 			Task toBeDeleted = itr.next();
 			taskList.remove(toBeDeleted);
-			storage.accessStorage(VALUE_COMMAND_DELETE, toBeDeleted);
+			CommandType commandType = determineCommandType(VALUE_COMMAND_DELETE);
+			storage.accessStorage(commandType, toBeDeleted);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
@@ -162,7 +192,8 @@ class Logic{
 			}
 			Task toBeDeleted = itr.next();
 			toBeDeleted.setIsFinished(true);
-			storage.accessStorage(VALUE_COMMAND_TICK, toBeDeleted);
+			CommandType commandType = determineCommandType(VALUE_COMMAND_TICK);
+			storage.accessStorage(commandType, toBeDeleted);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
@@ -181,13 +212,15 @@ class Logic{
 			}
 			Task toBeEdited = itr.next();
 			toBeEdited.setContent(messageSplit[1]);
-			storage.accessStorage(VALUE_COMMAND_UPDATE, toBeEdited);
+			CommandType commandType = determineCommandType(VALUE_COMMAND_UPDATE);
+			storage.accessStorage(commandType, toBeEdited);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
 	private String cmdClear(){
 		taskList.clear();
-		storage.accessStorage(VALUE_COMMAND_CLEAR, null);
+		CommandType commandType = determineCommandType(VALUE_COMMAND_CLEAR);
+		storage.accessStorage(commandType, null);
 		return SUCCESSFUL_MESSAGE;
 	}
 	

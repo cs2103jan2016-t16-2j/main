@@ -9,13 +9,7 @@ public class Storage {
 		ADD, UPDATE, DELETE, CLEAR, TICK, ERROR;
 	};
 	
-	public boolean accessStorage(String cmdString, Task task) {
-		if (cmdString.equals("")) {
-			return false;
-		}
-		
-		CommandType commandType = determineCommandType(cmdString);
-		
+	public boolean accessStorage(CommandType commandType, Task task) {
 		if (commandType == CommandType.ERROR) {
 			return false;
 		}
@@ -82,24 +76,5 @@ public class Storage {
 	public boolean update(Task obj){
 		// code for moving tasks from current to complete
 		return false;
-	}
-	
-	private CommandType determineCommandType(String commandTypeString) {
-		if (commandTypeString == null) {
-			throw new Error("command type string cannot be null!");
-		}
-		
-		if (commandTypeString.equalsIgnoreCase("add")) {
-			return CommandType.ADD;
-		} else if (commandTypeString.equalsIgnoreCase("delete")) {
-			return CommandType.DELETE;
-		} else if (commandTypeString.equalsIgnoreCase("update")) {
-			return CommandType.UPDATE;
-		} else if (commandTypeString.equalsIgnoreCase("clear")) {
-			return CommandType.CLEAR;
-		} else if (commandTypeString.equalsIgnoreCase("tick")) {
-			return CommandType.TICK;
-		}
-		return CommandType.ERROR;
 	}
 }

@@ -33,6 +33,20 @@ public class Storage {
 		return false;
 	}
 	
+	public boolean update(Task obj){
+		// code for moving tasks from current to complete
+		return false;
+	}
+	
+	public boolean clearCurrentTask(){
+		// code for moving tasks from current to complete
+		return false;
+	}
+	
+	public boolean clearCompleteTask(){
+		// code for moving tasks from current to complete
+		return false;
+	}
 	
 
 }

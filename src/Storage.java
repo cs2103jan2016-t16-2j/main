@@ -28,8 +28,11 @@ public class Storage {
 		return false;
 	}
 	
-	public boolean archive(Task obj){
-		
+	public boolean tick(Task obj){
+		// code for moving tasks from current to complete
+		return false;
 	}
+	
+	
 
 }

@@ -9,9 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TreeSet;
+
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,35 +27,40 @@ import javafx.scene.text.Text;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GUI extends Application{
 	
 	Button button;
 	Stage window;
 	Scene scene;
-	
-	final String TITLE = "%1$s's Wallist";
-	final String TITLE_TODAY = "TODAY'S TASKS";
-	final String TITLE_IMPORTANT = "IMPORTANT TASKS";
-	
-	final int STAGE_HEIGHT = 600;
-	final int STAGE_WIDTH = 900;
-	final int COMPONENT_GAP = 30;
-	final int FLOATYBOX_HEIGHT = 250;
-	final int FLOATYBOX_WIDTH = 240;
-	final int TASKBOX_HEIGHT = 560;
-	final int TASKBOX_WIDTH = 460;
-	
-	final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
-	final Insets CONTENT_PADDING = new Insets(10, 10, 10, 10);
 	GridPane layout = new GridPane();
 	Logic logic = new Logic();
 	String command;
+	TreeSet<Task> taskList;
 	
+	private final String TITLE = "%1$s's Wallist";
+	private final String TITLE_FLOATY = "FLOATY TASKS";
+	private final String TITLE_ALL = "ALL TASKS";
+	private final String MESSAGE_SUCCESS = "success";
+	
+	private final int STAGE_HEIGHT = 600;
+	private final int STAGE_WIDTH = 900;
+	private final int COMPONENT_GAP_H = 30;
+	private final int COMPONENT_GAP_V = 30;
+	private final int FLOATYBOX_HEIGHT = 250;
+	private final int FLOATYBOX_WIDTH = 240;
+	private final int TASKBOX_HEIGHT = 560;
+	private final int TASKBOX_WIDTH = 460;
+	
+	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
+	private final Insets CONTENT_PADDING = new Insets(10, 10, 10, 10);
+	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
 	public static void main(String[] args){
 		launch(args);
@@ -75,16 +85,41 @@ public class GUI extends Application{
 		        if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	command = inputBox.getText();
 		        	String status = logic.process(command);
-		    		Text task = new Text(status);
-		    		task.setFill(Color.valueOf("#ffffcb"));
-		    		tasks.getChildren().add(task);
+		        	Label displayText = new Label(status);
+		        	GridPane.setConstraints(displayText, 0, 2, 2, 1, HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
+		        	layout.getChildren().add(displayText);
+		            FadeTransition fade = fadeAnimation(displayText);
+		            fade.play();
+		            if (status.equals(MESSAGE_SUCCESS)){
+		            	tasks.getChildren().clear();
+		            	taskList = logic.getList();
+		            	while (!taskList.isEmpty()){
+		            	    Task task = taskList.pollFirst();
+		            		String taskStr = task.toString();
+		            		Text line = new Text(taskStr);
+		            		line.setFill(Color.valueOf("#ffffcb"));
+		            		if (task.getIsFloating()){
+		            		    tasks.getChildren().add(line);	
+		            		} else{
+		            			floaties.getChildren().add(line);
+		            		}
+		            	}
+		        	}
 		    		inputBox.clear();
 		        }
-		    }
+			}
 		});
-
 	}
-
+	
+	private FadeTransition fadeAnimation(Label comm) {
+		FadeTransition ft = new FadeTransition(Duration.millis(2000), comm);
+		ft.setFromValue(0);
+		ft.setToValue(1);
+		ft.setCycleCount(2);
+		ft.setAutoReverse(true);
+		return ft;
+	}
+	
 	private TextField inputComponent() {
 		TextField inputBox = new TextField();
 		inputBox.setPromptText("How Can I Help You ?");
@@ -138,8 +173,8 @@ public class GUI extends Application{
 		window = primaryStage;
 		window.setTitle(String.format(TITLE, System.getProperty("user.name")));
 		layout.setPadding(COMPONENT_PADDING);
-		layout.setVgap(COMPONENT_GAP);
-		layout.setHgap(COMPONENT_GAP);
+		layout.setVgap(COMPONENT_GAP_V);
+		layout.setHgap(COMPONENT_GAP_H);
 		timeComponent();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		scene.getStylesheets().add("Stylesheet.css");

@@ -30,6 +30,12 @@
     -fx-font-size: 16pt;
     -fx-text-fill: #fffacd;
 }
+
+.label{
+    -fx-font-size: 16pt;
+    -fx-text-fill: #fffacd;
+}
+
 .scroll-pane{
     -fx-background-color: transparent;
 }

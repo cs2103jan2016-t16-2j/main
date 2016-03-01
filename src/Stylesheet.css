@@ -1,0 +1,54 @@
+.root {
+    -fx-background-color: #0ebd94;
+    -fx-font-size: 16pt;    
+    -fx-font-family: "Segoe UI Light";
+}
+
+#bold-label{
+
+    -fx-font-weight: bold;
+}
+
+#timeDisplay{
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 64pt;
+    -fx-text-fill: #ffffcb;
+}
+
+#dateDisplay{
+    -fx-font-size: 18pt;
+    -fx-text-fill: #ffffcb;
+}
+
+.text-field{
+    -fx-font-size: 16pt;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: #ffffff;
+}
+
+#content{
+    -fx-font-size: 16pt;
+    -fx-text-fill: #fffacd;
+}
+.scroll-pane{
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-bar{
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 2em;
+}
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding:0 20 0 0;
+}
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-shape: " ";
+    -fx-padding:2;
+}

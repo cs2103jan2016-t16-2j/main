@@ -48,13 +48,14 @@ public class Task {
 		isFloating = true;
 		isImportant = false;
 		isFinished = false;
-		try{
+		if (cmdTable.get(KEY_START_DATE) != "") {
 			startDate = sdf.parse(cmdTable.get(KEY_START_DATE));
-			endDate = sdf.parse(cmdTable.get(KEY_END_DATE));
-		} finally {
-			startDate = getCurrentDate();
-			endDate = DEFAULT_END_DATE;
 		}
+		if (cmdTable.get(KEY_END_DATE) != "") {
+			endDate = sdf.parse(cmdTable.get(KEY_END_DATE));
+		}
+		startDate = getCurrentDate();
+		endDate = DEFAULT_END_DATE;
 	}
 	
 	public boolean getIsFloating(){

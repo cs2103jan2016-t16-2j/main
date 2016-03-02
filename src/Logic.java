@@ -85,7 +85,10 @@ class Logic{
 	
 	public String process(String cmd){
 		HashMap<String,String> cmdTable = parser.processInput(cmd);
+		// print the hashtable
 		System.out.println(cmdTable.toString());
+		
+		
 		boolean isValid = stringToBoolean(cmdTable.get(KEY_IS_VALID));
 
 		String result;
@@ -142,7 +145,7 @@ class Logic{
 	}
 	
 	
-	private String cmdAdd(HashMap<String,String> cmdTable){
+	private String cmdAdd(HashMap<String,String> cmdTable) {
 		try {
 			Task newTask;
 			newTask = new Task(cmdTable);
@@ -151,7 +154,7 @@ class Logic{
 			storage.accessStorage(commandType, newTask);
 			return SUCCESSFUL_MESSAGE;
 		} catch (Exception e){
-			return EXCEPTION_FAIL_TO_INSTANTIATE_TASK;
+			return e.toString();
 		}
 	}
 	

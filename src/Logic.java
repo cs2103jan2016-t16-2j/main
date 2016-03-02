@@ -85,6 +85,7 @@ class Logic{
 	
 	public String process(String cmd){
 		HashMap<String,String> cmdTable = parser.processInput(cmd);
+		System.out.println(cmdTable.toString());
 		boolean isValid = stringToBoolean(cmdTable.get(KEY_IS_VALID));
 
 		String result;

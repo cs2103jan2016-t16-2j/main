@@ -114,47 +114,32 @@ class Parser {
 	 */
 	private boolean isCommandInvalid() {
 		String inputList[] = input_.split(" ");
-		try{
-			switch(CommandType.valueOf(inputList[0])){
-			
-				case ADD:
-					command_ = VALUE_COMMAND_ADD;
-					content_ = readContent(inputList);
-					return false;
-					
-				case CLEAR:
-					command_ = VALUE_COMMAND_CLEAR;
-					content_ = readContent(inputList);
-					return false;
-				
-				case DELETE:
-					command_ = VALUE_COMMAND_DELETE;
-					content_ = readContent(inputList);
-					return false;
-				
-//				case EXIT:
-//					command_ = VALUE_COMMAND_EXIT;
-//					content_ = readContent(inputList);
-//					return false;
-					
-				case TICK:
-					command_ = VALUE_COMMAND_TICK;
-					content_ = readContent(inputList);
-					return false;
-					
-				case UPDATE:
-					command_ = VALUE_COMMAND_UPDATE;
-					content_ = readContent(inputList);
-					return false;
-				
-				default: 
-					return true;
-			}
-		}
-		catch(IllegalArgumentException e){
-			return true;
-		}
+		CommandType commandType = determineCommandType(inputList[0]);
 		
+		switch(commandType) {
+			case ADD:
+				command_ = VALUE_COMMAND_ADD;
+				content_ = readContent(inputList);
+				return false;	
+			case CLEAR:
+				command_ = VALUE_COMMAND_CLEAR;
+				content_ = readContent(inputList);
+				return false;
+			case DELETE:
+				command_ = VALUE_COMMAND_DELETE;
+				content_ = readContent(inputList);
+				return false;
+			case TICK:
+				command_ = VALUE_COMMAND_TICK;
+				content_ = readContent(inputList);
+				return false;	
+			case UPDATE:
+				command_ = VALUE_COMMAND_UPDATE;
+				content_ = readContent(inputList);
+				return false;
+			default: 
+				return true;
+		}
 	}
 	
 	/*
@@ -237,5 +222,28 @@ class Parser {
 		map.put(KEY_TYPE, type_);
 		map.put(KEY_START_DATE, startDate_);
 		map.put(KEY_END_DATE, endDate_);
+	}
+	
+	
+	
+	
+	
+	private CommandType determineCommandType(String commandTypeString) {
+		if (commandTypeString == null) {
+			throw new Error("command type string cannot be null!");
+		}
+		
+		if (commandTypeString.equalsIgnoreCase("add")) {
+			return CommandType.ADD;
+		} else if (commandTypeString.equalsIgnoreCase("delete")) {
+			return CommandType.DELETE;
+		} else if (commandTypeString.equalsIgnoreCase("update")) {
+			return CommandType.UPDATE;
+		} else if (commandTypeString.equalsIgnoreCase("clear")) {
+			return CommandType.CLEAR;
+		} else if (commandTypeString.equalsIgnoreCase("tick")) {
+			return CommandType.TICK;
+		}
+		return CommandType.ERROR;
 	}
 }

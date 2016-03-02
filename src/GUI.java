@@ -63,7 +63,7 @@ public class GUI extends Application{
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
 	public static void main(String[] args){
-		launch(args);
+		launch();
 	}
 	
 	@Override

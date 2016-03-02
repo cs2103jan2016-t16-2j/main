@@ -46,9 +46,6 @@ class Parser {
 	private String endDate_;
 	private String input_;
 	
-	enum USER_COMMANDS{
-		ADD, DELETE, CLEAR, TICK, UPDATE, EXIT
-	}
 	
 	private HashMap<String, String> map;
 	
@@ -118,7 +115,7 @@ class Parser {
 	private boolean isCommandInvalid() {
 		String inputList[] = input_.split(" ");
 		try{
-			switch(USER_COMMANDS.valueOf(inputList[0])){
+			switch(CommandType.valueOf(inputList[0])){
 			
 				case ADD:
 					command_ = VALUE_COMMAND_ADD;
@@ -135,10 +132,10 @@ class Parser {
 					content_ = readContent(inputList);
 					return false;
 				
-				case EXIT:
-					command_ = VALUE_COMMAND_EXIT;
-					content_ = readContent(inputList);
-					return false;
+//				case EXIT:
+//					command_ = VALUE_COMMAND_EXIT;
+//					content_ = readContent(inputList);
+//					return false;
 					
 				case TICK:
 					command_ = VALUE_COMMAND_TICK;
@@ -166,7 +163,7 @@ class Parser {
 	private boolean isArgumentInvalid() {
 		if(errorCode_.equals(VALUE_ERROR_NO_ERROR)){
 			try{
-				switch(USER_COMMANDS.valueOf(command_)){
+				switch(CommandType.valueOf(command_)){
 				
 					case ADD:
 						if(content_.length() == 0){
@@ -183,10 +180,10 @@ class Parser {
 							return true;
 						}
 				
-					case EXIT:
-						if(content_.length() != 0){
-							return true;
-						}
+//					case EXIT:
+//						if(content_.length() != 0){
+//							return true;
+//						}
 					
 					case TICK:
 						if(content_.length() == 0 || !content_.matches("\\d+")){

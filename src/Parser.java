@@ -93,6 +93,9 @@ class Parser {
 		}else if(isArgumentInvalid()){
 			errorCode_ = VALUE_ERROR_INVALID_ARGUMENT;
 			isValid_ = VALUE_FALSE;
+		}else{
+			errorCode_ = VALUE_ERROR_NO_ERROR;
+			isValid_ = VALUE_TRUE;
 		}
 	}
 	
@@ -205,7 +208,7 @@ class Parser {
 			sb.append(inputList[i]);
 			sb.append(" ");
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 	
 

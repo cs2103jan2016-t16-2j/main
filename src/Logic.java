@@ -141,8 +141,6 @@ class Logic{
 	}
 	
 	
-	
-	
 	private String cmdAdd(HashMap<String,String> cmdTable){
 		try {
 			Task newTask;
@@ -155,6 +153,7 @@ class Logic{
 			return EXCEPTION_FAIL_TO_INSTANTIATE_TASK;
 		}
 	}
+	
 	private String cmdDelete(HashMap<String,String> cmdTable){
 		int position = Integer.parseInt(cmdTable.get(KEY_CONTENT));
 

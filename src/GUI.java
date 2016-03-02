@@ -6,7 +6,6 @@
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeSet;
@@ -16,9 +15,9 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -36,17 +35,17 @@ import javafx.util.Duration;
 
 public class GUI extends Application{
 	
-	Button button;
-	Stage window;
-	Scene scene;
-	GridPane layout = new GridPane();
-	Logic logic = new Logic();
-	String command;
-	TreeSet<Task> taskList;
+	private Stage window;
+	private Scene scene;
+	private GridPane layout = new GridPane();
+	private Logic logic = new Logic();
+	private String command;
+	private TreeSet<Task> taskList;
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM H:mm");
+	
+	private int taskIndex, floatyIndex;
 	
 	private final String TITLE = "%1$s's Wallist";
-	private final String TITLE_FLOATY = "FLOATY TASKS";
-	private final String TITLE_ALL = "ALL TASKS";
 	private final String MESSAGE_SUCCESS = "success";
 	
 	private final int STAGE_HEIGHT = 600;
@@ -57,9 +56,13 @@ public class GUI extends Application{
 	private final int FLOATYBOX_WIDTH = 240;
 	private final int TASKBOX_HEIGHT = 560;
 	private final int TASKBOX_WIDTH = 460;
+	private final int TASK_CONTENT_WIDTH = 300;
+	private final int TASK_CONTENT_WIDTH_FLOATY = 200;
+	private final int TASK_INDEX_WIDTH = 30;
+	private final int TASK_DEADLINE_WIDTH = 120;
+	
 	
 	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
-	private final Insets CONTENT_PADDING = new Insets(10, 10, 10, 10);
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
 	public static void main(String[] args){
@@ -75,41 +78,119 @@ public class GUI extends Application{
 		
 		VBox tasks = new VBox();
 		taskPane.setContent(tasks);
-
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
+		
+    	refresh(tasks, floaties);
+		
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
 		    public void handle(KeyEvent keyEvent) {
 		        if (keyEvent.getCode() == KeyCode.ENTER)  {
-		        	command = inputBox.getText();
-		        	String status = logic.process(command);
-		        	Label displayText = new Label(status);
-		        	GridPane.setConstraints(displayText, 0, 2, 2, 1, HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
-		        	layout.getChildren().add(displayText);
-		            FadeTransition fade = fadeAnimation(displayText);
-		            fade.play();
-		            if (status.equals(MESSAGE_SUCCESS)){
-		            	tasks.getChildren().clear();
-		            	taskList = logic.getList();
-		            	for (Task task: taskList){
-		            		Text line = new Text(task.toString());
-		            		line.setFill(Color.valueOf("#ffffcb"));
-		            		if (task.getIsFloating()){
-		            		    tasks.getChildren().add(line);	
-		            		} else{
-		            			floaties.getChildren().add(line);
-		            		}
-		            	}
-		        	}
-		    		inputBox.clear();
+		        	displayStatus(inputBox, tasks, floaties);
 		        }
 			}
 		});
 	}
 	
+	private void displayStatus(TextField inputBox, VBox tasks, VBox floaties) {
+		command = inputBox.getText();
+		String status = logic.process(command);
+		Label displayText = new Label(status);
+		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
+				HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
+		layout.getChildren().add(displayText);
+		FadeTransition fade = fadeAnimation(displayText);
+		fade.play();
+		if (status.equals(MESSAGE_SUCCESS)){
+			refresh(tasks, floaties);
+		}
+		inputBox.clear();
+	}
+	
+	private void refresh(VBox tasks, VBox floaties) {
+		tasks.getChildren().clear();
+		taskList = logic.getList();
+		taskIndex = 0;
+		floatyIndex = 0;
+		for (Task task: taskList){
+			if (task.getIsFloating()){
+				displayTaskLine(tasks, task);
+			} else{
+				displayFloatyLine(floaties, task);
+			}
+		}
+	}
+	
+	private void displayFloatyLine(VBox floaties, Task task) {
+		floatyIndex ++;
+		String taskContent = task.getContent();
+		GridPane taskLine = new GridPane();
+		taskLine.setHgap(10);
+		StackPane indexPane = indexCol(floatyIndex);
+		StackPane contentPane = contentCol(taskContent, TASK_CONTENT_WIDTH_FLOATY);
+		taskLine.getChildren().addAll(indexPane, contentPane);
+		floaties.getChildren().add(taskLine);
+		floaties.getChildren().add(taskLine);
+	}
+
+	private void displayTaskLine(VBox tasks, Task task) {
+		taskIndex ++;
+		String taskContent = task.getContent();
+		String taskDeadline = sdf.format(task.getStartDate());
+		GridPane taskLine = new GridPane();
+		if (taskIndex % 2 == 0){
+			taskLine.setId("gridPane");
+		}
+		taskLine.setHgap(10);
+		StackPane indexPane = indexCol(taskIndex);
+		StackPane contentPane = contentCol(taskContent, TASK_CONTENT_WIDTH);
+		StackPane deadlinePane = deadlineCol(taskDeadline);
+		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
+		tasks.getChildren().add(taskLine);
+	}
+	
+	private StackPane deadlineCol(String taskDeadline) {
+		StackPane deadlinePane = new StackPane();
+		deadlinePane.setAlignment(Pos.TOP_LEFT);
+		Rectangle deadlineRec = new Rectangle();
+		deadlineRec.setWidth(TASK_DEADLINE_WIDTH);
+		deadlineRec.setOpacity(0);
+		Text deadline = new Text(taskDeadline);
+		deadline.setFill(Color.valueOf("#ffffcb"));
+		deadlinePane.getChildren().addAll(deadlineRec, deadline);
+		GridPane.setConstraints(deadlinePane, 2, 0);
+		return deadlinePane;
+	}
+
+	private StackPane contentCol(String taskContent, int width) {
+		StackPane contentPane = new StackPane();		            			
+		Rectangle contentRec = new Rectangle();
+		contentRec.setWidth(width);
+		contentRec.setOpacity(0);
+		Text content = new Text(taskContent);
+		content.setWrappingWidth(width);
+		content.setFill(Color.valueOf("#ffffcb"));
+		contentPane.getChildren().addAll(contentRec, content);
+		GridPane.setConstraints(contentPane, 1, 0);
+		return contentPane;
+	}
+
+	private StackPane indexCol(int index) {
+		StackPane indexPane = new StackPane();
+		indexPane.setAlignment(Pos.TOP_RIGHT);
+		Rectangle indexRec = new Rectangle();
+		indexRec.setWidth(TASK_INDEX_WIDTH);
+		indexRec.setOpacity(0);
+		Text indexStr = new Text(Integer.toString(index));
+		indexStr.setFill(Color.valueOf("#ffffcb"));
+		indexPane.getChildren().addAll(indexRec,indexStr);
+		GridPane.setConstraints(indexPane, 0, 0);
+		return indexPane;
+	}
+	
 	private FadeTransition fadeAnimation(Label comm) {
-		FadeTransition ft = new FadeTransition(Duration.millis(2000), comm);
+		FadeTransition ft = new FadeTransition(Duration.millis(1000), comm);
 		ft.setFromValue(0);
 		ft.setToValue(1);
 		ft.setCycleCount(2);
@@ -130,8 +211,8 @@ public class GUI extends Application{
 		Rectangle taskBox = boxGrid(TASKBOX_HEIGHT, TASKBOX_WIDTH);
 		ScrollPane taskPane = new ScrollPane();
 		taskPane.setPrefSize(TASKBOX_HEIGHT, TASKBOX_WIDTH);
-		//taskPane.setContent();
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    taskDisplay.getChildren().addAll(taskBox, taskPane);
 		GridPane.setConstraints(taskDisplay, 1, 0, 1, 2);
 		layout.getChildren().add(taskDisplay);
@@ -153,6 +234,7 @@ public class GUI extends Application{
 
 	private void timeComponent(){
 		VBox timeDisplay = new VBox();
+		timeDisplay.setAlignment(Pos.CENTER);
 		Date today = Calendar.getInstance().getTime();
 		String dateStr = new SimpleDateFormat("dd MMMM yyyy").format(today);
 		String dayStr = new SimpleDateFormat("EEEE").format(today);

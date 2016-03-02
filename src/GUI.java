@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeSet;
-
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -69,7 +68,11 @@ public class GUI extends Application{
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
 	public static void main(String[] args){
-		launch(args);
+		launch();
+	}
+	
+	public GUI(){
+		
 	}
 	
 	@Override
@@ -118,10 +121,12 @@ public class GUI extends Application{
 		taskIndex = 0;
 		floatyIndex = 0;
 		for (Task task: taskList){
-			if (task.getIsFloating()){
-				displayTaskLine(tasks, task);
-			} else{
-				displayFloatyLine(floaties, task);
+			if (!task.getIsFinished()){
+    			if (task.getIsFloating()){
+	    			displayTaskLine(tasks, task);
+		    	} else{
+			    	displayFloatyLine(floaties, task);
+			    }
 			}
 		}
 	}

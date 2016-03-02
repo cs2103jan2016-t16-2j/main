@@ -63,7 +63,7 @@ public class GUI extends Application{
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
 	public static void main(String[] args){
-		launch();
+		launch(args);
 	}
 	
 	@Override
@@ -78,7 +78,6 @@ public class GUI extends Application{
 
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
-		
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
 		    public void handle(KeyEvent keyEvent) {
@@ -93,10 +92,8 @@ public class GUI extends Application{
 		            if (status.equals(MESSAGE_SUCCESS)){
 		            	tasks.getChildren().clear();
 		            	taskList = logic.getList();
-		            	while (!taskList.isEmpty()){
-		            	    Task task = taskList.pollFirst();
-		            		String taskStr = task.toString();
-		            		Text line = new Text(taskStr);
+		            	for (Task task: taskList){
+		            		Text line = new Text(task.toString());
 		            		line.setFill(Color.valueOf("#ffffcb"));
 		            		if (task.getIsFloating()){
 		            		    tasks.getChildren().add(line);	
@@ -154,7 +151,7 @@ public class GUI extends Application{
 		return floatyPane;
 	}
 
-	private void timeComponent() {
+	private void timeComponent(){
 		VBox timeDisplay = new VBox();
 		Date today = Calendar.getInstance().getTime();
 		String dateStr = new SimpleDateFormat("dd MMMM yyyy").format(today);

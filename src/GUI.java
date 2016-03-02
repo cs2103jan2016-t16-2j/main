@@ -259,6 +259,14 @@ public class GUI extends Application{
 		scene.getStylesheets().add("Stylesheet.css");
 		window.setScene(scene);
 		window.show();
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override 
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.ESCAPE) {
+					window.close();
+				}
+			}
+		});
 	}
 	
 	private Rectangle boxGrid(int width, int height) {

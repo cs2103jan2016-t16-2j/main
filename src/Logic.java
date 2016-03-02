@@ -150,6 +150,7 @@ class Logic{
 			Task newTask;
 			newTask = new Task(cmdTable);
 			taskList.add(newTask);
+			System.out.println(taskList.size());
 			CommandType commandType = determineCommandType(VALUE_COMMAND_ADD);
 			storage.accessStorage(commandType, newTask);
 			return SUCCESSFUL_MESSAGE;

@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
-public class Task {
+public class Task implements Comparable<Task> {
 	private boolean isFloating, isImportant, isFinished;
 	private Date startDate, endDate;
 	private String content, venue, detail;
@@ -55,7 +55,7 @@ public class Task {
 			endDate = sdf.parse(cmdTable.get(KEY_END_DATE));
 		}
 		startDate = getCurrentDate();
-		endDate = DEFAULT_END_DATE;
+		endDate = getCurrentDate();
 	}
 	
 	public boolean getIsFloating(){
@@ -146,4 +146,12 @@ public class Task {
 		return result;
 	}
 	
+	@Override
+    public int compareTo(Task other){
+        // compareTo should return < 0 if this is supposed to be
+        // less than other, > 0 if this is supposed to be greater than 
+        // other and 0 if they are supposed to be equal
+        return this.startDate.compareTo(other.startDate);
+        
+    }
 }

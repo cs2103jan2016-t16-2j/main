@@ -28,7 +28,7 @@ public class Storage {
 	
 	public boolean save(Task obj){
 		// code for saving
-		return false; // saving unsuccessful
+		return true; // saving unsuccessful
 	}
 	
 	public TreeSet<Task> loadCurrentTask(){

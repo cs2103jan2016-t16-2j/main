@@ -1,6 +1,10 @@
+package LogicPackage;
 import java.util.*;
+import ParserPackage.*;
+import CommonPackage.*;
+import StoragePackage.*;
 
-class Logic{
+public class Logic{
 
 	private Storage storage;
 	private Parser parser;

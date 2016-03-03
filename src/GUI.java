@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeSet;
-
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -31,6 +30,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class GUI extends Application{
@@ -41,6 +41,8 @@ public class GUI extends Application{
 	private Logic logic = new Logic();
 	private String command;
 	private TreeSet<Task> taskList;
+	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
+	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM H:mm");
 	
 	private int taskIndex, floatyIndex;
@@ -52,10 +54,10 @@ public class GUI extends Application{
 	private final int STAGE_WIDTH = 900;
 	private final int COMPONENT_GAP_H = 30;
 	private final int COMPONENT_GAP_V = 30;
-	private final int FLOATYBOX_HEIGHT = 250;
-	private final int FLOATYBOX_WIDTH = 240;
-	private final int TASKBOX_HEIGHT = 560;
-	private final int TASKBOX_WIDTH = 460;
+	private final int FLOATYBOX_HEIGHT = 260;
+	private final int FLOATYBOX_WIDTH = 250;
+	private final int TASKBOX_HEIGHT = 470;
+	private final int TASKBOX_WIDTH = 560;
 	private final int TASK_CONTENT_WIDTH = 300;
 	private final int TASK_CONTENT_WIDTH_FLOATY = 200;
 	private final int TASK_INDEX_WIDTH = 30;
@@ -66,12 +68,17 @@ public class GUI extends Application{
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
 	public static void main(String[] args){
-		launch(args);
+		launch();
+	}
+	
+	public GUI(){
+		
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		stageSetup(primaryStage);
+		
 		ScrollPane floatyPane = floatyComponent();
         ScrollPane taskPane = taskComponent();
 		TextField inputBox = inputComponent();
@@ -114,10 +121,12 @@ public class GUI extends Application{
 		taskIndex = 0;
 		floatyIndex = 0;
 		for (Task task: taskList){
-			if (task.getIsFloating()){
-				displayTaskLine(tasks, task);
-			} else{
-				displayFloatyLine(floaties, task);
+			if (!task.getIsFinished()){
+    			if (task.getIsFloating()){
+	    			displayTaskLine(tasks, task);
+		    	} else{
+			    	displayFloatyLine(floaties, task);
+			    }
 			}
 		}
 	}
@@ -208,9 +217,9 @@ public class GUI extends Application{
 
 	private ScrollPane taskComponent() {
 		StackPane taskDisplay = new StackPane();
-		Rectangle taskBox = boxGrid(TASKBOX_HEIGHT, TASKBOX_WIDTH);
+		Rectangle taskBox = boxGrid(TASKBOX_WIDTH, TASKBOX_HEIGHT);
 		ScrollPane taskPane = new ScrollPane();
-		taskPane.setPrefSize(TASKBOX_HEIGHT, TASKBOX_WIDTH);
+		taskPane.setPrefSize(TASKBOX_WIDTH, TASKBOX_HEIGHT);
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    taskDisplay.getChildren().addAll(taskBox, taskPane);
@@ -221,11 +230,11 @@ public class GUI extends Application{
 
 	private ScrollPane floatyComponent() {
 		StackPane floatyTaskDisplay = new StackPane();
-		Rectangle floatyBox = boxGrid(FLOATYBOX_HEIGHT, FLOATYBOX_WIDTH);
+		Rectangle floatyBox = boxGrid(FLOATYBOX_WIDTH, FLOATYBOX_HEIGHT);
 		ScrollPane floatyPane = new ScrollPane();
-		floatyPane.setPrefSize(FLOATYBOX_HEIGHT, FLOATYBOX_WIDTH);
-		//floatyPane.setConent();
-		floatyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		floatyPane.setPrefSize(FLOATYBOX_WIDTH, FLOATYBOX_HEIGHT);
+		floatyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		floatyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		floatyTaskDisplay.getChildren().add(floatyBox);	
 		GridPane.setConstraints(floatyTaskDisplay, 0, 1);
 		layout.getChildren().add(floatyTaskDisplay);
@@ -236,21 +245,23 @@ public class GUI extends Application{
 		VBox timeDisplay = new VBox();
 		timeDisplay.setAlignment(Pos.CENTER);
 		Date today = Calendar.getInstance().getTime();
-		String dateStr = new SimpleDateFormat("dd MMMM yyyy").format(today);
-		String dayStr = new SimpleDateFormat("EEEE").format(today);
-		
+		String dateStr = datesdf.format(today);
+		String dayStr = daysdf.format(today);
+
 		Label date = new Label(dateStr+"\n"+dayStr);
 		date.setId("dateDisplay");
 		DigitalClock clock = new DigitalClock();
 		timeDisplay.getChildren().addAll(clock, date);
 		GridPane.setConstraints(timeDisplay, 0, 0);
 		layout.getChildren().add(timeDisplay);
-
 	}
 
 	private void stageSetup(Stage primaryStage) {
 		window = primaryStage;
-		window.setTitle(String.format(TITLE, System.getProperty("user.name")));
+
+        window.initStyle(StageStyle.UNDECORATED);
+		
+        window.setTitle(String.format(TITLE, System.getProperty("user.name")));
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setVgap(COMPONENT_GAP_V);
 		layout.setHgap(COMPONENT_GAP_H);
@@ -259,6 +270,14 @@ public class GUI extends Application{
 		scene.getStylesheets().add("Stylesheet.css");
 		window.setScene(scene);
 		window.show();
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override 
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.ESCAPE) {
+					window.close();
+				}
+			}
+		});
 	}
 	
 	private Rectangle boxGrid(int width, int height) {

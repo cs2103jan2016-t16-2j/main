@@ -1,9 +1,13 @@
 package StoragePackage;
 import java.util.TreeSet;
+import java.lang.reflect.Type;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -12,11 +16,12 @@ import CommonPackage.*;
 public class Storage {
 	
 	protected File file;
+	protected Gson gson = new Gson();
+	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	
-	public Storage(){
+ 	public Storage(){
 		File dataDir = createDataDir();
 		this.file = new File(dataDir,"data.txt");
-		
 	}
 
 	/**
@@ -53,29 +58,33 @@ public class Storage {
 	}
 	
 	public boolean save(Task task){
+		String json = gson.toJson(task);
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
-			String content = task.getContent();
-			String venue = task.getVenue();
-			String detail = task.getDetail();
-			String isFloating = String.valueOf(task.getIsFinished());
-			String isImportant = String.valueOf(task.getIsImportant());
-			String isFinished = String.valueOf(task.getIsFinished());
-			String startDate = task.getStartDate().toString();
-			String endDate = task.getEndDate().toString();
-			writer.write(content +" " + venue + " " + detail + " " +
-						isFloating + " " + isImportant + " " + isFinished +
-							" " + startDate + " " + endDate);
+			writer.write(json + "\n");
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return true; 
+		return true;
 	}
 	
 	public TreeSet<Task> loadCurrentTask(){
-		// read the files, store in data structure
 		TreeSet<Task> tasks = new TreeSet<Task>();
+		Task task;
+		BufferedReader reader;
+		
+		
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			while (reader.ready()) {
+				String currentTask = reader.readLine();
+				task = gson.fromJson(currentTask, typeOfTask);
+				tasks.add(task);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return tasks;
 	}
 	
@@ -85,7 +94,6 @@ public class Storage {
 		return tasks;
 	}
 	
-
 	public boolean delete(Task obj){
 		// code for delete tasks
 		return false;

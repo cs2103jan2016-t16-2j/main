@@ -25,6 +25,8 @@ public class Storage {
 	}
 
 	/**
+	 * This method creates a directory at user's home directory. Database text file
+	 * will be stored here.
 	 * @return
 	 */
 	private File createDataDir() {
@@ -36,6 +38,13 @@ public class Storage {
 		return dataDir;
 	}
 	
+	/**
+	 * This method takes a Command and a Task object(if any), and executes the
+	 * commands accordingly.
+	 * @param commandType
+	 * @param task
+	 * @return a boolean value for testing
+	 */
 	public boolean accessStorage(CommandType commandType, Task task) {
 		if (commandType == CommandType.ERROR) {
 			return false;
@@ -47,7 +56,7 @@ public class Storage {
 			case DELETE :
 				return delete(task);
 			case CLEAR : 
-				return clearCurrentTask();
+				return clearTask();
 			case UPDATE :
 				return update(task);
 			case TICK : 
@@ -57,8 +66,12 @@ public class Storage {
 		}
 	}
 	
+	/**
+	 * This method takes a Task object and save the task into the file in JSON format
+	 * @param task
+	 * @return
+	 */
 	public boolean save(Task task){
-		
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
 			writeTaskToJson(task, writer);
@@ -109,12 +122,6 @@ public class Storage {
 		return task;
 	}
 	
-	public TreeSet<Task> loadCompletedTask(){
-		// read the files, store in data structure
-		TreeSet<Task> tasks = new TreeSet<Task>();
-		return tasks;
-	}
-	
 	public boolean delete(Task deletedTask){
 		File tempFile = new File("tempFile.txt");
 		try {
@@ -140,19 +147,42 @@ public class Storage {
 		// code for moving tasks from current to complete
 		return false;
 	}
-	
-	public boolean clearCurrentTask(){
-		// code for moving tasks from current to complete
+
+	public boolean clearTask(){
+		File tempFile = new File("tempFile.txt");
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
+			writer.write("");
+			writer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		tempFile.renameTo(file);
 		return false;
 	}
 	
-	public boolean clearCompleteTask(){
-		// code for moving tasks from current to complete
-		return false;
-	}
-	
-	public boolean update(Task obj){
-		// code for moving tasks from current to complete
+	public boolean update(Task modifiedTask){
+		File tempFile = new File("tempFile.txt");
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
+			
+			while (reader.ready()) {
+				Task task = readCurrentTask(reader);
+				if (task.compareTo(modifiedTask) != 0) {
+					writeTaskToJson(task,writer);
+				} else {
+					writeTaskToJson(modifiedTask,writer);
+				}
+			}
+			
+			reader.close();
+			writer.close();
+			tempFile.renameTo(file);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
 		return false;
 	}
 }

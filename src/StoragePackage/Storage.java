@@ -58,15 +58,25 @@ public class Storage {
 	}
 	
 	public boolean save(Task task){
-		String json = gson.toJson(task);
+		
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
-			writer.write(json + "\n");
+			writeTaskToJson(task, writer);
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return true;
+	}
+
+	/**
+	 * @param task
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void writeTaskToJson(Task task, BufferedWriter writer) throws IOException {
+		String json = gson.toJson(task);
+		writer.write(json + "\n");
 	}
 	
 	public TreeSet<Task> loadCurrentTask(){
@@ -78,14 +88,25 @@ public class Storage {
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			while (reader.ready()) {
-				String currentTask = reader.readLine();
-				task = gson.fromJson(currentTask, typeOfTask);
+				task = readCurrentTask(reader);
 				tasks.add(task);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return tasks;
+	}
+
+	/**
+	 * @param reader
+	 * @return
+	 * @throws IOException
+	 */
+	private Task readCurrentTask(BufferedReader reader) throws IOException {
+		Task task;
+		String currentTask = reader.readLine();
+		task = gson.fromJson(currentTask, typeOfTask);
+		return task;
 	}
 	
 	public TreeSet<Task> loadCompletedTask(){
@@ -94,9 +115,27 @@ public class Storage {
 		return tasks;
 	}
 	
-	public boolean delete(Task obj){
-		// code for delete tasks
-		return false;
+	public boolean delete(Task deletedTask){
+		File tempFile = new File("tempFile.txt");
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
+			
+			while (reader.ready()) {
+				Task task = readCurrentTask(reader);
+				if (task.compareTo(deletedTask) != 0) {
+					writeTaskToJson(task,writer);
+				}
+			}
+			
+			
+			reader.close();
+			writer.close();
+			tempFile.renameTo(file);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return true;
 	}
 	
 	public boolean tick(Task obj){

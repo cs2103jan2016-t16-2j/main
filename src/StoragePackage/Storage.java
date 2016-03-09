@@ -47,7 +47,7 @@ public class Storage {
 			case DELETE :
 				return delete(task);
 			case CLEAR : 
-				return clearCurrentTask();
+				return clearTask();
 			case UPDATE :
 				return update(task);
 			case TICK : 
@@ -140,14 +140,18 @@ public class Storage {
 		// code for moving tasks from current to complete
 		return false;
 	}
+
 	
-	public boolean clearCurrentTask(){
-		// code for moving tasks from current to complete
-		return false;
-	}
-	
-	public boolean clearCompleteTask(){
-		// code for moving tasks from current to complete
+	public boolean clearTask(){
+		File tempFile = new File("tempFile.txt");
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
+			writer.write("");
+			writer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		tempFile.renameTo(file);
 		return false;
 	}
 	

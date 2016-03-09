@@ -1,8 +1,6 @@
 package StoragePackage;
 import java.util.TreeSet;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -54,20 +52,20 @@ public class Storage {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public boolean save(Task task){
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
-			JSONObject taskJSON = new JSONObject();
-			taskJSON.put("content", task.getContent());
-			taskJSON.put("venue", task.getVenue());
-			taskJSON.put("detail", task.getDetail());
-			taskJSON.put("isFloating", task.getIsFloating());
-			taskJSON.put("isImportant", task.getIsImportant());
-			taskJSON.put("isFinished", task.getIsFinished());
-			taskJSON.put("startDate", task.getStartDate());
-			taskJSON.put("endDate", task.getEndDate());
-			writer.write(taskJSON.toJSONString());
+			String content = task.getContent();
+			String venue = task.getVenue();
+			String detail = task.getDetail();
+			String isFloating = String.valueOf(task.getIsFinished());
+			String isImportant = String.valueOf(task.getIsImportant());
+			String isFinished = String.valueOf(task.getIsFinished());
+			String startDate = task.getStartDate().toString();
+			String endDate = task.getEndDate().toString();
+			writer.write(content +" " + venue + " " + detail + " " +
+						isFloating + " " + isImportant + " " + isFinished +
+							" " + startDate + " " + endDate);
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();

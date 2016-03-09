@@ -24,7 +24,7 @@ public class DigitalClock extends Label {
           }
         }
       ),
-      new KeyFrame(Duration.minutes(1))
+      new KeyFrame(Duration.millis(1))
     );
     timeline.setCycleCount(Animation.INDEFINITE);
     timeline.play();

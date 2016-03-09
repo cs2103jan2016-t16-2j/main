@@ -127,8 +127,6 @@ public class Storage {
 					writeTaskToJson(task,writer);
 				}
 			}
-			
-			
 			reader.close();
 			writer.close();
 			tempFile.renameTo(file);
@@ -139,11 +137,6 @@ public class Storage {
 	}
 	
 	public boolean tick(Task obj){
-		// code for moving tasks from current to complete
-		return false;
-	}
-	
-	public boolean accessStorage(Task obj){
 		// code for moving tasks from current to complete
 		return false;
 	}

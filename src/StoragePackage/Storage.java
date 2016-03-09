@@ -1,11 +1,32 @@
 package StoragePackage;
 import java.util.TreeSet;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import CommonPackage.*;
 
 public class Storage {
 	
+	protected File file;
+	
 	public Storage(){
+		File dataDir = createDataDir();
+		this.file = new File(dataDir,"data.txt");
+	}
+
+	/**
+	 * @return
+	 */
+	private File createDataDir() {
+		File dataDir = new File(System.getProperty("user.home") + "/WallistDatabase");
+		
+		if (!dataDir.exists()) {
+			dataDir.mkdirs();
+		}
+		return dataDir;
 	}
 	
 	public boolean accessStorage(CommandType commandType, Task task) {
@@ -30,7 +51,14 @@ public class Storage {
 	}
 	
 	public boolean save(Task obj){
-		// code for saving
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.file, true));
+			writer.write("haha111");
+			System.out.println("x");
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return true; // saving unsuccessful
 	}
 	

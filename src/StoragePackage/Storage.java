@@ -1,6 +1,9 @@
 package StoragePackage;
 import java.util.TreeSet;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -15,6 +18,7 @@ public class Storage {
 	public Storage(){
 		File dataDir = createDataDir();
 		this.file = new File(dataDir,"data.txt");
+		
 	}
 
 	/**
@@ -50,16 +54,25 @@ public class Storage {
 		}
 	}
 	
-	public boolean save(Task obj){
+	@SuppressWarnings("unchecked")
+	public boolean save(Task task){
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(this.file, true));
-			writer.write("haha111");
-			System.out.println("x");
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+			JSONObject taskJSON = new JSONObject();
+			taskJSON.put("content", task.getContent());
+			taskJSON.put("venue", task.getVenue());
+			taskJSON.put("detail", task.getDetail());
+			taskJSON.put("isFloating", task.getIsFloating());
+			taskJSON.put("isImportant", task.getIsImportant());
+			taskJSON.put("isFinished", task.getIsFinished());
+			taskJSON.put("startDate", task.getStartDate());
+			taskJSON.put("endDate", task.getEndDate());
+			writer.write(taskJSON.toJSONString());
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return true; // saving unsuccessful
+		return true; 
 	}
 	
 	public TreeSet<Task> loadCurrentTask(){

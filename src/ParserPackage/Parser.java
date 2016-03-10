@@ -87,19 +87,24 @@ public class Parser {
 	 * Output: None
 	 */
 	private void isInputValid() {
+		errorCode_ = VALUE_ERROR_NO_ERROR;
+		isValid_ = VALUE_TRUE;
 		if(isInputEmpty()){
+			System.out.println("Input Empty");
 			errorCode_ = VALUE_ERROR_NO_INPUT;
 			isValid_ = VALUE_FALSE;
-		}else if(isCommandInvalid()){
+		}
+		if(isCommandInvalid()){
+			System.out.println("Command invalid");
 			errorCode_ = VALUE_ERROR_COMMAND_NOT_FOUND;
 			isValid_ = VALUE_FALSE;
-		}else if(isArgumentInvalid()){
+		}
+		if(isArgumentInvalid()){
+			System.out.println("Argument invalid");
 			errorCode_ = VALUE_ERROR_INVALID_ARGUMENT;
 			isValid_ = VALUE_FALSE;
-		}else{
-			errorCode_ = VALUE_ERROR_NO_ERROR;
-			isValid_ = VALUE_TRUE;
 		}
+			
 	}
 	
 
@@ -153,23 +158,31 @@ public class Parser {
 	 */
 	private boolean isArgumentInvalid() {
 		if(errorCode_.equals(VALUE_ERROR_NO_ERROR)){
+			CommandType commandType = determineCommandType(command_);
 			try{
-				switch(CommandType.valueOf(command_)){
+				switch(commandType){
 				
 					case ADD:
+						System.out.println("In case ADD");
 						if(content_.length() == 0){
+							System.out.println("In ADD");
 							return true;
 						}
+						return false;
 					
 					case CLEAR:
+						System.out.println("In case clear");
 						if(content_.length() != 0){
 							return true;
 						}
+						return false;
 				
 					case DELETE:
+						System.out.println("In case delete");
 						if(content_.length() == 0 || !content_.matches("\\d+")){
 							return true;
 						}
+						return false;
 				
 //					case EXIT:
 //						if(content_.length() != 0){
@@ -177,24 +190,32 @@ public class Parser {
 //						}
 					
 					case TICK:
+						System.out.println("In case tick");
 						if(content_.length() == 0 || !content_.matches("\\d+")){
 							return true;
 						}
+						return false;
 					
 					case UPDATE:
+						System.out.println("In case update");
 						String lst[] = content_.split(" ");
 						if(!lst[0].matches("\\d+") || content_.length() == 0 || lst.length < 2){
 							return true;
 						}
+						return false;
 				
 					default: 
+						System.out.println("In case default");
+						System.out.println("case2");
 						return false;
 				}
 			}
 			catch(IllegalArgumentException e){
+				System.out.println("In case clear");
 				return false;
 			}
 		}else{
+			System.out.println("In case else");
 			return false;
 		}
 	}

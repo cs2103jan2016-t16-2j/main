@@ -15,15 +15,58 @@ import CommonPackage.*;
 
 public class Storage {
 	
+	// Attributes
 	protected File file;
 	protected Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	
+	
+	// Constructor
  	public Storage(){
 		File dataDir = createDataDir();
 		this.file = new File(dataDir,"data.txt");
 	}
 
+ 	// Operation Methods
+ 	/**
+ 	 * This method read all JSON in the text file and convert into Task objects.
+ 	 * Store the Task Objects in a TreeSet and return it to LOGIC
+ 	 * @return a TreeSet containing all Tasks
+ 	 */
+	public TreeSet<Task> read(){
+		TreeSet<Task> tasks = new TreeSet<Task>();
+		Task task;
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			while (reader.ready()) {
+				task = readCurrentTask(reader);
+				tasks.add(task);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return tasks;
+	}
+ 	
+	/**
+	 * This method takes a Task object and save the task into the file in JSON format
+	 * @param task
+	 * @return
+	 */
+	public boolean save(TreeSet<Task> taskList){
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writeTaskToJson(taskList, writer);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	
+	
 	/**
 	 * This method creates a directory at user's home directory. Database text file
 	 * will be stored here.
@@ -38,43 +81,16 @@ public class Storage {
 		return dataDir;
 	}
 	
-	/**
-	 * This method takes a Command and a Task object(if any), and executes the
-	 * commands accordingly.
-	 * @param commandType
-	 * @param task
-	 * @return a boolean value for testing
-	 */
-	public boolean accessStorage(CommandType commandType, Task task) {
-		if (commandType == CommandType.ERROR) {
-			return false;
-		}
-		
-		switch (commandType) {
-			case ADD : 
-				return save(task);
-			case DELETE :
-				return delete(task);
-			case CLEAR : 
-				return clearTask();
-			case UPDATE :
-				return update(task);
-			case TICK : 
-				return tick(task);
-			default :
-				return false;
-		}
-	}
 	
 	/**
 	 * This method takes a Task object and save the task into the file in JSON format
 	 * @param task
 	 * @return
 	 */
-	public boolean save(Task task){
+	public boolean save(TreeSet<Task> taskList){
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
-			writeTaskToJson(task, writer);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writeTaskToJson(taskList, writer);
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -83,33 +99,17 @@ public class Storage {
 	}
 
 	/**
-	 * @param task
+	 * @param taskList
 	 * @param writer
 	 * @throws IOException
 	 */
-	private void writeTaskToJson(Task task, BufferedWriter writer) throws IOException {
-		String json = gson.toJson(task);
-		writer.write(json + "\n");
+	private void writeTaskToJson(TreeSet<Task> taskList, BufferedWriter writer) throws IOException {
+		for (Task task: taskList) {
+			String json = gson.toJson(task);
+			writer.write(json + "\n");
+		}	
 	}
 	
-	public TreeSet<Task> loadCurrentTask(){
-		TreeSet<Task> tasks = new TreeSet<Task>();
-		Task task;
-		BufferedReader reader;
-		
-		
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			while (reader.ready()) {
-				task = readCurrentTask(reader);
-				tasks.add(task);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return tasks;
-	}
-
 	/**
 	 * @param reader
 	 * @return
@@ -121,68 +121,5 @@ public class Storage {
 		task = gson.fromJson(currentTask, typeOfTask);
 		return task;
 	}
-	
-	public boolean delete(Task deletedTask){
-		File tempFile = new File("tempFile.txt");
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
-			
-			while (reader.ready()) {
-				Task task = readCurrentTask(reader);
-				if (task.compareTo(deletedTask) != 0) {
-					writeTaskToJson(task,writer);
-				}
-			}
-			reader.close();
-			writer.close();
-			tempFile.renameTo(file);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return true;
-	}
-	
-	public boolean tick(Task obj){
-		// code for moving tasks from current to complete
-		return false;
-	}
 
-	public boolean clearTask(){
-		File tempFile = new File("tempFile.txt");
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
-			writer.write("");
-			writer.close();
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-		tempFile.renameTo(file);
-		return false;
-	}
-	
-	public boolean update(Task modifiedTask){
-		File tempFile = new File("tempFile.txt");
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true));
-			
-			while (reader.ready()) {
-				Task task = readCurrentTask(reader);
-				if (task.compareTo(modifiedTask) != 0) {
-					writeTaskToJson(task,writer);
-				} else {
-					writeTaskToJson(modifiedTask,writer);
-				}
-			}
-			
-			reader.close();
-			writer.close();
-			tempFile.renameTo(file);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		
-		return false;
-	}
 }

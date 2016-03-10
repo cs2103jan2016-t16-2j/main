@@ -50,9 +50,9 @@ public class Storage {
 	}
  	
 	/**
-	 * This method takes a Task object and save the task into the file in JSON format
-	 * @param task
-	 * @return
+	 * This method takes a TreeSet and save the task into the file in JSON format
+	 * @param TreeSet containing Task Objects
+	 * @return boolean value indicating whether saving is successful or not
 	 */
 	public boolean save(TreeSet<Task> taskList){
 		try {
@@ -66,7 +66,7 @@ public class Storage {
 	}
 	
 	
-	
+	// Helper Methods
 	/**
 	 * This method creates a directory at user's home directory. Database text file
 	 * will be stored here.
@@ -81,23 +81,6 @@ public class Storage {
 		return dataDir;
 	}
 	
-	
-	/**
-	 * This method takes a Task object and save the task into the file in JSON format
-	 * @param task
-	 * @return
-	 */
-	public boolean save(TreeSet<Task> taskList){
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writeTaskToJson(taskList, writer);
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
-
 	/**
 	 * @param taskList
 	 * @param writer

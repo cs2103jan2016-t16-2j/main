@@ -1,7 +1,11 @@
 .root {
     -fx-font-size: 16pt;    
     -fx-font-family: "Segoe UI";
+<<<<<<< HEAD:src/Stylesheet.css
     -fx-background-image: url("resources/teal.jpg");
+=======
+    -fx-background-image: url("../../resources/teal.jpg");
+>>>>>>> 30c35c688ff5399045794f5f35c9b6a7b18715d6:src/GUIPackage/Stylesheet.css
     -fx-background-size: 1000 600;
     -fx-background-position: center center;
 }

@@ -1,6 +1,10 @@
+package LogicPackage;
 import java.util.*;
+import ParserPackage.*;
+import CommonPackage.*;
+import StoragePackage.*;
 
-class Logic{
+public class Logic{
 
 	private Storage storage;
 	private Parser parser;
@@ -86,7 +90,6 @@ class Logic{
 	public String process(String cmd){
 		HashMap<String,String> cmdTable = parser.processInput(cmd);
 		// print the hashtable
-		System.out.println(cmdTable.toString());
 		
 		
 		boolean isValid = stringToBoolean(cmdTable.get(KEY_IS_VALID));
@@ -150,7 +153,6 @@ class Logic{
 			Task newTask;
 			newTask = new Task(cmdTable);
 			taskList.add(newTask);
-			System.out.println(taskList.size());
 			CommandType commandType = determineCommandType(VALUE_COMMAND_ADD);
 			storage.accessStorage(commandType, newTask);
 			return SUCCESSFUL_MESSAGE;

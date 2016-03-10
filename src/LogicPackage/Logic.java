@@ -81,7 +81,7 @@ public class Logic{
 	public Logic(){
 		storage = new Storage();
 		parser = new Parser(); // processInput
-		taskList = storage.loadCurrentTask();
+		taskList = storage.read();
 	}
 	
 	public TreeSet<Task> getList(){
@@ -155,7 +155,7 @@ public class Logic{
 			newTask = new Task(cmdTable);
 			taskList.add(newTask);
 			CommandType commandType = determineCommandType(VALUE_COMMAND_ADD);
-			storage.accessStorage(commandType, newTask);
+			storage.save(taskList);
 			return SUCCESSFUL_MESSAGE;
 		} catch (Exception e){
 			return e.toString();
@@ -176,7 +176,7 @@ public class Logic{
 			Task toBeDeleted = itr.next();
 			taskList.remove(toBeDeleted);
 			CommandType commandType = determineCommandType(VALUE_COMMAND_DELETE);
-			storage.accessStorage(commandType, toBeDeleted);
+			storage.save(taskList);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
@@ -195,7 +195,7 @@ public class Logic{
 			Task toBeDeleted = itr.next();
 			toBeDeleted.setIsFinished(true);
 			CommandType commandType = determineCommandType(VALUE_COMMAND_TICK);
-			storage.accessStorage(commandType, toBeDeleted);
+			storage.save(taskList);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
@@ -215,14 +215,14 @@ public class Logic{
 			Task toBeEdited = itr.next();
 			toBeEdited.setContent(parser.readContent(messageSplit));
 			CommandType commandType = determineCommandType(VALUE_COMMAND_UPDATE);
-			storage.accessStorage(commandType, toBeEdited);
+			storage.save(taskList);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
 	private String cmdClear(){
 		taskList.clear();
 		CommandType commandType = determineCommandType(VALUE_COMMAND_CLEAR);
-		storage.accessStorage(commandType, null);
+		storage.save(taskList);
 		return SUCCESSFUL_MESSAGE;
 	}
 	

@@ -49,6 +49,7 @@ public class GUI extends Application{
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM H:mm");
 	
 	private int taskIndex, floatyIndex;
+	private double vValue;
 	
 	private final String TITLE = "%1$s's Wallist";
 	private final String MESSAGE_SUCCESS = "success";
@@ -65,8 +66,9 @@ public class GUI extends Application{
 	private final int TASK_CONTENT_WIDTH_FLOATY = 200;
 	private final int TASK_INDEX_WIDTH = 30;
 	private final int TASK_DEADLINE_WIDTH = 120;
-	
-	
+
+	private final double SCROLL_PERCENTAGE = 0.1;
+		
 	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
@@ -96,9 +98,17 @@ public class GUI extends Application{
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
 		    public void handle(KeyEvent keyEvent) {
-		        if (keyEvent.getCode() == KeyCode.ENTER)  {
+		        if (keyEvent.getCode() == KeyCode.DOWN)  {
+		            vValue = taskPane.getVvalue();
+		        	taskPane.setVvalue(vValue + SCROLL_PERCENTAGE);
+		        } else if (keyEvent.getCode() == KeyCode.UP)  {
+			        vValue = taskPane.getVvalue();
+			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
+			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	displayStatus(inputBox, tasks, floaties);
 		        }
+
+		        
 			}
 		});
 	}

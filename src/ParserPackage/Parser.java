@@ -25,12 +25,12 @@ public class Parser {
 	private final String VALUE_ERROR_INVALID_ARGUMENT = "3";
 	
 	// List of all available commands for the hashmap
-	private final String VALUE_COMMAND_ADD = "add";
-	private final String VALUE_COMMAND_DELETE = "delete";
-	private final String VALUE_COMMAND_CLEAR = "clear";
-	private final String VALUE_COMMAND_TICK = "tick";
-	private final String VALUE_COMMAND_UPDATE = "update";
-	private final String VALUE_COMMAND_EXIT = "exit";
+	private final String VALUE_COMMAND_ADD = "ADD";
+	private final String VALUE_COMMAND_DELETE = "DELETE";
+	private final String VALUE_COMMAND_CLEAR = "CLEAR";
+	private final String VALUE_COMMAND_TICK = "TICK";
+	private final String VALUE_COMMAND_UPDATE = "UPDATE";
+	private final String VALUE_COMMAND_EXIT = "EXIT";
 	
 	// List of all available types for the hashmap
 	private final String VALUE_TYPE_FLOAT = "float";
@@ -87,19 +87,24 @@ public class Parser {
 	 * Output: None
 	 */
 	private void isInputValid() {
+		errorCode_ = VALUE_ERROR_NO_ERROR;
+		isValid_ = VALUE_TRUE;
 		if(isInputEmpty()){
+			System.out.println("Input Empty");
 			errorCode_ = VALUE_ERROR_NO_INPUT;
 			isValid_ = VALUE_FALSE;
-		}else if(isCommandInvalid()){
+		}
+		if(isCommandInvalid()){
+			System.out.println("Command invalid");
 			errorCode_ = VALUE_ERROR_COMMAND_NOT_FOUND;
 			isValid_ = VALUE_FALSE;
-		}else if(isArgumentInvalid()){
+		}
+		if(isArgumentInvalid()){
+			System.out.println("Argument invalid");
 			errorCode_ = VALUE_ERROR_INVALID_ARGUMENT;
 			isValid_ = VALUE_FALSE;
-		}else{
-			errorCode_ = VALUE_ERROR_NO_ERROR;
-			isValid_ = VALUE_TRUE;
 		}
+			
 	}
 	
 
@@ -188,6 +193,7 @@ public class Parser {
 						}
 				
 					default: 
+						System.out.println("case2");
 						return false;
 				}
 			}

@@ -1,4 +1,5 @@
 package LogicPackage;
+import java.lang.StringBuilder;
 import java.util.*;
 import ParserPackage.*;
 import CommonPackage.*;
@@ -212,7 +213,7 @@ public class Logic{
 				itr.next();
 			}
 			Task toBeEdited = itr.next();
-			toBeEdited.setContent(messageSplit[1]);
+			toBeEdited.setContent(parser.readContent(messageSplit));
 			CommandType commandType = determineCommandType(VALUE_COMMAND_UPDATE);
 			storage.accessStorage(commandType, toBeEdited);
 			return SUCCESSFUL_MESSAGE;

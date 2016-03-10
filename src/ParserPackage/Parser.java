@@ -205,7 +205,7 @@ public class Parser {
 	 * Output: A string of the content
 	 */
 
-	private String readContent(String[] inputList) {
+	public String readContent(String[] inputList) {
 		StringBuilder sb = new StringBuilder("");
 		for(int i = 1; i < inputList.length; i ++){
 			sb.append(inputList[i]);
@@ -236,7 +236,7 @@ public class Parser {
 	
 	private CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {
-			throw new Error("command type string cannot be null!");
+			throw new Error("Command type string cannot be null!");
 		}
 		
 		if (commandTypeString.equalsIgnoreCase("add")) {

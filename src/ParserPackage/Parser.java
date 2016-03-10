@@ -25,12 +25,12 @@ public class Parser {
 	private final String VALUE_ERROR_INVALID_ARGUMENT = "3";
 	
 	// List of all available commands for the hashmap
-	private final String VALUE_COMMAND_ADD = "ADD";
-	private final String VALUE_COMMAND_DELETE = "DELETE";
-	private final String VALUE_COMMAND_CLEAR = "CLEAR";
-	private final String VALUE_COMMAND_TICK = "TICK";
-	private final String VALUE_COMMAND_UPDATE = "UPDATE";
-	private final String VALUE_COMMAND_EXIT = "EXIT";
+	private final String VALUE_COMMAND_ADD = "add";
+	private final String VALUE_COMMAND_DELETE = "delete";
+	private final String VALUE_COMMAND_CLEAR = "clear";
+	private final String VALUE_COMMAND_TICK = "tick";
+	private final String VALUE_COMMAND_UPDATE = "update";
+	private final String VALUE_COMMAND_EXIT = "exit";
 	
 	// List of all available types for the hashmap
 	private final String VALUE_TYPE_FLOAT = "float";
@@ -158,23 +158,31 @@ public class Parser {
 	 */
 	private boolean isArgumentInvalid() {
 		if(errorCode_.equals(VALUE_ERROR_NO_ERROR)){
+			CommandType commandType = determineCommandType(command_);
 			try{
-				switch(CommandType.valueOf(command_)){
+				switch(commandType){
 				
 					case ADD:
+						System.out.println("In case ADD");
 						if(content_.length() == 0){
+							System.out.println("In ADD");
 							return true;
 						}
+						return false;
 					
 					case CLEAR:
+						System.out.println("In case clear");
 						if(content_.length() != 0){
 							return true;
 						}
+						return false;
 				
 					case DELETE:
+						System.out.println("In case delete");
 						if(content_.length() == 0 || !content_.matches("\\d+")){
 							return true;
 						}
+						return false;
 				
 //					case EXIT:
 //						if(content_.length() != 0){
@@ -182,25 +190,32 @@ public class Parser {
 //						}
 					
 					case TICK:
+						System.out.println("In case tick");
 						if(content_.length() == 0 || !content_.matches("\\d+")){
 							return true;
 						}
+						return false;
 					
 					case UPDATE:
+						System.out.println("In case update");
 						String lst[] = content_.split(" ");
 						if(!lst[0].matches("\\d+") || content_.length() == 0 || lst.length < 2){
 							return true;
 						}
+						return false;
 				
 					default: 
+						System.out.println("In case default");
 						System.out.println("case2");
 						return false;
 				}
 			}
 			catch(IllegalArgumentException e){
+				System.out.println("In case clear");
 				return false;
 			}
 		}else{
+			System.out.println("In case else");
 			return false;
 		}
 	}

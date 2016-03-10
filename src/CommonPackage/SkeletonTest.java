@@ -1,6 +1,9 @@
+package CommonPackage;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import LogicPackage.*;
 
 public class SkeletonTest {
 

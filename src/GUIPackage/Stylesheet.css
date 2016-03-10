@@ -1,8 +1,8 @@
 .root {
     -fx-font-size: 16pt;    
     -fx-font-family: "Segoe UI";
-    -fx-background-image: url("../resources/teal.jpg");
-    -fx-background-size: 900 600;
+    -fx-background-image: url("../../resources/teal.jpg");
+    -fx-background-size: 1000 600;
     -fx-background-position: center center;
 }
 
@@ -13,7 +13,7 @@
 }
 
 #dateDisplay{
-    -fx-font-size: 18pt;
+    -fx-font-size: 16pt;
     -fx-text-fill: #ffffcb;
 }
 

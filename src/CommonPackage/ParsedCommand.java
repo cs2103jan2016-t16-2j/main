@@ -12,7 +12,7 @@ public class ParsedCommand {
 	public ParsedCommand(){
 		Constant c = new Constant();
 		isValid_ = true;
-		errorCode_ = 0;
+		errorCode_ = c.VALUE_ERROR_NO_ERROR;
 		command_ = CommandType.UNDEFINED;
 		content_ = c.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;

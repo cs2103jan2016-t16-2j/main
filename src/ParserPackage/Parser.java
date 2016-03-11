@@ -1,56 +1,11 @@
 package ParserPackage;
-import java.lang.StringBuilder;
-import java.util.HashMap;
 
+import java.lang.StringBuilder;
 import CommonPackage.*;
 
 public class Parser {
-	// List of all the available keys for the hashmap
-	private final String KEY_IS_VALID = "isValid";
-	private final String KEY_ERROR_CODE = "errorCode";
-	private final String KEY_COMMAND = "command";
-	private final String KEY_CONTENT = "content";
-	private final String KEY_TYPE = "type";
-	private final String KEY_START_DATE = "startDate";
-	private final String KEY_END_DATE = "endDate";
 	
-	// List of all available boolean values for the hashmap
-	private final String VALUE_TRUE = "true";
-	private final String VALUE_FALSE = "false";
-	
-	// List of all available error values for the hashmap
-	private final String VALUE_ERROR_NO_ERROR = "0";
-	private final String VALUE_ERROR_COMMAND_NOT_FOUND = "1";
-	private final String VALUE_ERROR_NO_INPUT = "2";
-	private final String VALUE_ERROR_INVALID_ARGUMENT = "3";
-	
-	// List of all available commands for the hashmap
-	private final String VALUE_COMMAND_ADD = "add";
-	private final String VALUE_COMMAND_DELETE = "delete";
-	private final String VALUE_COMMAND_CLEAR = "clear";
-	private final String VALUE_COMMAND_TICK = "tick";
-	private final String VALUE_COMMAND_UPDATE = "update";
-	private final String VALUE_COMMAND_EXIT = "exit";
-	
-	// List of all available types for the hashmap
-	private final String VALUE_TYPE_FLOAT = "float";
-	private final String VALUE_TYPE_DEADLINE = "deadline";
-	private final String VALUE_TYPE_RECURRING = "recurring";
-	
-	private final String VALUE_DEFAULT_EMPTY = "";
-	
-	// Class attributes
-	private String isValid_;
-	private String errorCode_;
-	private String command_;
-	private String content_;
-	private String type_;
-	private String startDate_;
-	private String endDate_;
-	private String input_;
-	
-	
-	private HashMap<String, String> map;
+	private Constant constant_;
 	
 	/*
 	 * Initializing parser
@@ -58,125 +13,183 @@ public class Parser {
 	 * Output: A parser instance
 	 */
 	public Parser(){
-		isValid_ = VALUE_TRUE;
-		errorCode_ = VALUE_ERROR_NO_ERROR;
-		command_ = VALUE_DEFAULT_EMPTY;
-		content_ = VALUE_DEFAULT_EMPTY;
-		type_ = VALUE_TYPE_FLOAT;
-		startDate_ = VALUE_DEFAULT_EMPTY;
-		endDate_ = VALUE_DEFAULT_EMPTY;
-		
-		map = new HashMap<String, String>();
+		constant_ = new Constant();
 	}
 	
 	/*
 	 * Break down a string of input into smaller parts for logic to process
 	 * Input: String
-	 * Output: A hashmap with predefined keys
+	 * Output: A parsedCommand object
 	 */
-	public HashMap<String, String> processInput(String input){
-		input_ = input;
-		isInputValid();
-		buildMap();
-		return map;
+	public ParsedCommand processInput(String input){
+		return buildParsedCommand(input);
 	}
 	
 	/*
-	 * Check whether the input is valid (There is a recognizable command and content)
-	 * Input: None
-	 * Output: None
+	 * Build a parsedCommand from a given input
+	 * Input: String
+	 * Output: ParsedCommand object
 	 */
-	private void isInputValid() {
-		errorCode_ = VALUE_ERROR_NO_ERROR;
-		isValid_ = VALUE_TRUE;
-		if(isInputEmpty()){
-			errorCode_ = VALUE_ERROR_NO_INPUT;
-			isValid_ = VALUE_FALSE;
+	private ParsedCommand buildParsedCommand(String input) {
+		ParsedCommand parsed = new ParsedCommand();
+		
+		parsed.setErrorCode(getErrorCode(input));
+		parsed.setIsValid(getIsValid(parsed.getErrorCode()));
+		if(parsed.getIsValid()){
+			parsed.setCommand(getCommand(input));
+			parsed.setContent(getContent(input));
+			parsed.setType(getType(parsed.getContent()));
+			parsed.setStartDate(getStartDate(parsed.getContent()));
+			parsed.setEndDate(getEndDate(parsed.getContent()));
 		}
-		if(isCommandInvalid()){
-			errorCode_ = VALUE_ERROR_COMMAND_NOT_FOUND;
-			isValid_ = VALUE_FALSE;
-		}
-		if(isArgumentInvalid()){
-			errorCode_ = VALUE_ERROR_INVALID_ARGUMENT;
-			isValid_ = VALUE_FALSE;
-		}
-			
+		return parsed;
 	}
 	
+	
+	/*
+	 * Get the deadline of a task from a given input
+	 * Input: String
+	 * Output: String
+	 */
+	private String getEndDate(String input) {
+		return constant_.VALUE_DEFAULT_EMPTY;
+	}
+	
+	/*
+	 * Get the starting date of a task.
+	 * Input: String
+	 * Output: The start date. Default value is the time of assignment
+	 */
+	private String getStartDate(String content) {
+		return constant_.VALUE_DEFAULT_EMPTY;
+	}
+
+	/*
+	 * Get the type of a task from a given input
+	 * Input: String
+	 * Output: TaskType
+	 */
+	private TaskType getType(String content) {
+		return TaskType.FLOATING;
+	}
+	
+	/*
+	 * Get the command of an input
+	 * Input: String
+	 * Output: CommandType
+	 */
+	private CommandType getCommand(String input) {
+		String inputList[] = input.split(" ");
+		return determineCommandType(inputList[0]);
+	}
+	
+	/*
+	 * Get the content of an input
+	 * Input: String
+	 * Output: String
+	 */
+	private String getContent(String input){
+		String inputList[] = input.split(" ");
+		return readContent(inputList);
+	}
+	
+
+	/*
+	 * Check whether parsed command is valid
+	 * Input: Error code (int)
+	 * Output: True if command input is valid. False otherwise.
+	 */
+	private boolean getIsValid(int errorCode) {
+		return errorCode == constant_.VALUE_ERROR_NO_ERROR;
+	}
+	
+
+	/*
+	 * Get the error code for a given input. 
+	 * Input: String input
+	 * Output: 0 for no error. 1 for command not found. 2 for empty input. 3 for invalid argument
+	 */
+	private int getErrorCode(String input) {
+		if(isInputEmpty(input)){
+			return constant_.VALUE_ERROR_NO_INPUT;
+		}
+		if(isCommandInvalid(input)){
+			return constant_.VALUE_ERROR_COMMAND_NOT_FOUND;
+		}
+		if(isArgumentInvalid(input)){
+			return constant_.VALUE_ERROR_INVALID_ARGUMENT;
+		}
+		return constant_.VALUE_ERROR_NO_ERROR;
+	}
 
 	/*
 	 * Check whether the input is an empty string
-	 * Input: None
+	 * Input: Input string
 	 * Output: true if it is empty. false otherwise
-	 */
-
-	private boolean isInputEmpty() {
-		return input_.length() == 0;
+	 */	
+	private boolean isInputEmpty(String input) {
+		return input.length() == 0;
 	}
 	
 	/*
 	 * Check whether the input has a valid command (add, update, tick, delete, clear, exit)
-	 * Input: None
+	 * Input: Input string
 	 * Output: True if it is valid. False otherwise
 	 */
-	private boolean isCommandInvalid() {
-		String inputList[] = input_.split(" ");
-		CommandType commandType = determineCommandType(inputList[0]);
+	private boolean isCommandInvalid(String input) {
+		if(!isInputEmpty(input)){
+			CommandType commandType = getCommand(input);
 		
-		switch(commandType) {
-			case ADD:
-				command_ = VALUE_COMMAND_ADD;
-				content_ = readContent(inputList);
-				return false;	
-			case CLEAR:
-				command_ = VALUE_COMMAND_CLEAR;
-				content_ = readContent(inputList);
-				return false;
-			case DELETE:
-				command_ = VALUE_COMMAND_DELETE;
-				content_ = readContent(inputList);
-				return false;
-			case TICK:
-				command_ = VALUE_COMMAND_TICK;
-				content_ = readContent(inputList);
-				return false;	
-			case UPDATE:
-				command_ = VALUE_COMMAND_UPDATE;
-				content_ = readContent(inputList);
-				return false;
-			default: 
-				return true;
+			switch(commandType) {
+				
+				case ADD:
+					return false;	
+				
+				case CLEAR:
+					return false;
+				
+				case DELETE:
+					return false;
+				
+				case TICK:
+					return false;	
+				
+				case UPDATE:
+					return false;
+				
+				default: 
+					return true;
+			}
 		}
+		return false;
 	}
 	
 	/*
 	 * Check whether the input has the correct and valid argument for the given command
+	 * Input: Input string
+	 * Output: True if it's invalid. False otherwise
 	 */
-	private boolean isArgumentInvalid() {
-		if(errorCode_.equals(VALUE_ERROR_NO_ERROR)){
-			CommandType commandType = determineCommandType(command_);
+	private boolean isArgumentInvalid(String input) {
+		if(!isCommandInvalid(input)){
+			CommandType commandType = getCommand(input);
+			String content = getContent(input);
 			try{
 				switch(commandType){
 				
 					case ADD:
-						
-						if(content_.length() == 0){
-							System.out.println("In ADD");
+						if(content.length() == 0){
 							return true;
 						}
 						return false;
 					
 					case CLEAR:
-
-						if(content_.length() != 0){
+						if(content.length() != 0){
 							return true;
 						}
 						return false;
 				
 					case DELETE:
-
-						if(content_.length() == 0 || !content_.matches("\\d+")){
+						if(content.length() == 0 || !content.matches("\\d+")){
 							return true;
 						}
 						return false;
@@ -187,32 +200,26 @@ public class Parser {
 //						}
 					
 					case TICK:
-
-						if(content_.length() == 0 || !content_.matches("\\d+")){
+						if(content.length() == 0 || !content.matches("\\d+")){
 							return true;
 						}
 						return false;
 					
 					case UPDATE:
-
-						String lst[] = content_.split(" ");
-						if(!lst[0].matches("\\d+") || content_.length() == 0 || lst.length < 2){
+						String lst[] = content.split(" ");
+						if(!lst[0].matches("\\d+") || content.length() == 0 || lst.length < 2){
 							return true;
 						}
 						return false;
 				
 					default: 
-
-						System.out.println("case2");
 						return false;
 				}
 			}
 			catch(IllegalArgumentException e){
-
-				return false;
+				return true;
 			}
 		}else{
-
 			return false;
 		}
 	}
@@ -222,7 +229,6 @@ public class Parser {
 	 * Input: String[] of input words
 	 * Output: A string of the content
 	 */
-
 	public String readContent(String[] inputList) {
 		StringBuilder sb = new StringBuilder("");
 		for(int i = 1; i < inputList.length; i ++){
@@ -231,26 +237,6 @@ public class Parser {
 		}
 		return sb.toString().trim();
 	}
-	
-
-	/*
-	 * Build the hashmap with the required keys and values
-	 * Input: None
-	 * Output: None
-	 */
-	private void buildMap() {
-		map.put(KEY_IS_VALID, isValid_);
-		map.put(KEY_ERROR_CODE, errorCode_);
-		map.put(KEY_COMMAND, command_);
-		map.put(KEY_CONTENT, content_);
-		map.put(KEY_TYPE, type_);
-		map.put(KEY_START_DATE, startDate_);
-		map.put(KEY_END_DATE, endDate_);
-	}
-	
-	
-	
-	
 	
 	private CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {

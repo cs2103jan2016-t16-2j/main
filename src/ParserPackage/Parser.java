@@ -90,17 +90,14 @@ public class Parser {
 		errorCode_ = VALUE_ERROR_NO_ERROR;
 		isValid_ = VALUE_TRUE;
 		if(isInputEmpty()){
-			System.out.println("Input Empty");
 			errorCode_ = VALUE_ERROR_NO_INPUT;
 			isValid_ = VALUE_FALSE;
 		}
 		if(isCommandInvalid()){
-			System.out.println("Command invalid");
 			errorCode_ = VALUE_ERROR_COMMAND_NOT_FOUND;
 			isValid_ = VALUE_FALSE;
 		}
 		if(isArgumentInvalid()){
-			System.out.println("Argument invalid");
 			errorCode_ = VALUE_ERROR_INVALID_ARGUMENT;
 			isValid_ = VALUE_FALSE;
 		}
@@ -163,7 +160,7 @@ public class Parser {
 				switch(commandType){
 				
 					case ADD:
-						System.out.println("In case ADD");
+						
 						if(content_.length() == 0){
 							System.out.println("In ADD");
 							return true;
@@ -171,14 +168,14 @@ public class Parser {
 						return false;
 					
 					case CLEAR:
-						System.out.println("In case clear");
+
 						if(content_.length() != 0){
 							return true;
 						}
 						return false;
 				
 					case DELETE:
-						System.out.println("In case delete");
+
 						if(content_.length() == 0 || !content_.matches("\\d+")){
 							return true;
 						}
@@ -190,14 +187,14 @@ public class Parser {
 //						}
 					
 					case TICK:
-						System.out.println("In case tick");
+
 						if(content_.length() == 0 || !content_.matches("\\d+")){
 							return true;
 						}
 						return false;
 					
 					case UPDATE:
-						System.out.println("In case update");
+
 						String lst[] = content_.split(" ");
 						if(!lst[0].matches("\\d+") || content_.length() == 0 || lst.length < 2){
 							return true;
@@ -205,17 +202,17 @@ public class Parser {
 						return false;
 				
 					default: 
-						System.out.println("In case default");
+
 						System.out.println("case2");
 						return false;
 				}
 			}
 			catch(IllegalArgumentException e){
-				System.out.println("In case clear");
+
 				return false;
 			}
 		}else{
-			System.out.println("In case else");
+
 			return false;
 		}
 	}

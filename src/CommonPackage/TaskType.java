@@ -1,5 +1,5 @@
 package CommonPackage;
 
 public enum TaskType {
-	FLOATING, DEADLINE, RECURRENT
+	FLOATING, DEADLINE, RECURRENT, UNDEFINED
 }

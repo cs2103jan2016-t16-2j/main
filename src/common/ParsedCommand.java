@@ -1,4 +1,4 @@
-package CommonPackage;
+package common;
 
 public class ParsedCommand {
 	private boolean isValid_;

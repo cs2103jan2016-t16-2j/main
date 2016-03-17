@@ -1,4 +1,4 @@
-package CommonPackage;
+package common;
 
 public class Constant {
 	

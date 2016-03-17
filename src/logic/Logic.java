@@ -1,9 +1,10 @@
-package LogicPackage;
+package logic;
 import java.lang.StringBuilder;
 import java.util.*;
-import ParserPackage.*;
-import CommonPackage.*;
-import StoragePackage.*;
+
+import common.*;
+import parser.*;
+import storage.*;
 
 public class Logic{
 

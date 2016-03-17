@@ -1,7 +1,8 @@
-package ParserPackage;
+package parser;
 
 import java.lang.StringBuilder;
-import CommonPackage.*;
+
+import common.*;
 
 public class Parser {
 	

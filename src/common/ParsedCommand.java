@@ -1,13 +1,18 @@
 package common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ParsedCommand {
 	private boolean isValid_;
 	private int errorCode_;
 	private CommandType command_;
 	private String content_;
 	private TaskType type_;
-	private String startDate_;
-	private String endDate_;
+	private boolean isStartDate_;
+	private Date startDate_;
+	private boolean isEndDate_;
+	private Date endDate_;
 	
 	public ParsedCommand(){
 		Constant c = new Constant();
@@ -16,8 +21,10 @@ public class ParsedCommand {
 		command_ = CommandType.UNDEFINED;
 		content_ = c.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;
-		startDate_ = c.VALUE_DEFAULT_EMPTY;
-		endDate_ = c.VALUE_DEFAULT_EMPTY;
+		isStartDate_ = false;
+		startDate_ = null;
+		isEndDate_ = false;
+		endDate_ = null;
 	}
 	/*
 	 * List of set commands
@@ -42,11 +49,11 @@ public class ParsedCommand {
 		type_ = type;
 	}
 	
-	public void setStartDate(String startDate){
+	public void setStartDate(Date startDate){
 		startDate_ = startDate;
 	}
 	
-	public void setEndDate(String endDate){
+	public void setEndDate(Date endDate){
 		endDate_ = endDate;
 	}
 	
@@ -73,11 +80,11 @@ public class ParsedCommand {
 		return type_;
 	}
 	
-	public String getStartDate(){
+	public Date getStartDate(){
 		return startDate_;
 	}
 	
-	public String getEndDate(){
+	public Date getEndDate(){
 		return endDate_;
 	}
 	

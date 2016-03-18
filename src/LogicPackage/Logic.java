@@ -9,7 +9,7 @@ public class Logic{
 
 	private Storage storage;
 	private Parser parser;
-	private TreeSet<Task> taskList;
+	private TreeSet<Task> normalTaskList;
 
 	private final String KEY_IS_VALID = "isValid";
 	private final String KEY_ERROR_CODE = "errorCode";
@@ -81,11 +81,12 @@ public class Logic{
 	public Logic(){
 		storage = new Storage();
 		parser = new Parser(); // processInput
-		taskList = storage.read();
+		normalTaskList = storage.getNormalTree();
+		
 	}
 	
 	public TreeSet<Task> getList(){
-		return taskList;
+		return normalTaskList;
 	}
 	
 	public String process(String cmd){
@@ -153,9 +154,9 @@ public class Logic{
 		try {
 			Task newTask;
 			newTask = new Task(cmdTable);
-			taskList.add(newTask);
+			normalTaskList.add(newTask);
 			CommandType commandType = determineCommandType(VALUE_COMMAND_ADD);
-			storage.save(taskList);
+			storage.save(normalTaskList);
 			return SUCCESSFUL_MESSAGE;
 		} catch (Exception e){
 			return e.toString();
@@ -165,18 +166,18 @@ public class Logic{
 	private String cmdDelete(HashMap<String,String> cmdTable){
 		int position = Integer.parseInt(cmdTable.get(KEY_CONTENT));
 
-		if(position > taskList.size()){
+		if(position > normalTaskList.size()){
 			return FAILURE_INDEX_OUT_OF_BOUND;
 		} else {
 			Iterator<Task> itr;
-			itr = taskList.iterator();
+			itr = normalTaskList.iterator();
 			for(int i = 1; i< position; i++){
 				itr.next();
 			}
 			Task toBeDeleted = itr.next();
-			taskList.remove(toBeDeleted);
+			normalTaskList.remove(toBeDeleted);
 			CommandType commandType = determineCommandType(VALUE_COMMAND_DELETE);
-			storage.save(taskList);
+			storage.save(normalTaskList);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
@@ -184,18 +185,18 @@ public class Logic{
 	private String cmdTick(HashMap<String,String> cmdTable){
 		int position = Integer.parseInt(cmdTable.get(KEY_CONTENT));
 
-		if(position > taskList.size()){
+		if(position > normalTaskList.size()){
 			return FAILURE_INDEX_OUT_OF_BOUND;
 		} else {
 			Iterator<Task> itr;
-			itr = taskList.iterator();
+			itr = normalTaskList.iterator();
 			for(int i = 1; i< position; i++){
 				itr.next();
 			}
 			Task toBeDeleted = itr.next();
 			toBeDeleted.setIsFinished(true);
 			CommandType commandType = determineCommandType(VALUE_COMMAND_TICK);
-			storage.save(taskList);
+			storage.save(normalTaskList);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
@@ -204,25 +205,25 @@ public class Logic{
 		String[] messageSplit = message.split(" ");
 		int position = Integer.parseInt(messageSplit[0]);
 
-		if(position > taskList.size()){
+		if(position > normalTaskList.size()){
 			return FAILURE_INDEX_OUT_OF_BOUND;
 		} else {
 			Iterator<Task> itr;
-			itr = taskList.iterator();
+			itr = normalTaskList.iterator();
 			for(int i = 1; i< position; i++){
 				itr.next();
 			}
 			Task toBeEdited = itr.next();
 			toBeEdited.setContent(parser.readContent(messageSplit));
 			CommandType commandType = determineCommandType(VALUE_COMMAND_UPDATE);
-			storage.save(taskList);
+			storage.save(normalTaskList);
 			return SUCCESSFUL_MESSAGE;
 		}
 	}
 	private String cmdClear(){
-		taskList.clear();
+		normalTaskList.clear();
 		CommandType commandType = determineCommandType(VALUE_COMMAND_CLEAR);
-		storage.save(taskList);
+		storage.save(normalTaskList);
 		return SUCCESSFUL_MESSAGE;
 	}
 	

@@ -1,4 +1,5 @@
 package StoragePackage;
+import java.util.ArrayList;
 import java.util.TreeSet;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
@@ -20,6 +21,8 @@ public class Storage {
 	protected Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	
+	private TreeSet<Task> normalTasks;
+	private ArrayList<Task> floatingTasks;
 	
 	// Constructor
  	public Storage(){
@@ -33,20 +36,26 @@ public class Storage {
  	 * Store the Task Objects in a TreeSet and return it to LOGIC
  	 * @return a TreeSet containing all Tasks
  	 */
-	public TreeSet<Task> read(){
-		TreeSet<Task> tasks = new TreeSet<Task>();
+	public void read(){
+		this.normalTasks = new TreeSet<Task>();
+		this.floatingTasks = new ArrayList<Task>();
+		
 		Task task;
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			while (reader.ready()) {
 				task = readCurrentTask(reader);
-				tasks.add(task);
+				boolean isFloating = task.getIsFloating();
+				if (isFloating) {
+					floatingTasks.add(task);
+				} else {
+					normalTasks.add(task);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return tasks;
 	}
  	
 	/**
@@ -104,5 +113,12 @@ public class Storage {
 		task = gson.fromJson(currentTask, typeOfTask);
 		return task;
 	}
-
+	
+	public ArrayList<Task> getFloatingList() {
+		return this.floatingTasks;
+	}
+	
+	public TreeSet<Task> getNormalTree() {
+		return this.normalTasks;
+	}
 }

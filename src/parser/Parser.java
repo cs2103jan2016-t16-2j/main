@@ -7,15 +7,15 @@ import common.*;
 
 public class Parser {
 	
-	private Constant constant_;
+	private State state_;
 	
 	/*
 	 * Initializing parser
 	 * Input: None
 	 * Output: A parser instance
 	 */
-	public Parser(){
-		constant_ = new Constant();
+	public Parser(State state){
+		state_ = state;
 	}
 	
 	/*
@@ -23,7 +23,7 @@ public class Parser {
 	 * Input: String
 	 * Output: A parsedCommand object
 	 */
-	public ParsedCommand processInput(String input){
+	public boolean processInput(String input){
 		return buildParsedCommand(input);
 	}
 	
@@ -32,19 +32,18 @@ public class Parser {
 	 * Input: String
 	 * Output: ParsedCommand object
 	 */
-	private ParsedCommand buildParsedCommand(String input) {
-		ParsedCommand parsed = new ParsedCommand();
-		
-		parsed.setErrorCode(getErrorCode(input));
-		parsed.setIsValid(getIsValid(parsed.getErrorCode()));
-		if(parsed.getIsValid()){
-			parsed.setCommand(getCommand(input));
-			parsed.setContent(getContent(input));
-			parsed.setType(getType(parsed.getContent()));
-			parsed.setStartDate(getStartDate(parsed.getContent()));
-			parsed.setEndDate(getEndDate(parsed.getContent()));
+	private boolean buildParsedCommand(String input) {
+
+		state_.setErrorCode(getErrorCode(input));
+		state_.setIsValid(getIsValid(state_.getErrorCode()));
+		if(state_.getIsValid()){
+			state_.setCommand(getCommand(input));
+			state_.setContent(getContent(input));
+			state_.setType(getType(state_.getContent()));
+			state_.setStartDate(getStartDate(state_.getContent()));
+			state_.setEndDate(getEndDate(state_.getContent()));
 		}
-		return parsed;
+		return state_.getErrorCode() == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
 	
@@ -102,7 +101,7 @@ public class Parser {
 	 * Output: True if command input is valid. False otherwise.
 	 */
 	private boolean getIsValid(int errorCode) {
-		return errorCode == constant_.VALUE_ERROR_NO_ERROR;
+		return errorCode == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
 
@@ -113,15 +112,15 @@ public class Parser {
 	 */
 	private int getErrorCode(String input) {
 		if(isInputEmpty(input)){
-			return constant_.VALUE_ERROR_NO_INPUT;
+			return Constant.VALUE_ERROR_NO_INPUT;
 		}
 		if(isCommandInvalid(input)){
-			return constant_.VALUE_ERROR_COMMAND_NOT_FOUND;
+			return Constant.VALUE_ERROR_COMMAND_NOT_FOUND;
 		}
 		if(isArgumentInvalid(input)){
-			return constant_.VALUE_ERROR_INVALID_ARGUMENT;
+			return Constant.VALUE_ERROR_INVALID_ARGUMENT;
 		}
-		return constant_.VALUE_ERROR_NO_ERROR;
+		return Constant.VALUE_ERROR_NO_ERROR;
 	}
 
 	/*

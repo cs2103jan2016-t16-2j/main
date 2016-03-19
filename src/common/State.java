@@ -1,9 +1,11 @@
 package common;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.TreeSet;
 
-public class ParsedCommand {
+public class State {
 	private boolean isValid_;
 	private int errorCode_;
 	private CommandType command_;
@@ -13,8 +15,10 @@ public class ParsedCommand {
 	private Date startDate_;
 	private boolean isEndDate_;
 	private Date endDate_;
+	private ArrayList<Task> floatingTasks_;
+	private TreeSet<Task> normalTasks_;
 	
-	public ParsedCommand(){
+	public State(){
 		Constant c = new Constant();
 		isValid_ = true;
 		errorCode_ = c.VALUE_ERROR_NO_ERROR;
@@ -25,6 +29,8 @@ public class ParsedCommand {
 		startDate_ = null;
 		isEndDate_ = false;
 		endDate_ = null;
+		floatingTasks_ = new ArrayList<Task>();
+		normalTasks_ = new TreeSet<Task>();
 	}
 	/*
 	 * List of set commands
@@ -65,6 +71,14 @@ public class ParsedCommand {
 		isEndDate_ = isEndDate;
 	}
 	
+	public void setFloatingTasks (ArrayList<Task> floatingTasks){
+		floatingTasks_ = floatingTasks;
+	}
+	
+	public void setNormalTasks (TreeSet<Task> normalTasks){
+		normalTasks_ = normalTasks;
+	}
+	
 	/*
 	 * List of get commands
 	 */
@@ -102,5 +116,13 @@ public class ParsedCommand {
 	
 	public boolean getIsEndDate(){
 		return isEndDate_;
+	}
+	
+	public ArrayList<Task> setFloatingTasks (){
+		return floatingTasks_;
+	}
+	
+	public TreeSet<Task> setNormalTasks (){
+		return normalTasks_;
 	}
 }

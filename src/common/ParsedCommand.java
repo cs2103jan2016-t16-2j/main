@@ -57,6 +57,14 @@ public class ParsedCommand {
 		endDate_ = endDate;
 	}
 	
+	public void setIsStartDate(boolean isStartDate){
+		isStartDate_ = isStartDate;
+	}
+	
+	public void setIsEndDate(boolean isEndDate){
+		isEndDate_ = isEndDate;
+	}
+	
 	/*
 	 * List of get commands
 	 */
@@ -88,4 +96,11 @@ public class ParsedCommand {
 		return endDate_;
 	}
 	
+	public boolean getIsStartDate(){
+		return isStartDate_;
+	}
+	
+	public boolean getIsEndDate(){
+		return isEndDate_;
+	}
 }

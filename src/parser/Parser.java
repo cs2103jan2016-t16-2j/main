@@ -1,6 +1,7 @@
 package parser;
 
 import java.lang.StringBuilder;
+import java.util.Date;
 
 import common.*;
 
@@ -52,8 +53,8 @@ public class Parser {
 	 * Input: String
 	 * Output: String
 	 */
-	private String getEndDate(String input) {
-		return constant_.VALUE_DEFAULT_EMPTY;
+	private Date getEndDate(String input) {
+		return null; //constant_.VALUE_DEFAULT_EMPTY;
 	}
 	
 	/*
@@ -61,8 +62,8 @@ public class Parser {
 	 * Input: String
 	 * Output: The start date. Default value is the time of assignment
 	 */
-	private String getStartDate(String content) {
-		return constant_.VALUE_DEFAULT_EMPTY;
+	private Date getStartDate(String content) {
+		return null; //constant_.VALUE_DEFAULT_EMPTY;
 	}
 
 	/*

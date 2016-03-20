@@ -1,17 +1,16 @@
-package GUIPackage;
+package gui;
 /**
  * 
  * @author Kaidi
  *
  */
 
-import LogicPackage.*;
-import CommonPackage.*;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeSet;
+
+import common.*;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -35,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import logic.*;
 
 public class GUI extends Application{
 	

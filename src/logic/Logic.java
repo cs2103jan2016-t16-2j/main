@@ -1,9 +1,10 @@
-package LogicPackage;
+package logic;
 import java.lang.StringBuilder;
 import java.util.*;
-import ParserPackage.*;
-import CommonPackage.*;
-import StoragePackage.*;
+
+import common.*;
+import parser.*;
+import storage.*;
 
 public class Logic{
 
@@ -81,7 +82,7 @@ public class Logic{
 	public Logic(){
 		storage = new Storage();
 		parser = new Parser(); // processInput
-		taskList = storage.read();
+		taskList = storage.loadState();
 	}
 	
 	public TreeSet<Task> getList(){

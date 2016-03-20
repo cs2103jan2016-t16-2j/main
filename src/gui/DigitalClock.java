@@ -1,4 +1,4 @@
-package GUIPackage;
+package gui;
 import javafx.animation.*;
 import javafx.event.*;
 import javafx.scene.control.Label;

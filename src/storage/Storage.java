@@ -22,9 +22,6 @@ public class Storage {
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	private State state;
 	
-	private TreeSet<Task> normalTasks;
-	private ArrayList<Task> floatingTasks;
-	
 	// Constructor
  	public Storage(State state){
 		File dataDir = createDataDir();
@@ -39,8 +36,8 @@ public class Storage {
  	 * @return a TreeSet containing all Tasks
  	 */
 	public boolean loadState(){
-		normalTasks = state.getNormalTasks();
-		floatingTasks = state.getFloatingTasks();
+		TreeSet<Task> normalTasks = state.getNormalTasks();
+		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		
 		Task task;
 		BufferedReader reader;

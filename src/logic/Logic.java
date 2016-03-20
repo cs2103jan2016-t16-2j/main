@@ -82,7 +82,7 @@ public class Logic{
 	public Logic(){
 		storage = new Storage();
 		parser = new Parser(); // processInput
-		taskList = storage.read();
+		taskList = storage.loadState();
 	}
 	
 	public TreeSet<Task> getList(){

@@ -118,11 +118,11 @@ public class State {
 		return isEndDate_;
 	}
 	
-	public ArrayList<Task> setFloatingTasks (){
+	public ArrayList<Task> getFloatingTasks (){
 		return floatingTasks_;
 	}
 	
-	public TreeSet<Task> setNormalTasks (){
+	public TreeSet<Task> getNormalTasks (){
 		return normalTasks_;
 	}
 }

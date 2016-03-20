@@ -230,7 +230,7 @@ public class Parser {
 	 * Input: String[] of input words
 	 * Output: A string of the content
 	 */
-	public String readContent(String[] inputList) {
+	private String readContent(String[] inputList) {
 		StringBuilder sb = new StringBuilder("");
 		for(int i = 1; i < inputList.length; i ++){
 			sb.append(inputList[i]);

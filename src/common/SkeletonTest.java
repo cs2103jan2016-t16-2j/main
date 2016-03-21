@@ -9,7 +9,7 @@ public class SkeletonTest {
 
 	@Test
 	public void test() {
-		Facade lg = new Facade();
+		WallistModel lg = new WallistModel();
 		
 	}
 

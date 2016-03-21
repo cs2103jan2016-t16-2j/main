@@ -6,7 +6,7 @@ import common.*;
 import parser.*;
 import storage.*;
 
-public class Facade{
+public class WallistModel{
 
 	private Storage storage;
 	private Parser parser;
@@ -17,7 +17,7 @@ public class Facade{
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
 	
-	public Facade(){
+	public WallistModel(){
 		state = new State();
 		addTask = new AddTask(state);
 		deleteTask = new DeleteTask(state);

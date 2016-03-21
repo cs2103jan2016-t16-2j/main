@@ -10,6 +10,7 @@ public class State {
 	private int errorCode_;
 	private CommandType command_;
 	private String content_;
+	private String userInput_;
 	private TaskType type_;
 	private boolean isStartDate_;
 	private Date startDate_;
@@ -24,6 +25,7 @@ public class State {
 		errorCode_ = c.VALUE_ERROR_NO_ERROR;
 		command_ = CommandType.UNDEFINED;
 		content_ = c.VALUE_DEFAULT_EMPTY;
+		userInput_ = c.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;
 		isStartDate_ = false;
 		startDate_ = null;
@@ -49,6 +51,10 @@ public class State {
 	
 	public void setContent(String content){
 		content_ = content;
+	}
+	
+	public void setUserInput(String userInput){
+		userInput_ = userInput;
 	}
 	
 	public void setType(TaskType type){
@@ -96,6 +102,10 @@ public class State {
 	
 	public String getContent(){
 		return content_;
+	}
+	
+	public String getUserInput(){
+		return userInput_;
 	}
 	
 	public TaskType getType(){

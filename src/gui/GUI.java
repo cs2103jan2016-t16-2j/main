@@ -41,7 +41,7 @@ public class GUI extends Application{
 	private Stage window;
 	private Scene scene;
 	private GridPane layout = new GridPane();
-	private Logic logic = new Logic();
+	private WallistModel logic = new WallistModel();
 	private String command;
 	private TreeSet<Task> taskList;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
@@ -130,7 +130,7 @@ public class GUI extends Application{
 	
 	private void refresh(VBox tasks, VBox floaties) {
 		tasks.getChildren().clear();
-		taskList = logic.getList();
+		taskList = logic.getState();
 		taskIndex = 0;
 		floatyIndex = 0;
 		for (Task task: taskList){

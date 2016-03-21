@@ -23,7 +23,8 @@ public class Parser {
 	 * Input: String
 	 * Output: A parsedCommand object
 	 */
-	public boolean processInput(String input){
+	public boolean processInput(){
+		String input = state_.getUserInput();
 		return buildParsedCommand(input);
 	}
 	

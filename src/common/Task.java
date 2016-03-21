@@ -42,6 +42,19 @@ public class Task implements Comparable<Task> {
 		endDate = DEFAULT_END_DATE;
 	}
 	
+	//to be completed
+	public Task(State state) {
+		this.content = "";
+		venue = DEFAULT_VENUE;
+		detail = DEFAULT_DETAIL;
+		isFloating = DEFAULT_IS_FLOATING;
+		isImportant = DEFAULT_IS_IMPORTANT;
+		isFinished = DEFAULT_IS_FINISHED;
+		startDate = getCurrentDate();
+		endDate = DEFAULT_END_DATE;
+	}
+	
+	
 	public Task(HashMap<String,String> cmdTable) throws Exception{
 		content = cmdTable.get(KEY_CONTENT);
 		venue = cmdTable.get(KEY_CONTENT);

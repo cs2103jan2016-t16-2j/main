@@ -6,6 +6,7 @@ package gui;
  */
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeSet;
@@ -41,9 +42,8 @@ public class GUI extends Application{
 	private Stage window;
 	private Scene scene;
 	private GridPane layout = new GridPane();
-	private WallistModel logic = new WallistModel();
+	private WallistModel wallistModel = new WallistModel();
 	private String command;
-	private TreeSet<Task> taskList;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM H:mm");
@@ -52,7 +52,14 @@ public class GUI extends Application{
 	private double vValue;
 	
 	private final String TITLE = "%1$s's Wallist";
-	private final String MESSAGE_SUCCESS = "success";
+	
+	
+	public final String MESSAGE_SUCCESS = "Success";
+	public final String MESSAGE_ERROR_COMMAND_NOT_FOUND = "Command not available";
+	public final String MESSAGE_ERROR_NO_INPUT = "No input for command";
+	public final String MESSAGE_ERROR_INVALID_ARGUMENT = "Input for command invalid";
+	public final String MESSAGE_DEFAULT_EMPTY = "";
+
 	
 	private final int STAGE_HEIGHT = 600;
 	private final int STAGE_WIDTH = 900;
@@ -93,7 +100,10 @@ public class GUI extends Application{
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
 		
-    	refresh(tasks, floaties);
+		State state = wallistModel.getState();
+		TreeSet<Task> taskList = state.getNormalTasks();
+		ArrayList<Task> floatyList = state.getFloatingTasks();
+    	refresh(tasks, floaties, taskList, floatyList);
 		
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
@@ -115,31 +125,35 @@ public class GUI extends Application{
 	
 	private void displayStatus(TextField inputBox, VBox tasks, VBox floaties) {
 		command = inputBox.getText();
-		String status = logic.process(command);
-		Label displayText = new Label(status);
+		boolean isSuccess = wallistModel.process(command);
+		if (isSuccess){
+			State state = wallistModel.getState();
+			TreeSet<Task> taskList = state.getNormalTasks();
+			ArrayList<Task> floatyList = state.getFloatingTasks();
+	    	refresh(tasks, floaties, taskList, floatyList);
+		}
+		Label displayText = new Label("wtf is hapennign");
 		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
 				HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
 		layout.getChildren().add(displayText);
 		FadeTransition fade = fadeAnimation(displayText);
 		fade.play();
-		if (status.equals(MESSAGE_SUCCESS)){
-			refresh(tasks, floaties);
-		}
 		inputBox.clear();
 	}
 	
-	private void refresh(VBox tasks, VBox floaties) {
+	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
-		taskList = logic.getState();
 		taskIndex = 0;
 		floatyIndex = 0;
 		for (Task task: taskList){
 			if (!task.getIsFinished()){
-    			if (task.getIsFloating()){
 	    			displayTaskLine(tasks, task);
-		    	} else{
+		    }
+		}
+		
+		for (Task task: floatyList){
+			if (!task.getIsFinished()){
 			    	displayFloatyLine(floaties, task);
-			    }
 			}
 		}
 	}
@@ -152,7 +166,6 @@ public class GUI extends Application{
 		StackPane indexPane = indexCol(floatyIndex);
 		StackPane contentPane = contentCol(taskContent, TASK_CONTENT_WIDTH_FLOATY);
 		taskLine.getChildren().addAll(indexPane, contentPane);
-		floaties.getChildren().add(taskLine);
 		floaties.getChildren().add(taskLine);
 	}
 

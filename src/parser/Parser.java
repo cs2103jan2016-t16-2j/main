@@ -91,7 +91,6 @@ public class Parser {
 	 */
 
 	private boolean isIndexRequired() {
-		// TODO Auto-generated method stub
 		return state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE);
 	}
 

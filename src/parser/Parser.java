@@ -35,18 +35,17 @@ public class Parser {
 	 */
 	private boolean buildParsedCommand(String input) {
 
-		state_.setErrorCode(getErrorCode(input));
-		state_.setIsValid(getIsValid(state_.getErrorCode()));
+		state_.setErrorMessage(getErrorMessage(input));
+		state_.setIsValid(getIsValid(state_.getErrorMessage()));
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand(input));
 			state_.setContent(getContent(input));
-			state_.setType(getType(state_.getContent()));
+			state_.setTaskType(getType(state_.getContent()));
 			state_.setStartDate(getStartDate(state_.getContent()));
 			state_.setEndDate(getEndDate(state_.getContent()));
 		}
-		return state_.getErrorCode() == Constant.VALUE_ERROR_NO_ERROR;
+		return state_.getIsValid();
 	}
-	
 	
 	/*
 	 * Get the deadline of a task from a given input
@@ -101,8 +100,8 @@ public class Parser {
 	 * Input: Error code (int)
 	 * Output: True if command input is valid. False otherwise.
 	 */
-	private boolean getIsValid(int errorCode) {
-		return errorCode == Constant.VALUE_ERROR_NO_ERROR;
+	private boolean getIsValid(String errorMessage) {
+		return errorMessage == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
 
@@ -111,7 +110,7 @@ public class Parser {
 	 * Input: String input
 	 * Output: 0 for no error. 1 for command not found. 2 for empty input. 3 for invalid argument
 	 */
-	private int getErrorCode(String input) {
+	private String getErrorMessage(String input) {
 		if(isInputEmpty(input)){
 			return Constant.VALUE_ERROR_NO_INPUT;
 		}
@@ -240,6 +239,11 @@ public class Parser {
 		return sb.toString().trim();
 	}
 	
+	/*
+	 * Get the command type based on input
+	 * Input: String of command
+	 * Output: CommandType of the given input
+	 */
 	private CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {
 			throw new Error("Command type string cannot be null!");

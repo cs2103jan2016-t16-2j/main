@@ -23,14 +23,13 @@ public class State {
 	private TreeSet<Task> normalTasks_;
 	
 	public State(){
-		Constant c = new Constant();
 		isValid_ = true;
 		command_ = CommandType.UNDEFINED;
-		content_ = c.VALUE_DEFAULT_EMPTY;
-		userInput_ = c.VALUE_DEFAULT_EMPTY;
-		venue_ = c.VALUE_DEFAULT_EMPTY;
-		errorMessage_ = c.VALUE_DEFAULT_EMPTY;
-		detail_ = c.VALUE_DEFAULT_EMPTY;
+		content_ = Constant.VALUE_DEFAULT_EMPTY;
+		userInput_ = Constant.VALUE_DEFAULT_EMPTY;
+		venue_ = Constant.VALUE_DEFAULT_EMPTY;
+		errorMessage_ = Constant.VALUE_DEFAULT_EMPTY;
+		detail_ = Constant.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;
 		position_ = 0;
 		isStartDate_ = false;
@@ -133,7 +132,7 @@ public class State {
 		return detail_;
 	}	
 	
-	public String getErrorMessgae(){
+	public String getErrorMessage(){
 		return errorMessage_;
 	}
 	

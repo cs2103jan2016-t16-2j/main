@@ -54,6 +54,7 @@ public class GUI extends Application{
 	
 	private final String TITLE = "%1$s's Wallist";
 	
+/***	
 	private final int STAGE_HEIGHT = 600;
 	private final int STAGE_WIDTH = 900;
 	private final int COMPONENT_GAP_H = 30;
@@ -66,7 +67,21 @@ public class GUI extends Application{
 	private final int TASK_CONTENT_WIDTH_FLOATY = 200;
 	private final int TASK_INDEX_WIDTH = 30;
 	private final int TASK_DEADLINE_WIDTH = 120;
-
+*/
+	
+	private final int STAGE_HEIGHT = 700;
+	private final int STAGE_WIDTH = 1300;
+	private final int COMPONENT_GAP_H = 30;
+	private final int COMPONENT_GAP_V = 30;
+	private final int FLOATYBOX_HEIGHT = 360;
+	private final int FLOATYBOX_WIDTH = 400;
+	private final int TASKBOX_HEIGHT = 570;
+	private final int TASKBOX_WIDTH = 810;
+	private final int TASK_CONTENT_WIDTH = 640;
+	private final int TASK_CONTENT_WIDTH_FLOATY = 370;
+	private final int TASK_INDEX_WIDTH = 30;
+	private final int TASK_DEADLINE_WIDTH = 120;
+	
 	private final double SCROLL_PERCENTAGE = 0.1;
 		
 	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);

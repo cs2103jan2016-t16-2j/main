@@ -38,11 +38,12 @@ public class Parser {
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());
 			state_.setRawContent(getRawContent());
+			state_.setStartDate(getStartDate());
+			state_.setEndDate(getEndDate());
 			state_.setPosition(getPosition());
 			state_.setContent(getContent());
 			state_.setTaskType(getType());
-			state_.setStartDate(getStartDate());
-			state_.setEndDate(getEndDate());
+			
 		}
 		return state_.getIsValid();
 	}
@@ -55,11 +56,24 @@ public class Parser {
 	private String getContent() {
 		if(isUpdate()){
 			return state_.getRawContent().substring(1).trim();
+		}else if(isDeadline()){
+			System.out.println("Content Deadline");
+			String lst[] = state_.getRawContent().split("on");
+			return lst[0];
 		}else{
 			return state_.getRawContent();
 		}
 	}
 	
+	/*
+	 * Check whether the task is a deadline task
+	 * Input: None
+	 * Output: True if it is an add deadline task. False otherwise
+	 */
+	private boolean isDeadline() {
+		return state_.getCommand().equals(CommandType.ADD) && state_.getIsEndDate();
+	}
+
 	/*
 	 * Check whether the task is of update type
 	 * Input: None
@@ -101,7 +115,7 @@ public class Parser {
 	 * Output: String
 	 */
 	private Date getEndDate() {
-		String list[] = state_.getContent().split("on");
+		String list[] = state_.getRawContent().split("on");
 		if(list.length==1){
 			state_.setIsEndDate(false);
 			return null;

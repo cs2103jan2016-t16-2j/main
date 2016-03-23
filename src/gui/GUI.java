@@ -293,7 +293,7 @@ public class GUI extends Application{
 		layout.setHgap(COMPONENT_GAP_H);
 		timeComponent();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/GUIPackage/Stylesheet.css");
+		scene.getStylesheets().add("/gui/Stylesheet.css");
 		window.setScene(scene);
 		window.show();
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {

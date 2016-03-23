@@ -44,7 +44,7 @@ public class Task implements Comparable<Task> {
 	
 	//to be completed
 	public Task(State state) {
-		this.content = "";
+		this.content = state.getContent();
 		venue = DEFAULT_VENUE;
 		detail = DEFAULT_DETAIL;
 		isFloating = DEFAULT_IS_FLOATING;

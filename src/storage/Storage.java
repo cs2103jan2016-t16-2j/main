@@ -26,7 +26,7 @@ public class Storage {
  	public Storage(State state){
 		File dataDir = createDataDir();
 		this.file = new File(dataDir,"data.txt");
-		state = this.state;
+		this.state = state;
 	}
 
  	// Operation Methods

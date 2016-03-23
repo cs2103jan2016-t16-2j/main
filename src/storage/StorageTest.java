@@ -25,6 +25,7 @@ public class StorageTest {
 		Storage storage = new Storage(state);
 		
 		// create one floating task and one normal task
+		/* This is a equivalence partition as Tasks with same type are similar */
 		Task floatingTask = new Task("This is a floating Task");
 		Task normalTask = new Task("This is a normal Task");
 		floatingTask.setTaskType(TaskType.FLOATING);

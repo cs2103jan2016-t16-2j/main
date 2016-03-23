@@ -57,7 +57,6 @@ public class Parser {
 		if(isUpdate()){
 			return state_.getRawContent().substring(1).trim();
 		}else if(isDeadline()){
-			System.out.println("Content Deadline");
 			String lst[] = state_.getRawContent().split("on");
 			return lst[0];
 		}else{
@@ -103,7 +102,6 @@ public class Parser {
 	 * Input: None
 	 * Output: True if it needs index. False othrwise
 	 */
-
 	private boolean isIndexRequired() {
 		return state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE);
 	}

@@ -52,9 +52,13 @@ public class Storage {
 				TaskType taskType = task.getTaskType();
 				switch (taskType) {
 					case FLOATING :
+						System.out.println("1");
 						floatingTasks.add(task);
+						break;
 					case DEADLINE :
+						System.out.println("2");
 						normalTasks.add(task);
+						break;
 					default :
 						continue;
 				}

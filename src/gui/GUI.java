@@ -24,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.input.KeyCode;
@@ -42,7 +43,7 @@ public class GUI extends Application{
 	private Stage window;
 	private Scene scene;
 	private GridPane layout = new GridPane();
-	private WallistModel wallistModel = new WallistModel();
+//	private WallistModel wallistModel = new WallistModel();
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
@@ -87,7 +88,7 @@ public class GUI extends Application{
 		taskPane.setContent(tasks);
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
-		
+/***		
 		State state = wallistModel.getState();
 		TreeSet<Task> taskList = state.getNormalTasks();
 		ArrayList<Task> floatyList = state.getFloatingTasks();
@@ -125,7 +126,7 @@ public class GUI extends Application{
 		FadeTransition fade = fadeAnimation(displayText);
 		fade.play();
 		inputBox.clear();
-	}
+*/	}
 	
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
@@ -274,6 +275,8 @@ public class GUI extends Application{
         window.initStyle(StageStyle.UNDECORATED);
         window.setResizable(false);
 		
+        window.getIcons().add(new Image("file:../../resources/title.png"));
+        
         window.setTitle(String.format(TITLE, System.getProperty("user.name")));
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setVgap(COMPONENT_GAP_V);

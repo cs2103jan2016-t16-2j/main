@@ -55,7 +55,8 @@ public class Parser {
 	 */
 	private String getContent() {
 		if(isUpdate()){
-			return state_.getRawContent().substring(1).trim();
+			String lst[] = state_.getRawContent().substring(1, state_.getRawContent().length()).trim().split(" ");
+			return readContent(lst);
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
 			return lst[0];

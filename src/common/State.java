@@ -76,7 +76,7 @@ public class State {
 		return position_;
 	}
 	
-	public void setErrorMessage(String errorMessage){
+	public void setMessage(String errorMessage){
 		errorMessage_ = errorMessage;
 	}
 	
@@ -140,7 +140,7 @@ public class State {
 		return detail_;
 	}	
 	
-	public String getErrorMessage(){
+	public String getMessage(){
 		return errorMessage_;
 	}
 	

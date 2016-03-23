@@ -33,7 +33,7 @@ public class Parser {
 	 * Output: ParsedCommand object
 	 */
 	private boolean buildParsedCommand() {
-		state_.setErrorMessage(getErrorMessage());
+		state_.setMessage(getErrorMessage());
 		state_.setIsValid(getIsValid());
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());
@@ -182,7 +182,7 @@ public class Parser {
 	 * Output: True if command input is valid. False otherwise.
 	 */
 	private boolean getIsValid() {
-		return state_.getErrorMessage() == Constant.VALUE_ERROR_NO_ERROR;
+		return state_.getMessage() == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
 	/*

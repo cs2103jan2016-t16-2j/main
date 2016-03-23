@@ -134,7 +134,7 @@ public class GUI extends Application{
 			ArrayList<Task> floatyList = state.getFloatingTasks();
 	    	refresh(tasks, floaties, taskList, floatyList);
 		}
-		Label displayText = new Label(state.getErrorMessage());
+		Label displayText = new Label(state.getMessage());
 		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
 				HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
 		layout.getChildren().add(displayText);

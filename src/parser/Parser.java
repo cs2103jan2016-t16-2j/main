@@ -33,7 +33,7 @@ public class Parser {
 	 * Output: ParsedCommand object
 	 */
 	private boolean buildParsedCommand() {
-		state_.setErrorMessage(getErrorMessage());
+		state_.setMessage(getErrorMessage());
 		state_.setIsValid(getIsValid());
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());
@@ -55,7 +55,8 @@ public class Parser {
 	 */
 	private String getContent() {
 		if(isUpdate()){
-			return state_.getRawContent().substring(1).trim();
+			String lst[] = state_.getRawContent().substring(1, state_.getRawContent().length()).trim().split(" ");
+			return readContent(lst);
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
 			return lst[0];
@@ -143,6 +144,10 @@ public class Parser {
 	 * Output: TaskType
 	 */
 	private TaskType getType() {
+		if(isIndexRequired()){
+			String lst[] = state_.getRawContent().split(" ");
+			return determineTaskType(lst[1]);
+		}
 		if(state_.getIsEndDate()){
 			return TaskType.DEADLINE;
 		}
@@ -177,7 +182,7 @@ public class Parser {
 	 * Output: True if command input is valid. False otherwise.
 	 */
 	private boolean getIsValid() {
-		return state_.getErrorMessage() == Constant.VALUE_ERROR_NO_ERROR;
+		return state_.getMessage() == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
 	/*
@@ -336,5 +341,23 @@ public class Parser {
 			return CommandType.TICK;
 		}
 		return CommandType.ERROR;
+	}
+	
+	/*
+	 * Get the task type based on input
+	 * Input: String of command
+	 * Output: TaskType of the given input
+	 */
+	private TaskType determineTaskType(String taskTypeString) {
+		if (taskTypeString == null) {
+			throw new Error("Task type string cannot be null!");
+		}
+		
+		if (taskTypeString.equalsIgnoreCase("float")) {
+			return TaskType.FLOATING;
+		} else if (taskTypeString.equalsIgnoreCase("deadline")) {
+			return TaskType.DEADLINE;
+		} 
+		return TaskType.UNDEFINED;
 	}
 }

@@ -52,7 +52,7 @@ public class DeleteTask implements Operation {
 			return true;
 		} catch (IndexOutOfBoundsException e) {
 			//logging
-			state.setErrorMessage(DisplayMessage.MESSAGE_INDEX_OUT_OF_BOUND);
+			state.setMessage(DisplayMessage.MESSAGE_INDEX_OUT_OF_BOUND);
 			return false;
 		}
 	}

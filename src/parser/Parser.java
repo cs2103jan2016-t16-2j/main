@@ -14,7 +14,7 @@ public class Parser {
 	 * Input: None
 	 * Output: A parser instance
 	 */
-	public Parser(State state){
+ 	public Parser(State state){
 		state_ = state;
 	}
 	
@@ -24,8 +24,7 @@ public class Parser {
 	 * Output: A parsedCommand object
 	 */
 	public boolean processInput(){
-		String input = state_.getUserInput();
-		return buildParsedCommand(input);
+		return buildParsedCommand();
 	}
 	
 	/*
@@ -33,13 +32,15 @@ public class Parser {
 	 * Input: String
 	 * Output: ParsedCommand object
 	 */
-	private boolean buildParsedCommand(String input) {
-
+	private boolean buildParsedCommand() {
+		String input = state_.getUserInput();
 		state_.setErrorMessage(getErrorMessage(input));
 		state_.setIsValid(getIsValid(state_.getErrorMessage()));
 		if(state_.getIsValid()){
+			state_.setUserInput(getInput(input));
 			state_.setCommand(getCommand(input));
-			state_.setContent(getContent(input));
+			state_.setPosition(getPosition(state_.getUserInput()));
+			state_.setContent(getInput(input));
 			state_.setTaskType(getType(state_.getContent()));
 			state_.setStartDate(getStartDate(state_.getContent()));
 			state_.setEndDate(getEndDate(state_.getContent()));
@@ -47,6 +48,19 @@ public class Parser {
 		return state_.getIsValid();
 	}
 	
+	/*
+	 * Get the index of the task for delete, update and tick
+	 * Input: String of user input
+	 * Output: int of the index
+	 */
+	private int getPosition(String userInput) {
+		if(state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE)){
+			return Integer.parseInt(userInput.substring(0,1));
+		}else{
+			return 0;
+		}
+	}
+
 	/*
 	 * Get the deadline of a task from a given input
 	 * Input: String
@@ -89,11 +103,10 @@ public class Parser {
 	 * Input: String
 	 * Output: String
 	 */
-	private String getContent(String input){
+	private String getInput(String input){
 		String inputList[] = input.split(" ");
 		return readContent(inputList);
 	}
-	
 
 	/*
 	 * Check whether parsed command is valid
@@ -104,7 +117,6 @@ public class Parser {
 		return errorMessage == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
-
 	/*
 	 * Get the error code for a given input. 
 	 * Input: String input
@@ -173,7 +185,7 @@ public class Parser {
 	private boolean isArgumentInvalid(String input) {
 		if(!isCommandInvalid(input)){
 			CommandType commandType = getCommand(input);
-			String content = getContent(input);
+			String content = getInput(input);
 			try{
 				switch(commandType){
 				

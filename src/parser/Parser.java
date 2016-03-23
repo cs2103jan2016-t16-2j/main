@@ -33,41 +33,76 @@ public class Parser {
 	 * Output: ParsedCommand object
 	 */
 	private boolean buildParsedCommand() {
-		String input = state_.getUserInput();
-		state_.setErrorMessage(getErrorMessage(input));
-		state_.setIsValid(getIsValid(state_.getErrorMessage()));
+		state_.setErrorMessage(getErrorMessage());
+		state_.setIsValid(getIsValid());
 		if(state_.getIsValid()){
-			state_.setUserInput(getInput(input));
-			state_.setCommand(getCommand(input));
-			state_.setPosition(getPosition(state_.getUserInput()));
-			state_.setContent(getInput(input));
-			state_.setTaskType(getType(state_.getContent()));
-			state_.setStartDate(getStartDate(state_.getContent()));
-			state_.setEndDate(getEndDate(state_.getContent()));
+			state_.setCommand(getCommand());
+			state_.setRawContent(getRawContent());
+			state_.setPosition(getPosition());
+			state_.setContent(getContent());
+			state_.setTaskType(getType());
+			state_.setStartDate(getStartDate());
+			state_.setEndDate(getEndDate());
 		}
 		return state_.getIsValid();
 	}
 	
 	/*
-	 * Get the index of the task for delete, update and tick
-	 * Input: String of user input
-	 * Output: int of the index
+	 * Get the content of the task
+	 * Input: None
+	 * Output: String of the content
 	 */
-	private int getPosition(String userInput) {
-		if(state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE)){
-			return Integer.parseInt(userInput.substring(0,1));
+	private String getContent() {
+		if(isUpdate()){
+			return state_.getRawContent().substring(1).trim();
+		}else{
+			return state_.getRawContent();
+		}
+	}
+	
+	/*
+	 * Check whether the task is of update type
+	 * Input: None
+	 * Outpu: True if it is. False, otherwise
+	 */
+
+	private boolean isUpdate() {
+		return state_.getCommand().equals(CommandType.UPDATE);
+	}
+	
+
+	/*
+	 * Get the index of the task for delete, update and tick
+	 * Input: None
+	 * Output: Int of the index
+	 */
+	private int getPosition() {
+		if(isIndexRequired()){
+			return Integer.parseInt(state_.getRawContent().substring(0,1));
 		}else{
 			return 0;
 		}
 	}
+	
+	/*
+	 * Check whether the current command need index
+	 * Input: None
+	 * Output: True if it needs index. False othrwise
+	 */
 
+	private boolean isIndexRequired() {
+		// TODO Auto-generated method stub
+		return state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE);
+	}
+
+	
 	/*
 	 * Get the deadline of a task from a given input
 	 * Input: String
 	 * Output: String
 	 */
-	private Date getEndDate(String input) {
-		return null; //constant_.VALUE_DEFAULT_EMPTY;
+	private Date getEndDate() {
+		return null;
 	}
 	
 	/*
@@ -75,61 +110,66 @@ public class Parser {
 	 * Input: String
 	 * Output: The start date. Default value is the time of assignment
 	 */
-	private Date getStartDate(String content) {
-		return null; //constant_.VALUE_DEFAULT_EMPTY;
+	private Date getStartDate() {
+		return null;
 	}
 
 	/*
 	 * Get the type of a task from a given input
-	 * Input: String
+	 * Input: None
 	 * Output: TaskType
 	 */
-	private TaskType getType(String content) {
-		return TaskType.FLOATING;
+	private TaskType getType() {
+		if(state_.getIsEndDate()){
+			return TaskType.DEADLINE;
+		}
+		else{
+			return TaskType.FLOATING;
+		}
 	}
 	
 	/*
 	 * Get the command of an input
-	 * Input: String
+	 * Input: None
 	 * Output: CommandType
 	 */
-	private CommandType getCommand(String input) {
-		String inputList[] = input.split(" ");
+	private CommandType getCommand() {
+		String inputList[] = state_.getUserInput().split(" ");
 		return determineCommandType(inputList[0]);
 	}
 	
 	/*
 	 * Get the content of an input
-	 * Input: String
+	 * Input: None
 	 * Output: String
 	 */
-	private String getInput(String input){
-		String inputList[] = input.split(" ");
+	private String getRawContent(){
+		String inputList[] = state_.getUserInput().split(" ");
 		return readContent(inputList);
 	}
 
 	/*
 	 * Check whether parsed command is valid
-	 * Input: Error code (int)
+	 * Input: None
 	 * Output: True if command input is valid. False otherwise.
 	 */
-	private boolean getIsValid(String errorMessage) {
-		return errorMessage == Constant.VALUE_ERROR_NO_ERROR;
+	private boolean getIsValid() {
+		return state_.getErrorMessage() == Constant.VALUE_ERROR_NO_ERROR;
 	}
 	
 	/*
 	 * Get the error code for a given input. 
-	 * Input: String input
+	 * Input: None
 	 * Output: 0 for no error. 1 for command not found. 2 for empty input. 3 for invalid argument
 	 */
-	private String getErrorMessage(String input) {
-		if(isInputEmpty(input)){
+	private String getErrorMessage() {
+		if(isInputEmpty()){
 			return Constant.VALUE_ERROR_NO_INPUT;
 		}
-		if(isCommandInvalid(input)){
+		if(isCommandInvalid()){
 			return Constant.VALUE_ERROR_COMMAND_NOT_FOUND;
 		}
-		if(isArgumentInvalid(input)){
+		if(isArgumentInvalid()){
 			return Constant.VALUE_ERROR_INVALID_ARGUMENT;
 		}
 		return Constant.VALUE_ERROR_NO_ERROR;
@@ -137,21 +177,21 @@ public class Parser {
 
 	/*
 	 * Check whether the input is an empty string
-	 * Input: Input string
+	 * Input: None
 	 * Output: true if it is empty. false otherwise
 	 */	
-	private boolean isInputEmpty(String input) {
-		return input.length() == 0;
+	private boolean isInputEmpty() {
+		return state_.getUserInput().length() == 0;
 	}
 	
 	/*
 	 * Check whether the input has a valid command (add, update, tick, delete, clear, exit)
-	 * Input: Input string
+	 * Input: None
 	 * Output: True if it is valid. False otherwise
 	 */
-	private boolean isCommandInvalid(String input) {
-		if(!isInputEmpty(input)){
-			CommandType commandType = getCommand(input);
+	private boolean isCommandInvalid() {
+		if(!isInputEmpty()){
+			CommandType commandType = getCommand();
 		
 			switch(commandType) {
 				
@@ -179,13 +219,13 @@ public class Parser {
 	
 	/*
 	 * Check whether the input has the correct and valid argument for the given command
-	 * Input: Input string
+	 * Input: None
 	 * Output: True if it's invalid. False otherwise
 	 */
-	private boolean isArgumentInvalid(String input) {
-		if(!isCommandInvalid(input)){
-			CommandType commandType = getCommand(input);
-			String content = getInput(input);
+	private boolean isArgumentInvalid() {
+		if(!isCommandInvalid()){
+			CommandType commandType = getCommand();
+			String content = getRawContent();
 			try{
 				switch(commandType){
 				

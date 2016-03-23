@@ -8,6 +8,7 @@ import java.util.TreeSet;
 public class State {
 	private boolean isValid_;
 	private CommandType command_;
+	private String rawContent_;
 	private String content_;
 	private String detail_;
 	private String userInput_;
@@ -25,6 +26,7 @@ public class State {
 	public State(){
 		isValid_ = true;
 		command_ = CommandType.UNDEFINED;
+		rawContent_ = Constant.VALUE_DEFAULT_EMPTY;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
 		userInput_ = Constant.VALUE_DEFAULT_EMPTY;
 		venue_ = Constant.VALUE_DEFAULT_EMPTY;
@@ -46,6 +48,9 @@ public class State {
 		isValid_ = bool;
 	}
 	
+	public void setRawContent(String rawContent){
+		rawContent_ = rawContent;
+	}
 	
 	public void setCommand(CommandType command){
 		command_ = command;
@@ -115,6 +120,9 @@ public class State {
 		return isValid_;
 	}
 	
+	public String getRawContent(){
+		return rawContent_;
+	}
 	
 	public CommandType getCommand(){
 		return command_;

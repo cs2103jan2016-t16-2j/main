@@ -143,6 +143,10 @@ public class Parser {
 	 * Output: TaskType
 	 */
 	private TaskType getType() {
+		if(isIndexRequired()){
+			String lst[] = state_.getRawContent().split(" ");
+			return determineTaskType(lst[1]);
+		}
 		if(state_.getIsEndDate()){
 			return TaskType.DEADLINE;
 		}
@@ -336,5 +340,23 @@ public class Parser {
 			return CommandType.TICK;
 		}
 		return CommandType.ERROR;
+	}
+	
+	/*
+	 * Get the task type based on input
+	 * Input: String of command
+	 * Output: TaskType of the given input
+	 */
+	private TaskType determineTaskType(String taskTypeString) {
+		if (taskTypeString == null) {
+			throw new Error("Task type string cannot be null!");
+		}
+		
+		if (taskTypeString.equalsIgnoreCase("float")) {
+			return TaskType.FLOATING;
+		} else if (taskTypeString.equalsIgnoreCase("deadline")) {
+			return TaskType.DEADLINE;
+		} 
+		return TaskType.UNDEFINED;
 	}
 }

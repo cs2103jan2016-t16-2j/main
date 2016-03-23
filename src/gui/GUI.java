@@ -43,7 +43,7 @@ public class GUI extends Application{
 	private Stage window;
 	private Scene scene;
 	private GridPane layout = new GridPane();
-//	private WallistModel wallistModel = new WallistModel();
+	private WallistModel wallistModel = new WallistModel();
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
@@ -88,7 +88,7 @@ public class GUI extends Application{
 		taskPane.setContent(tasks);
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
-/***		
+		
 		State state = wallistModel.getState();
 		TreeSet<Task> taskList = state.getNormalTasks();
 		ArrayList<Task> floatyList = state.getFloatingTasks();
@@ -126,7 +126,7 @@ public class GUI extends Application{
 		FadeTransition fade = fadeAnimation(displayText);
 		fade.play();
 		inputBox.clear();
-*/	}
+	}
 	
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();

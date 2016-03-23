@@ -42,7 +42,7 @@ public class GUI extends Application{
 	private Stage window;
 	private Scene scene;
 	private GridPane layout = new GridPane();
-	private WallistModel wallistModel = new WallistModel();
+//	private WallistModel wallistModel = new WallistModel();
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
@@ -79,12 +79,8 @@ public class GUI extends Application{
 	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
-	public static void main(String[] args){
+	public static void launcher(){
 		launch();
-	}
-	
-	public GUI(){
-		
 	}
 	
 	@Override
@@ -99,12 +95,12 @@ public class GUI extends Application{
 		taskPane.setContent(tasks);
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
-		
+/***		
 		State state = wallistModel.getState();
 		TreeSet<Task> taskList = state.getNormalTasks();
 		ArrayList<Task> floatyList = state.getFloatingTasks();
     	refresh(tasks, floaties, taskList, floatyList);
-		
+	
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
 		    public void handle(KeyEvent keyEvent) {
@@ -121,8 +117,9 @@ public class GUI extends Application{
 		        
 			}
 		});
+*/	
 	}
-	
+/***	
 	private void displayStatus(TextField inputBox, VBox tasks, VBox floaties) {
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.process(command);
@@ -140,7 +137,7 @@ public class GUI extends Application{
 		fade.play();
 		inputBox.clear();
 	}
-	
+*/	
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
 		taskIndex = 0;

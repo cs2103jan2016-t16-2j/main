@@ -80,6 +80,7 @@ public class Storage {
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -105,18 +106,23 @@ public class Storage {
 	 * @param writer
 	 * @throws IOException
 	 */
-	private void writeTaskToJson(BufferedWriter writer) throws IOException {
+	protected boolean writeTaskToJson(BufferedWriter writer) throws IOException {
 		TreeSet<Task> normalTasks = this.state.getNormalTasks();
 		ArrayList<Task> floatingTasks = this.state.getFloatingTasks();
-		for (Task task: normalTasks) {
-			String json = gson.toJson(task);
-			writer.write(json + "\n");
+		try {
+			for (Task task: normalTasks) {
+				String json = gson.toJson(task);
+				writer.write(json + "\n");
+			}
+			
+			for (Task task: floatingTasks) {
+				String json = gson.toJson(task);
+				writer.write(json + "\n");
+			}
+		} catch (Exception e) {
+			return false;
 		}
-		
-		for (Task task: floatingTasks) {
-			String json = gson.toJson(task);
-			writer.write(json + "\n");
-		}
+		return true;
 	}
 	
 	/**
@@ -125,7 +131,7 @@ public class Storage {
 	 * @return a Task object
 	 * @throws IOException
 	 */
-	private Task readCurrentTask(BufferedReader reader) throws IOException {
+	protected Task readCurrentTask(BufferedReader reader) throws IOException {
 		Task task;
 		String currentTask = reader.readLine();
 		task = gson.fromJson(currentTask, typeOfTask);

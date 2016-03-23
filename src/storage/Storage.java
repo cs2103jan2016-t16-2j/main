@@ -46,11 +46,12 @@ public class Storage {
 			reader = new BufferedReader(new FileReader(file));
 			while (reader.ready()) {
 				task = readCurrentTask(reader);
-				boolean isFloating = task.getIsFloating();
-				if (isFloating) {
-					floatingTasks.add(task);
-				} else {
-					normalTasks.add(task);
+				TaskType taskType = task.getTaskType();
+				switch (taskType) {
+					case FLOATING :
+						floatingTasks.add(task);
+					case DEADLINE :
+						normalTasks.add(task);
 				}
 			}
 		} catch (IOException e) {

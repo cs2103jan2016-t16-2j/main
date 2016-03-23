@@ -130,6 +130,7 @@ public class GUI extends Application{
 	
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
+		floaties.getChildren().clear();
 		taskIndex = 0;
 		floatyIndex = 0;
 		for (Task task: taskList){
@@ -149,6 +150,9 @@ public class GUI extends Application{
 		floatyIndex ++;
 		String taskContent = task.getContent();
 		GridPane taskLine = new GridPane();
+		if (floatyIndex % 2 == 0){
+			taskLine.setId("gridPane");
+		}
 		taskLine.setHgap(10);
 		StackPane indexPane = indexStackPane(floatyIndex);
 		StackPane contentPane = contentStackPane(taskContent, TASK_CONTENT_WIDTH_FLOATY);
@@ -248,7 +252,7 @@ public class GUI extends Application{
 		floatyPane.setPrefSize(FLOATYBOX_WIDTH, FLOATYBOX_HEIGHT);
 		floatyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		floatyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		floatyTaskDisplay.getChildren().add(floatyBox);	
+		floatyTaskDisplay.getChildren().addAll(floatyBox, floatyPane);	
 		GridPane.setConstraints(floatyTaskDisplay, 0, 1);
 		layout.getChildren().add(floatyTaskDisplay);
 		return floatyPane;

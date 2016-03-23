@@ -36,7 +36,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import logic.*;
 
 public class GUI extends Application{
 	
@@ -127,13 +126,13 @@ public class GUI extends Application{
 	private void displayStatus(TextField inputBox, VBox tasks, VBox floaties) {
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.process(command);
+		State state = wallistModel.getState();
 		if (isSuccess){
-			State state = wallistModel.getState();
 			TreeSet<Task> taskList = state.getNormalTasks();
 			ArrayList<Task> floatyList = state.getFloatingTasks();
 	    	refresh(tasks, floaties, taskList, floatyList);
 		}
-		Label displayText = new Label("wtf is hapennign");
+		Label displayText = new Label(state.getErrorMessgae());
 		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
 				HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
 		layout.getChildren().add(displayText);

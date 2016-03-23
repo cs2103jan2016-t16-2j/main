@@ -102,7 +102,19 @@ public class Parser {
 	 * Output: String
 	 */
 	private Date getEndDate() {
-		return null;
+		String list[] = state_.getContent().split("on");
+		if(list.length==1){
+			state_.setIsEndDate(false);
+			return null;
+		}
+		Date d = TimeParser.stringToDate(list[list.length-1].trim());
+		if(d != null){
+			state_.setIsEndDate(true);
+			return d;
+		}else{
+			state_.setIsEndDate(false);
+			return null;
+		}
 	}
 	
 	/*

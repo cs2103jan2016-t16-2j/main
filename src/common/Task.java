@@ -5,10 +5,11 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class Task implements Comparable<Task> {
-	private boolean isFloating, isImportant, isFinished;
+	private boolean isImportant, isFinished;
 	private Date startDate, endDate;
 	private String content, venue, detail;
-	
+	private TaskType type;
+
 	private final String EXCEPTION_WRONG_INPUT = "Invalid input";
 	
 	private final String DEFAULT_VENUE = "NA";
@@ -35,7 +36,6 @@ public class Task implements Comparable<Task> {
 		this.content = content;
 		venue = DEFAULT_VENUE;
 		detail = DEFAULT_DETAIL;
-		isFloating = DEFAULT_IS_FLOATING;
 		isImportant = DEFAULT_IS_IMPORTANT;
 		isFinished = DEFAULT_IS_FINISHED;
 		startDate = getCurrentDate();
@@ -44,14 +44,24 @@ public class Task implements Comparable<Task> {
 	
 	//to be completed
 	public Task(State state) {
-		this.content = state.getContent();
-		venue = DEFAULT_VENUE;
-		detail = DEFAULT_DETAIL;
-		isFloating = DEFAULT_IS_FLOATING;
-		isImportant = DEFAULT_IS_IMPORTANT;
-		isFinished = DEFAULT_IS_FINISHED;
-		startDate = getCurrentDate();
-		endDate = DEFAULT_END_DATE;
+		content = state.getContent();
+		venue = state.getVenue();
+		detail = state.getDetail();
+		type = state.getTaskType();
+		isImportant = false;
+		isFinished = false;
+		if(state.getIsStartDate()){
+			startDate = state.getStartDate();
+		} else {
+			startDate = getCurrentDate();			
+		}
+		
+		if (state.getIsEndDate()) {
+			endDate = state.getEndDate();
+		} else {
+			endDate = getCurrentDate();	
+		}
+
 	}
 	
 	
@@ -59,7 +69,6 @@ public class Task implements Comparable<Task> {
 		content = cmdTable.get(KEY_CONTENT);
 		venue = cmdTable.get(KEY_CONTENT);
 		detail = cmdTable.get(KEY_CONTENT);
-		isFloating = true;
 		isImportant = false;
 		isFinished = false;
 		if (cmdTable.get(KEY_START_DATE) != "") {
@@ -72,14 +81,7 @@ public class Task implements Comparable<Task> {
 		endDate = getCurrentDate();
 	}
 	
-	public boolean getIsFloating(){
-		return isFloating;
-	}
-	
-	public void setIsFloating(boolean input){
-		isFloating = input;
-	}
-	
+
 	public boolean getIsImportant(){
 		return isImportant;
 	}
@@ -115,6 +117,15 @@ public class Task implements Comparable<Task> {
 	public Date getEndDate(){
 		return endDate;
 	}
+	
+	public void setTaskType(TaskType type){
+		this.type = type;
+	}
+	
+	public TaskType getTaskType(){
+		return type;
+	}
+	
 	
 	public void setEndDate(String str){
 		try{
@@ -155,7 +166,7 @@ public class Task implements Comparable<Task> {
 	@Override
 	public String toString(){
 		String result;
-		result= String.format(TO_STRING, content, venue, detail, isFloating, 
+		result= String.format(TO_STRING, content, venue, detail, true, 
 							  isImportant,sdf.format(startDate), sdf.format(endDate));
 		return result;
 	}

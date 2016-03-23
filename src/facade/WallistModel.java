@@ -1,8 +1,13 @@
-package logic;
+package facade;
 import java.lang.StringBuilder;
 import java.util.*;
 
 import common.*;
+import logic.AddTask;
+import logic.ClearTask;
+import logic.DeleteTask;
+import logic.TickTask;
+import logic.UpdateTask;
 import parser.*;
 import storage.*;
 

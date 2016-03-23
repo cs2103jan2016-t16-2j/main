@@ -7,11 +7,14 @@ import java.util.TreeSet;
 
 public class State {
 	private boolean isValid_;
-	private int errorCode_;
 	private CommandType command_;
 	private String content_;
+	private String detail_;
 	private String userInput_;
+	private String venue_;
+	private String errorMessage_;
 	private TaskType type_;
+	private int position_;
 	private boolean isStartDate_;
 	private Date startDate_;
 	private boolean isEndDate_;
@@ -22,11 +25,14 @@ public class State {
 	public State(){
 		Constant c = new Constant();
 		isValid_ = true;
-		errorCode_ = c.VALUE_ERROR_NO_ERROR;
 		command_ = CommandType.UNDEFINED;
 		content_ = c.VALUE_DEFAULT_EMPTY;
 		userInput_ = c.VALUE_DEFAULT_EMPTY;
+		venue_ = c.VALUE_DEFAULT_EMPTY;
+		errorMessage_ = c.VALUE_DEFAULT_EMPTY;
+		detail_ = c.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;
+		position_ = 0;
 		isStartDate_ = false;
 		startDate_ = null;
 		isEndDate_ = false;
@@ -41,9 +47,6 @@ public class State {
 		isValid_ = bool;
 	}
 	
-	public void setErrorCode(int code){
-		errorCode_ = code;
-	}
 	
 	public void setCommand(CommandType command){
 		command_ = command;
@@ -53,11 +56,32 @@ public class State {
 		content_ = content;
 	}
 	
+	public void setVenue(String venue){
+		venue_ = venue;
+	}	
+	
+	public void setDetail(String detail){
+		detail_ = detail;
+	}
+	
+	public void setPosition(int position){
+		this.position_ = position;
+	}
+	
+	public int getPosition(){
+		return position_;
+	}
+	
+	public void setErrorMessage(String errorMessage){
+		errorMessage_ = errorMessage;
+	}
+	
+	
 	public void setUserInput(String userInput){
 		userInput_ = userInput;
 	}
 	
-	public void setType(TaskType type){
+	public void setTaskType(TaskType type){
 		type_ = type;
 	}
 	
@@ -92,9 +116,6 @@ public class State {
 		return isValid_;
 	}
 	
-	public int getErrorCode(){
-		return errorCode_;
-	}
 	
 	public CommandType getCommand(){
 		return command_;
@@ -104,11 +125,23 @@ public class State {
 		return content_;
 	}
 	
+	public String getVenue(){
+		return venue_;
+	}	
+	
+	public String getDetail(){
+		return detail_;
+	}	
+	
+	public String getErrorMessgae(){
+		return errorMessage_;
+	}
+	
 	public String getUserInput(){
 		return userInput_;
 	}
 	
-	public TaskType getType(){
+	public TaskType getTaskType(){
 		return type_;
 	}
 	

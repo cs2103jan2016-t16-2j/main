@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.TreeSet;
 
 import common.*;
+import facade.WallistModel;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;

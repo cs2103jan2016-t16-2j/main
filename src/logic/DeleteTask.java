@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import common.State;
 import common.Task;
+import common.TaskType;
 
 public class DeleteTask implements Operation {
 	private State state;
@@ -16,21 +17,37 @@ public class DeleteTask implements Operation {
 	@Override
 	public boolean process() {
 		try {
-			int position = Integer.parseInt(state.getContent());
-			TreeSet<Task> taskList = state.getNormalTasks();
-			
-			if(position > taskList.size()){
-				throw new IndexOutOfBoundsException();
+			int position = state.getPosition();
+			TaskType type = state.getTaskType();
+			if(type.equals(TaskType.DEADLINE)){
+				TreeSet<Task> taskList = state.getNormalTasks();
+				
+				if(position > taskList.size()){
+					throw new IndexOutOfBoundsException();
+				}
+				
+				Iterator<Task> itr;
+				itr = taskList.iterator();
+				for(int i = 1; i< position; i++){
+					itr.next();
+				}
+				Task toBeDeleted = itr.next();
+				taskList.remove(toBeDeleted);
+	
+				return true;
 			}
 			
-			Iterator<Task> itr;
-			itr = taskList.iterator();
-			for(int i = 1; i< position; i++){
-				itr.next();
+			if(type.equals(TaskType.FLOATING)){
+				ArrayList<Task> taskList = state.getFloatingTasks();
+				
+				if(position > taskList.size()){
+					throw new IndexOutOfBoundsException();
+				}
+				
+				taskList.remove(position - 1);
+				return true;
 			}
-			Task toBeDeleted = itr.next();
-			taskList.remove(toBeDeleted);
-
+			
 			return true;
 		} catch (IndexOutOfBoundsException e) {
 			//logging

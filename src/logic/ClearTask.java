@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import common.DisplayMessage;
 import common.State;
 import common.Task;
 import common.TaskType;
@@ -30,6 +31,7 @@ public class ClearTask implements Operation {
 			}
 		} catch (Exception e) {
 			//logging
+			state.setErrorMessage(DisplayMessage.MESSAGE_DUMMY);
 			return false;
 		}
 	}

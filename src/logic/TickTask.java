@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import common.DisplayMessage;
 import common.State;
 import common.Task;
 import common.TaskType;
@@ -55,6 +56,7 @@ public class TickTask implements Operation {
 			return true;
 		} catch (IndexOutOfBoundsException e) {
 			//logging
+			state.setErrorMessage(DisplayMessage.MESSAGE_INDEX_OUT_OF_BOUND);
 			return false;
 		}
 	}

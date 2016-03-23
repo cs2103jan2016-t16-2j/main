@@ -42,7 +42,7 @@ public class GUI extends Application{
 	private Stage window;
 	private Scene scene;
 	private GridPane layout = new GridPane();
-//	private WallistModel wallistModel = new WallistModel();
+	private WallistModel wallistModel = new WallistModel();
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
@@ -52,14 +52,6 @@ public class GUI extends Application{
 	private double vValue;
 	
 	private final String TITLE = "%1$s's Wallist";
-	
-	
-	public final String MESSAGE_SUCCESS = "Success";
-	public final String MESSAGE_ERROR_COMMAND_NOT_FOUND = "Command not available";
-	public final String MESSAGE_ERROR_NO_INPUT = "No input for command";
-	public final String MESSAGE_ERROR_INVALID_ARGUMENT = "Input for command invalid";
-	public final String MESSAGE_DEFAULT_EMPTY = "";
-
 	
 	private final int STAGE_HEIGHT = 600;
 	private final int STAGE_WIDTH = 900;
@@ -79,7 +71,7 @@ public class GUI extends Application{
 	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
 	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
 	
-	public static void launcher(){
+	public static void launching(){
 		launch();
 	}
 	
@@ -87,7 +79,7 @@ public class GUI extends Application{
 	public void start(Stage primaryStage) throws Exception{
 		stageSetup(primaryStage);
 		
-		ScrollPane floatyPane = floatyComponent();
+		ScrollPane floatyPane = floatyTaskComponent();
         ScrollPane taskPane = taskComponent();
 		TextField inputBox = inputComponent();
 		
@@ -95,7 +87,7 @@ public class GUI extends Application{
 		taskPane.setContent(tasks);
 		VBox floaties = new VBox();
 		floatyPane.setContent(floaties);
-/***		
+		
 		State state = wallistModel.getState();
 		TreeSet<Task> taskList = state.getNormalTasks();
 		ArrayList<Task> floatyList = state.getFloatingTasks();
@@ -113,13 +105,10 @@ public class GUI extends Application{
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	displayStatus(inputBox, tasks, floaties);
 		        }
-
-		        
 			}
 		});
-*/	
 	}
-/***	
+	
 	private void displayStatus(TextField inputBox, VBox tasks, VBox floaties) {
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.process(command);
@@ -137,36 +126,36 @@ public class GUI extends Application{
 		fade.play();
 		inputBox.clear();
 	}
-*/	
+	
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
 		taskIndex = 0;
 		floatyIndex = 0;
 		for (Task task: taskList){
 			if (!task.getIsFinished()){
-	    			displayTaskLine(tasks, task);
+	    			displayNormalTaskLine(tasks, task);
 		    }
 		}
 		
 		for (Task task: floatyList){
 			if (!task.getIsFinished()){
-			    	displayFloatyLine(floaties, task);
+			    	displayFloatyTaskLine(floaties, task);
 			}
 		}
 	}
 	
-	private void displayFloatyLine(VBox floaties, Task task) {
+	private void displayFloatyTaskLine(VBox floaties, Task task) {
 		floatyIndex ++;
 		String taskContent = task.getContent();
 		GridPane taskLine = new GridPane();
 		taskLine.setHgap(10);
-		StackPane indexPane = indexCol(floatyIndex);
-		StackPane contentPane = contentCol(taskContent, TASK_CONTENT_WIDTH_FLOATY);
+		StackPane indexPane = indexStackPane(floatyIndex);
+		StackPane contentPane = contentStackPane(taskContent, TASK_CONTENT_WIDTH_FLOATY);
 		taskLine.getChildren().addAll(indexPane, contentPane);
 		floaties.getChildren().add(taskLine);
 	}
 
-	private void displayTaskLine(VBox tasks, Task task) {
+	private void displayNormalTaskLine(VBox tasks, Task task) {
 		taskIndex ++;
 		String taskContent = task.getContent();
 		String taskDeadline = sdf.format(task.getStartDate());
@@ -175,14 +164,14 @@ public class GUI extends Application{
 			taskLine.setId("gridPane");
 		}
 		taskLine.setHgap(10);
-		StackPane indexPane = indexCol(taskIndex);
-		StackPane contentPane = contentCol(taskContent, TASK_CONTENT_WIDTH);
-		StackPane deadlinePane = deadlineCol(taskDeadline);
+		StackPane indexPane = indexStackPane(taskIndex);
+		StackPane contentPane = contentStackPane(taskContent, TASK_CONTENT_WIDTH);
+		StackPane deadlinePane = deadlineStackPane(taskDeadline);
 		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
 		tasks.getChildren().add(taskLine);
 	}
 	
-	private StackPane deadlineCol(String taskDeadline) {
+	private StackPane deadlineStackPane(String taskDeadline) {
 		StackPane deadlinePane = new StackPane();
 		deadlinePane.setAlignment(Pos.TOP_LEFT);
 		Rectangle deadlineRec = new Rectangle();
@@ -195,7 +184,7 @@ public class GUI extends Application{
 		return deadlinePane;
 	}
 
-	private StackPane contentCol(String taskContent, int width) {
+	private StackPane contentStackPane(String taskContent, int width) {
 		StackPane contentPane = new StackPane();		            			
 		Rectangle contentRec = new Rectangle();
 		contentRec.setWidth(width);
@@ -208,7 +197,7 @@ public class GUI extends Application{
 		return contentPane;
 	}
 
-	private StackPane indexCol(int index) {
+	private StackPane indexStackPane(int index) {
 		StackPane indexPane = new StackPane();
 		indexPane.setAlignment(Pos.TOP_RIGHT);
 		Rectangle indexRec = new Rectangle();
@@ -251,7 +240,7 @@ public class GUI extends Application{
 		return taskPane;
 	}
 
-	private ScrollPane floatyComponent() {
+	private ScrollPane floatyTaskComponent() {
 		StackPane floatyTaskDisplay = new StackPane();
 		Rectangle floatyBox = boxGrid(FLOATYBOX_WIDTH, FLOATYBOX_HEIGHT);
 		ScrollPane floatyPane = new ScrollPane();
@@ -283,6 +272,7 @@ public class GUI extends Application{
 		window = primaryStage;
 
         window.initStyle(StageStyle.UNDECORATED);
+        window.setResizable(false);
 		
         window.setTitle(String.format(TITLE, System.getProperty("user.name")));
 		layout.setPadding(COMPONENT_PADDING);

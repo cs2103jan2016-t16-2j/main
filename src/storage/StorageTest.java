@@ -72,5 +72,20 @@ public class StorageTest {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@Test
+	public void testLoadState() {
+		// instantiate State and Storage class for testing
+		State state = new State();
+		Storage storage = new Storage(state);
+		assertEquals(storage.loadState(),true);
+	}
+	
+	@Test
+	public void testSaveState() {
+		// instantiate State and Storage class for testing
+		State state = new State();
+		Storage storage = new Storage(state);
+		assertEquals(storage.saveState(),true);
+	}
 }

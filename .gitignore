@@ -4,3 +4,4 @@ src/.DS_Store
 src/StoragePackage/.DS_Store
 .idea/
 main.iml
+storageTestFile.txt

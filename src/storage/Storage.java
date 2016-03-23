@@ -36,6 +36,7 @@ public class Storage {
  	 * @return a TreeSet containing all Tasks
  	 */
 	public boolean loadState(){
+		
 		TreeSet<Task> normalTasks = state.getNormalTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		
@@ -44,13 +45,18 @@ public class Storage {
 		
 		try {
 			reader = new BufferedReader(new FileReader(file));
+			
+		
 			while (reader.ready()) {
 				task = readCurrentTask(reader);
-				boolean isFloating = task.getIsFloating();
-				if (isFloating) {
-					floatingTasks.add(task);
-				} else {
-					normalTasks.add(task);
+				TaskType taskType = task.getTaskType();
+				switch (taskType) {
+					case FLOATING :
+						floatingTasks.add(task);
+					case DEADLINE :
+						normalTasks.add(task);
+					default :
+						continue;
 				}
 			}
 		} catch (IOException e) {

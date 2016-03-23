@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import common.CommandType;
 import common.State;
 import common.Task;
+import common.TaskType;
 
 public class AddTask implements Operation {
 	private State state;
@@ -18,8 +19,8 @@ public class AddTask implements Operation {
 	public boolean process() {
 		try {
 			Task newTask = new Task(state);
-			boolean isFloating = newTask.getIsFloating();
-			if(isFloating){
+			TaskType type = newTask.getTaskType();
+			if(type.equals(TaskType.DEADLINE)){
 				TreeSet<Task> taskList = state.getNormalTasks();
 				taskList.add(newTask);
 			} else {

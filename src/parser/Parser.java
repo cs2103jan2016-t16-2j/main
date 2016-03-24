@@ -264,15 +264,15 @@ public class Parser {
 						return false;
 					
 					case CLEAR:
-						if(content.length() != 0){
-							return true;
-						}
+//						if(content.length() != 1){
+//							return true;
+//						}
 						return false;
 				
 					case DELETE:
-						if(content.length() == 0 || !content.matches("\\d+")){
-							return true;
-						}
+//						if(content.length() == 0 || !content.matches("\\d+")){
+//							return true;
+//						}
 						return false;
 				
 //					case EXIT:
@@ -281,9 +281,9 @@ public class Parser {
 //						}
 					
 					case TICK:
-						if(content.length() == 0 || !content.matches("\\d+")){
-							return true;
-						}
+//						if(content.length() == 0 || !content.matches("\\d+")){
+//							return true;
+//						}
 						return false;
 					
 					case UPDATE:

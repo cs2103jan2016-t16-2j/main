@@ -50,34 +50,17 @@ public class GUI extends Application{
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM H:mm");
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	
 	private int taskIndex, floatyIndex;
 	private double vValue;
 	
 	private final String TITLE = "%1$s's Wallist";
 	
-/***	
-	private final int STAGE_HEIGHT = 600;
-	private final int STAGE_WIDTH = 900;
-	private final int COMPONENT_GAP_H = 30;
-	private final int COMPONENT_GAP_V = 30;
-	private final int FLOATYBOX_HEIGHT = 260;
-	private final int FLOATYBOX_WIDTH = 250;
-	private final int TASKBOX_HEIGHT = 470;
-	private final int TASKBOX_WIDTH = 560;
-	private final int TASK_CONTENT_WIDTH = 300;
-	private final int TASK_CONTENT_WIDTH_FLOATY = 200;
-	private final int TASK_INDEX_WIDTH = 30;
-	private final int TASK_DEADLINE_WIDTH = 120;
-*/
-	
-	
 	private final int COMPONENT_GAP_H = 30;
 	private final int COMPONENT_GAP_V = 30;
 	private final int INDEX_WIDTH = 30;
-	private final int START_TIME_WIDTH = 120;
-	private final int END_TIME_WIDTH = 120;
+	private final int END_TIME_WIDTH = 210;
 	private final int TIME_BOX_HEIGHT = 135;
 	private final int INPUT_BOX_HEIGHT = 40;
 	
@@ -188,7 +171,7 @@ public class GUI extends Application{
 	private void displayNormalTaskLine(VBox tasks, Task task) {
 		taskIndex ++;
 		String taskContent = task.getContent();
-		String taskDeadline = sdf.format(task.getStartDate());
+		String taskDeadline = sdf.format(task.getEndDate());
 		GridPane taskLine = new GridPane();
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");
@@ -205,7 +188,7 @@ public class GUI extends Application{
 		StackPane deadlinePane = new StackPane();
 		deadlinePane.setAlignment(Pos.TOP_LEFT);
 		Rectangle deadlineRec = new Rectangle();
-		deadlineRec.setWidth(START_TIME_WIDTH);
+		deadlineRec.setWidth(END_TIME_WIDTH);
 		deadlineRec.setOpacity(0);
 		Text deadline = new Text(taskDeadline);
 		deadline.setFill(Color.valueOf("#ffffcb"));
@@ -324,7 +307,7 @@ public class GUI extends Application{
     	floatyBoxHeight = stageHeight - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - TIME_BOX_HEIGHT;
     	floatyBoxWidth = stageWidth - COMPONENT_GAP_H * 3 - normalBoxWidth;
     	floatyContentWidth = floatyBoxWidth - INDEX_WIDTH;
-    	noralContentWidth = normalBoxWidth - INDEX_WIDTH - START_TIME_WIDTH - END_TIME_WIDTH;
+    	noralContentWidth = normalBoxWidth - INDEX_WIDTH - END_TIME_WIDTH;
         
         
         window.getIcons().add(new Image("file:../../resources/title.png"));

@@ -177,7 +177,7 @@ public class Task implements Comparable<Task> {
         // compareTo should return < 0 if this is supposed to be
         // less than other, > 0 if this is supposed to be greater than 
         // other and 0 if they are supposed to be equal
-        return this.startDate.compareTo(other.startDate);
+        return this.endDate.compareTo(other.getEndDate());
         
     }
 }

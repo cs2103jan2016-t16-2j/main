@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -30,10 +31,12 @@ import javafx.scene.text.Text;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -47,40 +50,30 @@ public class GUI extends Application{
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM H:mm");
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	
 	private int taskIndex, floatyIndex;
 	private double vValue;
 	
 	private final String TITLE = "%1$s's Wallist";
 	
-/***	
-	private final int STAGE_HEIGHT = 600;
-	private final int STAGE_WIDTH = 900;
 	private final int COMPONENT_GAP_H = 30;
 	private final int COMPONENT_GAP_V = 30;
-	private final int FLOATYBOX_HEIGHT = 260;
-	private final int FLOATYBOX_WIDTH = 250;
-	private final int TASKBOX_HEIGHT = 470;
-	private final int TASKBOX_WIDTH = 560;
-	private final int TASK_CONTENT_WIDTH = 300;
-	private final int TASK_CONTENT_WIDTH_FLOATY = 200;
-	private final int TASK_INDEX_WIDTH = 30;
-	private final int TASK_DEADLINE_WIDTH = 120;
-*/
+	private final int INDEX_WIDTH = 30;
+	private final int END_TIME_WIDTH = 210;
+	private final int TIME_BOX_HEIGHT = 135;
+	private final int INPUT_BOX_HEIGHT = 40;
 	
-	private final int STAGE_HEIGHT = 700;
-	private final int STAGE_WIDTH = 1300;
-	private final int COMPONENT_GAP_H = 30;
-	private final int COMPONENT_GAP_V = 30;
-	private final int FLOATYBOX_HEIGHT = 360;
-	private final int FLOATYBOX_WIDTH = 400;
-	private final int TASKBOX_HEIGHT = 570;
-	private final int TASKBOX_WIDTH = 810;
-	private final int TASK_CONTENT_WIDTH = 640;
-	private final int TASK_CONTENT_WIDTH_FLOATY = 370;
-	private final int TASK_INDEX_WIDTH = 30;
-	private final int TASK_DEADLINE_WIDTH = 120;
+	private int stageHeight;
+	private int stageWidth;
+	
+	private int floatyBoxHeight;
+	private int floatyBoxWidth;
+	private int normalBoxHeight;
+	private int normalBoxWidth;
+	private int floatyContentWidth;
+	private int noralContentWidth;
+
 	
 	private final double SCROLL_PERCENTAGE = 0.1;
 		
@@ -170,7 +163,7 @@ public class GUI extends Application{
 		}
 		taskLine.setHgap(10);
 		StackPane indexPane = indexStackPane(floatyIndex);
-		StackPane contentPane = contentStackPane(taskContent, TASK_CONTENT_WIDTH_FLOATY);
+		StackPane contentPane = contentStackPane(taskContent, floatyContentWidth);
 		taskLine.getChildren().addAll(indexPane, contentPane);
 		floaties.getChildren().add(taskLine);
 	}
@@ -178,14 +171,14 @@ public class GUI extends Application{
 	private void displayNormalTaskLine(VBox tasks, Task task) {
 		taskIndex ++;
 		String taskContent = task.getContent();
-		String taskDeadline = sdf.format(task.getStartDate());
+		String taskDeadline = sdf.format(task.getEndDate());
 		GridPane taskLine = new GridPane();
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");
 		}
 		taskLine.setHgap(10);
 		StackPane indexPane = indexStackPane(taskIndex);
-		StackPane contentPane = contentStackPane(taskContent, TASK_CONTENT_WIDTH);
+		StackPane contentPane = contentStackPane(taskContent, noralContentWidth);
 		StackPane deadlinePane = deadlineStackPane(taskDeadline);
 		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
 		tasks.getChildren().add(taskLine);
@@ -195,7 +188,7 @@ public class GUI extends Application{
 		StackPane deadlinePane = new StackPane();
 		deadlinePane.setAlignment(Pos.TOP_LEFT);
 		Rectangle deadlineRec = new Rectangle();
-		deadlineRec.setWidth(TASK_DEADLINE_WIDTH);
+		deadlineRec.setWidth(END_TIME_WIDTH);
 		deadlineRec.setOpacity(0);
 		Text deadline = new Text(taskDeadline);
 		deadline.setFill(Color.valueOf("#ffffcb"));
@@ -221,7 +214,7 @@ public class GUI extends Application{
 		StackPane indexPane = new StackPane();
 		indexPane.setAlignment(Pos.TOP_RIGHT);
 		Rectangle indexRec = new Rectangle();
-		indexRec.setWidth(TASK_INDEX_WIDTH);
+		indexRec.setWidth(INDEX_WIDTH);
 		indexRec.setOpacity(0);
 		Text indexStr = new Text(Integer.toString(index));
 		indexStr.setFill(Color.valueOf("#ffffcb"));
@@ -241,6 +234,8 @@ public class GUI extends Application{
 	
 	private TextField inputComponent() {
 		TextField inputBox = new TextField();
+		inputBox.setPrefHeight(INPUT_BOX_HEIGHT);
+		inputBox.setMaxHeight(INPUT_BOX_HEIGHT);
 		inputBox.setPromptText("How Can I Help You ?");
 		GridPane.setConstraints(inputBox, 0, 2, 2, 1);
 		layout.getChildren().add(inputBox);
@@ -249,9 +244,9 @@ public class GUI extends Application{
 
 	private ScrollPane taskComponent() {
 		StackPane taskDisplay = new StackPane();
-		Rectangle taskBox = boxGrid(TASKBOX_WIDTH, TASKBOX_HEIGHT);
+		Rectangle taskBox = boxGrid(normalBoxWidth, normalBoxHeight);
 		ScrollPane taskPane = new ScrollPane();
-		taskPane.setPrefSize(TASKBOX_WIDTH, TASKBOX_HEIGHT);
+		taskPane.setPrefSize(normalBoxWidth, normalBoxHeight);
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    taskDisplay.getChildren().addAll(taskBox, taskPane);
@@ -262,9 +257,9 @@ public class GUI extends Application{
 
 	private ScrollPane floatyTaskComponent() {
 		StackPane floatyTaskDisplay = new StackPane();
-		Rectangle floatyBox = boxGrid(FLOATYBOX_WIDTH, FLOATYBOX_HEIGHT);
+		Rectangle floatyBox = boxGrid(floatyBoxWidth, floatyBoxHeight);
 		ScrollPane floatyPane = new ScrollPane();
-		floatyPane.setPrefSize(FLOATYBOX_WIDTH, FLOATYBOX_HEIGHT);
+		floatyPane.setPrefSize(floatyBoxWidth, floatyBoxHeight);
 		floatyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		floatyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		floatyTaskDisplay.getChildren().addAll(floatyBox, floatyPane);	
@@ -274,8 +269,11 @@ public class GUI extends Application{
 	}
 
 	private void timeComponent(){
-		VBox timeDisplay = new VBox();
+		HBox timeDisplay = new HBox(COMPONENT_GAP_H);
 		timeDisplay.setAlignment(Pos.CENTER);
+		timeDisplay.setPrefHeight(TIME_BOX_HEIGHT);
+		timeDisplay.setMaxHeight(TIME_BOX_HEIGHT);
+		
 		Date today = Calendar.getInstance().getTime();
 		String dateStr = datesdf.format(today);
 		String dayStr = daysdf.format(today);
@@ -293,7 +291,25 @@ public class GUI extends Application{
 
         window.initStyle(StageStyle.UNDECORATED);
         window.setResizable(false);
-		
+        
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+        
+        window.setX(bounds.getMinX());
+        window.setY(bounds.getMinY());
+        window.setWidth(bounds.getWidth());
+        window.setHeight(bounds.getHeight());
+      
+        stageWidth = (int)bounds.getWidth();
+        stageHeight = (int)bounds.getHeight();  
+    	normalBoxHeight = stageHeight - COMPONENT_GAP_V * 3 - INPUT_BOX_HEIGHT;
+    	normalBoxWidth = (int)(stageWidth * 2 / 3 - COMPONENT_GAP_H);
+    	floatyBoxHeight = stageHeight - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - TIME_BOX_HEIGHT;
+    	floatyBoxWidth = stageWidth - COMPONENT_GAP_H * 3 - normalBoxWidth;
+    	floatyContentWidth = floatyBoxWidth - INDEX_WIDTH;
+    	noralContentWidth = normalBoxWidth - INDEX_WIDTH - END_TIME_WIDTH;
+        
+        
         window.getIcons().add(new Image("file:../../resources/title.png"));
         
         window.setTitle(String.format(TITLE, System.getProperty("user.name")));
@@ -301,7 +317,7 @@ public class GUI extends Application{
 		layout.setVgap(COMPONENT_GAP_V);
 		layout.setHgap(COMPONENT_GAP_H);
 		timeComponent();
-		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
+		scene = new Scene(layout, stageWidth, stageHeight);
 		scene.getStylesheets().add("/gui/Stylesheet.css");
 		window.setScene(scene);
 		window.show();

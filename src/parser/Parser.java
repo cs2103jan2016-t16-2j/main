@@ -276,21 +276,20 @@ public class Parser {
 						return false;
 					
 					case CLEAR:
-//						System.out.println(content);
-//						if(content.equalsIgnoreCase("float")||content.equalsIgnoreCase("deadline")){
-//							return false;
-//						}
-						return false;
+						if(content.equalsIgnoreCase("float")||content.equalsIgnoreCase("deadline")){
+							return false;
+						}
+						return true;
 				
 					case DELETE:
-//						String lst[] = content.split(" ");
-//						if(lst.length < 2){
-//							return true;
-//						}
-//						if(content.length() == 0 || !lst[0].matches("\\d+") || !lst[1].equalsIgnoreCase("float")||!lst[1].equalsIgnoreCase("deadline")){
-//							return true;
-//						}
-						return false;
+						String lst[] = content.split(" ");
+						if(lst.length < 2){
+							return true;
+						}
+						if(!(content.length() == 0) || lst[0].matches("\\d+")||lst[1].equalsIgnoreCase("float")||lst[1].equalsIgnoreCase("deadline")){
+							return false;
+						}
+						return true;
 				
 //					case EXIT:
 //						if(content_.length() != 0){
@@ -298,18 +297,18 @@ public class Parser {
 //						}
 					
 					case TICK:
-//						String list[] = content.split(" ");
-//						if(list.length < 2){
-//							return true;
-//						}
-//						if(content.length() == 0 || !list[0].matches("\\d+") || !list[1].equalsIgnoreCase("float")||!list[1].equalsIgnoreCase("deadline")){
-//							return true;
-//						}
-						return false;
+						String list[] = content.split(" ");
+						if(list.length < 2){
+							return true;
+						}
+						if(!(content.length() == 0) || list[0].matches("\\d+")||list[1].equalsIgnoreCase("float")||list[1].equalsIgnoreCase("deadline")){
+							return false;
+						}
+						return true;
 					
 					case UPDATE:
 						String lst_a[] = content.split(" ");
-						if(!lst_a[0].matches("\\d+") || content.length() == 0 || lst_a.length < 2){
+						if(!lst_a[0].matches("\\d+") || content.length() == 0 || lst_a.length <=2){
 							return true;
 						}
 						return false;

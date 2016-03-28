@@ -250,6 +250,15 @@ public class Parser {
 				case UPDATE:
 					return false;
 				
+				case EXIT:
+					return false;
+					
+				case UNDO:
+					return false;
+					
+				case SEARCH:
+					return false;
+				
 				default: 
 					return true;
 			}
@@ -291,10 +300,11 @@ public class Parser {
 						}
 						return true;
 				
-//					case EXIT:
-//						if(content_.length() != 0){
-//							return true;
-//						}
+					case EXIT:
+						if(content.length() != 0){
+							return true;
+						}
+						return false;
 					
 					case TICK:
 						String list[] = content.split(" ");
@@ -312,7 +322,19 @@ public class Parser {
 							return true;
 						}
 						return false;
-				
+						
+					case UNDO:
+						if(content.length() != 0){
+							return true;
+						}
+						return false;
+					
+					case SEARCH:
+						if(content.length() == 0){
+							return true;
+						}
+						return false;
+						
 					default: 
 						return false;
 				}
@@ -359,6 +381,12 @@ public class Parser {
 			return CommandType.CLEAR;
 		} else if (commandTypeString.equalsIgnoreCase("tick")) {
 			return CommandType.TICK;
+		} else if (commandTypeString.equalsIgnoreCase("undo")) {
+			return CommandType.UNDO;
+		} else if (commandTypeString.equalsIgnoreCase("search")) {
+			return CommandType.SEARCH;
+		} else if (commandTypeString.equalsIgnoreCase("exit")) {
+			return CommandType.EXIT;
 		}
 		return CommandType.ERROR;
 	}

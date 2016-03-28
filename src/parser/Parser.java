@@ -59,7 +59,7 @@ public class Parser {
 			return readContent(lst);
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
-			return lst[0];
+			return lst[0].trim();
 		}else{
 			return state_.getRawContent();
 		}
@@ -147,6 +147,8 @@ public class Parser {
 		if(isIndexRequired()){
 			String lst[] = state_.getRawContent().split(" ");
 			return determineTaskType(lst[1]);
+		}else if(isClear()){
+			return determineTaskType(state_.getContent());
 		}
 		if(state_.getIsEndDate()){
 			return TaskType.DEADLINE;
@@ -156,6 +158,16 @@ public class Parser {
 		}
 	}
 	
+	/*
+	 * Check whether the current task type is clear
+	 * Input: None
+	 * Output: True if it is. False otherwise
+	 */
+	private boolean isClear() {
+		// TODO Auto-generated method stub
+		return state_.getCommand().equals(CommandType.CLEAR);
+	}
+
 	/*
 	 * Get the command of an input
 	 * Input: None
@@ -264,16 +276,20 @@ public class Parser {
 						return false;
 					
 					case CLEAR:
-//						if(content.length() != 1){
-//							return true;
-//						}
-						return false;
+						if(content.equalsIgnoreCase("float")||content.equalsIgnoreCase("deadline")){
+							return false;
+						}
+						return true;
 				
 					case DELETE:
-//						if(content.length() == 0 || !content.matches("\\d+")){
-//							return true;
-//						}
-						return false;
+						String lst[] = content.split(" ");
+						if(lst.length < 2){
+							return true;
+						}
+						if(!(content.length() == 0) || lst[0].matches("\\d+")||lst[1].equalsIgnoreCase("float")||lst[1].equalsIgnoreCase("deadline")){
+							return false;
+						}
+						return true;
 				
 //					case EXIT:
 //						if(content_.length() != 0){
@@ -281,14 +297,18 @@ public class Parser {
 //						}
 					
 					case TICK:
-//						if(content.length() == 0 || !content.matches("\\d+")){
-//							return true;
-//						}
-						return false;
+						String list[] = content.split(" ");
+						if(list.length < 2){
+							return true;
+						}
+						if(!(content.length() == 0) || list[0].matches("\\d+")||list[1].equalsIgnoreCase("float")||list[1].equalsIgnoreCase("deadline")){
+							return false;
+						}
+						return true;
 					
 					case UPDATE:
-						String lst[] = content.split(" ");
-						if(!lst[0].matches("\\d+") || content.length() == 0 || lst.length < 2){
+						String lst_a[] = content.split(" ");
+						if(!lst_a[0].matches("\\d+") || content.length() == 0 || lst_a.length <=2){
 							return true;
 						}
 						return false;

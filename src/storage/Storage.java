@@ -36,6 +36,12 @@ public class Storage {
 		this.state = state;
 	}
  	
+ 	/**
+ 	 * This method takes in the datafile directory, and retrieve the file if it exists, 
+ 	 * if not a new one will be created
+ 	 * @param dataDir
+ 	 * @return
+ 	 */
  	private boolean getDataFile(File dataDir) {
  		LOGGER.log(Level.INFO, "Retrieving Datafile...");
  		this.file = new File(dataDir, "data.txt");
@@ -58,7 +64,7 @@ public class Storage {
  	 * @return a TreeSet containing all Tasks
  	 */
 	public boolean loadState(){
-		
+		LOGGER.log(Level.INFO, "Loading State from datafile...");
 		TreeSet<Task> normalTasks = state.getNormalTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		
@@ -96,6 +102,7 @@ public class Storage {
 	 * @return boolean value indicating whether saving is successful or not
 	 */
 	public boolean saveState(){
+		LOGGER.log(Level.INFO, "Saving state to datafile...");
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			writeTaskToJson(writer);
@@ -144,6 +151,7 @@ public class Storage {
 				writer.write(json + "\n");
 			}
 		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Task is not succesfully written to datafile...", e);
 			return false;
 		}
 		return true;

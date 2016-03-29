@@ -1,6 +1,8 @@
 package storage;
 import java.util.ArrayList;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,14 +23,34 @@ public class Storage {
 	protected Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	private State state;
+	private boolean isFileSuccessfullyCreated;
+	
+	// Logger
+	private final static Logger LOGGER = Logger.getLogger(Storage.class.getName());
+	
 	
 	// Constructor
  	public Storage(State state){
-		File dataDir = createDataDir();
-		this.file = new File(dataDir,"data.txt");
+		File dataDir = getDataFileDirectory();
+		isFileSuccessfullyCreated = getDataFile(dataDir);
 		this.state = state;
 	}
-
+ 	
+ 	private boolean getDataFile(File dataDir) {
+ 		LOGGER.log(Level.INFO, "Retrieving Datafile...");
+ 		this.file = new File(dataDir, "data.txt");
+ 		if (!file.exists()) {
+ 			try {
+ 				LOGGER.log(Level.INFO, "Datafile does not exist, creating new datafile...");
+				return file.createNewFile();
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, "Datafile is not created successfully...", e);
+				return false;
+			}
+ 		}
+ 		return true;
+ 	}
+ 	
  	// Operation Methods
  	/**
  	 * This method read all JSON in the text file and convert into Task objects.
@@ -62,7 +84,7 @@ public class Storage {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "State is not successfully loaded", e);
 			return false;
 		}
 		return true;
@@ -79,7 +101,7 @@ public class Storage {
 			writeTaskToJson(writer);
 			writer.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "State is not successfully saved", e);
 			return false;
 		}
 		return true;
@@ -92,11 +114,13 @@ public class Storage {
 	 * will be stored here.
 	 * @return
 	 */
-	private File createDataDir() {
+	private File getDataFileDirectory() {
+		LOGGER.log(Level.INFO, "Retrieving the datafile directory...");
 		File dataDir = new File(System.getProperty("user.home") + "/WallistDatabase");
 		
 		if (!dataDir.exists()) {
 			dataDir.mkdirs();
+			LOGGER.log(Level.INFO, "Directory not exist or removed, creating new directory");
 		}
 		return dataDir;
 	}

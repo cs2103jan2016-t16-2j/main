@@ -5,3 +5,4 @@ src/StoragePackage/.DS_Store
 .idea/
 main.iml
 storageTestFile.txt
+out/

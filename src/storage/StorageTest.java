@@ -18,6 +18,8 @@ import storage.Storage;
 import common.State;
 public class StorageTest {
 
+	
+// test files, create desired files want to read and write
 	@Test
 	public void testIO() {
 		// instantiate State and Storage class for testing

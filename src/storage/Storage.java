@@ -23,7 +23,7 @@ public class Storage {
 	protected Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	private State state;
-	private boolean isFileSuccessfullyCreated;
+	private boolean isConnectedToDatafile;
 	
 	// Logger
 	private final static Logger LOGGER = Logger.getLogger(Storage.class.getName());
@@ -32,7 +32,7 @@ public class Storage {
 	// Constructor
  	public Storage(State state){
 		File dataDir = getDataFileDirectory();
-		isFileSuccessfullyCreated = getDataFile(dataDir);
+		isConnectedToDatafile = getDataFile(dataDir);
 		this.state = state;
 	}
  	
@@ -64,6 +64,7 @@ public class Storage {
  	 * @return a TreeSet containing all Tasks
  	 */
 	public boolean loadState(){
+		assert isConnectedToDatafile;
 		LOGGER.log(Level.INFO, "Loading State from datafile...");
 		TreeSet<Task> normalTasks = state.getNormalTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
@@ -102,6 +103,7 @@ public class Storage {
 	 * @return boolean value indicating whether saving is successful or not
 	 */
 	public boolean saveState(){
+		assert isConnectedToDatafile;
 		LOGGER.log(Level.INFO, "Saving state to datafile...");
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));

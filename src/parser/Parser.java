@@ -33,7 +33,7 @@ public class Parser {
 	 * Output: ParsedCommand object
 	 */
 	private boolean buildParsedCommand() {
-		state_.setMessage(getErrorMessage());
+		state_.setErrorMessage(getErrorMessage());
 		state_.setIsValid(getIsValid());
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());

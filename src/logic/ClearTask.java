@@ -31,7 +31,7 @@ public class ClearTask implements Operation {
 			}
 		} catch (Exception e) {
 			//logging
-			state.setMessage(DisplayMessage.MESSAGE_DUMMY);
+			state.setErrorMessage(DisplayMessage.MESSAGE_DUMMY);
 			return false;
 		}
 	}

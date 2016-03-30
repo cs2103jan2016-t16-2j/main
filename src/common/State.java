@@ -47,6 +47,8 @@ public class State {
 		attributes_.put("isEndDate", false);
 		attributes_.put("isDetails", false);
 		attributes_.put("isVenue", false);
+		attributes_.put("isFinished", false);
+		attributes_.put("isImportant", false);
 	}
 	/*
 	 * List of set commands
@@ -121,6 +123,14 @@ public class State {
 	
 	public void setIsVenue(boolean isVenue){
 		attributes_.put("isVenue", isVenue);
+	}
+	
+	public void setIsImportant(boolean isImportant){
+		attributes_.put("isImportant", isImportant);
+	}
+	
+	public void setIsFinished(boolean isFinished){
+		attributes_.put("isFinished", isFinished);
 	}
 	
 	public void setFloatingTasks (ArrayList<Task> floatingTasks){

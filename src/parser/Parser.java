@@ -169,6 +169,9 @@ public class Parser {
 			Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
 			if(d != null){
 				state_.setIsEndDate(true);
+				if(d.before(state_.getStartDate())){
+					state_.setMessage(Constant.VALUE_ERROR_DATE_ERROR);
+				}
 				return d;
 			}else{
 				state_.setIsEndDate(false);

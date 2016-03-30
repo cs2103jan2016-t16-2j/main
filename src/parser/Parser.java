@@ -83,18 +83,36 @@ public class Parser {
 			String content = readContent(lst);
 			if(isStartingDate()){
 				String list[] = content.split("from");
+				if(list.length == 1){
+					return Constant.VALUE_DEFAULT_EMPTY;
+				}
+				state_.setIsContent(true);
 				return list[0].trim();
 			}
 			else if (isDeadline()){
 				String list[] = content.split("on");
+				if(list.length == 1){
+					return Constant.VALUE_DEFAULT_EMPTY;
+				}
+				state_.setIsContent(true);
 				return list[0].trim();
 			}
 			return content;
 		}else if(isStartingDate()){
 			String lst[] = state_.getRawContent().split("from");
+			if(lst.length == 1){
+				state_.setMessage(Constant.VALUE_ERROR_NO_INPUT);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContent(true);
 			return lst[0].trim();
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
+			if(lst.length == 1){
+				state_.setMessage(Constant.VALUE_ERROR_NO_INPUT);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContent(true);
 			return lst[0].trim();
 		}else{
 			return state_.getRawContent();

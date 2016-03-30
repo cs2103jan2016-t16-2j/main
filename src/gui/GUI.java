@@ -19,7 +19,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -36,9 +35,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class GUI extends Application{
@@ -60,7 +57,7 @@ public class GUI extends Application{
 	private final int COMPONENT_GAP_H = 30;
 	private final int COMPONENT_GAP_V = 30;
 	private final int INDEX_WIDTH = 30;
-	private final int END_TIME_WIDTH = 210;
+	private final int END_TIME_WIDTH = 250;
 	private final int TIME_BOX_HEIGHT = 135;
 	private final int INPUT_BOX_HEIGHT = 40;
 	
@@ -289,7 +286,6 @@ public class GUI extends Application{
 	private void stageSetup(Stage primaryStage) {
 		window = primaryStage;
 
-        //window.initStyle(StageStyle.UNDECORATED);
         window.setResizable(true);
 
     	normalBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 3 - INPUT_BOX_HEIGHT;

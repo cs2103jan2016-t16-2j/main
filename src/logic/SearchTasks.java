@@ -20,7 +20,7 @@ public class SearchTasks implements Operation {
 	@Override
 	public boolean process() {
 		String keyToSearch = state.getSearchKey();
-		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
+		ArrayList<Task> searchedTasks = new ArrayList<Task>();
 		
 		//searching deadline tasks
 		searchNormalTasks(keyToSearch, searchedTasks);
@@ -28,6 +28,7 @@ public class SearchTasks implements Operation {
 		// searching floating tasks
 		searchFloatingTasks(keyToSearch, searchedTasks);
 		
+		state.setSearchResultTasks(searchedTasks); 
 		return true;
 	}
 

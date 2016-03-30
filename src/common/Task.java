@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class Task implements Comparable<Task> {
-	private boolean isImportant, isFinished;
+	private boolean isImportant, isFinished, isOverdue;
 	private Date startDate, endDate;
 	private String content, venue, detail;
 	private TaskType type;
@@ -42,7 +42,6 @@ public class Task implements Comparable<Task> {
 		endDate = DEFAULT_END_DATE;
 	}
 	
-	//to be completed
 	public Task(State state) {
 		content = state.getContent();
 		venue = state.getVenue();
@@ -50,6 +49,7 @@ public class Task implements Comparable<Task> {
 		type = state.getTaskType();
 		isImportant = false;
 		isFinished = false;
+		isOverdue = false;
 		if(state.getIsStartDate()){
 			startDate = state.getStartDate();
 		} else {
@@ -64,22 +64,6 @@ public class Task implements Comparable<Task> {
 
 	}
 	
-	
-	public Task(HashMap<String,String> cmdTable) throws Exception{
-		content = cmdTable.get(KEY_CONTENT);
-		venue = cmdTable.get(KEY_CONTENT);
-		detail = cmdTable.get(KEY_CONTENT);
-		isImportant = false;
-		isFinished = false;
-		if (cmdTable.get(KEY_START_DATE) != "") {
-			startDate = sdf.parse(cmdTable.get(KEY_START_DATE));
-		}
-		if (cmdTable.get(KEY_END_DATE) != "") {
-			endDate = sdf.parse(cmdTable.get(KEY_END_DATE));
-		}
-		startDate = getCurrentDate();
-		endDate = getCurrentDate();
-	}
 	
 
 	public boolean getIsImportant(){

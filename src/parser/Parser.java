@@ -80,7 +80,19 @@ public class Parser {
 	private String getContent() {
 		if(isUpdate()){
 			String lst[] = state_.getRawContent().substring(1, state_.getRawContent().length()).trim().split(" ");
-			return readContent(lst);
+			String content = readContent(lst);
+			if(isStartingDate()){
+				String list[] = content.split("from");
+				return list[0].trim();
+			}
+			else if (isDeadline()){
+				String list[] = content.split("on");
+				return list[0].trim();
+			}
+			return content;
+		}else if(isStartingDate()){
+			String lst[] = state_.getRawContent().split("from");
+			return lst[0].trim();
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
 			return lst[0].trim();
@@ -90,12 +102,21 @@ public class Parser {
 	}
 	
 	/*
+	 * Check whether starting date is given
+	 * Pre-Cond: None
+	 * Post-Cond: True if starting date is given. False otherwise
+	 */
+	private boolean isStartingDate() {
+		return state_.getIsStartDate();
+	}
+
+	/*
 	 * Check whether the task is a deadline task
 	 * Pre-Cond: None
 	 * Post-Cond: True if it is an add deadline task. False otherwise
 	 */
 	private boolean isDeadline() {
-		return state_.getCommand().equals(CommandType.ADD) && state_.getIsEndDate();
+		return state_.getIsEndDate();
 	}
 
 	/*
@@ -138,12 +159,29 @@ public class Parser {
 	 * Post-Cond: String
 	 */
 	private Date getEndDate() {
+		if(isStartingDate()){
+			String list[] = state_.getRawContent().split("to");
+			if(list.length==1){
+				state_.setIsEndDate(false);
+				state_.setIsStartDate(false);
+				return null;
+			}
+			Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
+			if(d != null){
+				state_.setIsEndDate(true);
+				return d;
+			}else{
+				state_.setIsEndDate(false);
+				state_.setIsStartDate(false);
+				return null;
+			}
+		}
 		String list[] = state_.getRawContent().split("on");
 		if(list.length==1){
 			state_.setIsEndDate(false);
 			return null;
 		}
-		Date d = TimeParser.stringToDate(list[list.length-1].trim());
+		Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
 		if(d != null){
 			state_.setIsEndDate(true);
 			return d;
@@ -159,7 +197,19 @@ public class Parser {
 	 * Post-Cond: The start date. Default value is the time of assignment
 	 */
 	private Date getStartDate() {
-		return null;
+		String list[] = state_.getRawContent().split("from");
+		if(list.length==1){
+			state_.setIsStartDate(false);
+			return null;
+		}
+		Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
+		if(d != null){
+			state_.setIsStartDate(true);
+			return d;
+		}else{
+			state_.setIsStartDate(false);
+			return null;
+		}
 	}
 
 	/*

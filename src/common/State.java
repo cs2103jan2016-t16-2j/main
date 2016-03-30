@@ -3,6 +3,7 @@ package common;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Stack;
 import java.util.TreeSet;
 
 public class State {
@@ -80,7 +81,7 @@ public class State {
 		return position_;
 	}
 	
-	public void setMessage(String errorMessage){
+	public void setErrorMessage(String errorMessage){
 		errorMessage_ = errorMessage;
 	}
 	
@@ -124,6 +125,7 @@ public class State {
 		searchResultTasks_ = searchResultTasks;
 	}
 	
+
 	/*
 	 * List of get commands
 	 */
@@ -194,4 +196,5 @@ public class State {
 	public ArrayList<Task> getSearchResultTasks(){
 		return searchResultTasks_;
 	}
+
 }

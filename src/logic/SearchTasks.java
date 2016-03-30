@@ -23,6 +23,25 @@ public class SearchTasks implements Operation {
 		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
 		
 		//searching deadline tasks
+		searchNormalTasks(keyToSearch, searchedTasks);
+	
+		// searching floating tasks
+		searchFloatingTasks(keyToSearch, searchedTasks);
+		
+		return true;
+	}
+
+	private void searchFloatingTasks(String keyToSearch, ArrayList<Task> searchedTasks) {
+		ArrayList<Task> floatingTaskList = state.getFloatingTasks();
+		for(int i = 0; i < floatingTaskList.size(); i++){
+			Task another = floatingTaskList.get(i);
+			if(another.toString().contains(keyToSearch)){
+				searchedTasks.add(another);
+			}
+		}
+	}
+
+	private void searchNormalTasks(String keyToSearch, ArrayList<Task> searchedTasks) {
 		TreeSet<Task> normalTaskList = state.getNormalTasks();
 		Iterator<Task> itr;
 		itr = normalTaskList.iterator();
@@ -32,17 +51,6 @@ public class SearchTasks implements Operation {
 				searchedTasks.add(another);
 			}
 		}
-	
-		// searching floating tasks
-		ArrayList<Task> floatingTaskList = state.getFloatingTasks();
-		for(int i = 0; i < floatingTaskList.size(); i++){
-			Task another = floatingTaskList.get(i);
-			if(another.toString().contains(keyToSearch)){
-				searchedTasks.add(another);
-			}
-		}
-		
-		return true;
 	}
 
 }

@@ -6,6 +6,7 @@ import common.*;
 import logic.AddTask;
 import logic.ClearTask;
 import logic.DeleteTask;
+import logic.SearchTasks;
 import logic.TickTask;
 import logic.UpdateTask;
 import parser.*;
@@ -21,6 +22,7 @@ public class WallistModel{
 	private TickTask tickTask;
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
+	private SearchTasks searchTasks;
 	
 	public WallistModel(){
 		state = new State();
@@ -29,6 +31,7 @@ public class WallistModel{
 		tickTask = new TickTask(state);
 		updateTask = new UpdateTask(state);
 		clearTask = new ClearTask(state);
+		searchTasks = new SearchTasks(state);
 		storage = new Storage(state);
 		parser = new Parser(state); 
 		storage.loadState();
@@ -80,6 +83,9 @@ public class WallistModel{
 			boolean clearResult = clearTask.process();
 			boolean parserResult = storage.saveState();
 			result = clearResult && parserResult;
+		} else if (cmdType.equals(CommandType.SEARCH)){
+			boolean searchResult = searchTasks.process();
+			result = searchResult;
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
 		} else {

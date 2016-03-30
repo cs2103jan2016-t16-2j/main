@@ -120,6 +120,11 @@ public class GUI extends Application{
 		boolean isSuccess = wallistModel.process(command);
 		State state = wallistModel.getState();
 		if (isSuccess){
+			if (state.isSearch()){
+				ArrayList<Task> resultList = state.getSearchResultTasks();
+				refresh(tasks, resultList);
+			}
+				
 			TreeSet<Task> taskList = state.getNormalTasks();
 			ArrayList<Task> floatyList = state.getFloatingTasks();
 	    	refresh(tasks, floaties, taskList, floatyList);
@@ -133,6 +138,16 @@ public class GUI extends Application{
 		inputBox.clear();
 	}
 	
+	private void refresh(VBox tasks, ArrayList<Task> resultList) {
+		tasks.getChildren().clear();
+		taskIndex = 0;
+		for (Task task: resultList){
+			if (!task.getIsFinished()){
+				displayNormalTaskLine(tasks, task);
+		    }
+		}
+	}
+
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
 		floaties.getChildren().clear();
@@ -168,7 +183,10 @@ public class GUI extends Application{
 	private void displayNormalTaskLine(VBox tasks, Task task) {
 		taskIndex ++;
 		String taskContent = task.getContent();
-		String taskDeadline = sdf.format(task.getEndDate());
+		String taskDeadline = "";
+		if (task.getTaskType().equals(TaskType.DEADLINE)){
+			taskDeadline = sdf.format(task.getEndDate());
+		}
 		GridPane taskLine = new GridPane();
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");

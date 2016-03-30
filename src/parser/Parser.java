@@ -174,6 +174,7 @@ public class Parser {
 		}else if(isClear()){
 			return determineTaskType(state_.getContent());
 		}
+		
 		if(state_.getIsEndDate()){
 			return TaskType.DEADLINE;
 		}
@@ -309,7 +310,7 @@ public class Parser {
 						return false;
 					
 					case CLEAR:
-						if(content.equalsIgnoreCase("float")||content.equalsIgnoreCase("deadline")){
+						if(content.equalsIgnoreCase("float")||content.equalsIgnoreCase("deadline") || content.isEmpty()){
 							return false;
 						}
 						return true;
@@ -429,7 +430,7 @@ public class Parser {
 			return TaskType.FLOATING;
 		} else if (taskTypeString.equalsIgnoreCase("deadline")) {
 			return TaskType.DEADLINE;
-		} 
+		}
 		return TaskType.UNDEFINED;
 	}
 }

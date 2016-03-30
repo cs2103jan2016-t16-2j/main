@@ -55,6 +55,8 @@ public class WallistModelTest {
  * 
  * add boxin is testing venue at SOC on 12/11/00 11:12 (not yet there)
  * 
+ * add boxin is testing something on 11/11/11 11:11
+ * 
  * add boxin is testing something very late on 12/11/11 11:11
  * 
  * add boxin is testing something very late2 on 12/11/35 11:12
@@ -64,6 +66,8 @@ public class WallistModelTest {
 		
 		/* right now tasks in the normal tasks list is 
 		 * 
+		 * add boxin is testing something on 11/11/11 11:11
+		 * 
 		 * add boxin is testing something very late on 12/11/11 11:11
 		 * 
 		 * add boxin is testing something very late2 on 12/11/35 11:12
@@ -71,12 +75,16 @@ public class WallistModelTest {
 		 */
 		wm.process("delete 1 deadline");
 		
-		/* right now after delete tasks in the normal tasks list is 
+		/* right now tasks in the normal tasks list is 
+		 * 
+		 * add boxin is testing something very late on 12/11/11 11:11
 		 * 
 		 * add boxin is testing something very late2 on 12/11/35 11:12
 		 * 
 		 */
-		//assertEquals("boxin is testing something very late", state.getNormalTasks().first().getContent());
+		assertEquals("boxin is testing something very late", state.getNormalTasks().first().getContent());
+		assertEquals("boxin is testing something very late2", state.getNormalTasks().last().getContent());
+		
 		assertEquals(2, state.getNormalTasks().size());
 			
 //		

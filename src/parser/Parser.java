@@ -38,6 +38,8 @@ public class Parser {
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());
 			state_.setRawContent(getRawContent());
+			state_.setDetail(getDetail());
+			state_.setVenue(getVenue());
 			state_.setStartDate(getStartDate());
 			state_.setEndDate(getEndDate());
 			state_.setPosition(getPosition());
@@ -49,6 +51,34 @@ public class Parser {
 		return state_.getIsValid();
 	}
 	
+	private String getDetail() {
+		if (isDetail()) {
+			String rawContent = state_.getRawContent();
+			return rawContent;
+		}
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+	
+	private boolean isDetail() {
+		return state_.getCommand().equals(CommandType.DETAIL);
+	}
+	/**
+	 * This method returns the venue in String if there is one
+	 * @return venue
+	 */
+	private String getVenue() {
+		if (isVenue()) {
+			String rawContent = state_.getRawContent();
+			String[] rawContentArray = rawContent.split("at:");
+			String venue = rawContentArray[1];
+			return venue;
+		} 
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+	
+	private boolean isVenue() {
+		return state_.getIsVenue();
+	}
 	/*
 	 * Get the Search Key for Search command
 	 * Pre-Cond: Valid search command
@@ -483,6 +513,8 @@ public class Parser {
 			return CommandType.SEARCH;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
+		} else if (commandTypeString.equalsIgnoreCase("detail")) {
+			return CommandType.DETAIL;
 		}
 		return CommandType.ERROR;
 	}

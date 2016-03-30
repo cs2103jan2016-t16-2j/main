@@ -64,8 +64,8 @@ public class GUI extends Application{
 	private final int TIME_BOX_HEIGHT = 135;
 	private final int INPUT_BOX_HEIGHT = 40;
 	
-	private int stageHeight;
-	private int stageWidth;
+	private final int STAGE_HEIGHT = 650;
+	private final int STAGE_WIDTH = 1300;
 	
 	private int floatyBoxHeight;
 	private int floatyBoxWidth;
@@ -247,7 +247,7 @@ public class GUI extends Application{
 		Rectangle taskBox = boxGrid(normalBoxWidth, normalBoxHeight);
 		ScrollPane taskPane = new ScrollPane();
 		taskPane.setPrefSize(normalBoxWidth, normalBoxHeight);
-		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    taskDisplay.getChildren().addAll(taskBox, taskPane);
 		GridPane.setConstraints(taskDisplay, 1, 0, 1, 2);
@@ -289,35 +289,24 @@ public class GUI extends Application{
 	private void stageSetup(Stage primaryStage) {
 		window = primaryStage;
 
-        window.initStyle(StageStyle.UNDECORATED);
-        window.setResizable(false);
-        
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-        
-        window.setX(bounds.getMinX());
-        window.setY(bounds.getMinY());
-        window.setWidth(bounds.getWidth());
-        window.setHeight(bounds.getHeight());
-      
-        stageWidth = (int)bounds.getWidth();
-        stageHeight = (int)bounds.getHeight();  
-    	normalBoxHeight = stageHeight - COMPONENT_GAP_V * 3 - INPUT_BOX_HEIGHT;
-    	normalBoxWidth = (int)(stageWidth * 2 / 3 - COMPONENT_GAP_H);
-    	floatyBoxHeight = stageHeight - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - TIME_BOX_HEIGHT;
-    	floatyBoxWidth = stageWidth - COMPONENT_GAP_H * 3 - normalBoxWidth;
+        //window.initStyle(StageStyle.UNDECORATED);
+        window.setResizable(true);
+
+    	normalBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 3 - INPUT_BOX_HEIGHT;
+    	normalBoxWidth = (int)(STAGE_WIDTH * 2 / 3 - COMPONENT_GAP_H);
+    	floatyBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - TIME_BOX_HEIGHT;
+    	floatyBoxWidth = STAGE_WIDTH - COMPONENT_GAP_H * 3 - normalBoxWidth;
     	floatyContentWidth = floatyBoxWidth - INDEX_WIDTH;
     	noralContentWidth = normalBoxWidth - INDEX_WIDTH - END_TIME_WIDTH;
-        
-        
-        window.getIcons().add(new Image("file:../../resources/title.png"));
+    	
+        window.getIcons().add(new Image("/title.png"));
         
         window.setTitle(String.format(TITLE, System.getProperty("user.name")));
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setVgap(COMPONENT_GAP_V);
 		layout.setHgap(COMPONENT_GAP_H);
 		timeComponent();
-		scene = new Scene(layout, stageWidth, stageHeight);
+		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		scene.getStylesheets().add("/gui/Stylesheet.css");
 		window.setScene(scene);
 		window.show();

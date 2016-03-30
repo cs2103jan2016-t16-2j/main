@@ -14,9 +14,12 @@ public class WallistModelTest {
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		state.setContent("Boxin is testing");
+		String testString = "Boxin is testing";
+		state.setContent(testString);
 		//testing task constructor
 		Task newTask = new Task(state);
+		assertEquals(testString, newTask.getContent());
+		
 		wm.process("clear float");
 		wm.process("clear deadline");
 

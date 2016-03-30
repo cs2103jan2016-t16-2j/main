@@ -14,6 +14,7 @@ public class State {
 	private String userInput_;
 	private String venue_;
 	private String errorMessage_;
+	private String searchKey_;
 	private TaskType type_;
 	private int position_;
 	private boolean isStartDate_;
@@ -21,6 +22,7 @@ public class State {
 	private boolean isEndDate_;
 	private Date endDate_;
 	private ArrayList<Task> floatingTasks_;
+	private ArrayList<Task> searchResultTasks_;
 	private TreeSet<Task> normalTasks_;
 	
 	public State(){
@@ -31,6 +33,7 @@ public class State {
 		userInput_ = Constant.VALUE_DEFAULT_EMPTY;
 		venue_ = Constant.VALUE_DEFAULT_EMPTY;
 		errorMessage_ = Constant.VALUE_DEFAULT_EMPTY;
+		searchKey_ =  Constant.VALUE_DEFAULT_EMPTY;
 		detail_ = Constant.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;
 		position_ = 0;
@@ -40,6 +43,7 @@ public class State {
 		endDate_ = null;
 		floatingTasks_ = new ArrayList<Task>();
 		normalTasks_ = new TreeSet<Task>();
+		searchResultTasks_ = new ArrayList<Task>();
 	}
 	/*
 	 * List of set commands
@@ -80,6 +84,9 @@ public class State {
 		errorMessage_ = errorMessage;
 	}
 	
+	public void setSearchKey(String searchKey){
+		searchKey_ = searchKey;
+	}
 	
 	public void setUserInput(String userInput){
 		userInput_ = userInput;
@@ -111,6 +118,10 @@ public class State {
 	
 	public void setNormalTasks (TreeSet<Task> normalTasks){
 		normalTasks_ = normalTasks;
+	}
+
+	public void setSearchResultTasks (ArrayList<Task> searchResultTasks){
+		searchResultTasks_ = searchResultTasks;
 	}
 	
 	/*
@@ -144,6 +155,10 @@ public class State {
 		return errorMessage_;
 	}
 	
+	public String getSearchKey(){
+		return searchKey_;
+	}
+	
 	public String getUserInput(){
 		return userInput_;
 	}
@@ -168,11 +183,15 @@ public class State {
 		return isEndDate_;
 	}
 	
-	public ArrayList<Task> getFloatingTasks (){
+	public ArrayList<Task> getFloatingTasks(){
 		return floatingTasks_;
 	}
 	
-	public TreeSet<Task> getNormalTasks (){
+	public TreeSet<Task> getNormalTasks(){
 		return normalTasks_;
+	}
+	
+	public ArrayList<Task> getSearchResultTasks(){
+		return searchResultTasks_;
 	}
 }

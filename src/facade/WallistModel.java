@@ -50,6 +50,7 @@ public class WallistModel{
 			boolean parserResult = parser.processInput();
 			boolean isValid = state.getIsValid();
 			boolean successfulParser = parserResult && isValid;
+			
 			if(!successfulParser){
 				return false;
 			} else {

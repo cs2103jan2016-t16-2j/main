@@ -20,8 +20,9 @@ public class SearchTasks implements Operation {
 	@Override
 	public boolean process() {
 		String keyToSearch = state.getSearchKey();
-		ArrayList<Task> searchedTasks = new ArrayList<Task>();
+		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
 		
+		searchedTasks.clear();
 		//searching deadline tasks
 		searchNormalTasks(keyToSearch, searchedTasks);
 	

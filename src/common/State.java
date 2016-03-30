@@ -169,6 +169,10 @@ public class State {
 		return type_;
 	}
 	
+	public boolean isSearch(){
+		return command_.equals(CommandType.SEARCH);
+	}
+	
 	public Date getStartDate(){
 		return startDate_;
 	}

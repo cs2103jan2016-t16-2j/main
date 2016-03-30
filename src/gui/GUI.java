@@ -124,10 +124,11 @@ public class GUI extends Application{
 				ArrayList<Task> resultList = state.getSearchResultTasks();
 				refresh(tasks, resultList);
 			}
-				
-			TreeSet<Task> taskList = state.getNormalTasks();
-			ArrayList<Task> floatyList = state.getFloatingTasks();
-	    	refresh(tasks, floaties, taskList, floatyList);
+			else{	
+		    	TreeSet<Task> taskList = state.getNormalTasks();
+			    ArrayList<Task> floatyList = state.getFloatingTasks();
+	    	    refresh(tasks, floaties, taskList, floatyList);
+			}
 		}
 		Label displayText = new Label(state.getMessage());
 		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
@@ -175,7 +176,7 @@ public class GUI extends Application{
 		}
 		taskLine.setHgap(10);
 		StackPane indexPane = indexStackPane(floatyIndex);
-		StackPane contentPane = contentStackPane(taskContent, floatyContentWidth);
+		StackPane contentPane = rightPane(taskContent, floatyContentWidth);
 		taskLine.getChildren().addAll(indexPane, contentPane);
 		floaties.getChildren().add(taskLine);
 	}
@@ -193,13 +194,13 @@ public class GUI extends Application{
 		}
 		taskLine.setHgap(10);
 		StackPane indexPane = indexStackPane(taskIndex);
-		StackPane contentPane = contentStackPane(taskContent, noralContentWidth);
-		StackPane deadlinePane = deadlineStackPane(taskDeadline);
+		StackPane contentPane = rightPane(taskContent, noralContentWidth);
+		StackPane deadlinePane = leftPane(taskDeadline);
 		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
 		tasks.getChildren().add(taskLine);
 	}
 	
-	private StackPane deadlineStackPane(String taskDeadline) {
+	private StackPane leftPane(String taskDeadline) {
 		StackPane deadlinePane = new StackPane();
 		deadlinePane.setAlignment(Pos.TOP_LEFT);
 		Rectangle deadlineRec = new Rectangle();
@@ -212,7 +213,7 @@ public class GUI extends Application{
 		return deadlinePane;
 	}
 
-	private StackPane contentStackPane(String taskContent, int width) {
+	private StackPane rightPane(String taskContent, int width) {
 		StackPane contentPane = new StackPane();		            			
 		Rectangle contentRec = new Rectangle();
 		contentRec.setWidth(width);

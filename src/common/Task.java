@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class Task implements Comparable<Task> {
-	private boolean isImportant, isFinished, isOverdue;
+	private boolean isImportant, isFinished, isOverdue, isStartDate;
 	private Date startDate, endDate;
 	private String content, venue, detail;
 	private TaskType type;
@@ -52,8 +52,10 @@ public class Task implements Comparable<Task> {
 		isOverdue = false;
 		if(state.getIsStartDate()){
 			startDate = state.getStartDate();
+			this.isStartDate = true;
 		} else {
-			startDate = getCurrentDate();			
+			startDate = getCurrentDate();	
+			this.isStartDate = false;
 		}
 		
 		if (state.getIsEndDate()) {
@@ -64,7 +66,9 @@ public class Task implements Comparable<Task> {
 
 	}
 	
-	
+	public boolean getIsStartDate(){
+		return this.isStartDate;
+	}
 
 	public boolean getIsImportant(){
 		return isImportant;

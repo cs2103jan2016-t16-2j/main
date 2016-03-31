@@ -195,16 +195,18 @@ public class GUI extends Application{
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
-		if (!task.getVenue().isEmpty()){
-			taskContent = taskContent + "\n" + task.getVenue();
-		}
-		if (!task.getDetail().isEmpty()){
-			taskContent = taskContent + "\n" + task.getDetail();
-		}
+		//if (!task.getVenue().isEmpty()){
+		//	taskContent = taskContent + "\n" + task.getVenue();
+		//}
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
 			taskDeadline = sdf.format(task.getEndDate());
+
+			if (task.getIsStartDate()){
+
+				taskDeadline = sdf.format(task.getStartDate()) + "\n" + taskDeadline;				
+			}
 			Date today = Calendar.getInstance().getTime();
 			if (today.after(task.getEndDate())){
 				isOverdue = true;

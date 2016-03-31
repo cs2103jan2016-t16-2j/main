@@ -70,7 +70,7 @@ public class Parser {
 	 */
 	private String getVenue() {
 		String list[] = state_.getRawContent().split("at:");
-		if(list.length == 0){
+		if(list.length == 1){
 			state_.setIsVenue(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{

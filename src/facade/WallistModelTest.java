@@ -73,6 +73,8 @@ public class WallistModelTest {
 		 * add boxin is testing something very late2 on 12/11/35 11:12
 		 * 
 		 */
+		assertEquals(3, state.getNormalTasks().size());
+
 		wm.process("delete 1 deadline");
 		
 		/* right now tasks in the normal tasks list is 
@@ -87,6 +89,19 @@ public class WallistModelTest {
 		
 		assertEquals(2, state.getNormalTasks().size());
 			
+		//test undo
+		wm.process("undo");
+//		wm.process("undo");
+//		wm.process("undo");
+//		wm.process("undo");
+//		wm.process("undo");
+		
+		//assertEquals(2, state.getNormalTasks().size());
+
+//		assertEquals(CommandType.UNDO, state.getCommand());
+//		assertEquals(false, wm.states.empty());
+//		assertEquals(2, wm.states.peek().getNormalTasks().size());
+
 //		
 //		//testing update
 //		wm.process("update 1 deadline hahahaha");

@@ -3,11 +3,7 @@ package common;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-<<<<<<< HEAD
-import java.util.Stack;
-=======
 import java.util.HashMap;
->>>>>>> 14df7ca4071c291ab83602162fc1221f59b7ed12
 import java.util.TreeSet;
 
 public class State {
@@ -139,7 +135,9 @@ public class State {
 		searchResultTasks_ = searchResultTasks;
 	}
 	
-
+	public void setAttributes(HashMap<String, Boolean> attributes) {
+		attributes_ = attributes;
+	}
 	/*
 	 * List of get commands
 	 */
@@ -222,4 +220,32 @@ public class State {
 		return searchResultTasks_;
 	}
 
+	public HashMap<String, Boolean> getAttributes() {
+		return attributes_;
+	}
+	
+	public State deepCopy(){
+		State newState = new State();
+		newState.setIsValid(isValid_);
+		newState.setCommand(command_);
+		newState.setRawContent(rawContent_);
+		newState.setContent(content_);
+		newState.setDetail(detail_);
+		newState.setUserInput(userInput_);
+		newState.setVenue(venue_);
+		newState.setErrorMessage(errorMessage_);
+		newState.setSearchKey(searchKey_);
+		newState.setTaskType(type_);
+		newState.setPosition(position_);
+		newState.setStartDate(startDate_);
+		newState.setEndDate(endDate_);
+		newState.setAttributes(attributes_);
+		newState.setFloatingTasks(floatingTasks_);
+		newState.setSearchResultTasks(searchResultTasks_);
+		newState.setNormalTasks(normalTasks_);
+		return newState;
+	}
+
+
+	
 }

@@ -23,7 +23,7 @@ public class WallistModel{
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
 	private SearchTasks searchTasks;
-	private Stack<State> states;
+	public Stack<State> states;
 	
 	public WallistModel(){
 		state = new State();
@@ -58,7 +58,8 @@ public class WallistModel{
 				CommandType cmdType = state.getCommand();
 
 				if(isRunningSuccessful && !cmdType.equals(CommandType.UNDO)){
-					states.push(state);
+					State current = state.deepCopy();
+					states.push(current);
 				}
 				return isRunningSuccessful;
 			}
@@ -101,7 +102,8 @@ public class WallistModel{
 	private boolean runningUndo() {
 		boolean result;
 		try{
-			state = states.pop();
+			states.pop();
+			state = states.peek();
 		} finally{
 			result = true;				
 		}

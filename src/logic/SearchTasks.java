@@ -37,7 +37,7 @@ public class SearchTasks implements Operation {
 		ArrayList<Task> floatingTaskList = state.getFloatingTasks();
 		for(int i = 0; i < floatingTaskList.size(); i++){
 			Task another = floatingTaskList.get(i);
-			if(another.toString().contains(keyToSearch)){
+			if(another.concatString().contains(keyToSearch)){
 				searchedTasks.add(another);
 			}
 		}
@@ -49,7 +49,7 @@ public class SearchTasks implements Operation {
 		itr = normalTaskList.iterator();
 		while(itr.hasNext()){
 			Task another = itr.next();
-			if(another.toString().contains(keyToSearch)){
+			if(another.concatString().contains(keyToSearch)){
 				searchedTasks.add(another);
 			}
 		}

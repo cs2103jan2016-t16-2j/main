@@ -1,9 +1,8 @@
 package common;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Stack;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 public class State {
@@ -18,10 +17,9 @@ public class State {
 	private String searchKey_;
 	private TaskType type_;
 	private int position_;
-	private boolean isStartDate_;
 	private Date startDate_;
-	private boolean isEndDate_;
 	private Date endDate_;
+	private HashMap<String, Boolean> attributes_;
 	private ArrayList<Task> floatingTasks_;
 	private ArrayList<Task> searchResultTasks_;
 	private TreeSet<Task> normalTasks_;
@@ -38,13 +36,19 @@ public class State {
 		detail_ = Constant.VALUE_DEFAULT_EMPTY;
 		type_ = TaskType.UNDEFINED;
 		position_ = 0;
-		isStartDate_ = false;
 		startDate_ = null;
-		isEndDate_ = false;
 		endDate_ = null;
 		floatingTasks_ = new ArrayList<Task>();
 		normalTasks_ = new TreeSet<Task>();
 		searchResultTasks_ = new ArrayList<Task>();
+		attributes_ = new HashMap<String, Boolean>();
+		attributes_.put("isStartDate", false);
+		attributes_.put("isEndDate", false);
+		attributes_.put("isDetails", false);
+		attributes_.put("isVenue", false);
+		attributes_.put("isFinished", false);
+		attributes_.put("isImportant", false);
+		attributes_.put("isContent", false);
 	}
 	/*
 	 * List of set commands
@@ -106,11 +110,31 @@ public class State {
 	}
 	
 	public void setIsStartDate(boolean isStartDate){
-		isStartDate_ = isStartDate;
+		attributes_.put("isStartDate", isStartDate);
 	}
 	
 	public void setIsEndDate(boolean isEndDate){
-		isEndDate_ = isEndDate;
+		attributes_.put("isEndDate", isEndDate);
+	}
+	
+	public void setIsDetails(boolean isDetails){
+		attributes_.put("isDetails", isDetails);
+	}
+	
+	public void setIsVenue(boolean isVenue){
+		attributes_.put("isVenue", isVenue);
+	}
+	
+	public void setIsImportant(boolean isImportant){
+		attributes_.put("isImportant", isImportant);
+	}
+	
+	public void setIsFinished(boolean isFinished){
+		attributes_.put("isFinished", isFinished);
+	}
+	
+	public void setIsContent(boolean isContent){
+		attributes_.put("isContent", isContent);
 	}
 	
 	public void setFloatingTasks (ArrayList<Task> floatingTasks){
@@ -182,11 +206,31 @@ public class State {
 	}
 	
 	public boolean getIsStartDate(){
-		return isStartDate_;
+		return attributes_.get("isStartDate");
 	}
 	
 	public boolean getIsEndDate(){
-		return isEndDate_;
+		return attributes_.get("isEndDate");
+	}
+
+	public boolean getIsDetails(){
+		return attributes_.get("isDetails");
+	}
+	
+	public boolean getIsVenue(){
+		return attributes_.get("isVenue");
+	}
+	
+	public void getIsImportant(){
+		attributes_.get("isImportant");
+	}
+	
+	public void getIsFinished(){
+		attributes_.get("isFinished");
+	}
+	
+	public void getIsContent(){
+		attributes_.get("isContent");
 	}
 	
 	public ArrayList<Task> getFloatingTasks(){

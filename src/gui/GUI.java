@@ -193,9 +193,9 @@ public class GUI extends Application{
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
-		//if (!task.getVenue().isEmpty()){
-		//	taskContent = taskContent + "\n" + task.getVenue();
-		//}
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){

@@ -85,7 +85,7 @@ public class State {
 		return position_;
 	}
 	
-	public void setMessage(String errorMessage){
+	public void setErrorMessage(String errorMessage){
 		errorMessage_ = errorMessage;
 	}
 	
@@ -149,6 +149,7 @@ public class State {
 		searchResultTasks_ = searchResultTasks;
 	}
 	
+
 	/*
 	 * List of get commands
 	 */
@@ -190,6 +191,10 @@ public class State {
 	
 	public TaskType getTaskType(){
 		return type_;
+	}
+	
+	public boolean isSearch(){
+		return command_.equals(CommandType.SEARCH);
 	}
 	
 	public Date getStartDate(){
@@ -239,4 +244,5 @@ public class State {
 	public ArrayList<Task> getSearchResultTasks(){
 		return searchResultTasks_;
 	}
+
 }

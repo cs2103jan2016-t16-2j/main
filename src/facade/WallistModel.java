@@ -23,6 +23,7 @@ public class WallistModel{
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
 	private SearchTasks searchTasks;
+	private Stack<State> states;
 	
 	public WallistModel(){
 		state = new State();
@@ -35,6 +36,8 @@ public class WallistModel{
 		storage = new Storage(state);
 		parser = new Parser(state); 
 		storage.loadState();
+		states = new Stack<State>();
+		states.push(state);
 	}
 	
 	public State getState(){
@@ -47,51 +50,108 @@ public class WallistModel{
 			boolean parserResult = parser.processInput();
 			boolean isValid = state.getIsValid();
 			boolean successfulParser = parserResult && isValid;
+			
 			if(!successfulParser){
 				return false;
 			} else {
-				boolean runningResult = running();
-				return runningResult;
+				boolean isRunningSuccessful = running();
+				CommandType cmdType = state.getCommand();
+
+				if(isRunningSuccessful && !cmdType.equals(CommandType.UNDO)){
+					states.push(state);
+				}
+				return isRunningSuccessful;
 			}
+		} catch (EmptyStackException e){
+			state.setErrorMessage(DisplayMessage.MESSAGE_EMPTY_STACK);
+			return false;
 		} catch (Exception e){
 			return false;
 		}
 
 	}
 
-	private boolean running(){
+	private boolean running() throws EmptyStackException{
 		CommandType cmdType = state.getCommand();
 		boolean result;
 		
 		if(cmdType.equals(CommandType.ADD)){
-			boolean addResult = addTask.process();
-			boolean parserResult = storage.saveState();
-			result = addResult && parserResult;
+			result = runningAdd();
 		} else if (cmdType.equals(CommandType.DELETE)){
-			boolean deleteResult = deleteTask.process();
-			boolean parserResult = storage.saveState();
-			result = deleteResult && parserResult;
+			result = runningDelete();
 		} else if (cmdType.equals(CommandType.TICK)){
-			boolean tickResult = tickTask.process();
-			boolean parserResult = storage.saveState();
-			result = tickResult && parserResult;
+			result = runningTick();
 		} else if (cmdType.equals(CommandType.UPDATE)){
-			boolean updateResult = updateTask.process();
-			boolean parserResult = storage.saveState();
-			result = updateResult && parserResult;
+			result = runningUpdate();
 		} else if (cmdType.equals(CommandType.CLEAR)){
-			boolean clearResult = clearTask.process();
-			boolean parserResult = storage.saveState();
-			result = clearResult && parserResult;
+			result = runningClear();
 		} else if (cmdType.equals(CommandType.SEARCH)){
-			boolean searchResult = searchTasks.process();
-			result = searchResult;
+			result = runningSearch();
+		} else if (cmdType.equals(CommandType.UNDO)){
+			result = runningUndo();
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
 		} else {
 			result = false;
 		}
 
+		return result;
+	}
+
+	private boolean runningUndo() {
+		boolean result;
+		try{
+			state = states.pop();
+		} finally{
+			result = true;				
+		}
+		return result;
+	}
+
+	private boolean runningSearch() {
+		boolean result;
+		boolean searchResult = searchTasks.process();
+		result = searchResult;
+		return result;
+	}
+
+	private boolean runningClear() {
+		boolean result;
+		boolean clearResult = clearTask.process();
+		boolean parserResult = storage.saveState();
+		result = clearResult && parserResult;
+		return result;
+	}
+
+	private boolean runningUpdate() {
+		boolean result;
+		boolean updateResult = updateTask.process();
+		boolean parserResult = storage.saveState();
+		result = updateResult && parserResult;
+		return result;
+	}
+
+	private boolean runningTick() {
+		boolean result;
+		boolean tickResult = tickTask.process();
+		boolean parserResult = storage.saveState();
+		result = tickResult && parserResult;
+		return result;
+	}
+
+	private boolean runningDelete() {
+		boolean result;
+		boolean deleteResult = deleteTask.process();
+		boolean parserResult = storage.saveState();
+		result = deleteResult && parserResult;
+		return result;
+	}
+
+	private boolean runningAdd() {
+		boolean result;
+		boolean addResult = addTask.process();
+		boolean parserResult = storage.saveState();
+		result = addResult && parserResult;
 		return result;
 	}
 	

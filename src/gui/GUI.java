@@ -52,6 +52,10 @@ public class GUI extends Application{
 	private int taskIndex, floatyIndex;
 	private double vValue;
 	
+
+	private final Color WHITE = Color.valueOf("ffffcb");
+	private final Color RED = Color.valueOf("b4df4f");
+	
 	private final String TITLE = "%1$s's Wallist";
 	
 	private final int COMPONENT_GAP_H = 30;
@@ -120,9 +124,15 @@ public class GUI extends Application{
 		boolean isSuccess = wallistModel.process(command);
 		State state = wallistModel.getState();
 		if (isSuccess){
-			TreeSet<Task> taskList = state.getNormalTasks();
-			ArrayList<Task> floatyList = state.getFloatingTasks();
-	    	refresh(tasks, floaties, taskList, floatyList);
+			if (state.isSearch()){
+				ArrayList<Task> resultList = state.getSearchResultTasks();
+				refresh(tasks, resultList);
+			}
+			else{	
+		    	TreeSet<Task> taskList = state.getNormalTasks();
+			    ArrayList<Task> floatyList = state.getFloatingTasks();
+	    	    refresh(tasks, floaties, taskList, floatyList);
+			}
 		}
 		Label displayText = new Label(state.getMessage());
 		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
@@ -133,6 +143,16 @@ public class GUI extends Application{
 		inputBox.clear();
 	}
 	
+	private void refresh(VBox tasks, ArrayList<Task> resultList) {
+		tasks.getChildren().clear();
+		taskIndex = 0;
+		for (Task task: resultList){
+			if (!task.getIsFinished()){
+				displayNormalTaskLine(tasks, task);
+		    }
+		}
+	}
+
 	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
 		tasks.getChildren().clear();
 		floaties.getChildren().clear();
@@ -154,67 +174,94 @@ public class GUI extends Application{
 	private void displayFloatyTaskLine(VBox floaties, Task task) {
 		floatyIndex ++;
 		String taskContent = task.getContent();
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
+		if (!task.getDetail().isEmpty()){
+			taskContent = taskContent + "\n" + task.getDetail();
+		}
 		GridPane taskLine = new GridPane();
 		if (floatyIndex % 2 == 0){
 			taskLine.setId("gridPane");
 		}
 		taskLine.setHgap(10);
-		StackPane indexPane = indexStackPane(floatyIndex);
-		StackPane contentPane = contentStackPane(taskContent, floatyContentWidth);
+		StackPane indexPane = indexStackPane(floatyIndex, WHITE);
+		StackPane contentPane = contentPane(taskContent, floatyContentWidth, WHITE);
 		taskLine.getChildren().addAll(indexPane, contentPane);
 		floaties.getChildren().add(taskLine);
 	}
 
 	private void displayNormalTaskLine(VBox tasks, Task task) {
 		taskIndex ++;
+		boolean isOverdue = false;
 		String taskContent = task.getContent();
-		String taskDeadline = sdf.format(task.getEndDate());
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
+		if (!task.getDetail().isEmpty()){
+			taskContent = taskContent + "\n" + task.getDetail();
+		}
+		String taskDeadline = "";
+		StackPane indexPane, contentPane, deadlinePane;
+		if (task.getTaskType().equals(TaskType.DEADLINE)){
+			taskDeadline = sdf.format(task.getEndDate());
+			Date today = Calendar.getInstance().getTime();
+			if (today.after(task.getEndDate())){
+				isOverdue = true;
+			}
+		}
 		GridPane taskLine = new GridPane();
+		taskLine.setHgap(10);
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");
 		}
-		taskLine.setHgap(10);
-		StackPane indexPane = indexStackPane(taskIndex);
-		StackPane contentPane = contentStackPane(taskContent, noralContentWidth);
-		StackPane deadlinePane = deadlineStackPane(taskDeadline);
+		if (isOverdue){
+			indexPane = indexStackPane(taskIndex, RED);
+			contentPane = contentPane(taskContent, noralContentWidth, RED);
+			deadlinePane = timePane(taskDeadline, RED);
+		} else {
+			indexPane = indexStackPane(taskIndex, WHITE);
+			contentPane = contentPane(taskContent, noralContentWidth, WHITE);
+			deadlinePane = timePane(taskDeadline, WHITE);
+		}
 		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
 		tasks.getChildren().add(taskLine);
 	}
 	
-	private StackPane deadlineStackPane(String taskDeadline) {
+	private StackPane timePane(String taskDeadline, Color color) {
 		StackPane deadlinePane = new StackPane();
 		deadlinePane.setAlignment(Pos.TOP_LEFT);
 		Rectangle deadlineRec = new Rectangle();
 		deadlineRec.setWidth(END_TIME_WIDTH);
 		deadlineRec.setOpacity(0);
 		Text deadline = new Text(taskDeadline);
-		deadline.setFill(Color.valueOf("#ffffcb"));
+		deadline.setFill(color);
 		deadlinePane.getChildren().addAll(deadlineRec, deadline);
 		GridPane.setConstraints(deadlinePane, 2, 0);
 		return deadlinePane;
 	}
 
-	private StackPane contentStackPane(String taskContent, int width) {
+	private StackPane contentPane(String taskContent, int width, Color color) {
 		StackPane contentPane = new StackPane();		            			
 		Rectangle contentRec = new Rectangle();
 		contentRec.setWidth(width);
 		contentRec.setOpacity(0);
 		Text content = new Text(taskContent);
 		content.setWrappingWidth(width);
-		content.setFill(Color.valueOf("#ffffcb"));
+		content.setFill(color);
 		contentPane.getChildren().addAll(contentRec, content);
 		GridPane.setConstraints(contentPane, 1, 0);
 		return contentPane;
 	}
 
-	private StackPane indexStackPane(int index) {
+	private StackPane indexStackPane(int index, Color color) {
 		StackPane indexPane = new StackPane();
 		indexPane.setAlignment(Pos.TOP_RIGHT);
 		Rectangle indexRec = new Rectangle();
 		indexRec.setWidth(INDEX_WIDTH);
 		indexRec.setOpacity(0);
 		Text indexStr = new Text(Integer.toString(index));
-		indexStr.setFill(Color.valueOf("#ffffcb"));
+		indexStr.setFill(color);
 		indexPane.getChildren().addAll(indexRec,indexStr);
 		GridPane.setConstraints(indexPane, 0, 0);
 		return indexPane;

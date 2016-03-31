@@ -37,7 +37,7 @@ public class WallistModel{
 		parser = new Parser(state); 
 		storage.loadState();
 		states = new Stack<State>();
-		states.push(state);
+		states.push(state.deepCopy());
 	}
 	
 	public State getState(){

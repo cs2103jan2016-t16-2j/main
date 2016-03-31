@@ -89,8 +89,14 @@ public class WallistModelTest {
 		
 		assertEquals(2, state.getNormalTasks().size());
 			
+		//System.out.println(wm.states.size());
 		//test undo
 		wm.process("undo");
+		wm.process("undo");
+		wm.process("undo");
+		System.out.println(wm.getState().getTaskType());
+		System.out.println(wm.states.size());
+
 //		wm.process("undo");
 //		wm.process("undo");
 //		wm.process("undo");

@@ -132,7 +132,7 @@ public class Parser {
 		}else if(isStartingDate()){
 			String lst[] = state_.getRawContent().split("from");
 			if(lst.length == 1){
-				state_.setMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContent(true);
@@ -140,7 +140,7 @@ public class Parser {
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
 			if(lst.length == 1){
-				state_.setMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContent(true);
@@ -220,7 +220,7 @@ public class Parser {
 			if(d != null){
 				state_.setIsEndDate(true);
 				if(d.before(state_.getStartDate())){
-					state_.setMessage(Constant.VALUE_ERROR_DATE_ERROR);
+					state_.setErrorMessage(Constant.VALUE_ERROR_DATE_ERROR);
 				}
 				return d;
 			}else{

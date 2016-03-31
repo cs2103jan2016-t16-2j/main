@@ -174,12 +174,10 @@ public class GUI extends Application{
 	private void displayFloatyTaskLine(VBox floaties, Task task) {
 		floatyIndex ++;
 		String taskContent = task.getContent();
-		if (!task.getVenue().isEmpty()){
-			taskContent = taskContent + "\n" + task.getVenue();
-		}
-		if (!task.getDetail().isEmpty()){
-			taskContent = taskContent + "\n" + task.getDetail();
-		}
+		//if (!task.getVenue().isEmpty()){
+		//	taskContent = taskContent + "\n" + task.getVenue();
+		//}
+		
 		GridPane taskLine = new GridPane();
 		if (floatyIndex % 2 == 0){
 			taskLine.setId("gridPane");

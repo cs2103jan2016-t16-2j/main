@@ -24,9 +24,15 @@ public class ClearTask implements Operation {
 				TreeSet<Task> taskList = state.getNormalTasks();
 				taskList.clear();
 				return true;
-			} else {
+			} else if(type.equals(TaskType.FLOATING)){
 				ArrayList<Task> taskList = state.getFloatingTasks();
 				taskList.clear();
+				return true;
+			} else{
+				TreeSet<Task> normalTaskList = state.getNormalTasks();
+				normalTaskList.clear();
+				ArrayList<Task> floatingTaskList = state.getFloatingTasks();
+				floatingTaskList.clear();
 				return true;
 			}
 		} catch (Exception e) {

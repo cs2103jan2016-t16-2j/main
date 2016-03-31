@@ -145,11 +145,28 @@ public class Parser {
 			}
 			state_.setIsContent(true);
 			return lst[0].trim();
+		}else if(isVenue()){
+			String lst[] = state_.getRawContent().split("at:");
+			if(lst.length == 1){
+				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContent(true);
+			return lst[0].trim();
 		}else{
 			return state_.getRawContent();
 		}
 	}
 	
+	/*
+	 * Check whether the task has venue
+	 * Pre-Cond:None
+	 * Post-Cond:True if it has, False otherwise
+	 */
+	private boolean isVenue() {
+		return state_.getIsVenue();
+	}
+
 	/*
 	 * Check whether starting date is given
 	 * Pre-Cond: None

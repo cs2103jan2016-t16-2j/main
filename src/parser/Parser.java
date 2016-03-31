@@ -53,8 +53,8 @@ public class Parser {
 	
 	private String getDetail() {
 		if (isDetail()) {
-			String rawContent = state_.getRawContent();
-			return rawContent;
+			String list[] = state_.getRawContent().split(" ");
+			return list[2];
 		}
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
@@ -62,23 +62,24 @@ public class Parser {
 	private boolean isDetail() {
 		return state_.getCommand().equals(CommandType.DETAIL);
 	}
-	/**
+	
+	/*
 	 * This method returns the venue in String if there is one
-	 * @return venue
+	 * Pre-Cond: None
+	 * Post-Cond: Return venue if there is any then set isVenue to true. False otherwise
 	 */
 	private String getVenue() {
-		if (isVenue()) {
-			String rawContent = state_.getRawContent();
-			String[] rawContentArray = rawContent.split("at:");
-			String venue = rawContentArray[1];
-			return venue;
-		} 
-		return Constant.VALUE_DEFAULT_EMPTY;
+		String list[] = state_.getRawContent().split("at:");
+		if(list.length == 0){
+			state_.setIsVenue(false);
+			return Constant.VALUE_DEFAULT_EMPTY;
+		}else{
+			state_.setIsVenue(true);
+			return list[list.length-1].trim();
+		}
 	}
 	
-	private boolean isVenue() {
-		return state_.getIsVenue();
-	}
+
 	/*
 	 * Get the Search Key for Search command
 	 * Pre-Cond: Valid search command
@@ -185,7 +186,8 @@ public class Parser {
 	 */
 	private int getPosition() {
 		if(isIndexRequired()){
-			return Integer.parseInt(state_.getRawContent().substring(0,1));
+			String list[] = state_.getRawContent().split(" ");
+			return Integer.parseInt(list[0]);
 		}else{
 			return 0;
 		}
@@ -197,7 +199,7 @@ public class Parser {
 	 * Post-Cond: True if it needs index. False othrwise
 	 */
 	private boolean isIndexRequired() {
-		return state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE);
+		return state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE) || state_.getCommand().equals(CommandType.DETAIL);
 	}
 
 	
@@ -385,6 +387,9 @@ public class Parser {
 				case SEARCH:
 					return false;
 				
+				case DETAIL:
+					return false;
+					
 				default: 
 					return true;
 			}
@@ -460,7 +465,14 @@ public class Parser {
 							return true;
 						}
 						return false;
-				
+					
+					case DETAIL:
+						String lst_b[] = content.split(" ");
+						if(!lst_b[0].matches("\\d+") || content.length() == 0 || lst_b.length <=2){
+							return true;
+						}
+						return false;
+						
 					default: 
 						return false;
 				}

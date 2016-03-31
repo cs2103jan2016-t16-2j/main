@@ -174,6 +174,12 @@ public class GUI extends Application{
 	private void displayFloatyTaskLine(VBox floaties, Task task) {
 		floatyIndex ++;
 		String taskContent = task.getContent();
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
+		if (!task.getDetail().isEmpty()){
+			taskContent = taskContent + "\n" + task.getDetail();
+		}
 		GridPane taskLine = new GridPane();
 		if (floatyIndex % 2 == 0){
 			taskLine.setId("gridPane");
@@ -189,6 +195,12 @@ public class GUI extends Application{
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
+		if (!task.getDetail().isEmpty()){
+			taskContent = taskContent + "\n" + task.getDetail();
+		}
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
@@ -203,18 +215,15 @@ public class GUI extends Application{
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");
 		}
-		
 		if (isOverdue){
 			indexPane = indexStackPane(taskIndex, RED);
 			contentPane = contentPane(taskContent, noralContentWidth, RED);
 			deadlinePane = timePane(taskDeadline, RED);
 		} else {
-
 			indexPane = indexStackPane(taskIndex, WHITE);
 			contentPane = contentPane(taskContent, noralContentWidth, WHITE);
 			deadlinePane = timePane(taskDeadline, WHITE);
 		}
-
 		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
 		tasks.getChildren().add(taskLine);
 	}

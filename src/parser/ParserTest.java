@@ -152,6 +152,20 @@ public class ParserTest {
 		assertEquals(state.getStartDate(), null);
 		assertEquals(state.getEndDate(), null);
 
+//		// Test Venue
+//		//Test Tick Deadline
+//		state.setUserInput("add eat lunch at: soc");
+//		parser.processInput();
+//		assertEquals(state.getIsValid(), true);
+//		assertEquals(state.getCommand(), CommandType.ADD);
+//		assertEquals(state.getContent(), "");
+//		assertEquals(state.getMessage(), Constant.VALUE_ERROR_NO_ERROR);
+//		assertEquals(state.getTaskType(), TaskType.FLOATING);
+//		assertEquals(state.getPosition(), 2);
+//		assertEquals(state.getIsStartDate(), false);
+//		assertEquals(state.getIsEndDate(), false);
+//		assertEquals(state.getStartDate(), null);
+//		assertEquals(state.getEndDate(), null);		
 	}
 	
 	public void testError(){

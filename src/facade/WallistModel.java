@@ -72,7 +72,7 @@ public class WallistModel{
 
 	}
 
-	private boolean running() throws EmptyStackException{
+	public boolean running() throws EmptyStackException{
 		CommandType cmdType = state.getCommand();
 		boolean result;
 		

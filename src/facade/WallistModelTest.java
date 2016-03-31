@@ -74,9 +74,11 @@ public class WallistModelTest {
 		 * 
 		 */
 		assertEquals(3, state.getNormalTasks().size());
+		System.out.println(wm.states.size());
 
 		wm.process("delete 1 deadline");
-		
+		System.out.println(wm.states.size());
+
 		/* right now tasks in the normal tasks list is 
 		 * 
 		 * add boxin is testing something very late on 12/11/11 11:11
@@ -91,10 +93,17 @@ public class WallistModelTest {
 			
 		//System.out.println(wm.states.size());
 		//test undo
-		wm.process("undo");
-		wm.process("undo");
-		wm.process("undo");
-		System.out.println(wm.getState().getTaskType());
+		//wm.process("undo");
+		//wm.process("undo");
+		//wm.process("undo");
+		System.out.println(wm.states.size());
+
+		wm.getState().setCommand(CommandType.UNDO);
+		System.out.println(wm.getState().getCommand());
+		wm.running();
+		System.out.println(wm.getState().getCommand());
+		System.out.println(wm.getState().getContent());
+
 		System.out.println(wm.states.size());
 
 //		wm.process("undo");
@@ -102,7 +111,7 @@ public class WallistModelTest {
 //		wm.process("undo");
 //		wm.process("undo");
 		
-		//assertEquals(2, state.getNormalTasks().size());
+		assertEquals(2, state.getNormalTasks().size());
 
 //		assertEquals(CommandType.UNDO, state.getCommand());
 //		assertEquals(false, wm.states.empty());
@@ -110,11 +119,11 @@ public class WallistModelTest {
 
 //		
 //		//testing update
-//		wm.process("update 1 deadline hahahaha");
+		wm.process("update 1 deadline hahahaha");
 //		assertEquals("hahahaha", state.getNormalTasks().first().getContent());
 //		
 //		//testing tick
-//		wm.process("tick 1 deadline hahahaha");
+		wm.process("tick 1 deadline hahahaha");
 //		assertEquals(true, state.getNormalTasks().first().getIsFinished());
 //				
 //		//testing clear

@@ -38,6 +38,8 @@ public class Parser {
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());
 			state_.setRawContent(getRawContent());
+			state_.setDetail(getDetail());
+			state_.setVenue(getVenue());
 			state_.setStartDate(getStartDate());
 			state_.setEndDate(getEndDate());
 			state_.setPosition(getPosition());
@@ -49,6 +51,34 @@ public class Parser {
 		return state_.getIsValid();
 	}
 	
+	private String getDetail() {
+		if (isDetail()) {
+			String rawContent = state_.getRawContent();
+			return rawContent;
+		}
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+	
+	private boolean isDetail() {
+		return state_.getCommand().equals(CommandType.DETAIL);
+	}
+	/**
+	 * This method returns the venue in String if there is one
+	 * @return venue
+	 */
+	private String getVenue() {
+		if (isVenue()) {
+			String rawContent = state_.getRawContent();
+			String[] rawContentArray = rawContent.split("at:");
+			String venue = rawContentArray[1];
+			return venue;
+		} 
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+	
+	private boolean isVenue() {
+		return state_.getIsVenue();
+	}
 	/*
 	 * Get the Search Key for Search command
 	 * Pre-Cond: Valid search command
@@ -80,9 +110,39 @@ public class Parser {
 	private String getContent() {
 		if(isUpdate()){
 			String lst[] = state_.getRawContent().substring(1, state_.getRawContent().length()).trim().split(" ");
-			return readContent(lst);
+			String content = readContent(lst);
+			if(isStartingDate()){
+				String list[] = content.split("from");
+				if(list.length == 1){
+					return Constant.VALUE_DEFAULT_EMPTY;
+				}
+				state_.setIsContent(true);
+				return list[0].trim();
+			}
+			else if (isDeadline()){
+				String list[] = content.split("on");
+				if(list.length == 1){
+					return Constant.VALUE_DEFAULT_EMPTY;
+				}
+				state_.setIsContent(true);
+				return list[0].trim();
+			}
+			return content;
+		}else if(isStartingDate()){
+			String lst[] = state_.getRawContent().split("from");
+			if(lst.length == 1){
+				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContent(true);
+			return lst[0].trim();
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
+			if(lst.length == 1){
+				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContent(true);
 			return lst[0].trim();
 		}else{
 			return state_.getRawContent();
@@ -90,12 +150,21 @@ public class Parser {
 	}
 	
 	/*
+	 * Check whether starting date is given
+	 * Pre-Cond: None
+	 * Post-Cond: True if starting date is given. False otherwise
+	 */
+	private boolean isStartingDate() {
+		return state_.getIsStartDate();
+	}
+
+	/*
 	 * Check whether the task is a deadline task
 	 * Pre-Cond: None
 	 * Post-Cond: True if it is an add deadline task. False otherwise
 	 */
 	private boolean isDeadline() {
-		return state_.getCommand().equals(CommandType.ADD) && state_.getIsEndDate();
+		return state_.getIsEndDate();
 	}
 
 	/*
@@ -138,12 +207,32 @@ public class Parser {
 	 * Post-Cond: String
 	 */
 	private Date getEndDate() {
+		if(isStartingDate()){
+			String list[] = state_.getRawContent().split("to");
+			if(list.length==1){
+				state_.setIsEndDate(false);
+				state_.setIsStartDate(false);
+				return null;
+			}
+			Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
+			if(d != null){
+				state_.setIsEndDate(true);
+				if(d.before(state_.getStartDate())){
+					state_.setErrorMessage(Constant.VALUE_ERROR_DATE_ERROR);
+				}
+				return d;
+			}else{
+				state_.setIsEndDate(false);
+				state_.setIsStartDate(false);
+				return null;
+			}
+		}
 		String list[] = state_.getRawContent().split("on");
 		if(list.length==1){
 			state_.setIsEndDate(false);
 			return null;
 		}
-		Date d = TimeParser.stringToDate(list[list.length-1].trim());
+		Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
 		if(d != null){
 			state_.setIsEndDate(true);
 			return d;
@@ -159,7 +248,19 @@ public class Parser {
 	 * Post-Cond: The start date. Default value is the time of assignment
 	 */
 	private Date getStartDate() {
-		return null;
+		String list[] = state_.getRawContent().split("from");
+		if(list.length==1){
+			state_.setIsStartDate(false);
+			return null;
+		}
+		Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
+		if(d != null){
+			state_.setIsStartDate(true);
+			return d;
+		}else{
+			state_.setIsStartDate(false);
+			return null;
+		}
 	}
 
 	/*
@@ -412,6 +513,8 @@ public class Parser {
 			return CommandType.SEARCH;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
+		} else if (commandTypeString.equalsIgnoreCase("detail")) {
+			return CommandType.DETAIL;
 		}
 		return CommandType.ERROR;
 	}

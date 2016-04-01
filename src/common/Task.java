@@ -1,11 +1,6 @@
 package common;
 import java.util.Date;
-import java.util.HashMap;
-
 import parser.TimeParser;
-
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
 
 public class Task {
 	private boolean isImportant;
@@ -127,5 +122,11 @@ public class Task {
 		
 		return result;
 	}
-	
+
+	@Override
+	public String toString(){
+		String result = String.format(TO_STRING, content,venue,detail,taskType,isImportant,
+									 startDate,toString(), endDate.toString(), creationDate.toString());
+		return result;
+	}
 }

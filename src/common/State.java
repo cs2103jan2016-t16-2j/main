@@ -2,10 +2,6 @@ package common;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.TreeSet;
 
 public class State {
 	private boolean isValid_, isStartDateChanged_, isEndDateChanged_, isContentChanged_, isVenueChanged_, isDetailChanged_;
@@ -292,7 +288,7 @@ public class State {
 		newState.setErrorMessage(displayMessage);
 		newState.setSearchKey(searchKey);	
 		
-		newState.setTaskType(taskType_);
+		newState.setTaskType(taskType);
 		newState.setCommandType(commandType);
 		newState.setViewMode(viewMode);
 		newState.setPositionIndex(positionIndex);

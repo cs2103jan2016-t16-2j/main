@@ -1,5 +1,5 @@
 .root {
-    -fx-font-size: 16pt;    
+    -fx-font-size: 12pt;    
     -fx-font-family: "Segoe UI";
    
     -fx-background-image: url("teal.jpg");
@@ -15,7 +15,7 @@
 }
 
 #dateDisplay{
-    -fx-font-size: 16pt;
+    -fx-font-size: 12pt;
     -fx-text-fill: #ffffcb;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .text-field{
-    -fx-font-size: 16pt;
+    -fx-font-size: 12pt;
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-text-fill: #ffffff;
 }
@@ -32,6 +32,9 @@
 .label{
     -fx-font-size: 16pt;
     -fx-text-fill: #fffacd;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 1em;
+    -fx-padding: 5 5 5 5;
 }
 
 .scroll-pane{

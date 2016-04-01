@@ -177,9 +177,7 @@ public class GUI extends Application{
 		if (!task.getVenue().isEmpty()){
 			taskContent = taskContent + "\n" + task.getVenue();
 		}
-		if (!task.getDetail().isEmpty()){
-			taskContent = taskContent + "\n" + task.getDetail();
-		}
+		
 		GridPane taskLine = new GridPane();
 		if (floatyIndex % 2 == 0){
 			taskLine.setId("gridPane");
@@ -198,13 +196,15 @@ public class GUI extends Application{
 		if (!task.getVenue().isEmpty()){
 			taskContent = taskContent + "\n" + task.getVenue();
 		}
-		if (!task.getDetail().isEmpty()){
-			taskContent = taskContent + "\n" + task.getDetail();
-		}
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
 			taskDeadline = sdf.format(task.getEndDate());
+
+			if (task.getIsStartDate()){
+
+				taskDeadline = sdf.format(task.getStartDate()) + "\n" + taskDeadline;				
+			}
 			Date today = Calendar.getInstance().getTime();
 			if (today.after(task.getEndDate())){
 				isOverdue = true;

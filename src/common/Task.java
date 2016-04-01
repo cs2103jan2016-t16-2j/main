@@ -5,42 +5,14 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class Task implements Comparable<Task> {
-	private boolean isImportant, isFinished;
-	private Date startDate, endDate;
+	private boolean isImportant;
+	private Date startDate, endDate, creationDate;
 	private String content, venue, detail;
 	private TaskType type;
 
-	private final String EXCEPTION_WRONG_INPUT = "Invalid input";
+	private final String TO_STRING = "Task [ content: %s | venue: %s | detail: %s | type: %s"
+										+ "isImportant: %b | startDate: %s | endDate: %s | creationDate: %s]";
 	
-	private final String DEFAULT_VENUE = "NA";
-	private final String DEFAULT_DETAIL = "NA";
-	private final boolean DEFAULT_IS_FLOATING = true;
-	private final boolean DEFAULT_IS_IMPORTANT = false;
-	private final boolean DEFAULT_IS_FINISHED = false;
-	private final Date DEFAULT_END_DATE = null;
-	private final String KEY_CONTENT = "content";
-	private final String KEY_TYPE = "type";
-	private final String KEY_START_DATE = "startDate";
-	private final String KEY_END_DATE = "endDate";
-
-	private final String TO_STRING = "Task [ content: %s | venue: %s | detail: %s | isFloating: %b | "
-										+ "isImportant: %b | startDate: %s | endDate: %s ]";
-	
-	private static SimpleDateFormat sdf= new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz y");
-	
-	private static Date getCurrentDate(){
-		return Calendar.getInstance().getTime();
-	}
-	
-	public Task(String content) {
-		this.content = content;
-		venue = DEFAULT_VENUE;
-		detail = DEFAULT_DETAIL;
-		isImportant = DEFAULT_IS_IMPORTANT;
-		isFinished = DEFAULT_IS_FINISHED;
-		startDate = getCurrentDate();
-		endDate = DEFAULT_END_DATE;
-	}
 	
 	public Task(State state) {
 		content = state.getContent();
@@ -51,8 +23,10 @@ public class Task implements Comparable<Task> {
 		isFinished = false;
 		if(state.getIsStartDate()){
 			startDate = state.getStartDate();
+			this.isStartDate = true;
 		} else {
-			startDate = getCurrentDate();			
+			startDate = getCurrentDate();	
+			this.isStartDate = false;
 		}
 		
 		if (state.getIsEndDate()) {
@@ -63,7 +37,9 @@ public class Task implements Comparable<Task> {
 
 	}
 	
-	
+	public boolean getIsStartDate(){
+		return this.isStartDate;
+	}
 
 	public boolean getIsImportant(){
 		return isImportant;

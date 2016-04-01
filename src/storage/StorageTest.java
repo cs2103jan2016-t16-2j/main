@@ -28,52 +28,52 @@ public class StorageTest {
 		
 		// create one floating task and one normal task
 		/* This is a equivalence partition as Tasks with same type are similar */
-		Task floatingTask = new Task("This is a floating Task");
-		Task normalTask = new Task("This is a normal Task");
-		floatingTask.setTaskType(TaskType.FLOATING);
-		floatingTask.setDetail("floating");
-		floatingTask.setVenue("floating");
-		normalTask.setTaskType(TaskType.DEADLINE);
-		normalTask.setDetail("deadline");
-		normalTask.setVenue("deadline");
-		
-		// update the state just like logic do
-		TreeSet<Task> normalTasks = new TreeSet<Task>();
-		normalTasks.add(normalTask);
-		state.setNormalTasks(normalTasks);
-		
-		ArrayList<Task> floatingTasks = new ArrayList<Task>();
-		floatingTasks.add(floatingTask);
-		state.setFloatingTasks(floatingTasks);
-		
-		// test1 : test writeTaskToJson()
-		BufferedWriter testWriter;
-		try {
-			testWriter = new BufferedWriter(new FileWriter("storageTestFile.txt"));
-			assertEquals(storage.writeTaskToJson(testWriter),true);
-			testWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		// test2 : test readCurrentTask()
-		BufferedReader testReader;
-		try {
-			testReader = new BufferedReader(new FileReader("storageTestFile.txt"));
-			// first input task is normal task
-			Task inputTask = storage.readCurrentTask(testReader);
-			assertEquals(inputTask.getContent(),"This is a normal Task");
-			assertEquals(inputTask.getVenue(),"deadline");
-			assertEquals(inputTask.getDetail(),"deadline");
-			
-			// second task is floating task
-			Task inputTask2 = storage.readCurrentTask(testReader);
-			assertEquals(inputTask2.getContent(),"This is a floating Task");
-			assertEquals(inputTask2.getVenue(),"floating");
-			assertEquals(inputTask2.getDetail(),"floating");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		Task floatingTask = new Task("This is a floating Task");
+//		Task normalTask = new Task("This is a normal Task");
+//		floatingTask.setTaskType(TaskType.FLOATING);
+//		floatingTask.setDetail("floating");
+//		floatingTask.setVenue("floating");
+//		normalTask.setTaskType(TaskType.DEADLINE);
+//		normalTask.setDetail("deadline");
+//		normalTask.setVenue("deadline");
+//		
+//		// update the state just like logic do
+//		TreeSet<Task> normalTasks = new TreeSet<Task>();
+//		normalTasks.add(normalTask);
+//		state.setNormalTasks(normalTasks);
+//		
+//		ArrayList<Task> floatingTasks = new ArrayList<Task>();
+//		floatingTasks.add(floatingTask);
+//		state.setFloatingTasks(floatingTasks);
+//		
+//		// test1 : test writeTaskToJson()
+//		BufferedWriter testWriter;
+//		try {
+//			testWriter = new BufferedWriter(new FileWriter("storageTestFile.txt"));
+//			assertEquals(storage.writeTaskToJson(testWriter),true);
+//			testWriter.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		// test2 : test readCurrentTask()
+//		BufferedReader testReader;
+//		try {
+//			testReader = new BufferedReader(new FileReader("storageTestFile.txt"));
+//			// first input task is normal task
+//			Task inputTask = storage.readCurrentTask(testReader);
+//			assertEquals(inputTask.getContent(),"This is a normal Task");
+//			assertEquals(inputTask.getVenue(),"deadline");
+//			assertEquals(inputTask.getDetail(),"deadline");
+//			
+//			// second task is floating task
+//			Task inputTask2 = storage.readCurrentTask(testReader);
+//			assertEquals(inputTask2.getContent(),"This is a floating Task");
+//			assertEquals(inputTask2.getVenue(),"floating");
+//			assertEquals(inputTask2.getDetail(),"floating");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	@Test

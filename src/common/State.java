@@ -139,11 +139,11 @@ public class State {
 		return detail_;
 	}
 	
-	public void setErrorMessage(String errorMessage){
+	public void setDisplayMessage(String errorMessage){
 		displayMessage_ = errorMessage;
 	}
 
-	public String getErrorMessage(){
+	public String getDisplayMessage(){
 		return displayMessage_;
 	}
 	
@@ -285,7 +285,7 @@ public class State {
 		newState.setDetail(detail);
 		newState.setUserInput(userInput);
 		newState.setVenue(venue);
-		newState.setErrorMessage(displayMessage);
+		newState.setDisplayMessage(displayMessage);
 		newState.setSearchKey(searchKey);	
 		
 		newState.setTaskType(taskType);

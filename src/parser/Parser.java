@@ -33,7 +33,7 @@ public class Parser {
 	 * Post-Cond: Updated State object
 	 */
 	private boolean buildParsedCommand() {
-		state_.setErrorMessage(getErrorMessage());
+		state_.setDisplayMessage(getErrorMessage());
 		state_.setIsValid(getIsValid());
 		if(state_.getIsValid()){
 			state_.setCommand(getCommand());
@@ -132,7 +132,7 @@ public class Parser {
 		}else if(isStartingDate()){
 			String lst[] = state_.getRawContent().split("from");
 			if(lst.length == 1){
-				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContent(true);
@@ -140,7 +140,7 @@ public class Parser {
 		}else if(isDeadline()){
 			String lst[] = state_.getRawContent().split("on");
 			if(lst.length == 1){
-				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContent(true);
@@ -148,7 +148,7 @@ public class Parser {
 		}else if(isVenue()){
 			String lst[] = state_.getRawContent().split("at:");
 			if(lst.length == 1){
-				state_.setErrorMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContent(true);
@@ -237,7 +237,7 @@ public class Parser {
 			if(d != null){
 				state_.setIsEndDate(true);
 				if(d.before(state_.getStartDate())){
-					state_.setErrorMessage(Constant.VALUE_ERROR_DATE_ERROR);
+					state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_ERROR);
 				}
 				return d;
 			}else{

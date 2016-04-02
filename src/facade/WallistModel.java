@@ -1,6 +1,8 @@
 package facade;
-import java.lang.StringBuilder;
-import java.util.*;
+
+import java.util.EmptyStackException;
+import java.util.Stack;
+
 
 import common.*;
 import logic.AddTask;
@@ -9,8 +11,8 @@ import logic.DeleteTask;
 import logic.SearchTasks;
 import logic.TickTask;
 import logic.UpdateTask;
-import parser.*;
-import storage.*;
+import parser.Parser;
+import storage.Storage;
 
 public class WallistModel{
 
@@ -55,7 +57,7 @@ public class WallistModel{
 				return false;
 			} else {
 				boolean isRunningSuccessful = running();
-				CommandType cmdType = state.getCommand();
+				CommandType cmdType = state.getCommandType();
 
 				if(isRunningSuccessful && !cmdType.equals(CommandType.UNDO)){
 					State current = state.deepCopy();
@@ -64,7 +66,7 @@ public class WallistModel{
 				return isRunningSuccessful;
 			}
 		} catch (EmptyStackException e){
-			state.setErrorMessage(DisplayMessage.MESSAGE_EMPTY_STACK);
+			state.setDisplayMessage(DisplayMessage.MESSAGE_EMPTY_STACK);
 			return false;
 		} catch (Exception e){
 			return false;
@@ -73,7 +75,7 @@ public class WallistModel{
 	}
 
 	public boolean running() throws EmptyStackException{
-		CommandType cmdType = state.getCommand();
+		CommandType cmdType = state.getCommandType();
 		boolean result;
 		
 		if(cmdType.equals(CommandType.ADD)){

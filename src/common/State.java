@@ -9,6 +9,7 @@ public class State {
 	private TaskType taskType_;
 	private CommandType commandType_;
 	private ViewMode viewMode_;
+	private ViewMode newViewMode_;	
 	private int positionIndex_;
 	private Date startDate_, endDate_;
 	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_;
@@ -22,6 +23,8 @@ public class State {
 		isVenueChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE; 
 		isDetailChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
 		commandType_ = CommandType.UNDEFINED;
+		viewMode_ = Constant.VALUE_DEFAULT_VIEW_MODE;
+		newViewMode_ = null;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
 		detail_ = Constant.VALUE_DEFAULT_EMPTY;
 		userInput_ = Constant.VALUE_DEFAULT_EMPTY;
@@ -115,6 +118,14 @@ public class State {
 		return viewMode_;
 	}
 
+	public void setNewViewMode(ViewMode vm){
+		newViewMode_ = vm;
+	}
+	
+	public ViewMode getNewViewMode(){
+		return newViewMode_;
+	}
+	
 	public void setContent(String content){
 		content_ = content;
 	}

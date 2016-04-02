@@ -3,7 +3,7 @@ import java.util.Date;
 import parser.TimeParser;
 
 public class Task {
-	private boolean isImportant;
+	private boolean isImportant, isDetailDisplayed;
 	private Date startDate, endDate, creationDate;
 	private String content, venue, detail;
 	private TaskType taskType;
@@ -32,8 +32,9 @@ public class Task {
 		}
 		
 		taskType = state.getTaskType();
-		isImportant = false;
-		
+		isImportant = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+				
 		if(taskType == TaskType.FLOATING){
 			startDate = null;
 			endDate = null;
@@ -58,6 +59,14 @@ public class Task {
 		isImportant = input;
 	}
 	
+	public boolean getIsDetailDisplayed(){
+		return isDetailDisplayed;
+	}
+	
+	public void setIsDetailDisplayed(boolean input){
+		isDetailDisplayed = input;
+	}
+
 	public Date getStartDate(){
 		return startDate;
 	}

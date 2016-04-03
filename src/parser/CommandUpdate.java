@@ -3,7 +3,6 @@ package parser;
 import java.util.ArrayList;
 import java.util.Date;
 
-import common.CommandType;
 import common.Constant;
 import common.State;
 import common.TaskType;
@@ -33,8 +32,14 @@ public class CommandUpdate implements Command{
 
 	@Override
 	public String getDetail() {
-		state_.setIsDetailChanged(false);
-		return Constant.VALUE_DEFAULT_EMPTY;
+		String wordList[] = content_.split("details:");
+		if(wordList.length == 1){
+			state_.setIsDetailChanged(false);
+			return Constant.VALUE_DEFAULT_EMPTY;
+		}else{
+			state_.setIsDetailChanged(true);
+			return wordList[wordList.length-1].trim();
+		}
 	}
 
 	@Override
@@ -51,27 +56,123 @@ public class CommandUpdate implements Command{
 
 	@Override
 	public Date getStartDate() {
-		state_.setIsStartDateChanged(false);
-		return null;
+		String wordList[] = content_.split("from:");
+		if(wordList.length==1){
+			state_.setIsStartDateChanged(false);
+			return null;
+		}
+		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+		if(date != null){
+			state_.setIsStartDateChanged(true);
+			return date;
+		}else{
+			state_.setIsStartDateChanged(false);
+			return null;
+		}
 	}
 
 	@Override
 	public Date getEndDate() {
-		state_.setIsEndDateChanged(false);
-		return null;
+		if(state_.getIsStartDateChanged()){
+			String wordList[] = content_.split("to:");
+			if(wordList.length==1){
+				state_.setIsEndDateChanged(false);
+				state_.setIsStartDateChanged(false);
+				return null;
+			}
+			Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+			if(date != null){
+				state_.setIsEndDateChanged(true);
+				if(date.before(state_.getStartDate())){
+					state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_ERROR);
+					state_.setIsEndDateChanged(false);
+					state_.setIsStartDateChanged(false);
+					return null;
+				}
+				return date;
+			}else{
+				state_.setIsEndDateChanged(false);
+				state_.setIsStartDateChanged(false);
+				return null;
+			}
+		}
+		String wordList[] = content_.split("on:");
+		if(wordList.length==1){
+			state_.setIsEndDateChanged(false);
+			return null;
+		}
+		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+		if(date != null){
+			state_.setIsEndDateChanged(true);
+			return date;
+		}else{
+			state_.setIsEndDateChanged(false);
+			return null;
+		}
 	}
 
 	@Override
 	public int getPositionIndex() {
-		return Constant.VALUE_DEFAULT_POSITION_INDEX;
+		String wordList[] = content_.split(" ");
+		return Integer.parseInt(wordList[0]);
 	}
 
 	@Override
 	public String getContent() {
-		state_.setIsContentChanged(false);
-		return Constant.VALUE_DEFAULT_EMPTY;
+		String content = getContentWithoutIndex();
+		if(state_.getIsStartDateChanged()){
+			String wordList[] = content.split("from:");
+			if(wordList.length == 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContentChanged(true);
+			return wordList[0].trim();
+		}else if(state_.getIsEndDateChanged()){
+			String wordList[] = content.split("on:");
+			if(wordList.length == 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContentChanged(true);
+			return wordList[0].trim();
+		}else if(state_.getIsVenueChanged()){
+			String wordList[] = content.split("at:");
+			if(wordList.length == 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			if(state_.getIsDetailChanged()){
+				String wordListDetail[] = wordList[0].split("detail:");
+				if(wordList.length == 1){
+					state_.setIsContentChanged(true);
+					return wordList[0].trim();
+				}else{
+					state_.setIsContentChanged(true);
+					return wordListDetail[0].trim();
+				}
+			}else{
+				state_.setIsContentChanged(true);
+				return wordList[0].trim();
+			}
+		}else{
+			return content;
+		}
 	}
 
+	private String getContentWithoutIndex() {
+		String inputWords[] = content_.split(" ");
+		StringBuilder sb = new StringBuilder("");
+		for(int i = 1; i < inputWords.length; i ++){
+			sb.append(inputWords[i]);
+			sb.append(" ");
+		}
+		return sb.toString().trim();
+	}
+	
 	@Override
 	public TaskType getTaskType() {
 		if(state_.getIsEndDateChanged()){
@@ -92,258 +193,3 @@ public class CommandUpdate implements Command{
 	}
 
 }
-
-
-
-//
-///*
-// * Get the content of the task
-// * Pre-Cond: None
-// * Post-Cond: String of the content
-// */
-//private String getContent() {
-//	if(isUpdate()){
-//		String lst[] = state_.getRawContent().substring(1, state_.getRawContent().length()).trim().split(" ");
-//		String content = readContent(lst);
-//		if(isStartingDate()){
-//			String list[] = content.split("from");
-//			if(list.length == 1){
-//				return Constant.VALUE_DEFAULT_EMPTY;
-//			}
-//			state_.setIsContent(true);
-//			return list[0].trim();
-//		}
-//		else if (isDeadline()){
-//			String list[] = content.split("on");
-//			if(list.length == 1){
-//				return Constant.VALUE_DEFAULT_EMPTY;
-//			}
-//			state_.setIsContent(true);
-//			return list[0].trim();
-//		}
-//		return content;
-//	}else if(isStartingDate()){
-//		String lst[] = state_.getRawContent().split("from");
-//		if(lst.length == 1){
-//			state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
-//			return Constant.VALUE_DEFAULT_EMPTY;
-//		}
-//		state_.setIsContent(true);
-//		return lst[0].trim();
-//	}else if(isDeadline()){
-//		String lst[] = state_.getRawContent().split("on");
-//		if(lst.length == 1){
-//			state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
-//			return Constant.VALUE_DEFAULT_EMPTY;
-//		}
-//		state_.setIsContent(true);
-//		return lst[0].trim();
-//	}else if(isVenue()){
-//		String lst[] = state_.getRawContent().split("at:");
-//		if(lst.length == 1){
-//			state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
-//			return Constant.VALUE_DEFAULT_EMPTY;
-//		}
-//		state_.setIsContent(true);
-//		return lst[0].trim();
-//	}else{
-//		return state_.getRawContent();
-//	}
-//}
-//
-///*
-// * Check whether the task has venue
-// * Pre-Cond:None
-// * Post-Cond:True if it has, False otherwise
-// */
-//private boolean isVenue() {
-//	return state_.getIsVenue();
-//}
-//
-///*
-// * Check whether starting date is given
-// * Pre-Cond: None
-// * Post-Cond: True if starting date is given. False otherwise
-// */
-//private boolean isStartingDate() {
-//	return state_.getIsStartDate();
-//}
-//
-///*
-// * Check whether the task is a deadline task
-// * Pre-Cond: None
-// * Post-Cond: True if it is an add deadline task. False otherwise
-// */
-//private boolean isDeadline() {
-//	return state_.getIsEndDate();
-//}
-//
-///*
-// * Check whether the task is of update type
-// * Pre-Cond: None
-// * Outpu: True if it is. False, otherwise
-// */
-//
-//private boolean isUpdate() {
-//	return state_.getCommand().equals(CommandType.UPDATE);
-//}
-//
-//
-///*
-// * Get the index of the task for delete, update and tick
-// * Pre-Cond: None
-// * Post-Cond: Int of the index
-// */
-//private int getPosition() {
-//	if(isIndexRequired()){
-//		String list[] = state_.getRawContent().split(" ");
-//		return Integer.parseInt(list[0]);
-//	}else{
-//		return 0;
-//	}
-//}
-//
-///*
-// * Check whether the current command need index
-// * Pre-Cond: None
-// * Post-Cond: True if it needs index. False othrwise
-// */
-//private boolean isIndexRequired() {
-//	return state_.getCommand().equals(CommandType.DELETE) || state_.getCommand().equals(CommandType.TICK) || state_.getCommand().equals(CommandType.UPDATE) || state_.getCommand().equals(CommandType.DETAIL);
-//}
-//
-//
-///*
-// * Get the deadline of a task from a given input
-// * Pre-Cond: String
-// * Post-Cond: String
-// */
-//private Date getEndDate() {
-//	if(isStartingDate()){
-//		String list[] = state_.getRawContent().split("to");
-//		if(list.length==1){
-//			state_.setIsEndDate(false);
-//			state_.setIsStartDate(false);
-//			return null;
-//		}
-//		Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
-//		if(d != null){
-//			state_.setIsEndDate(true);
-//			if(d.before(state_.getStartDate())){
-//				state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_ERROR);
-//			}
-//			return d;
-//		}else{
-//			state_.setIsEndDate(false);
-//			state_.setIsStartDate(false);
-//			return null;
-//		}
-//	}
-//	String list[] = state_.getRawContent().split("on");
-//	if(list.length==1){
-//		state_.setIsEndDate(false);
-//		return null;
-//	}
-//	Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
-//	if(d != null){
-//		state_.setIsEndDate(true);
-//		return d;
-//	}else{
-//		state_.setIsEndDate(false);
-//		return null;
-//	}
-//}
-//
-///*
-// * Get the starting date of a task.
-// * Pre-Cond: String
-// * Post-Cond: The start date. Default value is the time of assignment
-// */
-//private Date getStartDate() {
-//	String list[] = state_.getRawContent().split("from");
-//	if(list.length==1){
-//		state_.setIsStartDate(false);
-//		return null;
-//	}
-//	Date d = TimeParser.stringToDate(list[list.length-1].trim().substring(0, 14));
-//	if(d != null){
-//		state_.setIsStartDate(true);
-//		return d;
-//	}else{
-//		state_.setIsStartDate(false);
-//		return null;
-//	}
-//}
-//
-///*
-// * Get the type of a task from a given input
-// * Pre-Cond: None
-// * Post-Cond: TaskType
-// */
-//private TaskType getType() {
-//	if(isIndexRequired()){
-//		String lst[] = state_.getRawContent().split(" ");
-//		return determineTaskType(lst[1]);
-//	}else if(isClear()){
-//		return determineTaskType(state_.getContent());
-//	}
-//	
-//	if(state_.getIsEndDate()){
-//		return TaskType.DEADLINE;
-//	}
-//	else{
-//		return TaskType.FLOATING;
-//	}
-//}
-//
-///*
-// * Check whether the current task type is clear
-// * Pre-Cond: None
-// * Post-Cond: True if it is. False otherwise
-// */
-//private boolean isClear() {
-//	// TODO Auto-generated method stub
-//	return state_.getCommand().equals(CommandType.CLEAR);
-//}
-//
-///*
-// * Get the content of an input
-// * Pre-Cond: None
-// * Post-Cond: String
-// */
-//private String getRawContent(){
-//	String inputList[] = state_.getUserInput().split(" ");
-//	return readContent(inputList);
-//}
-//
-///*
-// * Extract the content of an input from a list of words.
-// * Pre-Cond: String[] of input words
-// * Post-Cond: A string of the content
-// */
-//private String readContent(String[] inputList) {
-//	StringBuilder sb = new StringBuilder("");
-//	for(int i = 1; i < inputList.length; i ++){
-//		sb.append(inputList[i]);
-//		sb.append(" ");
-//	}
-//	return sb.toString().trim();
-//}
-//
-///*
-// * Get the task type based on input
-// * Pre-Cond: String of command
-// * Post-Cond: TaskType of the given input
-// */
-//private TaskType determineTaskType(String taskTypeString) {
-//	if (taskTypeString == null) {
-//		throw new Error("Task type string cannot be null!");
-//	}
-//	
-//	if (taskTypeString.equalsIgnoreCase("float")) {
-//		return TaskType.FLOATING;
-//	} else if (taskTypeString.equalsIgnoreCase("deadline")) {
-//		return TaskType.DEADLINE;
-//	}
-//	return TaskType.UNDEFINED;
-//}

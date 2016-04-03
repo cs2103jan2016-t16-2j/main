@@ -32,8 +32,14 @@ public class CommandAdd implements Command{
 
 	@Override
 	public String getDetail() {
-		state_.setIsDetailChanged(false);
-		return Constant.VALUE_DEFAULT_EMPTY;
+		String wordList[] = content_.split("details:");
+		if(wordList.length == 1){
+			state_.setIsDetailChanged(false);
+			return Constant.VALUE_DEFAULT_EMPTY;
+		}else{
+			state_.setIsDetailChanged(true);
+			return wordList[wordList.length-1].trim();
+		}
 	}
 
 	@Override
@@ -50,14 +56,59 @@ public class CommandAdd implements Command{
 
 	@Override
 	public Date getStartDate() {
-		state_.setIsStartDateChanged(false);
-		return null;
+		String wordList[] = content_.split("from:");
+		if(wordList.length==1){
+			state_.setIsStartDateChanged(false);
+			return null;
+		}
+		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+		if(date != null){
+			state_.setIsStartDateChanged(true);
+			return date;
+		}else{
+			state_.setIsStartDateChanged(false);
+			return null;
+		}
 	}
 
 	@Override
 	public Date getEndDate() {
-		state_.setIsEndDateChanged(false);
-		return null;
+		if(state_.getIsStartDateChanged()){
+			String wordList[] = content_.split("to:");
+			if(wordList.length==1){
+				state_.setIsEndDateChanged(false);
+				state_.setIsStartDateChanged(false);
+				return null;
+			}
+			Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+			if(date != null){
+				state_.setIsEndDateChanged(true);
+				if(date.before(state_.getStartDate())){
+					state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_ERROR);
+					state_.setIsEndDateChanged(false);
+					state_.setIsStartDateChanged(false);
+					return null;
+				}
+				return date;
+			}else{
+				state_.setIsEndDateChanged(false);
+				state_.setIsStartDateChanged(false);
+				return null;
+			}
+		}
+		String wordList[] = content_.split("on:");
+		if(wordList.length==1){
+			state_.setIsEndDateChanged(false);
+			return null;
+		}
+		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+		if(date != null){
+			state_.setIsEndDateChanged(true);
+			return date;
+		}else{
+			state_.setIsEndDateChanged(false);
+			return null;
+		}
 	}
 
 	@Override
@@ -67,9 +118,49 @@ public class CommandAdd implements Command{
 
 	@Override
 	public String getContent() {
-		state_.setIsContentChanged(false);
-		return Constant.VALUE_DEFAULT_EMPTY;
+		if(state_.getIsStartDateChanged()){
+			String wordList[] = content_.split("from:");
+			if(wordList.length == 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContentChanged(true);
+			return wordList[0].trim();
+		}else if(state_.getIsEndDateChanged()){
+			String wordList[] = content_.split("on:");
+			if(wordList.length == 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			state_.setIsContentChanged(true);
+			return wordList[0].trim();
+		}else if(state_.getIsVenueChanged()){
+			String wordList[] = content_.split("at:");
+			if(wordList.length == 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			if(state_.getIsDetailChanged()){
+				String wordListDetail[] = wordList[0].split("detail:");
+				if(wordList.length == 1){
+					state_.setIsContentChanged(true);
+					return wordList[0].trim();
+				}else{
+					state_.setIsContentChanged(true);
+					return wordListDetail[0].trim();
+				}
+			}else{
+				state_.setIsContentChanged(true);
+				return wordList[0].trim();
+			}
+		}else{
+			return content_;
+		}
 	}
+
 
 	@Override
 	public TaskType getTaskType() {

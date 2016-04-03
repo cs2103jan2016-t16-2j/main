@@ -1,132 +1,100 @@
 package parser;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import common.CommandType;
 import common.Constant;
 import common.State;
 import common.TaskType;
+import common.ViewMode;
 
 public class CommandUpdate implements Command{
 	private State state_;
+	private String content_;
 	
 	public CommandUpdate(State state){
 		state_ = state;
+		content_ = getContentWithoutCommand(state_);
 	}
-	
 	@Override
 	public void processInput() {
-		// TODO Auto-generated method stub
+		state_.setDetail(getDetail());
+		state_.setVenue(getVenue());
+		state_.setStartDate(getStartDate());
+		state_.setEndDate(getEndDate());
+		state_.setPositionIndex(getPositionIndex());
+		state_.setContent(getContent());
+		state_.setTaskType(getTaskType());
+		state_.setSearchKey(getSearchKey());
+		state_.setNewViewMode(getNewViewMode());
 		
 	}
 
 	@Override
-	public String getRawContent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getDetail() {
-		// TODO Auto-generated method stub
-		return null;
+		state_.setIsDetailChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
 	public String getVenue() {
-		// TODO Auto-generated method stub
-		return null;
+		String wordList[] = content_.split("at:");
+		if(wordList.length == 1){
+			state_.setIsVenueChanged(false);
+			return Constant.VALUE_DEFAULT_EMPTY;
+		}else{
+			state_.setIsVenueChanged(true);
+			return wordList[wordList.length-1].trim();
+		}
 	}
 
 	@Override
 	public Date getStartDate() {
-		// TODO Auto-generated method stub
+		state_.setIsStartDateChanged(false);
 		return null;
 	}
 
 	@Override
 	public Date getEndDate() {
-		// TODO Auto-generated method stub
+		state_.setIsEndDateChanged(false);
 		return null;
 	}
 
 	@Override
-	public int getIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getPositionIndex() {
+		return Constant.VALUE_DEFAULT_POSITION_INDEX;
 	}
 
 	@Override
 	public String getContent() {
-		// TODO Auto-generated method stub
-		return null;
+		state_.setIsContentChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
-	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+	public TaskType getTaskType() {
+		if(state_.getIsEndDateChanged()){
+			return TaskType.DEADLINE;
+		}else{
+			return TaskType.FLOATING;
+		}
 	}
 
 	@Override
-	public String getSearchKey() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<String> getSearchKey() {
+		return new ArrayList<String>();
+	}
+	
+	@Override
+	public ViewMode getNewViewMode() {
+		return ViewMode.UNDEFINED;
 	}
 
 }
 
-//private String getDetail() {
-//	if (isDetail()) {
-//		String list[] = state_.getRawContent().split(" ");
-//		return list[2];
-//	}
-//	return Constant.VALUE_DEFAULT_EMPTY;
-//}
-//
-//private boolean isDetail() {
-//	return state_.getCommand().equals(CommandType.DETAIL);
-//}
-//
-///*
-// * This method returns the venue in String if there is one
-// * Pre-Cond: None
-// * Post-Cond: Return venue if there is any then set isVenue to true. False otherwise
-// */
-//private String getVenue() {
-//	String list[] = state_.getRawContent().split("at:");
-//	if(list.length == 1){
-//		state_.setIsVenue(false);
-//		return Constant.VALUE_DEFAULT_EMPTY;
-//	}else{
-//		state_.setIsVenue(true);
-//		return list[list.length-1].trim();
-//	}
-//}
-//
-//
-///*
-// * Get the Search Key for Search command
-// * Pre-Cond: Valid search command
-// * Post-cond: Updated state search key
-// */
-//private String getSearchKey() {
-//	if(isSearch()){
-//		return state_.getContent();
-//	}
-//	else{
-//		return Constant.VALUE_DEFAULT_EMPTY;
-//	}
-//}
-//
-///*
-// * Check whether the command is search
-// * Pre-cond: None
-// * Post-Cond: True if it is. False otherwise
-// */
-//private boolean isSearch() {
-//	return state_.getCommand().equals(CommandType.SEARCH);
-//}
+
+
 //
 ///*
 // * Get the content of the task

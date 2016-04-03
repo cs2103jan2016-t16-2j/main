@@ -61,6 +61,7 @@ public class CommandDelete implements Command{
 
 	@Override
 	public String getContent() {
+		state_.setIsContentChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 

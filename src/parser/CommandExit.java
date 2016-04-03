@@ -1,73 +1,83 @@
 package parser;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import common.Constant;
 import common.State;
+import common.TaskType;
+import common.ViewMode;
 
 public class CommandExit implements Command{
 	private State state_;
+	private String content_;
 	
 	public CommandExit(State state){
 		state_ = state;
+		content_ = getContentWithoutCommand(state_);
 	}
 	@Override
 	public void processInput() {
-		// TODO Auto-generated method stub
+		state_.setDetail(getDetail());
+		state_.setVenue(getVenue());
+		state_.setStartDate(getStartDate());
+		state_.setEndDate(getEndDate());
+		state_.setPositionIndex(getPositionIndex());
+		state_.setContent(getContent());
+		state_.setTaskType(getTaskType());
+		state_.setSearchKey(getSearchKey());
+		state_.setNewViewMode(getNewViewMode());
 		
 	}
 
 	@Override
-	public String getRawContent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getDetail() {
-		// TODO Auto-generated method stub
-		return null;
+		state_.setIsDetailChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
 	public String getVenue() {
-		// TODO Auto-generated method stub
-		return null;
+		state_.setIsVenueChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
 	public Date getStartDate() {
-		// TODO Auto-generated method stub
+		state_.setIsStartDateChanged(false);
 		return null;
 	}
 
 	@Override
 	public Date getEndDate() {
-		// TODO Auto-generated method stub
+		state_.setIsEndDateChanged(false);
 		return null;
 	}
 
 	@Override
-	public int getIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getPositionIndex() {
+		return Constant.VALUE_DEFAULT_POSITION_INDEX;
 	}
 
 	@Override
 	public String getContent() {
-		// TODO Auto-generated method stub
-		return null;
+		state_.setIsContentChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
-	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+	public TaskType getTaskType() {
+		return TaskType.UNDEFINED;
 	}
 
 	@Override
-	public String getSearchKey() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<String> getSearchKey() {
+		return new ArrayList<String>();
+	}
+	
+	@Override
+	public ViewMode getNewViewMode() {
+		return ViewMode.UNDEFINED;
 	}
 
 }

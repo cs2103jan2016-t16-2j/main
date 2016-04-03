@@ -32,54 +32,51 @@ public class CommandTick implements Command{
 
 	@Override
 	public String getDetail() {
+		state_.setIsDetailChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
 	public String getVenue() {
+		state_.setIsVenueChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
 	public Date getStartDate() {
-		// TODO Auto-generated method stub
+		state_.setIsStartDateChanged(false);
 		return null;
 	}
 
 	@Override
 	public Date getEndDate() {
-		// TODO Auto-generated method stub
+		state_.setIsEndDateChanged(false);
 		return null;
 	}
 
 	@Override
 	public int getPositionIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Integer.parseInt(content_);
 	}
 
 	@Override
 	public String getContent() {
-		// TODO Auto-generated method stub
-		return null;
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override
 	public TaskType getTaskType() {
-		// TODO Auto-generated method stub
-		return null;
+		return TaskType.UNDEFINED;
 	}
 
 	@Override
 	public ArrayList<String> getSearchKey() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<String>();
 	}
 	
 	@Override
 	public ViewMode getNewViewMode() {
-		// TODO Auto-generated method stub
-		return null;
+		return ViewMode.UNDEFINED;
 	}
 
 }

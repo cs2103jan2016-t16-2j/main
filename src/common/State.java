@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class State {
 	private boolean isValid_, isStartDateChanged_, isEndDateChanged_, isContentChanged_, isVenueChanged_, isDetailChanged_;
-	private String content_, detail_, userInput_, venue_, displayMessage_, searchKey_;
+	private String content_, detail_, userInput_, venue_, displayMessage_;
 	private TaskType taskType_;
 	private CommandType commandType_;
 	private ViewMode viewMode_;
@@ -13,6 +13,7 @@ public class State {
 	private int positionIndex_;
 	private Date startDate_, endDate_;
 	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_;
+	private ArrayList<String> searchKey_;
 	
 
 	public State(){
@@ -30,7 +31,6 @@ public class State {
 		userInput_ = Constant.VALUE_DEFAULT_EMPTY;
 		venue_ = Constant.VALUE_DEFAULT_EMPTY;
 		displayMessage_ = Constant.VALUE_DEFAULT_EMPTY;
-		searchKey_ =  Constant.VALUE_DEFAULT_EMPTY;
 		taskType_ = TaskType.UNDEFINED;
 		positionIndex_ = Constant.VALUE_DEFAULT_POSITION_INDEX;
 		startDate_ = null;
@@ -40,6 +40,7 @@ public class State {
 		allTasks_ = new ArrayList<Task>();
 		searchResultTasks_ = new ArrayList<Task>();
 		finishedTasks_ = new ArrayList<Task>();
+		searchKey_ = new ArrayList<String>();
 	}
 	
 	/*
@@ -158,11 +159,11 @@ public class State {
 		return displayMessage_;
 	}
 	
-	public void setSearchKey(String searchKey){
+	public void setSearchKey(ArrayList<String> searchKey){
 		searchKey_ = searchKey;
 	}
 
-	public String getSearchKey(){
+	public ArrayList<String> getSearchKey(){
 		return searchKey_;
 	}
 	
@@ -245,13 +246,12 @@ public class State {
 		boolean isValid = isValid_; 
 		boolean isStartDateChanged = isStartDateChanged_, isEndDateChanged = isEndDateChanged_;
 		boolean isContentChanged= isContentChanged_, isVenueChanged = isVenueChanged_, isDetailChanged =isDetailChanged_;
-		String content, detail, userInput, venue, displayMessage, searchKey;
+		String content, detail, userInput, venue, displayMessage;
 		content = new String(content_);
 		detail = new String(detail_);
 		userInput = new String(userInput_);
 		venue = new String(venue_);
 		displayMessage = new String(displayMessage_);
-		searchKey = new String(searchKey_);
 		
 		TaskType taskType = taskType_;
 		CommandType commandType = commandType_;
@@ -284,7 +284,12 @@ public class State {
 		for(int i = 0; i < finishedTasks_.size(); i++){
 			finishedTasks.add(finishedTasks_.get(i));
 		}
-				
+		
+		ArrayList<String> searchKey = new ArrayList<String>();
+		for(int i = 0; i < searchKey_.size(); i++){
+			searchKey.add(searchKey_.get(i));
+		}
+		
 		newState.setIsValid(isValid);
 		newState.setIsStartDateChanged(isStartDateChanged);
 		newState.setIsEndDateChanged(isEndDateChanged);

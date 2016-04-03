@@ -2,8 +2,15 @@ package parser;
 
 import java.util.Date;
 
-public class CommandAdd implements Command{
+import common.State;
 
+public class CommandAdd implements Command{
+	private State state_;
+	
+	public CommandAdd(State state){
+		state_ = state;
+	}
+	
 	@Override
 	public void processInput() {
 		// TODO Auto-generated method stub

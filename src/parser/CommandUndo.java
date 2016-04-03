@@ -2,8 +2,14 @@ package parser;
 
 import java.util.Date;
 
-public class CommandUndo implements Command{
+import common.State;
 
+public class CommandUndo implements Command{
+	private State state_;
+	
+	public CommandUndo(State state){
+		state_ = state;
+	}
 	@Override
 	public void processInput() {
 		// TODO Auto-generated method stub

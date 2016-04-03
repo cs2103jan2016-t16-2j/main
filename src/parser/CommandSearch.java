@@ -2,8 +2,14 @@ package parser;
 
 import java.util.Date;
 
-public class CommandSearch implements Command{
+import common.State;
 
+public class CommandSearch implements Command{
+	private State state_;
+	
+	public CommandSearch(State state){
+		state_ = state;
+	}
 	@Override
 	public void processInput() {
 		// TODO Auto-generated method stub

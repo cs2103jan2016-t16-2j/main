@@ -1,7 +1,6 @@
 package parser;
 
 import java.lang.StringBuilder;
-import java.util.Date;
 
 import common.*;
 
@@ -29,16 +28,16 @@ public class Parser {
  	public Parser(State state){
 		state_ = state;
 		add_ = new CommandAdd(state);
-		changeMode_ = CommandChangeMode(state);
-		clear_ = CommandClear(state);
-		delete_ = CommandDelete(state);
-		detail_ = CommandDetail(state);
-		exit_ = CommandExit(state);
-		redo_ = CommandRedo(state);
-		search_ = CommandSearch(state);
-		tick_ = CommandTick(state);
-		undo_ = CommandUndo(state);
-		update_ = CommandUpdate(state);
+		changeMode_ = new CommandChangeMode(state);
+		clear_ = new CommandClear(state);
+		delete_ = new CommandDelete(state);
+		detail_ = new CommandDetail(state);
+		exit_ = new CommandExit(state);
+		redo_ = new CommandRedo(state);
+		search_ = new CommandSearch(state);
+		tick_ = new CommandTick(state);
+		undo_ = new CommandUndo(state);
+		update_ = new CommandUpdate(state);
 		
 	}
 	

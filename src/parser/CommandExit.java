@@ -2,8 +2,14 @@ package parser;
 
 import java.util.Date;
 
-public class CommandExit implements Command{
+import common.State;
 
+public class CommandExit implements Command{
+	private State state_;
+	
+	public CommandExit(State state){
+		state_ = state;
+	}
 	@Override
 	public void processInput() {
 		// TODO Auto-generated method stub

@@ -2,8 +2,14 @@ package parser;
 
 import java.util.Date;
 
-public class CommandChangeMode implements Command{
+import common.State;
 
+public class CommandChangeMode implements Command{
+	private State state_;
+	
+	public CommandChangeMode(State state){
+		state_ = state;
+	}
 	@Override
 	public void processInput() {
 		// TODO Auto-generated method stub

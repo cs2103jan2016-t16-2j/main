@@ -2,8 +2,15 @@ package parser;
 
 import java.util.Date;
 
-public class CommandDelete implements Command{
+import common.State;
 
+public class CommandDelete implements Command{
+	private State state_;
+	
+	public CommandDelete(State state){
+		state_ = state;
+	}
+	
 	@Override
 	public void processInput() {
 		// TODO Auto-generated method stub

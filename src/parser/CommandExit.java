@@ -2,7 +2,7 @@ package parser;
 
 import java.util.Date;
 
-public class CommandClear implements Command{
+public class CommandExit implements Command{
 
 	@Override
 	public void processInput() {

@@ -14,10 +14,11 @@ public class CommandChangeMode implements Command{
 	
 	public CommandChangeMode(State state){
 		state_ = state;
-		content_ = getContentWithoutCommand(state_);
+		content_ = Constant.VALUE_DEFAULT_EMPTY;
 	}
 	@Override
 	public void processInput() {
+		content_ = getContentWithoutCommand();
 		state_.setDetail(getDetail());
 		state_.setVenue(getVenue());
 		state_.setStartDate(getStartDate());
@@ -103,4 +104,14 @@ public class CommandChangeMode implements Command{
 			return ViewMode.UNDEFINED;
 		}
 	}
+	@Override
+	public String getContentWithoutCommand(){
+		String inputWords[] = state_.getUserInput().split(" ");
+		StringBuilder sb = new StringBuilder("");
+		for(int i = 1; i < inputWords.length; i ++){
+			sb.append(inputWords[i]);
+			sb.append(" ");
+		}
+		return sb.toString().trim();
+	};
 }

@@ -14,10 +14,11 @@ public class CommandUpdate implements Command{
 	
 	public CommandUpdate(State state){
 		state_ = state;
-		content_ = getContentWithoutCommand(state_);
+		content_ = Constant.VALUE_DEFAULT_EMPTY;
 	}
 	@Override
 	public void processInput() {
+		content_ = getContentWithoutCommand();
 		state_.setDetail(getDetail());
 		state_.setVenue(getVenue());
 		state_.setStartDate(getStartDate());
@@ -32,12 +33,13 @@ public class CommandUpdate implements Command{
 
 	@Override
 	public String getDetail() {
-		String wordList[] = content_.split("details:");
+		String content = getContentWithoutIndex();
+		String wordList[] = content.split("details:");
 		if(wordList.length <= 1){
 			state_.setIsDetailChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
-			String wordListVenue[] = content_.split("at:");
+			String wordListVenue[] = wordList[wordList.length-1].split("at:");
 			if(wordListVenue.length <= 1){
 				state_.setIsDetailChanged(true);
 				return wordList[wordList.length-1].trim();
@@ -50,12 +52,13 @@ public class CommandUpdate implements Command{
 
 	@Override
 	public String getVenue() {
-		String wordList[] = content_.split("at:");
+		String content = getContentWithoutIndex();
+		String wordList[] = content.split("at:");
 		if(wordList.length <= 1){
 			state_.setIsVenueChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
-			String wordListDetails[] = content_.split("details:");
+			String wordListDetails[] = wordList[wordList.length-1].split("details:");
 			if(wordListDetails.length <= 1){
 				state_.setIsVenueChanged(true);
 				return wordList[wordList.length-1].trim();
@@ -79,6 +82,7 @@ public class CommandUpdate implements Command{
 			return date;
 		}else{
 			state_.setIsStartDateChanged(false);
+			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
 			return null;
 		}
 	}
@@ -105,6 +109,7 @@ public class CommandUpdate implements Command{
 			}else{
 				state_.setIsEndDateChanged(false);
 				state_.setIsStartDateChanged(false);
+				state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
 				return null;
 			}
 		}
@@ -119,6 +124,7 @@ public class CommandUpdate implements Command{
 			return date;
 		}else{
 			state_.setIsEndDateChanged(false);
+			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
 			return null;
 		}
 	}
@@ -170,6 +176,26 @@ public class CommandUpdate implements Command{
 				state_.setIsContentChanged(true);
 				return wordList[0].trim();
 			}
+		}else if(state_.getIsDetailChanged()){
+			String wordList[] = content.split("details:");
+			if(wordList.length <= 1){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+				state_.setIsContentChanged(false);
+				return Constant.VALUE_DEFAULT_EMPTY;
+			}
+			if(state_.getIsVenueChanged()){
+				String wordListVenue[] = wordList[0].split("at:");
+				if(wordList.length <= 1){
+					state_.setIsContentChanged(true);
+					return wordList[0].trim();
+				}else{
+					state_.setIsContentChanged(true);
+					return wordListVenue[0].trim();
+				}
+			}else{
+				state_.setIsContentChanged(true);
+				return wordList[0].trim();
+			}
 		}else{
 			return content;
 		}
@@ -203,5 +229,15 @@ public class CommandUpdate implements Command{
 	public ViewMode getNewViewMode() {
 		return ViewMode.UNDEFINED;
 	}
+	@Override
+	public String getContentWithoutCommand(){
+		String inputWords[] = state_.getUserInput().split(" ");
+		StringBuilder sb = new StringBuilder("");
+		for(int i = 1; i < inputWords.length; i ++){
+			sb.append(inputWords[i]);
+			sb.append(" ");
+		}
+		return sb.toString().trim();
+	};
 
 }

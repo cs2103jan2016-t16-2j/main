@@ -121,7 +121,7 @@ public class GUI extends Application{
 		if (isSuccess){
 			refresh();
 		}
-		Label displayText = new Label(state.getMessage());
+		Label displayText = new Label(state.getDisplayMessage());
 		layout.getChildren().add(displayText);
 		FadeTransition fade = fadeAnimation(displayText);
 		fade.play();
@@ -133,38 +133,11 @@ public class GUI extends Application{
 		tasks.getChildren().clear();
 		taskIndex = 0;
 		for (Task task: taskList){
-			if (!task.getIsFinished()){
-				displayNormalTaskLine(task);
-		    }
-		}
-
-		for (Task task: floatyList){
-			if (!task.getIsFinished()){
-			    	displayFloatyTaskLine(floaties, task);
-			}
+			displayTaskLine(task);
 		}
 	}
 	
-	private void displayFloatyTaskLine(VBox floaties, Task task) {
-		floatyIndex ++;
-		String taskContent = task.getContent();
-		if (!task.getVenue().isEmpty()){
-			taskContent = taskContent + "\n" + task.getVenue();
-		}
-		
-		GridPane taskLine = new GridPane();
-		if (floatyIndex % 2 == 0){
-			taskLine.setId("gridPane");
-		}
-		taskLine.setHgap(10);
-		StackPane indexPane = indexStackPane(floatyIndex, WHITE);
-		StackPane contentPane = contentPane(taskContent, floatyContentWidth, WHITE);
-		taskLine.getChildren().addAll(indexPane, contentPane);
-		floaties.getChildren().add(taskLine);
-
-	}
-
-	private void displayNormalTaskLine(Task task) {
+	private void displayTaskLine(Task task) {
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
@@ -176,9 +149,8 @@ public class GUI extends Application{
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
 			taskDeadline = sdf.format(task.getEndDate());
 
-			if (task.getIsStartDate()){
-
-				taskDeadline = sdf.format(task.getStartDate()) + "\n" + taskDeadline;				
+			if (task.getStartDate()!= null){
+				taskDeadline = sdf.format(task.getStartDate()) + " - " + taskDeadline;				
 			}
 			Date today = Calendar.getInstance().getTime();
 			if (today.after(task.getEndDate())){

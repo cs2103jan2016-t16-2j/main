@@ -256,7 +256,7 @@ public class GUI extends Application{
 
 	private StackPane indexStackPane(int index, Color color) {
 		StackPane indexPane = new StackPane();
-		indexPane.setAlignment(Pos.TOP_RIGHT);
+		indexPane.setAlignment(Pos.CENTER_RIGHT);
 		Rectangle indexRec = new Rectangle();
 		indexRec.setWidth(INDEX_WIDTH);
 		indexRec.setOpacity(0);

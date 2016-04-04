@@ -1,14 +1,14 @@
 package storage;
 import common.*;
 import java.io.File;
-public class StorageCommand {
+public class Storage {
 
 	private FileIO fileIO;
 	private FileManagement fileManagement;
 	private File file;
 	private boolean isConnectedToFile;
 	
-	public StorageCommand(State state) {
+	public Storage(State state) {
 		this.fileIO = new FileIO(state);
 		this.fileManagement = new FileManagement();
 		this.isConnectedToFile = connectFileToIO();

@@ -37,7 +37,7 @@ public class StorageTest {
 		floatingTasks.add(floatingTask);
 		state.setFloatingTasks(floatingTasks);
 		
-		StorageCommand sc = new StorageCommand(state);
+		Storage sc = new Storage(state);
 		
 		// test1 : 3 main functions in StorageCommand
 		assertEquals(sc.executeSaveState(),true);

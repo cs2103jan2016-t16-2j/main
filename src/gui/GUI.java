@@ -137,15 +137,40 @@ public class GUI extends Application{
 				displayNormalTaskLine(task);
 		    }
 		}
+
+		for (Task task: floatyList){
+			if (!task.getIsFinished()){
+			    	displayFloatyTaskLine(floaties, task);
+			}
+		}
+	}
+	
+	private void displayFloatyTaskLine(VBox floaties, Task task) {
+		floatyIndex ++;
+		String taskContent = task.getContent();
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
+		
+		GridPane taskLine = new GridPane();
+		if (floatyIndex % 2 == 0){
+			taskLine.setId("gridPane");
+		}
+		taskLine.setHgap(10);
+		StackPane indexPane = indexStackPane(floatyIndex, WHITE);
+		StackPane contentPane = contentPane(taskContent, floatyContentWidth, WHITE);
+		taskLine.getChildren().addAll(indexPane, contentPane);
+		floaties.getChildren().add(taskLine);
+
 	}
 
 	private void displayNormalTaskLine(Task task) {
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
-		//if (!task.getVenue().isEmpty()){
-		//	taskContent = taskContent + "\n" + task.getVenue();
-		//}
+		if (!task.getVenue().isEmpty()){
+			taskContent = taskContent + "\n" + task.getVenue();
+		}
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){

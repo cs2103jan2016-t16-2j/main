@@ -1,5 +1,6 @@
 package parser;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TimeParser{
@@ -17,6 +18,10 @@ public class TimeParser{
  public static String dateToString(Date date){
 	 String result = sdf.format(date);
 	 return result;
+ }
+ 
+ public static Date getCurrentDate(){
+	 return Calendar.getInstance().getTime();
  }
 }
 

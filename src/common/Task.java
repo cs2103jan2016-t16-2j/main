@@ -13,41 +13,47 @@ public class Task {
 	
 	
 	public Task(State state) {
+		
 		if(state.getIsContentChanged()){
-			content = state.getContent();
+			this.content = state.getContent();
+			System.out.println(state.getContent());
+			System.out.println(this.content);
 		} else {
-			content = Constant.VALUE_DEFAULT_EMPTY;
+			this.content = Constant.VALUE_DEFAULT_EMPTY;
 		}
+		
+		
 
 		if(state.getIsVenueChanged()){
-			venue = state.getVenue();
+			this.venue = state.getVenue();
 		} else {
-			venue = Constant.VALUE_DEFAULT_EMPTY;
+			this.venue = Constant.VALUE_DEFAULT_EMPTY;
 		}
 		
 		if(state.getIsDetailChanged()){
-			detail = state.getDetail();
+			this.detail = state.getDetail();
 		} else {
-			detail = Constant.VALUE_DEFAULT_EMPTY;
+			this.detail = Constant.VALUE_DEFAULT_EMPTY;
 		}
 		
-		taskType = state.getTaskType();
-		isImportant = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
-		isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		this.taskType = state.getTaskType();
+		this.isImportant = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		this.isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
 				
 		if(taskType == TaskType.FLOATING){
-			startDate = null;
-			endDate = null;
+			this.startDate = null;
+			this.endDate = null;
 		} else {
 			if(state.getIsStartDateChanged()){
-				startDate = state.getStartDate();
+				this.startDate = state.getStartDate();
 			} else {
-				startDate = null;
+				this.startDate = null;
 			}
-			endDate = state.getEndDate();
+			this.endDate = state.getEndDate();
 		}
 		
-		creationDate = TimeParser.getCurrentDate();
+		this.creationDate = TimeParser.getCurrentDate();
+	
 	}
 
 
@@ -135,7 +141,7 @@ public class Task {
 	@Override
 	public String toString(){
 		String result = String.format(TO_STRING, content,venue,detail,taskType,isImportant,
-									 startDate,toString(), endDate.toString(), creationDate.toString());
+									 startDate.toString(), endDate.toString(), creationDate.toString());
 		return result;
 	}
 }

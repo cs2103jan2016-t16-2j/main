@@ -205,6 +205,7 @@ public class CommandUpdate implements Command{
 				return wordList[0].trim();
 			}
 		}else{
+			state_.setIsContentChanged(true);
 			return content;
 		}
 	}

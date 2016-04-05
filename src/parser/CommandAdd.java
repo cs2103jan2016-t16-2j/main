@@ -201,6 +201,7 @@ public class CommandAdd implements Command{
 				return wordList[0].trim();
 			}
 		}else{
+			state_.setIsContentChanged(true);
 			return content_;
 		}
 	}

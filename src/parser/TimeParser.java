@@ -1,6 +1,8 @@
 package parser;
 
 import com.joestelmach.natty.*;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,10 @@ public class TimeParser{
 	 } catch (Exception e){
 		 return null;
 	 }
+ }
+ 
+ public static Date getCurrentDate(){
+	 return Calendar.getInstance().getTime();
  }
 }
 

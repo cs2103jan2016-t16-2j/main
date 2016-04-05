@@ -241,6 +241,25 @@ public class State {
 		return finishedTasks_;
 	}
 	
+	public ArrayList<Task> getCurrentTasks(){
+		switch(viewMode_){
+			case FLOATING: 
+				return floatingTasks_;
+			case DEADLINE:
+				return deadlineTasks_;
+			case ALL:
+				return allTasks_;
+			case SEARCH:
+				return searchResultTasks_;
+			case FINISHED:
+				return finishedTasks_;
+			case CONFIG:
+				return null;
+			default:
+				return allTasks_;
+		}
+	}
+	
 	public State deepCopy(){
 		State newState = new State();
 		boolean isValid = isValid_; 

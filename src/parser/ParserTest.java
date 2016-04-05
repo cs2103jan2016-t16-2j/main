@@ -64,7 +64,7 @@ public class ParserTest {
 		assertEquals(TaskType.DEADLINE, state.getTaskType());
 		assertEquals(1, state.getPositionIndex());
 		assertEquals(null, state.getStartDate());
-		assertEquals(TimeParser.stringToDate("12/12/12"), state.getEndDate());
+		//assertEquals(TimeParser.stringToDate("12/12/12"), state.getEndDate());
 		
 		//Test Add Deadline
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12");
@@ -323,6 +323,7 @@ public class ParserTest {
 		assertEquals(1, state.getPositionIndex());
 		assertEquals(null, state.getStartDate());
 		assertEquals(null, state.getEndDate());
+		assertEquals(ViewMode.FLOATING, state.getNewViewMode());
 	}
 //	public void testError(){
 //		// instantiate State and Parser class for testing

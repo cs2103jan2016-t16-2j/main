@@ -129,10 +129,11 @@ public class GUI extends Application{
 	}
 
 	private void refresh() {
-		ArrayList<Task> taskList = state.getFloatingTasks();
+		ArrayList<Task> taskList = state.getAllTasks();
 		tasks.getChildren().clear();
 		taskIndex = 0;
 		for (Task task: taskList){
+			System.out.println(task.toString());
 			displayTaskLine(task);
 		}
 	}

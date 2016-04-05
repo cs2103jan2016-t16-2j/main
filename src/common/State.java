@@ -247,6 +247,8 @@ public class State {
 		boolean isStartDateChanged = isStartDateChanged_, isEndDateChanged = isEndDateChanged_;
 		boolean isContentChanged= isContentChanged_, isVenueChanged = isVenueChanged_, isDetailChanged =isDetailChanged_;
 		String content, detail, userInput, venue, displayMessage;
+		Date startDate;
+		Date endDate;
 		content = new String(content_);
 		detail = new String(detail_);
 		userInput = new String(userInput_);
@@ -257,8 +259,19 @@ public class State {
 		CommandType commandType = commandType_;
 		ViewMode viewMode = viewMode_;
 		int positionIndex = positionIndex_;
-		Date startDate = new Date(startDate_.getTime());
-		Date endDate = new Date(endDate_.getTime());;
+		
+		
+		if (isStartDateChanged) {
+			startDate = new Date(startDate_.getTime());
+		} else {
+			startDate = null;
+		}
+		if (isEndDateChanged) {
+			endDate = new Date(endDate_.getTime());
+		} else {
+			endDate = null;
+		}
+		
 		
 		ArrayList<Task> floatingTasks = new ArrayList<Task>();
 		for(int i = 0; i < floatingTasks_.size(); i++){

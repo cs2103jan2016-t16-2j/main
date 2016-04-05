@@ -66,7 +66,7 @@ public class Storage {
 	public boolean loadState(){
 		assert isConnectedToDatafile;
 		LOGGER.log(Level.INFO, "Loading State from datafile...");
-		TreeSet<Task> normalTasks = state.getNormalTasks();
+		ArrayList<Task> normalTasks = state.getDeadlineTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		
 		Task task;
@@ -140,7 +140,7 @@ public class Storage {
 	 * @throws IOException
 	 */
 	protected boolean writeTaskToJson(BufferedWriter writer) throws IOException {
-		TreeSet<Task> normalTasks = this.state.getNormalTasks();
+		ArrayList<Task> normalTasks = this.state.getDeadlineTasks();
 		ArrayList<Task> floatingTasks = this.state.getFloatingTasks();
 		try {
 			for (Task task: normalTasks) {

@@ -14,7 +14,7 @@ public class SearchTasks implements Operation {
 
 	@Override
 	public boolean process() {
-		String keyToSearch = state.getSearchKey();
+		ArrayList<String> keyToSearch = state.getSearchKey();
 		
 		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
 		searchedTasks.clear();
@@ -24,7 +24,14 @@ public class SearchTasks implements Operation {
 		return true;
 	}
 
-	private void searchTasks(String keyToSearch, ArrayList<Task> searchedTasks) {
+	private void searchTasks(ArrayList<String> keyToSearch, ArrayList<Task> searchedTasks) {
+		for(int i = 0; i < keyToSearch.size(); i++){
+			String key = keyToSearch.get(i);
+			searchWord(key, searchedTasks);
+		}
+	}
+
+	private void searchWord(String keyToSearch, ArrayList<Task> searchedTasks) {
 		ArrayList<Task> allTasks = state.getAllTasks();
 		for(int i = 0; i < allTasks.size(); i++){
 			Task another = allTasks.get(i);

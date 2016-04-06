@@ -2,24 +2,92 @@ package storage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import common.Task;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 public class FileManagement {
 	
 	
 	// Attributes
-		protected File file;
-		protected Gson gson = new Gson();
+	protected File dataFile;
+	protected File configFile;
 
-		// Logger
-		private final static Logger LOGGER = Logger.getLogger(FileManagement.class.getName());
+	// Config Attributes
+	private File directory;
+
+	// Logger
+	private final static Logger LOGGER = Logger.getLogger(FileManagement.class.getName());
+	
 	public FileManagement(){
-		connectFile(getDataFileDirectory());
+		connectConfigFile();
+		connectDataFile();
 	}
 	
+	//============================
+	//       main functions
+	//============================
+	
+	
+	
+	private boolean createConfigFile() {
+		LOGGER.log(Level.INFO, "Configfile does not exist, creating new configFile...");
+		try {
+			configFile.createNewFile();
+			
+			// Default setting
+			String defaultDataDirectory = System.getProperty("user.home") + "/WallistDatabase";
+			this.directory = new File(defaultDataDirectory);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
+			writer.write(defaultDataDirectory);
+			writer.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+		
+	private boolean loadConfigFile() {
+		
+		LOGGER.log(Level.INFO, "Retrieving Congfiguration file...");
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(configFile));
+			String currentConfigLine = reader.readLine();
+			this.directory = new File(currentConfigLine);
+			reader.close();
+		} catch (IOException e){
+			LOGGER.log(Level.WARNING, "Configfile is not loaded successfully...", e);
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+
+	/**
+	 * 
+	 * @return
+	 */
+	protected boolean connectConfigFile() {
+		this.configFile = new File("config.txt"); // connects the file
+		if (!configFile.exists()) { // if not exist create a default one
+			createConfigFile();
+		}
+		loadConfigFile();
+		return true;
+	}
+	
+
 	public File getFile() {
-		return this.file;
+		return this.dataFile;
 	}
 	
 	/**
@@ -28,13 +96,13 @@ public class FileManagement {
  	 * @param dataDir
  	 * @return
  	 */
- 	private boolean connectFile(File dataDir) {
+ 	private boolean connectDataFile() {
  		LOGGER.log(Level.INFO, "Retrieving Datafile...");
- 		this.file = new File(dataDir, "data.txt");
- 		if (!file.exists()) {
+ 		this.dataFile = new File(this.directory, "data.txt");
+ 		if (!dataFile.exists()) {
  			try {
  				LOGGER.log(Level.INFO, "Datafile does not exist, creating new datafile...");
-				return file.createNewFile();
+				return dataFile.createNewFile();
 			} catch (IOException e) {
 				LOGGER.log(Level.WARNING, "Datafile is not created successfully...", e);
 				return false;
@@ -42,25 +110,20 @@ public class FileManagement {
  		}
  		return true;
  	}
-
- 	/**
-	 * This method creates a directory at user's home directory. Database text file
-	 * will be stored here.
-	 * @return
-	 */
-	private File getDataFileDirectory() {
-		LOGGER.log(Level.INFO, "Retrieving the datafile directory...");
-		File dataDir = new File(System.getProperty("user.home") + "/WallistDatabase");
-		
-		if (!dataDir.exists()) {
-			dataDir.mkdirs();
-			LOGGER.log(Level.INFO, "Directory not exist or removed, creating new directory");
-		}
-		return dataDir;
-	}
 	
-	public boolean changeDirectory(String directory) {
-		//Todo
+	public boolean changeDirectory(String directoryString) {
+		// read the File, stores the setting
+		// Todo
+		// input the new directory
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
+			writer.write(directoryString);
+			// other setting goes here
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 

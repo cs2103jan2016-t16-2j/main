@@ -133,7 +133,6 @@ public class GUI extends Application{
 		tasks.getChildren().clear();
 		taskIndex = 0;
 		for (Task task: taskList){
-			System.out.println(task.toString());
 			displayTaskLine(task);
 		}
 	}

@@ -68,16 +68,16 @@ public class Storage {
 		LOGGER.log(Level.INFO, "Loading State from datafile...");
 		ArrayList<Task> normalTasks = state.getDeadlineTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
+		ArrayList<Task> allTasks = state.getAllTasks();
 		
 		Task task;
 		BufferedReader reader;
 		
 		try {
 			reader = new BufferedReader(new FileReader(file));
-			
-		
 			while (reader.ready()) {
 				task = readCurrentTask(reader);
+				allTasks.add(task);
 				TaskType taskType = task.getTaskType();
 				switch (taskType) {
 					case FLOATING :

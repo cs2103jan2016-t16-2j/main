@@ -1,7 +1,8 @@
 package logic;
 
 import java.util.ArrayList;
-import common.DisplayMessage;
+
+import common.Constant;
 import common.State;
 import common.Task;
 import common.TaskType;
@@ -46,7 +47,7 @@ public class ClearTask implements Operation {
 			return true;
 		} catch (Exception e) {
 			//logging
-			state.setDisplayMessage(DisplayMessage.MESSAGE_DUMMY);
+			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
 			return false;
 		}
 	}

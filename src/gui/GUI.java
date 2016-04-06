@@ -42,6 +42,7 @@ public class GUI extends Application{
 	private StackPane layout = new StackPane();
 	private VBox contentLayout = new VBox();
 	private VBox tasks = new VBox();
+	private Label sectionHeader = new Label();
 	
 	private ScrollPane taskPane;
 	private TextField inputBox;
@@ -61,6 +62,8 @@ public class GUI extends Application{
 	private final Color RED = Color.valueOf("b4df4f");
 	
 	private final String TITLE = "%1$s's Wallist";
+	private final String VENUE = "Venue: %1$s";
+	private final String DETAIL = "Detail: %1$s";
 	
 	private final int COMPONENT_GAP_H = 20;
 	private final int COMPONENT_GAP_V = 20;
@@ -129,20 +132,22 @@ public class GUI extends Application{
 	}
 
 	private void refresh() {
+		sectionHeader.setText(state.getHeader());
 		ArrayList<Task> taskList = state.getCurrentTasks();
 		tasks.getChildren().clear();
 		taskIndex = 0;
 		for (Task task: taskList){
 			displayTaskLine(task);
 		}
+		taskPane.setVvalue(state.getPositionIndex() / taskList.size());
 	}
 	
 	private void displayTaskLine(Task task) {
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
-		if (!task.getVenue().isEmpty()){
-			taskContent = taskContent + "\n" + task.getVenue();
+		if (task.getIsDetailDisplayed()){
+			taskContent = taskContent + "\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());
 		}
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
@@ -152,10 +157,6 @@ public class GUI extends Application{
 			if (task.getStartDate()!= null){
 				taskDeadline = sdf.format(task.getStartDate()) + " - " + taskDeadline;				
 			}
-			Date today = Calendar.getInstance().getTime();
-			if (today.after(task.getEndDate())){
-				isOverdue = true;
-			}
 		}
 		GridPane taskLine = new GridPane();
 		taskLine.setPadding(CONTENT_PADDING);
@@ -163,7 +164,7 @@ public class GUI extends Application{
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");
 		}
-		if (isOverdue){
+		if (task.isOverdue()){
 			indexPane = indexStackPane(taskIndex, RED);
 			contentPane = contentPane(taskContent, noralContentWidth, RED);
 			deadlinePane = timePane(taskDeadline, RED);
@@ -246,10 +247,8 @@ public class GUI extends Application{
 	}
 
 	private void headerComponent() {
-		Label sectionHeader = new Label();
 		sectionHeader.setPrefHeight(30);
 		sectionHeader.setMaxHeight(30);
-		sectionHeader.setText("Header");
 		sectionHeader.setAlignment(Pos.CENTER);
 		sectionHeader.setTextAlignment(TextAlignment.CENTER);
 		contentLayout.getChildren().add(sectionHeader);

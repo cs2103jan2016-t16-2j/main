@@ -72,7 +72,7 @@ public class WallistModel{
 				return isRunningSuccessful;
 			}
 		} catch (EmptyStackException e){
-			state.setDisplayMessage(DisplayMessage.MESSAGE_EMPTY_STACK);
+			state.setDisplayMessage(Constant.MESSAGE_EMPTY_STACK);
 			return false;
 		} catch (Exception e){
 			return false;

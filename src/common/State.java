@@ -260,6 +260,25 @@ public class State {
 		}
 	}
 	
+	public String getHeader(){
+		switch(viewMode_){
+		case FLOATING: 
+			return Constant.HEADER_FLOATING;
+		case DEADLINE:
+			return Constant.HEADER_DEADLINE;
+		case ALL:
+			return Constant.HEADER_ALL;
+		case SEARCH:
+			return Constant.HEADER_SEARCH;
+		case FINISHED:
+			return Constant.HEADER_FINISHED;
+		case CONFIG:
+			return Constant.HEADER_CONFIG;
+		default:
+			return Constant.HEADER_ALL;
+		}
+	}
+	
 	public State deepCopy(){
 		State newState = new State();
 		boolean isValid = isValid_; 

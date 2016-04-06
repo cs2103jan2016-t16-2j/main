@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-import common.DisplayMessage;
+import common.Constant;
 import common.State;
 import common.Task;
 import common.TaskType;
@@ -50,12 +50,12 @@ public class DeleteTask implements Operation {
 			}
 			
 			//if above code does not return , means not current model to delete
-			state.setDisplayMessage(DisplayMessage.MESSAGE_DELETE_IN_WRONG_MODE);
+			state.setDisplayMessage(Constant.MESSAGE_DELETE_IN_WRONG_MODE);
 			
 			return false;
 		} catch (IndexOutOfBoundsException e) {
 			//logging
-			state.setDisplayMessage(DisplayMessage.MESSAGE_INDEX_OUT_OF_BOUND);
+			state.setDisplayMessage(Constant.MESSAGE_INDEX_OUT_OF_BOUND);
 			return false;
 		}
 	}

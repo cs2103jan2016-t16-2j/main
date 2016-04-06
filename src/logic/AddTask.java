@@ -3,7 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import common.DisplayMessage;
+import common.Constant;
 import common.State;
 import common.Task;
 import common.TaskComparators;
@@ -49,7 +49,7 @@ public class AddTask implements Operation {
 
 			return true;
 		} catch (Exception e){
-			state.setDisplayMessage(DisplayMessage.MESSAGE_DUMMY);
+			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
 			return false;
 		}
 	}

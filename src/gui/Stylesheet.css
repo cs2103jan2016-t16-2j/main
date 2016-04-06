@@ -1,8 +1,10 @@
 .root {
     -fx-font-size: 12pt;    
     -fx-font-family: "Segoe UI";
+    
+    -fx-background-color: black;
    
-    -fx-background-image: url("teal.jpg");
+    //-fx-background-image: url("teal.jpg");
     -fx-background-size: cover;                     
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
@@ -29,12 +31,18 @@
     -fx-text-fill: #ffffff;
 }
 
+
 .label{
+    -fx-font-size: 16pt;
+    -fx-text-fill: #fffacd;
+}
+
+#message{
     -fx-font-size: 16pt;
     -fx-text-fill: #fffacd;
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 1em;
-    -fx-padding: 5 5 5 5;
+    -fx-padding: 10 10 10 10;
 }
 
 .scroll-pane{

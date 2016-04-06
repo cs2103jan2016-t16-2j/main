@@ -1,23 +1,22 @@
 package parser;
-import java.text.SimpleDateFormat;
+
+import com.joestelmach.natty.*;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 
 public class TimeParser{
- private static SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yy HH:mm");
+ private static com.joestelmach.natty.Parser dateParser = new com.joestelmach.natty.Parser();
  
  public static Date stringToDate(String str){
 	 try {
-		 Date result = sdf.parse(str);
-		 return result;
+		 List<DateGroup> groups = dateParser.parse(str);
+		 return groups.get(0).getDates().get(0);
 	 } catch (Exception e){
 		 return null;
 	 }
- }
-
- public static String dateToString(Date date){
-	 String result = sdf.format(date);
-	 return result;
  }
  
  public static Date getCurrentDate(){

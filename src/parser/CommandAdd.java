@@ -7,7 +7,6 @@ import common.Constant;
 import common.State;
 import common.TaskType;
 import common.ViewMode;
-import gui.GUI;
 
 public class CommandAdd implements Command{
 	private State state_;
@@ -75,7 +74,15 @@ public class CommandAdd implements Command{
 			state_.setIsStartDateChanged(false);
 			return null;
 		}
-		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+		String endDate = wordList[wordList.length-1].trim();
+		String wordListEnd[] = endDate.split("to:");
+		
+		if(wordListEnd.length<=1){
+			state_.setIsStartDateChanged(false);
+			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
+			return null;
+		}
+		Date date = TimeParser.stringToDate(wordListEnd[0].trim());
 		if(date != null){
 			state_.setIsStartDateChanged(true);
 			return date;
@@ -95,7 +102,7 @@ public class CommandAdd implements Command{
 				state_.setIsStartDateChanged(false);
 				return null;
 			}
-			Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+			Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim());
 			if(date != null){
 				state_.setIsEndDateChanged(true);
 				if(date.before(state_.getStartDate())){
@@ -117,7 +124,7 @@ public class CommandAdd implements Command{
 			state_.setIsEndDateChanged(false);
 			return null;
 		}
-		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim().substring(0, 14));
+		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim());
 		if(date != null){
 			state_.setIsEndDateChanged(true);
 			return date;
@@ -194,6 +201,7 @@ public class CommandAdd implements Command{
 				return wordList[0].trim();
 			}
 		}else{
+			state_.setIsContentChanged(true);
 			return content_;
 		}
 	}

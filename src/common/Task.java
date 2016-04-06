@@ -9,15 +9,13 @@ public class Task {
 	private TaskType taskType;
 
 	private final String TO_STRING = "Task [ content: %s | venue: %s | detail: %s | type: %s"
-										+ "isImportant: %b ";//| startDate: %s | endDate: %s | creationDate: %s]";
+										+ "isImportant: %b | startDate: %s | endDate: %s | creationDate: %s]";
 	
 	
 	public Task(State state) {
 		
 		if(state.getIsContentChanged()){
 			this.content = state.getContent();
-			System.out.println(state.getContent());
-			System.out.println(this.content);
 		} else {
 			this.content = Constant.VALUE_DEFAULT_EMPTY;
 		}
@@ -140,9 +138,16 @@ public class Task {
 
 	@Override
 	public String toString(){
-		String result = String.format(TO_STRING, content,venue,detail,taskType,isImportant,
-									 startDate.toString(), endDate.toString(), creationDate.toString());
-
+		String result;
+		if ((startDate != null) && (endDate != null)) {
+			result = String.format(TO_STRING, content,venue,detail,taskType,isImportant,
+					 startDate.toString(), endDate.toString(), creationDate.toString());
+		} else {
+			result = String.format(TO_STRING, content,venue,detail,taskType,isImportant,
+					 null, null, creationDate.toString());
+		}
+		
+		
 		return result;
 	}
 }

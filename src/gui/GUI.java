@@ -21,12 +21,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -44,18 +42,19 @@ public class GUI extends Application{
 	
 	private ScrollPane taskPane;
 	private TextField inputBox;
+	private State state;
+	private int taskIndex;
+	private double vValue;
 	
 	private WallistModel wallistModel = new WallistModel();
 	private String command;
-	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
-	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	
-	private State state;
+	private int taskBoxHeight;
+	private int taskBoxWidth;
+	private int contentWidth;
+	private Color color;
 	
-	private int taskIndex;
-	private double vValue;
-
 	private final Color COLOR_ZOOM = Color.PALEGOLDENROD;
 	private final Color COLOR_NORMAL = Color.WHITE;
 	private final Color COLOR_OVERDUE = Color.RED;
@@ -63,6 +62,7 @@ public class GUI extends Application{
 	private final String TITLE = "%1$s's Wallist";
 	private final String VENUE = "Venue: %1$s";
 	private final String DETAIL = "Detail: %1$s";
+	private final String DURATION = "%1$s - %2$s"; 
 	
 	private final int COMPONENT_GAP_H = 20;
 	private final int COMPONENT_GAP_V = 20;
@@ -70,15 +70,8 @@ public class GUI extends Application{
 	private final int TIME_WIDTH = 400;
 	private final int INPUT_BOX_HEIGHT = 30;
 	private final int HEADER_HEIGHT = 30;
-	
 	private final int STAGE_HEIGHT = 650;
-	private final int STAGE_WIDTH = 1000;
-	
-	private int taskBoxHeight;
-	private int taskBoxWidth;
-	private int contentWidth;
-	private Color color;
-	
+	private final int STAGE_WIDTH = 1000;	
 	private final double SCROLL_PERCENTAGE = 0.1;
 		
 	private final Insets COMPONENT_PADDING = new Insets(20, 20, 20, 20);
@@ -95,7 +88,6 @@ public class GUI extends Application{
 		headerComponent();
         taskPane = taskComponent();
 		inputBox = inputComponent();
-		
 		taskPane.setContent(tasks);
 		
 		state = wallistModel.getState();
@@ -141,7 +133,8 @@ public class GUI extends Application{
 			displayTaskLine(task);
 		}
         if (taskList.size() > 0){
-		    taskPane.setVvalue(state.getPositionIndex() / taskList.size());
+        	double position = (double) (state.getPositionIndex() + 1) / taskList.size();
+		    taskPane.setVvalue(position);
         }
 	}
 	
@@ -149,14 +142,13 @@ public class GUI extends Application{
 		taskIndex ++;
 		String taskContent = task.getContent();
 		if (task.getIsDetailDisplayed()){
-			taskContent += "\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());
+			taskContent += "\n\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	
 		}
-		
 		String taskDeadline = "";
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
 			taskDeadline = sdf.format(task.getEndDate());
 			if (task.getStartDate()!= null){
-				taskDeadline = sdf.format(task.getStartDate()) + " - " + taskDeadline;				
+				taskDeadline = String.format(DURATION, sdf.format(task.getStartDate()), taskDeadline);				
 			}
 		}
 		
@@ -193,45 +185,6 @@ public class GUI extends Application{
 		
 		taskLine.getChildren().addAll(indexCol.getColumn(), contentCol.getColumn(), timeCol.getColumn());
 		tasks.getChildren().add(taskLine);
-	}
-	
-	private StackPane timePane(String taskDeadline) {
-		StackPane deadlinePane = new StackPane();
-		deadlinePane.setAlignment(Pos.TOP_LEFT);
-		Rectangle deadlineRec = new Rectangle();
-		deadlineRec.setWidth(TIME_WIDTH);
-		deadlineRec.setOpacity(0);
-		Text deadline = new Text(taskDeadline);
-		deadline.setFill(color);
-		deadlinePane.getChildren().addAll(deadlineRec, deadline);
-		GridPane.setConstraints(deadlinePane, 2, 0);
-		return deadlinePane;
-	}
-
-	private StackPane contentPane(String taskContent, int width) {
-		StackPane contentPane = new StackPane();		            			
-		Rectangle contentRec = new Rectangle();
-		contentRec.setWidth(width);
-		contentRec.setOpacity(0);
-		Text content = new Text(taskContent);
-		content.setWrappingWidth(width);
-		content.setFill(color);
-		contentPane.getChildren().addAll(contentRec, content);
-		GridPane.setConstraints(contentPane, 1, 0);
-		return contentPane;
-	}
-
-	private StackPane indexStackPane(int index) {
-		StackPane indexPane = new StackPane();
-		indexPane.setAlignment(Pos.TOP_RIGHT);
-		Rectangle indexRec = new Rectangle();
-		indexRec.setWidth(INDEX_WIDTH);
-		indexRec.setOpacity(0);
-		Text indexStr = new Text(Integer.toString(index));
-		indexStr.setFill(color);
-		indexPane.getChildren().addAll(indexRec,indexStr);
-		GridPane.setConstraints(indexPane, 0, 0);
-		return indexPane;
 	}
 	
 	private FadeTransition fadeAnimation(Label comm) {

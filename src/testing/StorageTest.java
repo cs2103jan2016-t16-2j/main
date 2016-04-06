@@ -1,24 +1,32 @@
 package testing;
-//package storage;
-//
-//import static org.junit.Assert.*;
-//
-//import java.io.BufferedReader;
-//import java.io.BufferedWriter;
-//import java.io.File;
-//import java.io.FileReader;
-//import java.io.FileWriter;
-//import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.TreeSet;
-//
-//import org.junit.Test;
-//import common.Task;
-//import common.TaskType;
-//import parser.TimeParser;
-//import common.State;
-//public class StorageTest {
-//
+
+import static org.junit.Assert.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+import org.junit.Test;
+import common.Task;
+import common.TaskType;
+import parser.TimeParser;
+import storage.Storage;
+import common.State;
+public class StorageTest {
+
+	@Test
+	public void testChangeDirectory() {
+		State state = new State();
+		Storage storage = new Storage(state);
+		storage.executeChangeDirectory("/Users/Shadowsong/WallistDatabase2");
+	}
+	
+	
 //	
 //// test files, create desired files want to read and write
 //	@Test
@@ -107,4 +115,4 @@ package testing;
 ////		normalTask.setEndDate(TimeParser.stringToDate("02/03/16 05:06"));
 ////		return normalTask;
 ////	}
-//}
+}

@@ -22,6 +22,7 @@ public class Storage {
 		assert isConnectedToFile;
 		return fileIO.saveState();
 	}
+	
 	public boolean executeChangeDirectory(String directory) {
 		assert isConnectedToFile;
 		return fileManagement.changeDirectory(directory);

@@ -14,7 +14,6 @@ public class Storage {
 		this.isConnectedToFile = connectFileToIO();
 	}
 
-	
 	public boolean executeLoadState() {
 		assert isConnectedToFile;
 		return fileIO.loadState();
@@ -24,7 +23,6 @@ public class Storage {
 		assert isConnectedToFile;
 		return fileIO.saveState();
 	}
-	
 	public boolean executeChangeDirectory(String directory) {
 		assert isConnectedToFile;
 		return fileManagement.changeDirectory(directory);

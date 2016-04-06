@@ -9,17 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TreeSet;
 
 import common.*;
 import facade.WallistModel;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -27,11 +24,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -42,44 +39,47 @@ public class GUI extends Application{
 	
 	private Stage window;
 	private Scene scene;
-	private GridPane layout = new GridPane();
+	private StackPane layout = new StackPane();
+	private VBox contentLayout = new VBox();
+	private VBox tasks = new VBox();
+	
+	private ScrollPane taskPane;
+	private TextField inputBox;
+	
 	private WallistModel wallistModel = new WallistModel();
 	private String command;
 	private SimpleDateFormat datesdf = new SimpleDateFormat("dd MMMM yyyy");
 	private SimpleDateFormat daysdf = new SimpleDateFormat("EEEE");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	
-	private int taskIndex, floatyIndex;
-	private double vValue;
+	private State state;
 	
+	private int taskIndex;
+	private double vValue;
 
 	private final Color WHITE = Color.valueOf("ffffcb");
 	private final Color RED = Color.valueOf("b4df4f");
 	
 	private final String TITLE = "%1$s's Wallist";
 	
-	private final int COMPONENT_GAP_H = 30;
-	private final int COMPONENT_GAP_V = 30;
+	private final int COMPONENT_GAP_H = 20;
+	private final int COMPONENT_GAP_V = 20;
 	private final int INDEX_WIDTH = 30;
 	private final int END_TIME_WIDTH = 250;
 	private final int TIME_BOX_HEIGHT = 135;
-	private final int INPUT_BOX_HEIGHT = 40;
+	private final int INPUT_BOX_HEIGHT = 30;
 	
 	private final int STAGE_HEIGHT = 650;
-	private final int STAGE_WIDTH = 1300;
+	private final int STAGE_WIDTH = 1000;
 	
-	private int floatyBoxHeight;
-	private int floatyBoxWidth;
 	private int normalBoxHeight;
 	private int normalBoxWidth;
-	private int floatyContentWidth;
 	private int noralContentWidth;
-
 	
 	private final double SCROLL_PERCENTAGE = 0.1;
 		
-	private final Insets COMPONENT_PADDING = new Insets(30, 30, 30, 30);
-	private final Insets WARNING_PADDING = new Insets(0, 10, 0, 0);
+	private final Insets COMPONENT_PADDING = new Insets(20, 20, 20, 20);
+	private final Insets CONTENT_PADDING = new Insets(5, 0, 5, 0);
 	
 	public static void launching(){
 		launch();
@@ -88,20 +88,15 @@ public class GUI extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		stageSetup(primaryStage);
+
+		headerComponent();
+        taskPane = taskComponent();
+		inputBox = inputComponent();
 		
-		ScrollPane floatyPane = floatyTaskComponent();
-        ScrollPane taskPane = taskComponent();
-		TextField inputBox = inputComponent();
-		
-		VBox tasks = new VBox();
 		taskPane.setContent(tasks);
-		VBox floaties = new VBox();
-		floatyPane.setContent(floaties);
 		
-		State state = wallistModel.getState();
-		TreeSet<Task> taskList = state.getNormalTasks();
-		ArrayList<Task> floatyList = state.getFloatingTasks();
-    	refresh(tasks, floaties, taskList, floatyList);
+		state = wallistModel.getState();
+    	refresh();
 	
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
@@ -113,83 +108,36 @@ public class GUI extends Application{
 			        vValue = taskPane.getVvalue();
 			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
-		        	displayStatus(inputBox, tasks, floaties);
+		        	displayStatus();
 		        }
 			}
 		});
 	}
 	
-	private void displayStatus(TextField inputBox, VBox tasks, VBox floaties) {
+	private void displayStatus() {
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.process(command);
-		State state = wallistModel.getState();
+		state = wallistModel.getState();
 		if (isSuccess){
-			if (state.isSearch()){
-				ArrayList<Task> resultList = state.getSearchResultTasks();
-				refresh(tasks, resultList);
-			}
-			else{	
-		    	TreeSet<Task> taskList = state.getNormalTasks();
-			    ArrayList<Task> floatyList = state.getFloatingTasks();
-	    	    refresh(tasks, floaties, taskList, floatyList);
-			}
+			refresh();
 		}
-		Label displayText = new Label(state.getMessage());
-		GridPane.setConstraints(displayText, 0, 2, 2, 1, 
-				HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER, WARNING_PADDING);
+		Label displayText = new Label(state.getDisplayMessage());
 		layout.getChildren().add(displayText);
 		FadeTransition fade = fadeAnimation(displayText);
 		fade.play();
 		inputBox.clear();
 	}
-	
-	private void refresh(VBox tasks, ArrayList<Task> resultList) {
-		tasks.getChildren().clear();
-		taskIndex = 0;
-		for (Task task: resultList){
-			if (!task.getIsFinished()){
-				displayNormalTaskLine(tasks, task);
-		    }
-		}
-	}
 
-	private void refresh(VBox tasks, VBox floaties, TreeSet<Task> taskList, ArrayList<Task> floatyList) {
+	private void refresh() {
+		ArrayList<Task> taskList = state.getCurrentTasks();
 		tasks.getChildren().clear();
-		floaties.getChildren().clear();
 		taskIndex = 0;
-		floatyIndex = 0;
 		for (Task task: taskList){
-			if (!task.getIsFinished()){
-	    			displayNormalTaskLine(tasks, task);
-		    }
-		}
-		
-		for (Task task: floatyList){
-			if (!task.getIsFinished()){
-			    	displayFloatyTaskLine(floaties, task);
-			}
+			displayTaskLine(task);
 		}
 	}
 	
-	private void displayFloatyTaskLine(VBox floaties, Task task) {
-		floatyIndex ++;
-		String taskContent = task.getContent();
-		if (!task.getVenue().isEmpty()){
-			taskContent = taskContent + "\n" + task.getVenue();
-		}
-		
-		GridPane taskLine = new GridPane();
-		if (floatyIndex % 2 == 0){
-			taskLine.setId("gridPane");
-		}
-		taskLine.setHgap(10);
-		StackPane indexPane = indexStackPane(floatyIndex, WHITE);
-		StackPane contentPane = contentPane(taskContent, floatyContentWidth, WHITE);
-		taskLine.getChildren().addAll(indexPane, contentPane);
-		floaties.getChildren().add(taskLine);
-	}
-
-	private void displayNormalTaskLine(VBox tasks, Task task) {
+	private void displayTaskLine(Task task) {
 		taskIndex ++;
 		boolean isOverdue = false;
 		String taskContent = task.getContent();
@@ -201,9 +149,8 @@ public class GUI extends Application{
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
 			taskDeadline = sdf.format(task.getEndDate());
 
-			if (task.getIsStartDate()){
-
-				taskDeadline = sdf.format(task.getStartDate()) + "\n" + taskDeadline;				
+			if (task.getStartDate()!= null){
+				taskDeadline = sdf.format(task.getStartDate()) + " - " + taskDeadline;				
 			}
 			Date today = Calendar.getInstance().getTime();
 			if (today.after(task.getEndDate())){
@@ -211,6 +158,7 @@ public class GUI extends Application{
 			}
 		}
 		GridPane taskLine = new GridPane();
+		taskLine.setPadding(CONTENT_PADDING);
 		taskLine.setHgap(10);
 		if (taskIndex % 2 == 0){
 			taskLine.setId("gridPane");
@@ -281,8 +229,7 @@ public class GUI extends Application{
 		inputBox.setPrefHeight(INPUT_BOX_HEIGHT);
 		inputBox.setMaxHeight(INPUT_BOX_HEIGHT);
 		inputBox.setPromptText("How Can I Help You ?");
-		GridPane.setConstraints(inputBox, 0, 2, 2, 1);
-		layout.getChildren().add(inputBox);
+		contentLayout.getChildren().add(inputBox);
 		return inputBox;
 	}
 
@@ -294,24 +241,20 @@ public class GUI extends Application{
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    taskDisplay.getChildren().addAll(taskBox, taskPane);
-		GridPane.setConstraints(taskDisplay, 1, 0, 1, 2);
-		layout.getChildren().add(taskDisplay);
+		contentLayout.getChildren().add(taskDisplay);
 		return taskPane;
 	}
 
-	private ScrollPane floatyTaskComponent() {
-		StackPane floatyTaskDisplay = new StackPane();
-		Rectangle floatyBox = boxGrid(floatyBoxWidth, floatyBoxHeight);
-		ScrollPane floatyPane = new ScrollPane();
-		floatyPane.setPrefSize(floatyBoxWidth, floatyBoxHeight);
-		floatyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		floatyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		floatyTaskDisplay.getChildren().addAll(floatyBox, floatyPane);	
-		GridPane.setConstraints(floatyTaskDisplay, 0, 1);
-		layout.getChildren().add(floatyTaskDisplay);
-		return floatyPane;
+	private void headerComponent() {
+		Label sectionHeader = new Label();
+		sectionHeader.setPrefHeight(30);
+		sectionHeader.setMaxHeight(30);
+		sectionHeader.setText("Header");
+		sectionHeader.setAlignment(Pos.CENTER);
+		sectionHeader.setTextAlignment(TextAlignment.CENTER);
+		contentLayout.getChildren().add(sectionHeader);
 	}
-
+	
 	private void timeComponent(){
 		HBox timeDisplay = new HBox(COMPONENT_GAP_H);
 		timeDisplay.setAlignment(Pos.CENTER);
@@ -326,8 +269,7 @@ public class GUI extends Application{
 		date.setId("dateDisplay");
 		DigitalClock clock = new DigitalClock();
 		timeDisplay.getChildren().addAll(clock, date);
-		GridPane.setConstraints(timeDisplay, 0, 0);
-		layout.getChildren().add(timeDisplay);
+		contentLayout.getChildren().add(timeDisplay);
 	}
 
 	private void stageSetup(Stage primaryStage) {
@@ -335,20 +277,18 @@ public class GUI extends Application{
 
         window.setResizable(true);
 
-    	normalBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 3 - INPUT_BOX_HEIGHT;
-    	normalBoxWidth = (int)(STAGE_WIDTH * 2 / 3 - COMPONENT_GAP_H);
-    	floatyBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - TIME_BOX_HEIGHT;
-    	floatyBoxWidth = STAGE_WIDTH - COMPONENT_GAP_H * 3 - normalBoxWidth;
-    	floatyContentWidth = floatyBoxWidth - INDEX_WIDTH;
+    	normalBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT * 3;
+    	normalBoxWidth = (int)(STAGE_WIDTH - COMPONENT_GAP_H * 2);
     	noralContentWidth = normalBoxWidth - INDEX_WIDTH - END_TIME_WIDTH;
     	
         window.getIcons().add(new Image("/title.png"));
         
         window.setTitle(String.format(TITLE, System.getProperty("user.name")));
-		layout.setPadding(COMPONENT_PADDING);
-		layout.setVgap(COMPONENT_GAP_V);
-		layout.setHgap(COMPONENT_GAP_H);
-		timeComponent();
+		contentLayout.setPadding(COMPONENT_PADDING);
+		contentLayout.setSpacing(COMPONENT_GAP_V);
+
+        layout.getChildren().add(contentLayout);
+        
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		scene.getStylesheets().add("/gui/Stylesheet.css");
 		window.setScene(scene);

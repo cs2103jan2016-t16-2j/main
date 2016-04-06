@@ -1,6 +1,8 @@
 package facade;
-import java.lang.StringBuilder;
-import java.util.*;
+
+import java.util.EmptyStackException;
+import java.util.Stack;
+
 
 import common.*;
 import logic.AddTask;
@@ -9,8 +11,8 @@ import logic.DeleteTask;
 import logic.SearchTasks;
 import logic.TickTask;
 import logic.UpdateTask;
-import parser.*;
-import storage.*;
+import parser.Parser;
+import storage.Storage;
 
 public class WallistModel{
 
@@ -23,7 +25,7 @@ public class WallistModel{
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
 	private SearchTasks searchTasks;
-	private Stack<State> states;
+	public Stack<State> states;
 	
 	public WallistModel(){
 		state = new State();
@@ -37,7 +39,7 @@ public class WallistModel{
 		parser = new Parser(state); 
 		storage.executeLoadState();
 		states = new Stack<State>();
-		states.push(state);
+		states.push(state.deepCopy());
 	}
 	
 	public State getState(){
@@ -55,15 +57,16 @@ public class WallistModel{
 				return false;
 			} else {
 				boolean isRunningSuccessful = running();
-				CommandType cmdType = state.getCommand();
+				CommandType cmdType = state.getCommandType();
 
 				if(isRunningSuccessful && !cmdType.equals(CommandType.UNDO)){
-					states.push(state);
+					State current = state.deepCopy();
+					states.push(current);
 				}
 				return isRunningSuccessful;
 			}
 		} catch (EmptyStackException e){
-			state.setErrorMessage(DisplayMessage.MESSAGE_EMPTY_STACK);
+			state.setDisplayMessage(DisplayMessage.MESSAGE_EMPTY_STACK);
 			return false;
 		} catch (Exception e){
 			return false;
@@ -71,8 +74,8 @@ public class WallistModel{
 
 	}
 
-	private boolean running() throws EmptyStackException{
-		CommandType cmdType = state.getCommand();
+	public boolean running() throws EmptyStackException{
+		CommandType cmdType = state.getCommandType();
 		boolean result;
 		
 		if(cmdType.equals(CommandType.ADD)){
@@ -101,7 +104,8 @@ public class WallistModel{
 	private boolean runningUndo() {
 		boolean result;
 		try{
-			state = states.pop();
+			states.pop();
+			state = states.peek();
 		} finally{
 			result = true;				
 		}

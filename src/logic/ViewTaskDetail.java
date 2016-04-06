@@ -1,15 +1,16 @@
 package logic;
 
 import java.util.ArrayList;
+
 import common.DisplayMessage;
 import common.State;
 import common.Task;
 import common.ViewMode;
 
-public class UpdateTask implements Operation {
+public class ViewTaskDetail implements Operation {
 	private State state;
 
-	public UpdateTask(State state) {
+	public ViewTaskDetail(State state) {
 		this.state = state;
 	}
 
@@ -34,7 +35,7 @@ public class UpdateTask implements Operation {
 				Task toBeUpdated = findTaskFromFloatingTasks(positionIndex);
 
 				//tick the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
+				boolean isTickSuccessful = viewTaskDetail(toBeUpdated);
 
 				if(isTickSuccessful) {
 					return true;
@@ -50,7 +51,7 @@ public class UpdateTask implements Operation {
 				Task toBeUpdated = findTaskFromDeadlineTasks(positionIndex);
 
 				//tick the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
+				boolean isTickSuccessful = viewTaskDetail(toBeUpdated);
 
 				if(isTickSuccessful) {
 					return true;
@@ -66,7 +67,7 @@ public class UpdateTask implements Operation {
 				Task toBeUpdated = findTaskFromAllTasks(positionIndex);
 
 				//tick the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
+				boolean isTickSuccessful = viewTaskDetail(toBeUpdated);
 
 				if(isTickSuccessful) {
 					return true;
@@ -85,27 +86,10 @@ public class UpdateTask implements Operation {
 		}
 	}
 	
-	private boolean updateTask(Task task){
-		if(state.getIsContentChanged()){
-			task.setContent(state.getContent());
-		}
-		
-		if(state.getIsVenueChanged()){
-			task.setVenue(state.getVenue());
-		}
-		
-		if(state.getIsDetailChanged()){
-			task.setDetail(state.getDetail());
-		}
-		
-		if(state.getIsStartDateChanged()){
-			task.setStartDate(state.getStartDate());
-		}
-		
-		if(state.getIsEndDateChanged()){
-			task.setEndDate(state.getEndDate());
-		}
-		
+	private boolean viewTaskDetail(Task task){
+		boolean currentDisplayStatus = task.getIsDetailDisplayed();
+		boolean changedToDisplayStatus = !currentDisplayStatus;
+		task.setIsDetailDisplayed(changedToDisplayStatus);
 		return true;
 	}
 	

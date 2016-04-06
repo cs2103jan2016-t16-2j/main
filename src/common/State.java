@@ -2,247 +2,356 @@ package common;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.TreeSet;
 
 public class State {
-	private boolean isValid_;
-	private CommandType command_;
-	private String rawContent_;
-	private String content_;
-	private String detail_;
-	private String userInput_;
-	private String venue_;
-	private String errorMessage_;
-	private String searchKey_;
-	private TaskType type_;
-	private int position_;
-	private Date startDate_;
-	private Date endDate_;
-	private HashMap<String, Boolean> attributes_;
-	private ArrayList<Task> floatingTasks_;
-	private ArrayList<Task> searchResultTasks_;
-	private TreeSet<Task> normalTasks_;
+	private boolean isValid_, isStartDateChanged_, isEndDateChanged_, isContentChanged_, isVenueChanged_, isDetailChanged_;
+	private String content_, detail_, userInput_, venue_, displayMessage_;
+	private TaskType taskType_;
+	private CommandType commandType_;
+	private ViewMode viewMode_;
+	private ViewMode newViewMode_;	
+	private int positionIndex_;
+	private Date startDate_, endDate_;
+	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_;
+	private ArrayList<String> searchKey_;
 	
+
 	public State(){
-		isValid_ = true;
-		command_ = CommandType.UNDEFINED;
-		rawContent_ = Constant.VALUE_DEFAULT_EMPTY;
+		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
+		isStartDateChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		isEndDateChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE; 
+		isContentChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE; 
+		isVenueChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE; 
+		isDetailChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		commandType_ = CommandType.UNDEFINED;
+		viewMode_ = Constant.VALUE_DEFAULT_VIEW_MODE;
+		newViewMode_ = null;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
+		detail_ = Constant.VALUE_DEFAULT_EMPTY;
 		userInput_ = Constant.VALUE_DEFAULT_EMPTY;
 		venue_ = Constant.VALUE_DEFAULT_EMPTY;
-		errorMessage_ = Constant.VALUE_DEFAULT_EMPTY;
-		searchKey_ =  Constant.VALUE_DEFAULT_EMPTY;
-		detail_ = Constant.VALUE_DEFAULT_EMPTY;
-		type_ = TaskType.UNDEFINED;
-		position_ = 0;
+		displayMessage_ = Constant.VALUE_DEFAULT_EMPTY;
+		taskType_ = TaskType.UNDEFINED;
+		positionIndex_ = Constant.VALUE_DEFAULT_POSITION_INDEX;
 		startDate_ = null;
 		endDate_ = null;
 		floatingTasks_ = new ArrayList<Task>();
-		normalTasks_ = new TreeSet<Task>();
+		deadlineTasks_ = new ArrayList<Task>();
+		allTasks_ = new ArrayList<Task>();
 		searchResultTasks_ = new ArrayList<Task>();
-		attributes_ = new HashMap<String, Boolean>();
-		attributes_.put("isStartDate", false);
-		attributes_.put("isEndDate", false);
-		attributes_.put("isDetails", false);
-		attributes_.put("isVenue", false);
-		attributes_.put("isFinished", false);
-		attributes_.put("isImportant", false);
-		attributes_.put("isContent", false);
+		finishedTasks_ = new ArrayList<Task>();
+		searchKey_ = new ArrayList<String>();
 	}
+	
 	/*
-	 * List of set commands
+	 * List of accessors and mutators for private attributes
 	 */
+
 	public void setIsValid(boolean bool){
 		isValid_ = bool;
 	}
 	
-	public void setRawContent(String rawContent){
-		rawContent_ = rawContent;
+	public boolean getIsValid(){
+		return isValid_;
+	}
+
+	public void setIsStartDateChanged(boolean bool){
+		isStartDateChanged_ = bool;
 	}
 	
-	public void setCommand(CommandType command){
-		command_ = command;
+	public boolean getIsStartDateChanged(){
+		return isStartDateChanged_;
+	}
+	
+	public void setIsEndDateChanged(boolean bool){
+		isEndDateChanged_ = bool;
+	}
+	
+	public boolean getIsEndDateChanged(){
+		return isEndDateChanged_;
+	}
+	
+	public void setIsContentChanged(boolean bool){
+		isContentChanged_ = bool;
+	}
+	
+	public boolean getIsContentChanged(){
+		return isContentChanged_;
+	}
+	
+	public void setIsVenueChanged(boolean bool){
+		isVenueChanged_ = bool;
+	}
+	
+	public boolean getIsVenueChanged(){
+		return isVenueChanged_;
+	}
+	
+	public void setIsDetailChanged(boolean bool){
+		isDetailChanged_ = bool;
+	}
+	
+	public boolean getIsDetailChanged(){
+		return isDetailChanged_;
+	}
+
+	public void setCommandType(CommandType command){
+		commandType_ = command;
+	}
+
+	public CommandType getCommandType(){
+		return commandType_;
+	}
+	
+	public void setTaskType(TaskType type){
+		taskType_ = type;
+	}
+	
+	public TaskType getTaskType(){
+		return taskType_;
+	}
+	
+	public void setViewMode(ViewMode vm){
+		viewMode_ = vm;
+	}
+	
+	public ViewMode getViewMode(){
+		return viewMode_;
+	}
+
+	public void setNewViewMode(ViewMode vm){
+		newViewMode_ = vm;
+	}
+	
+	public ViewMode getNewViewMode(){
+		return newViewMode_;
 	}
 	
 	public void setContent(String content){
 		content_ = content;
 	}
-	
-	public void setVenue(String venue){
-		venue_ = venue;
-	}	
-	
-	public void setDetail(String detail){
-		detail_ = detail;
-	}
-	
-	public void setPosition(int position){
-		this.position_ = position;
-	}
-	
-	public int getPosition(){
-		return position_;
-	}
-	
-	public void setErrorMessage(String errorMessage){
-		errorMessage_ = errorMessage;
-	}
-	
-	public void setSearchKey(String searchKey){
-		searchKey_ = searchKey;
-	}
-	
-	public void setUserInput(String userInput){
-		userInput_ = userInput;
-	}
-	
-	public void setTaskType(TaskType type){
-		type_ = type;
-	}
-	
-	public void setStartDate(Date startDate){
-		startDate_ = startDate;
-	}
-	
-	public void setEndDate(Date endDate){
-		endDate_ = endDate;
-	}
-	
-	public void setIsStartDate(boolean isStartDate){
-		attributes_.put("isStartDate", isStartDate);
-	}
-	
-	public void setIsEndDate(boolean isEndDate){
-		attributes_.put("isEndDate", isEndDate);
-	}
-	
-	public void setIsDetails(boolean isDetails){
-		attributes_.put("isDetails", isDetails);
-	}
-	
-	public void setIsVenue(boolean isVenue){
-		attributes_.put("isVenue", isVenue);
-	}
-	
-	public void setIsImportant(boolean isImportant){
-		attributes_.put("isImportant", isImportant);
-	}
-	
-	public void setIsFinished(boolean isFinished){
-		attributes_.put("isFinished", isFinished);
-	}
-	
-	public void setIsContent(boolean isContent){
-		attributes_.put("isContent", isContent);
-	}
-	
-	public void setFloatingTasks (ArrayList<Task> floatingTasks){
-		floatingTasks_ = floatingTasks;
-	}
-	
-	public void setNormalTasks (TreeSet<Task> normalTasks){
-		normalTasks_ = normalTasks;
-	}
 
-	public void setSearchResultTasks (ArrayList<Task> searchResultTasks){
-		searchResultTasks_ = searchResultTasks;
-	}
-	
-
-	/*
-	 * List of get commands
-	 */
-	public boolean getIsValid(){
-		return isValid_;
-	}
-	
-	public String getRawContent(){
-		return rawContent_;
-	}
-	
-	public CommandType getCommand(){
-		return command_;
-	}
-	
 	public String getContent(){
 		return content_;
 	}
 	
+	public void setVenue(String venue){
+		venue_ = venue;
+	}	
+
 	public String getVenue(){
 		return venue_;
-	}	
+	}
 	
+	public void setDetail(String detail){
+		detail_ = detail;
+	}
+
 	public String getDetail(){
 		return detail_;
-	}	
-	
-	public String getMessage(){
-		return errorMessage_;
 	}
 	
-	public String getSearchKey(){
+	public void setDisplayMessage(String errorMessage){
+		displayMessage_ = errorMessage;
+	}
+
+	public String getDisplayMessage(){
+		return displayMessage_;
+	}
+	
+	public void setSearchKey(ArrayList<String> searchKey){
+		searchKey_ = searchKey;
+	}
+
+	public ArrayList<String> getSearchKey(){
 		return searchKey_;
 	}
+	
+	public void setUserInput(String userInput){
+		userInput_ = userInput;
+	}	
 	
 	public String getUserInput(){
 		return userInput_;
 	}
 	
-	public TaskType getTaskType(){
-		return type_;
+	public void setPositionIndex(int position){
+		this.positionIndex_ = position;
 	}
-	
-	public boolean isSearch(){
-		return command_.equals(CommandType.SEARCH);
+
+	public int getPositionIndex(){
+		return positionIndex_;
+	}
+
+	public void setStartDate(Date startDate){
+		startDate_ = startDate;
 	}
 	
 	public Date getStartDate(){
 		return startDate_;
+	}
+
+	public void setEndDate(Date endDate){
+		endDate_ = endDate;
 	}
 	
 	public Date getEndDate(){
 		return endDate_;
 	}
 	
-	public boolean getIsStartDate(){
-		return attributes_.get("isStartDate");
-	}
-	
-	public boolean getIsEndDate(){
-		return attributes_.get("isEndDate");
-	}
+//	private ArrayList<Task> floatingTasks_,normalTasks_, allTask_, searchResultTasks_, FinishedTasks_;
 
-	public boolean getIsDetails(){
-		return attributes_.get("isDetails");
+	public void setFloatingTasks (ArrayList<Task> floatingTasks){
+		floatingTasks_ = floatingTasks;
 	}
 	
-	public boolean getIsVenue(){
-		return attributes_.get("isVenue");
-	}
-	
-	public void getIsImportant(){
-		attributes_.get("isImportant");
-	}
-	
-	public void getIsFinished(){
-		attributes_.get("isFinished");
-	}
-	
-	public void getIsContent(){
-		attributes_.get("isContent");
-	}
-	
-	public ArrayList<Task> getFloatingTasks(){
+	public ArrayList<Task> getFloatingTasks (){
 		return floatingTasks_;
 	}
 	
-	public TreeSet<Task> getNormalTasks(){
-		return normalTasks_;
+	public void setDeadlineTasks (ArrayList<Task> deadlineTasks){
+		deadlineTasks_ = deadlineTasks;
+	}
+
+	public ArrayList<Task> getDeadlineTasks (){
+		return deadlineTasks_;
 	}
 	
-	public ArrayList<Task> getSearchResultTasks(){
+	public void setAllTasks (ArrayList<Task> allTasks){
+		allTasks_ = allTasks;
+	}
+
+	public ArrayList<Task> getAllTasks (){
+		return allTasks_;
+	}
+	
+	public void setSearchResultTasks (ArrayList<Task> searchResultTasks){
+		searchResultTasks_ = searchResultTasks;
+	}
+	
+	public ArrayList<Task> getSearchResultTasks (){
 		return searchResultTasks_;
 	}
+	
+	public void setFinishedTasks (ArrayList<Task> finishedTasks){
+		finishedTasks_ = finishedTasks;
+	}
+
+	public ArrayList<Task> getFinishedTasks(){
+		return finishedTasks_;
+	}
+	
+	public ArrayList<Task> getCurrentTasks(){
+		switch(viewMode_){
+			case FLOATING: 
+				return floatingTasks_;
+			case DEADLINE:
+				return deadlineTasks_;
+			case ALL:
+				return allTasks_;
+			case SEARCH:
+				return searchResultTasks_;
+			case FINISHED:
+				return finishedTasks_;
+			case CONFIG:
+				return null;
+			default:
+				return allTasks_;
+		}
+	}
+	
+	public State deepCopy(){
+		State newState = new State();
+		boolean isValid = isValid_; 
+		boolean isStartDateChanged = isStartDateChanged_, isEndDateChanged = isEndDateChanged_;
+		boolean isContentChanged= isContentChanged_, isVenueChanged = isVenueChanged_, isDetailChanged =isDetailChanged_;
+		String content, detail, userInput, venue, displayMessage;
+		Date startDate;
+		Date endDate;
+		content = new String(content_);
+		detail = new String(detail_);
+		userInput = new String(userInput_);
+		venue = new String(venue_);
+		displayMessage = new String(displayMessage_);
+		
+		TaskType taskType = taskType_;
+		CommandType commandType = commandType_;
+		ViewMode viewMode = viewMode_;
+		int positionIndex = positionIndex_;
+		
+		
+		if (isStartDateChanged) {
+			startDate = new Date(startDate_.getTime());
+		} else {
+			startDate = null;
+		}
+		if (isEndDateChanged) {
+			endDate = new Date(endDate_.getTime());
+		} else {
+			endDate = null;
+		}
+		
+		
+		ArrayList<Task> floatingTasks = new ArrayList<Task>();
+		for(int i = 0; i < floatingTasks_.size(); i++){
+			floatingTasks.add(floatingTasks_.get(i));
+		}
+		
+		ArrayList<Task> deadlineTasks = new ArrayList<Task>();
+		for(int i = 0; i < deadlineTasks_.size(); i++){
+			deadlineTasks.add(deadlineTasks_.get(i));
+		}
+		
+		ArrayList<Task> allTasks = new ArrayList<Task>();
+		for(int i = 0; i < allTasks_.size(); i++){
+			allTasks.add(allTasks_.get(i));
+		}
+		
+		ArrayList<Task> searchResultTasks = new ArrayList<Task>();
+		for(int i = 0; i < searchResultTasks_.size(); i++){
+			searchResultTasks.add(searchResultTasks_.get(i));
+		}
+		
+		ArrayList<Task> finishedTasks = new ArrayList<Task>();
+		for(int i = 0; i < finishedTasks_.size(); i++){
+			finishedTasks.add(finishedTasks_.get(i));
+		}
+		
+		ArrayList<String> searchKey = new ArrayList<String>();
+		for(int i = 0; i < searchKey_.size(); i++){
+			searchKey.add(searchKey_.get(i));
+		}
+		
+		newState.setIsValid(isValid);
+		newState.setIsStartDateChanged(isStartDateChanged);
+		newState.setIsEndDateChanged(isEndDateChanged);
+		newState.setIsContentChanged(isContentChanged);
+		newState.setIsVenueChanged(isVenueChanged);
+		newState.setIsDetailChanged(isDetailChanged);
+		
+		newState.setContent(content);
+		newState.setDetail(detail);
+		newState.setUserInput(userInput);
+		newState.setVenue(venue);
+		newState.setDisplayMessage(displayMessage);
+		newState.setSearchKey(searchKey);	
+		
+		newState.setTaskType(taskType);
+		newState.setCommandType(commandType);
+		newState.setViewMode(viewMode);
+		newState.setPositionIndex(positionIndex);
+		newState.setStartDate(startDate);
+		newState.setEndDate(endDate);
+		
+		newState.setFloatingTasks(floatingTasks);
+		newState.setDeadlineTasks(deadlineTasks);
+		newState.setAllTasks(allTasks);
+		newState.setFinishedTasks(finishedTasks);
+		newState.setSearchResultTasks(searchResultTasks);
+		
+		return newState;
+	}
+
+
 
 }

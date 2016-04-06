@@ -44,9 +44,9 @@ public class FileIO {
 		public boolean loadState(){
 			assert isConnectedToDatafile;
 			LOGGER.log(Level.INFO, "Loading State from datafile...");
-			TreeSet<Task> normalTasks = state.getNormalTasks();
+			ArrayList<Task> normalTasks = state.getDeadlineTasks();
 			ArrayList<Task> floatingTasks = state.getFloatingTasks();
-			
+			ArrayList<Task> allTasks = state.getAllTasks();
 			Task task;
 			BufferedReader reader;
 			
@@ -56,6 +56,7 @@ public class FileIO {
 			
 				while (reader.ready()) {
 					task = readCurrentTask(reader);
+					allTasks.add(task);
 					TaskType taskType = task.getTaskType();
 					switch (taskType) {
 						case FLOATING :
@@ -101,7 +102,7 @@ public class FileIO {
 		 * @throws IOException
 		 */
 		protected boolean writeTaskToJson(BufferedWriter writer) throws IOException {
-			TreeSet<Task> normalTasks = this.state.getNormalTasks();
+			ArrayList<Task> normalTasks = this.state.getDeadlineTasks();
 			ArrayList<Task> floatingTasks = this.state.getFloatingTasks();
 			try {
 				for (Task task: normalTasks) {

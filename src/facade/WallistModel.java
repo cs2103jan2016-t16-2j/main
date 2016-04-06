@@ -37,7 +37,7 @@ public class WallistModel{
 		searchTasks = new SearchTasks(state);
 		storage = new Storage(state);
 		parser = new Parser(state); 
-		storage.loadState();
+		storage.executeLoadState();
 		states = new Stack<State>();
 		states.push(state.deepCopy());
 	}
@@ -122,7 +122,7 @@ public class WallistModel{
 	private boolean runningClear() {
 		boolean result;
 		boolean clearResult = clearTask.process();
-		boolean parserResult = storage.saveState();
+		boolean parserResult = storage.executeSaveState();
 		result = clearResult && parserResult;
 		return result;
 	}
@@ -130,7 +130,7 @@ public class WallistModel{
 	private boolean runningUpdate() {
 		boolean result;
 		boolean updateResult = updateTask.process();
-		boolean parserResult = storage.saveState();
+		boolean parserResult = storage.executeSaveState();
 		result = updateResult && parserResult;
 		return result;
 	}
@@ -138,7 +138,7 @@ public class WallistModel{
 	private boolean runningTick() {
 		boolean result;
 		boolean tickResult = tickTask.process();
-		boolean parserResult = storage.saveState();
+		boolean parserResult = storage.executeSaveState();
 		result = tickResult && parserResult;
 		return result;
 	}
@@ -146,7 +146,7 @@ public class WallistModel{
 	private boolean runningDelete() {
 		boolean result;
 		boolean deleteResult = deleteTask.process();
-		boolean parserResult = storage.saveState();
+		boolean parserResult = storage.executeSaveState();
 		result = deleteResult && parserResult;
 		return result;
 	}
@@ -154,7 +154,7 @@ public class WallistModel{
 	private boolean runningAdd() {
 		boolean result;
 		boolean addResult = addTask.process();
-		boolean parserResult = storage.saveState();
+		boolean parserResult = storage.executeSaveState();
 		result = addResult && parserResult;
 		return result;
 	}

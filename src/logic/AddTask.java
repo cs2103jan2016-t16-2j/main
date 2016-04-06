@@ -3,7 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import common.DisplayMessage;
+import common.Constant;
 import common.State;
 import common.Task;
 import common.TaskComparators;
@@ -26,13 +26,15 @@ public class AddTask implements Operation {
 			//If the viewMode is Floating, update both floating tasks and all tasks
 			if(viewMode == ViewMode.FLOATING){
 				addToFloatingList(newTask);
-				addToAllTasksList(newTask);				
+				addToAllTasksList(newTask);		
+				updateIndexUnderFloatingMode(newTask);
 			}
 
 			//If the viewMode is Deadline, update both deadline tasks and all tasks
 			if(viewMode == ViewMode.DEADLINE){
 				addToDeadlineTaskList(newTask);
-				addToAllTasksList(newTask);				
+				addToAllTasksList(newTask);		
+				updateIndexUnderDeadlineMode(newTask);
 			}
 
 			//If the viewMode is all, update all tasks
@@ -44,14 +46,30 @@ public class AddTask implements Operation {
 					addToFloatingList(newTask);	
 				} else {
 					addToDeadlineTaskList(newTask);				
-				}				
+				}
+				updateIndexUnderAllMode(newTask);
 			}
 
 			return true;
 		} catch (Exception e){
-			state.setDisplayMessage(DisplayMessage.MESSAGE_DUMMY);
+			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
 			return false;
 		}
+	}
+
+	private void updateIndexUnderAllMode(Task newTask) {
+		int indexOfNewTask = state.getAllTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
+	}
+
+	private void updateIndexUnderDeadlineMode(Task newTask) {
+		int indexOfNewTask = state.getDeadlineTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
+	}
+
+	private void updateIndexUnderFloatingMode(Task newTask) {
+		int indexOfNewTask = state.getFloatingTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
 	}
 
 	private void addToDeadlineTaskList(Task newTask) {

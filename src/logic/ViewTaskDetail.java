@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-import common.DisplayMessage;
+import common.Constant;
 import common.State;
 import common.Task;
 import common.ViewMode;
@@ -40,7 +40,7 @@ public class ViewTaskDetail implements Operation {
 				if(isDisplayDetailSuccessful) {
 					return true;
 				} else {
-					state.setDisplayMessage(DisplayMessage.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
 					return false;
 				}
 			}
@@ -56,7 +56,7 @@ public class ViewTaskDetail implements Operation {
 				if(isDisplayDetailSuccessful) {
 					return true;
 				} else {
-					state.setDisplayMessage(DisplayMessage.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
 					return false;
 				}
 			}
@@ -72,16 +72,16 @@ public class ViewTaskDetail implements Operation {
 				if(isDisplayDetailSuccessful) {
 					return true;
 				} else {
-					state.setDisplayMessage(DisplayMessage.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
 					return false;
 				}
 			}
 
 			//in wrong view mode
-			state.setDisplayMessage(DisplayMessage.MESSAGE_DELETE_IN_WRONG_MODE);
+			state.setDisplayMessage(Constant.MESSAGE_DELETE_IN_WRONG_MODE);
 			return false;
 		} catch (IndexOutOfBoundsException e){
-			state.setDisplayMessage(DisplayMessage.MESSAGE_INDEX_OUT_OF_BOUND);
+			state.setDisplayMessage(Constant.MESSAGE_INDEX_OUT_OF_BOUND);
 			return false;
 		}
 	}

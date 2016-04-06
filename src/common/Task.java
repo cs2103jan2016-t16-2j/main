@@ -1,4 +1,5 @@
 package common;
+import java.util.Calendar;
 import java.util.Date;
 import parser.TimeParser;
 
@@ -35,8 +36,8 @@ public class Task {
 		}
 		
 		this.taskType = state.getTaskType();
-		this.isImportant = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
-		this.isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		this.isImportant = Constant.VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_IMPORTANT;
+		this.isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_DETAIL_DISPLAYED;
 				
 		if(taskType == TaskType.FLOATING){
 			this.startDate = null;
@@ -149,5 +150,13 @@ public class Task {
 		
 		
 		return result;
+	}
+	
+	public boolean isOverdue(){
+		if (this.endDate == null){
+			return false;
+		}
+		Date today = Calendar.getInstance().getTime();
+		return today.after(this.endDate);
 	}
 }

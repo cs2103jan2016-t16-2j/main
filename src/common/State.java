@@ -279,14 +279,66 @@ public class State {
 		positionIndex_ = oldState.getPositionIndex();
 		startDate_ = oldState.getStartDate();
 		endDate_ = oldState.getEndDate();
-		floatingTasks_ = oldState.getFloatingTasks();
-		deadlineTasks_ = oldState.getDeadlineTasks();
-		allTasks_ = oldState.getAllTasks();
-		searchResultTasks_ = oldState.getSearchResultTasks();
-		finishedTasks_ = oldState.getFinishedTasks();
-		searchKey_ = oldState.getSearchKey();	
+
+		ArrayList<Task> floatingTasks = oldState.getFloatingTasks();
+		ArrayList<Task> deadlineTasks = oldState.getDeadlineTasks();
+		ArrayList<Task> allTasks = oldState.getAllTasks();
+		ArrayList<Task> searchResultTasks = oldState.getSearchResultTasks();
+		ArrayList<Task> finishedTasks = oldState.getFinishedTasks();
+		ArrayList<String> searchKey = oldState.getSearchKey();	
+		
+		floatingTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < floatingTasks.size(); i++){
+			floatingTasks_.add(floatingTasks.get(i));
+		}
+		
+		deadlineTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < deadlineTasks.size(); i++){
+			deadlineTasks_.add(deadlineTasks.get(i));
+		}
+		
+		allTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < allTasks.size(); i++){
+			allTasks_.add(allTasks.get(i));
+		}
+		
+		searchResultTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < searchResultTasks.size(); i++){
+			searchResultTasks_.add(searchResultTasks.get(i));
+		}
+		
+		finishedTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < finishedTasks.size(); i++){
+			finishedTasks_.add(finishedTasks.get(i));
+		}
+		
+		searchKey_ = new ArrayList<String>();
+		for(int i = 0; i < searchKey.size(); i++){
+			searchKey_.add(searchKey.get(i));
+		}
+
 		return true;
 	}
+	
+	public String getHeader(){
+		switch(viewMode_){
+		case FLOATING: 
+			return Constant.HEADER_FLOATING;
+		case DEADLINE:
+			return Constant.HEADER_DEADLINE;
+		case ALL:
+			return Constant.HEADER_ALL;
+		case SEARCH:
+			return Constant.HEADER_SEARCH;
+		case FINISHED:
+			return Constant.HEADER_FINISHED;
+		case CONFIG:
+			return Constant.HEADER_CONFIG;
+		default:
+			return Constant.HEADER_ALL;
+		}
+	}
+	
 	public State deepCopy(){
 		State newState = new State();
 		boolean isValid = isValid_; 

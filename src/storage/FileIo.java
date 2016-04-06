@@ -1,6 +1,5 @@
 package storage;
 import java.util.ArrayList;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Type;
@@ -15,7 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import common.*;
 
-public class FileIO {
+public class FileIo {
 	
 	// Attributes
 		protected File file;
@@ -24,9 +23,9 @@ public class FileIO {
 		private State state;
 		private boolean isConnectedToDatafile;
 		// Logger	
-		private final static Logger LOGGER = Logger.getLogger(FileIO.class.getName());
+		private final static Logger LOGGER = Logger.getLogger(FileIo.class.getName());
 		
-		public FileIO(State state) {
+		public FileIo(State state) {
 			this.state = state;
 		}
 		

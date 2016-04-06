@@ -12,6 +12,8 @@ public class Constant {
 		public static final String VALUE_DEFAULT_EMPTY = "";
 		public static final int VALUE_DEFAULT_POSITION_INDEX = 1;
 		public static final boolean VALUE_DEFAULT_BOOLEAN_TRUE = true;
+		public static final boolean VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_DETAIL_DISPLAYED = true;
+		public static final boolean VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_IMPORTANT = false;
 		public static final boolean VALUE_DEFAULT_BOOLEAN_FALSE = false;
 		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.ALL;
 		

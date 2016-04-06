@@ -18,7 +18,7 @@ import storage.Storage;
 
 public class WallistModel{
 
-	private Storage storage;
+	public Storage storage;
 	private Parser parser;
 	private State state;
 	private AddTask addTask;
@@ -29,7 +29,7 @@ public class WallistModel{
 	private SearchTasks searchTasks;
 	private ChangeViewMode changeViewMode;
 	private ViewTaskDetail viewTaskDetail;
-	public Stack<State> states;
+	public Stack<State> stateHistory, stateFuture ;
 	
 	public WallistModel(){
 		state = new State();
@@ -44,8 +44,9 @@ public class WallistModel{
 		storage = new Storage(state);
 		parser = new Parser(state); 
 		storage.executeLoadState();
-		states = new Stack<State>();
-		states.push(state.deepCopy());
+		stateHistory = new Stack<State>();
+		stateHistory.push(state.deepCopy());
+		stateFuture = new Stack<State>(); 
 	}
 	
 	public State getState(){
@@ -65,10 +66,6 @@ public class WallistModel{
 				boolean isRunningSuccessful = running();
 				CommandType cmdType = state.getCommandType();
 
-				if(isRunningSuccessful && !cmdType.equals(CommandType.UNDO)){
-					State current = state.deepCopy();
-					states.push(current);
-				}
 				return isRunningSuccessful;
 			}
 		} catch (EmptyStackException e){
@@ -98,6 +95,10 @@ public class WallistModel{
 			result = runningSearch();
 		} else if (cmdType.equals(CommandType.UNDO)){
 			result = runningUndo();
+			return result;
+		} else if (cmdType.equals(CommandType.REDO)){
+			result = runningRedo();
+			return result;
 		} else if (cmdType.equals(CommandType.DETAIL)){
 			result = runningViewDetail();
 		} else if (cmdType.equals(CommandType.CHANGEMODE)){
@@ -107,6 +108,8 @@ public class WallistModel{
 		} else {
 			result = false;
 		}
+		
+		stateHistory.push(state.deepCopy());
 
 		return result;
 	}
@@ -125,17 +128,39 @@ public class WallistModel{
 		return result;
 	}
 	
-	private boolean runningUndo() {
+	private boolean runningUndo() throws EmptyStackException{
 		boolean result;
 		try{
-			states.pop();
-			state = states.peek();
+			if(stateHistory.size() <= 1){
+				throw new EmptyStackException();
+			}
+			State currentCopy = stateHistory.peek();
+			stateFuture.push(currentCopy.deepCopy());
+			stateHistory.pop();
+			state.recoverFrom(stateHistory.peek());
 		} finally{
 			result = true;				
 		}
 		return result;
 	}
-
+	
+	private boolean runningRedo() throws EmptyStackException{
+		boolean result;
+		try{
+			if(stateFuture.isEmpty()){
+				throw new EmptyStackException();
+			}
+			State future = stateFuture.peek();
+			state.recoverFrom(future);
+			stateHistory.push(future.deepCopy());
+			stateFuture.pop();
+		} finally{
+			result = true;				
+		}
+		return result;
+	}
+	
+	
 	private boolean runningSearch() {
 		boolean result;
 		boolean searchResult = searchTasks.process();

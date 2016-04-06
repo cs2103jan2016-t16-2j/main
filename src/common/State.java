@@ -260,6 +260,66 @@ public class State {
 		}
 	}
 	
+	public boolean recoverFrom(State oldState){
+		isValid_ = oldState.getIsValid();
+		isStartDateChanged_ = oldState.getIsStartDateChanged();
+		isEndDateChanged_ = oldState.getIsEndDateChanged();
+		isContentChanged_ = oldState.getIsContentChanged();
+		isVenueChanged_ = oldState.getIsVenueChanged();
+		isDetailChanged_ = oldState.getIsDetailChanged();
+		content_ = oldState.getContent();
+		detail_ = oldState.getDetail();
+		userInput_ = oldState.getUserInput();
+		venue_ = oldState.getVenue();
+		displayMessage_ = oldState.getDisplayMessage();
+		taskType_ = oldState.getTaskType();
+		commandType_ = oldState.getCommandType();
+		viewMode_ = oldState.getViewMode();
+		newViewMode_ = oldState.getNewViewMode();	
+		positionIndex_ = oldState.getPositionIndex();
+		startDate_ = oldState.getStartDate();
+		endDate_ = oldState.getEndDate();
+
+		ArrayList<Task> floatingTasks = oldState.getFloatingTasks();
+		ArrayList<Task> deadlineTasks = oldState.getDeadlineTasks();
+		ArrayList<Task> allTasks = oldState.getAllTasks();
+		ArrayList<Task> searchResultTasks = oldState.getSearchResultTasks();
+		ArrayList<Task> finishedTasks = oldState.getFinishedTasks();
+		ArrayList<String> searchKey = oldState.getSearchKey();	
+		
+		floatingTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < floatingTasks.size(); i++){
+			floatingTasks_.add(floatingTasks.get(i));
+		}
+		
+		deadlineTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < deadlineTasks.size(); i++){
+			deadlineTasks_.add(deadlineTasks.get(i));
+		}
+		
+		allTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < allTasks.size(); i++){
+			allTasks_.add(allTasks.get(i));
+		}
+		
+		searchResultTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < searchResultTasks.size(); i++){
+			searchResultTasks_.add(searchResultTasks.get(i));
+		}
+		
+		finishedTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < finishedTasks.size(); i++){
+			finishedTasks_.add(finishedTasks.get(i));
+		}
+		
+		searchKey_ = new ArrayList<String>();
+		for(int i = 0; i < searchKey.size(); i++){
+			searchKey_.add(searchKey.get(i));
+		}
+
+		return true;
+	}
+	
 	public String getHeader(){
 		switch(viewMode_){
 		case FLOATING: 
@@ -299,12 +359,12 @@ public class State {
 		int positionIndex = positionIndex_;
 		
 		
-		if (isStartDateChanged) {
+		if (startDate_!=null) {
 			startDate = new Date(startDate_.getTime());
 		} else {
 			startDate = null;
 		}
-		if (isEndDateChanged) {
+		if (endDate_!=null) {
 			endDate = new Date(endDate_.getTime());
 		} else {
 			endDate = null;

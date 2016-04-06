@@ -1,5 +1,6 @@
-package facade;
+package testing;
 import common.*;
+import facade.WallistModel;
 import parser.TimeParser;
 
 import static org.junit.Assert.*;
@@ -12,14 +13,22 @@ public class WallistModelTest {
 
 	@Test
 	public void test() {
-//		WallistModel wm = new WallistModel();
-//		State state = wm.getState();
-//		String testString = "Boxin is testing";
-//		state.setContent(testString);
-//		//testing task constructor
-//		Task newTask = new Task(state);
-//		assertEquals(testString, newTask.getContent());
-//		
+		WallistModel wm = new WallistModel();
+		State state = wm.getState();
+		wm.storage.executeChangeDirectory("testing.txt");
+		wm.process("clear");
+		wm.process("add hahahahah");
+		System.out.println(wm.stateHistory.size());
+		System.out.println(wm.stateFuture.size());
+		wm.process("undo");	
+		System.out.println(wm.stateHistory.size());
+		System.out.println(wm.stateFuture.size());
+
+		wm.process("redo");
+		System.out.println(wm.stateHistory.size());
+		System.out.println(wm.stateFuture.size());
+		
+		
 //		//clear before testing
 //		wm.process("clear float");
 //		wm.process("clear deadline");

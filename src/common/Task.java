@@ -36,8 +36,8 @@ public class Task {
 		}
 		
 		this.taskType = state.getTaskType();
-		this.isImportant = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
-		this.isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
+		this.isImportant = Constant.VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_IMPORTANT;
+		this.isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_DETAIL_DISPLAYED;
 				
 		if(taskType == TaskType.FLOATING){
 			this.startDate = null;

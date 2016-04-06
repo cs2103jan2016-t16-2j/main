@@ -26,13 +26,15 @@ public class AddTask implements Operation {
 			//If the viewMode is Floating, update both floating tasks and all tasks
 			if(viewMode == ViewMode.FLOATING){
 				addToFloatingList(newTask);
-				addToAllTasksList(newTask);				
+				addToAllTasksList(newTask);		
+				updateIndexUnderFloatingMode(newTask);
 			}
 
 			//If the viewMode is Deadline, update both deadline tasks and all tasks
 			if(viewMode == ViewMode.DEADLINE){
 				addToDeadlineTaskList(newTask);
-				addToAllTasksList(newTask);				
+				addToAllTasksList(newTask);		
+				updateIndexUnderDeadlineMode(newTask);
 			}
 
 			//If the viewMode is all, update all tasks
@@ -44,7 +46,8 @@ public class AddTask implements Operation {
 					addToFloatingList(newTask);	
 				} else {
 					addToDeadlineTaskList(newTask);				
-				}				
+				}
+				updateIndexUnderAllMode(newTask);
 			}
 
 			return true;
@@ -52,6 +55,21 @@ public class AddTask implements Operation {
 			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
 			return false;
 		}
+	}
+
+	private void updateIndexUnderAllMode(Task newTask) {
+		int indexOfNewTask = state.getAllTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
+	}
+
+	private void updateIndexUnderDeadlineMode(Task newTask) {
+		int indexOfNewTask = state.getDeadlineTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
+	}
+
+	private void updateIndexUnderFloatingMode(Task newTask) {
+		int indexOfNewTask = state.getFloatingTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
 	}
 
 	private void addToDeadlineTaskList(Task newTask) {

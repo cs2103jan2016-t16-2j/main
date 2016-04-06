@@ -50,7 +50,6 @@ public class AddTask implements Operation {
 			return true;
 		} catch (Exception e){
 			state.setDisplayMessage(DisplayMessage.MESSAGE_DUMMY);
-			System.out.println(e);
 			return false;
 		}
 	}

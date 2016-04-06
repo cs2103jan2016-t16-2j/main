@@ -139,7 +139,9 @@ public class GUI extends Application{
 		for (Task task: taskList){
 			displayTaskLine(task);
 		}
-		taskPane.setVvalue(state.getPositionIndex() / taskList.size());
+        if (taskList.size() > 0){
+		    taskPane.setVvalue(state.getPositionIndex() / taskList.size());
+        }
 	}
 	
 	private void displayTaskLine(Task task) {

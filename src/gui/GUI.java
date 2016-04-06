@@ -76,6 +76,7 @@ public class GUI extends Application{
 	private int taskBoxHeight;
 	private int taskBoxWidth;
 	private int contentWidth;
+	private Color color;
 	
 	private final double SCROLL_PERCENTAGE = 0.1;
 		
@@ -147,8 +148,9 @@ public class GUI extends Application{
 		taskIndex ++;
 		String taskContent = task.getContent();
 		if (task.getIsDetailDisplayed()){
-			taskContent = taskContent + "\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());
+			taskContent += "\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());
 		}
+		
 		String taskDeadline = "";
 		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
@@ -166,19 +168,19 @@ public class GUI extends Application{
 			taskLine.setId("gridPane");
 		}
 		if (task.isOverdue()){
-			indexPane = indexStackPane(taskIndex, RED);
-			contentPane = contentPane(taskContent, contentWidth, RED);
-			deadlinePane = timePane(taskDeadline, RED);
-		} else {
-			indexPane = indexStackPane(taskIndex, WHITE);
-			contentPane = contentPane(taskContent, contentWidth, WHITE);
-			deadlinePane = timePane(taskDeadline, WHITE);
+			color = RED;
+		} else{
+			color = WHITE;
 		}
+		indexPane = indexStackPane(taskIndex);
+		contentPane = contentPane(taskContent, contentWidth);
+		deadlinePane = timePane(taskDeadline);
+		
 		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
 		tasks.getChildren().add(taskLine);
 	}
 	
-	private StackPane timePane(String taskDeadline, Color color) {
+	private StackPane timePane(String taskDeadline) {
 		StackPane deadlinePane = new StackPane();
 		deadlinePane.setAlignment(Pos.TOP_LEFT);
 		Rectangle deadlineRec = new Rectangle();
@@ -191,7 +193,7 @@ public class GUI extends Application{
 		return deadlinePane;
 	}
 
-	private StackPane contentPane(String taskContent, int width, Color color) {
+	private StackPane contentPane(String taskContent, int width) {
 		StackPane contentPane = new StackPane();		            			
 		Rectangle contentRec = new Rectangle();
 		contentRec.setWidth(width);
@@ -204,9 +206,9 @@ public class GUI extends Application{
 		return contentPane;
 	}
 
-	private StackPane indexStackPane(int index, Color color) {
+	private StackPane indexStackPane(int index) {
 		StackPane indexPane = new StackPane();
-		indexPane.setAlignment(Pos.CENTER_RIGHT);
+		indexPane.setAlignment(Pos.TOP_RIGHT);
 		Rectangle indexRec = new Rectangle();
 		indexRec.setWidth(INDEX_WIDTH);
 		indexRec.setOpacity(0);

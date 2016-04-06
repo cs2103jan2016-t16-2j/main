@@ -10,17 +10,6 @@
     -fx-background-position: center center;
 }
 
-#timeDisplay{
-    -fx-font-family: "Segoe UI Light";
-    -fx-font-size: 48pt;
-    -fx-text-fill: #ffffcb;
-}
-
-#dateDisplay{
-    -fx-font-size: 12pt;
-    -fx-text-fill: #ffffcb;
-}
-
 #gridPane{
     -fx-background-color: rgba(255, 255, 255, 0.1);
 }
@@ -31,6 +20,11 @@
     -fx-text-fill: #ffffff;
 }
 
+#emphasis{
+
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI bold";
+}
 
 .label{
     -fx-font-size: 16pt;

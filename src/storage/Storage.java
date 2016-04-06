@@ -3,12 +3,12 @@ import common.*;
 import java.io.File;
 public class Storage {
 
-	private FileIO fileIO;
+	private FileIo fileIO;
 	private FileManagement fileManagement;
 	private boolean isConnectedToFile;
 	
 	public Storage(State state) {
-		this.fileIO = new FileIO(state);
+		this.fileIO = new FileIo(state);
 		this.fileManagement = new FileManagement();
 		this.isConnectedToFile = connectFileToIO();
 	}

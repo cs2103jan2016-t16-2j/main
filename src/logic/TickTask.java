@@ -20,9 +20,9 @@ public class TickTask implements Operation {
 			int positionIndex = state.getPositionIndex();
 
 			// Convert 1 base index to 0 base index
-			positionIndex = fromOneBaseToZeroBase(positionIndex);
+			int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
 		
-			if(positionIndex < 0){
+			if(localPositionIndex < 0){
 				throw new IndexOutOfBoundsException();
 			}
 	
@@ -32,10 +32,10 @@ public class TickTask implements Operation {
 			//If the viewMode is Floating, find object in floating tasks list
 			if(viewMode == ViewMode.FLOATING){
 				// find the task in floating tasks list
-				Task toBeTicked = findTaskFromFloatingTasks(positionIndex);
+				Task toBeTicked = findTaskFromFloatingTasks(localPositionIndex);
 				
 				//tick the task 
-				boolean isTickSuccessful = tickTask(positionIndex, toBeTicked);
+				boolean isTickSuccessful = tickTask(localPositionIndex, toBeTicked);
 				
 				if(isTickSuccessful) {
 					return true;
@@ -48,10 +48,10 @@ public class TickTask implements Operation {
 			//If the viewMode is Deadline, update object deadline tasks list
 			if(viewMode == ViewMode.DEADLINE){
 				// find the task in deadline tasks list
-				Task toBeTicked = findTaskFromDeadlineTasks(positionIndex);
+				Task toBeTicked = findTaskFromDeadlineTasks(localPositionIndex);
 				
 				//tick the task 
-				boolean isTickSuccessful = tickTask(positionIndex, toBeTicked);
+				boolean isTickSuccessful = tickTask(localPositionIndex, toBeTicked);
 				
 				if(isTickSuccessful) {
 					return true;
@@ -64,10 +64,10 @@ public class TickTask implements Operation {
 			//If the viewMode is all, update object in all tasks list
 			if(viewMode == ViewMode.ALL){
 				// find the task in all tasks list
-				Task toBeTicked = findTaskFromAllTasks(positionIndex);
+				Task toBeTicked = findTaskFromAllTasks(localPositionIndex);
 				
 				//tick the task 
-				boolean isTickSuccessful = tickTask(positionIndex, toBeTicked);
+				boolean isTickSuccessful = tickTask(localPositionIndex, toBeTicked);
 				
 				if(isTickSuccessful) {
 					return true;
@@ -82,55 +82,54 @@ public class TickTask implements Operation {
 			return false;
 		} catch (IndexOutOfBoundsException e){
 			state.setDisplayMessage(DisplayMessage.MESSAGE_INDEX_OUT_OF_BOUND);
-
 			return false;
 		}
 	}
 
-	private Task findTaskFromAllTasks(int positionIndex) {
+	private Task findTaskFromAllTasks(int localPositionIndex) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getAllTasks();
 
-		if(positionIndex >= taskList.size()){
+		if(localPositionIndex >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeTicked = taskList.get(positionIndex);
+		Task toBeTicked = taskList.get(localPositionIndex);
 		return toBeTicked;
 	}
 
-	private Task findTaskFromDeadlineTasks(int positionIndex) {
+	private Task findTaskFromDeadlineTasks(int localPositionIndex) throws IndexOutOfBoundsException {
 		ArrayList<Task> taskList = state.getDeadlineTasks();
 
-		if(positionIndex >= taskList.size()){
+		if(localPositionIndex >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeTicked = taskList.get(positionIndex);
+		Task toBeTicked = taskList.get(localPositionIndex);
 		return toBeTicked;
 	}
 
-	private boolean tickTask(int positionIndex, Task toBeTicked) {
+	private boolean tickTask(int localPositionIndex, Task toBeTicked) {
 		ArrayList<Task> finishedTask = state.getFinishedTasks();
 		finishedTask.add(toBeTicked);
-		DeleteTask deleteTask = new DeleteTask(state, positionIndex + 1);
+		DeleteTask deleteTask = new DeleteTask(state, localPositionIndex + 1);
 		boolean isDeletedSuccessful = deleteTask.process();
 		return isDeletedSuccessful;
 	}
 
-	private Task findTaskFromFloatingTasks(int positionIndex) {
+	private Task findTaskFromFloatingTasks(int localPositionIndex) throws IndexOutOfBoundsException {
 		ArrayList<Task> taskList = state.getFloatingTasks();
 
-		if(positionIndex >= taskList.size()){
+		if(localPositionIndex >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeTicked = taskList.get(positionIndex);
+		Task toBeTicked = taskList.get(localPositionIndex);
 		return toBeTicked;
 	}
 
-	private int fromOneBaseToZeroBase(int positionIndex) {
-		positionIndex--;
-		return positionIndex;
+	private int fromOneBaseToZeroBase(int num) {
+		int newNew = num - 1;
+		return newNew;
 	}
 }
 

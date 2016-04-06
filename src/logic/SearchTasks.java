@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 import common.State;
 import common.Task;
+import common.ViewMode;
 
 public class SearchTasks implements Operation {
 
@@ -23,7 +24,7 @@ public class SearchTasks implements Operation {
 		for (String key: keysToSearch) {
 			searchWord(key, searchedTasks);
 		}
-		
+		state.setViewMode(ViewMode.SEARCH);
 		return true;
 	}
 

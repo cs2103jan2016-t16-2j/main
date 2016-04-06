@@ -26,27 +26,26 @@ public class DeleteTask implements Operation {
 	public boolean process() {
 		try {
 			// change position index from 1 base(user input) to zero base
-			positionIndex = fromOneBaseToZeroBase(positionIndex);
+			int positionIndexLocal = fromOneBaseToZeroBase(positionIndex);
 			
-			if(positionIndex <0){
+			if(positionIndexLocal <0){
 				throw new IndexOutOfBoundsException();
 			}
 			
 			ViewMode viewMode = state.getViewMode();
-			ArrayList<Task> allTasks = state.getAllTasks();
 			
 			if(viewMode == ViewMode.FLOATING){
-				boolean isDeleteSuccessful = deletedUnderFloatingMode(positionIndex, allTasks);
+				boolean isDeleteSuccessful = deletedUnderFloatingMode(positionIndexLocal);
 				return isDeleteSuccessful;
 			}
 			
 			if(viewMode == ViewMode.DEADLINE){
-				boolean isDeleteSuccessful = deleteUnderDeadlineMode(positionIndex, allTasks);
+				boolean isDeleteSuccessful = deleteUnderDeadlineMode(positionIndexLocal);
 				return isDeleteSuccessful;
 			}
 			
 			if(viewMode == ViewMode.ALL){
-				boolean isDeleteSuccessful = deleteUnderAllMode(positionIndex, allTasks);
+				boolean isDeleteSuccessful = deleteUnderAllMode(positionIndexLocal);
 				return isDeleteSuccessful;
 			}
 			
@@ -61,12 +60,14 @@ public class DeleteTask implements Operation {
 		}
 	}
 	
-	private boolean deleteUnderAllMode(int positionIndex, ArrayList<Task> allTasks) {
-		if(positionIndex >= allTasks.size()){
+	private boolean deleteUnderAllMode(int positionIndexLocal) throws IndexOutOfBoundsException{
+		ArrayList<Task> allTasks = state.getAllTasks();
+
+		if(positionIndexLocal >= allTasks.size()){
 			throw new IndexOutOfBoundsException();
 		}
 
-		Task toBeDeleted = allTasks.get(positionIndex);
+		Task toBeDeleted = allTasks.get(positionIndexLocal);
 		allTasks.remove(toBeDeleted);
 		
 		TaskType taskType = toBeDeleted.getTaskType();
@@ -84,34 +85,36 @@ public class DeleteTask implements Operation {
 		return true;
 	}
 	
-	private boolean deleteUnderDeadlineMode(int positionIndex, ArrayList<Task> allTasks) {
+	private boolean deleteUnderDeadlineMode(int positionIndexLocal) throws IndexOutOfBoundsException{
+		ArrayList<Task> allTasks = state.getAllTasks();
 		ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
 		
-		if(positionIndex >= deadlineTasks.size()){
+		if(positionIndexLocal >= deadlineTasks.size()){
 			throw new IndexOutOfBoundsException();
 		}
 
-		Task toBeDeleted = deadlineTasks.get(positionIndex);
+		Task toBeDeleted = deadlineTasks.get(positionIndexLocal);
 		deadlineTasks.remove(toBeDeleted);
 		allTasks.remove(toBeDeleted);
 		return true;
 	}
 	
-	private boolean deletedUnderFloatingMode(int positionIndex, ArrayList<Task> allTasks) {
+	private boolean deletedUnderFloatingMode(int positionIndexLocal) throws IndexOutOfBoundsException {
+		ArrayList<Task> allTasks = state.getAllTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		
-		if(positionIndex >= floatingTasks.size()){
+		if(positionIndexLocal >= floatingTasks.size()){
 			throw new IndexOutOfBoundsException();
 		}
 
-		Task toBeDeleted = floatingTasks.get(positionIndex);
+		Task toBeDeleted = floatingTasks.get(positionIndexLocal);
 		floatingTasks.remove(toBeDeleted);
 		allTasks.remove(toBeDeleted);
 		return true;
 	}
 	
-	private int fromOneBaseToZeroBase(int positionIndex) {
-		positionIndex--;
-		return positionIndex;
+	private int fromOneBaseToZeroBase(int num) {
+		int newNum = num - 1;
+		return newNum;
 	}
 }

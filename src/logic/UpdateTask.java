@@ -19,9 +19,9 @@ public class UpdateTask implements Operation {
 			int positionIndex = state.getPositionIndex();
 
 			// Convert 1 base index to 0 base index
-			positionIndex = fromOneBaseToZeroBase(positionIndex);
+			int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
 
-			if(positionIndex < 0){
+			if(localPositionIndex < 0){
 				throw new IndexOutOfBoundsException();
 			}
 
@@ -31,7 +31,7 @@ public class UpdateTask implements Operation {
 			//If the viewMode is Floating, find object in floating tasks list
 			if(viewMode == ViewMode.FLOATING){
 				// find the task in floating tasks list
-				Task toBeUpdated = findTaskFromFloatingTasks(positionIndex);
+				Task toBeUpdated = findTaskFromFloatingTasks(localPositionIndex);
 
 				//tick the task 
 				boolean isTickSuccessful = updateTask(toBeUpdated);
@@ -47,7 +47,7 @@ public class UpdateTask implements Operation {
 			//If the viewMode is Deadline, update object deadline tasks list
 			if(viewMode == ViewMode.DEADLINE){
 				// find the task in deadline tasks list
-				Task toBeUpdated = findTaskFromDeadlineTasks(positionIndex);
+				Task toBeUpdated = findTaskFromDeadlineTasks(localPositionIndex);
 
 				//tick the task 
 				boolean isTickSuccessful = updateTask(toBeUpdated);
@@ -63,7 +63,7 @@ public class UpdateTask implements Operation {
 			//If the viewMode is all, update object in all tasks list
 			if(viewMode == ViewMode.ALL){
 				// find the task in all tasks list
-				Task toBeUpdated = findTaskFromAllTasks(positionIndex);
+				Task toBeUpdated = findTaskFromAllTasks(localPositionIndex);
 
 				//tick the task 
 				boolean isTickSuccessful = updateTask(toBeUpdated);
@@ -109,42 +109,42 @@ public class UpdateTask implements Operation {
 		return true;
 	}
 	
-	private Task findTaskFromAllTasks(int positionIndex) {
+	private Task findTaskFromAllTasks(int localPositionIndex) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getAllTasks();
 
-		if(positionIndex >= taskList.size()){
+		if(localPositionIndex >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(positionIndex);
+		Task toBeUpdated = taskList.get(localPositionIndex);
 		return toBeUpdated;
 	}
 
-	private Task findTaskFromDeadlineTasks(int positionIndex) {
+	private Task findTaskFromDeadlineTasks(int localPositionIndex) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getDeadlineTasks();
 
-		if(positionIndex >= taskList.size()){
+		if(localPositionIndex >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(positionIndex);
+		Task toBeUpdated = taskList.get(localPositionIndex);
 		return toBeUpdated;
 	}
 	
-	private Task findTaskFromFloatingTasks(int positionIndex) {
+	private Task findTaskFromFloatingTasks(int localPositionIndex) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getFloatingTasks();
 
-		if(positionIndex >= taskList.size()){
+		if(localPositionIndex >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(positionIndex);
+		Task toBeUpdated = taskList.get(localPositionIndex);
 		return toBeUpdated;
 	}
 	
-	private int fromOneBaseToZeroBase(int positionIndex) {
-		positionIndex--;
-		return positionIndex;
+	private int fromOneBaseToZeroBase(int num) {
+		int newNum = num - 1;
+		return newNum;
 	}
 
 }

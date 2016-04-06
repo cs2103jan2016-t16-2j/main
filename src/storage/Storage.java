@@ -5,7 +5,6 @@ public class Storage {
 
 	private FileIO fileIO;
 	private FileManagement fileManagement;
-	private File file;
 	private boolean isConnectedToFile;
 	
 	public Storage(State state) {

@@ -6,11 +6,13 @@ import java.util.Stack;
 
 import common.*;
 import logic.AddTask;
+import logic.ChangeViewMode;
 import logic.ClearTask;
 import logic.DeleteTask;
 import logic.SearchTasks;
 import logic.TickTask;
 import logic.UpdateTask;
+import logic.ViewTaskDetail;
 import parser.Parser;
 import storage.Storage;
 
@@ -25,6 +27,8 @@ public class WallistModel{
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
 	private SearchTasks searchTasks;
+	private ChangeViewMode changeViewMode;
+	private ViewTaskDetail viewTaskDetail;
 	public Stack<State> states;
 	
 	public WallistModel(){
@@ -35,6 +39,8 @@ public class WallistModel{
 		updateTask = new UpdateTask(state);
 		clearTask = new ClearTask(state);
 		searchTasks = new SearchTasks(state);
+		changeViewMode = new ChangeViewMode(state);
+		viewTaskDetail = new ViewTaskDetail(state);
 		storage = new Storage(state);
 		parser = new Parser(state); 
 		storage.executeLoadState();
@@ -92,6 +98,10 @@ public class WallistModel{
 			result = runningSearch();
 		} else if (cmdType.equals(CommandType.UNDO)){
 			result = runningUndo();
+		} else if (cmdType.equals(CommandType.DETAIL)){
+			result = runningViewDetail();
+		} else if (cmdType.equals(CommandType.CHANGEMODE)){
+			result = runningChangeMode();
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
 		} else {
@@ -101,6 +111,20 @@ public class WallistModel{
 		return result;
 	}
 
+	private boolean runningChangeMode() {
+		boolean result;
+		boolean isChangeModeSuccessful = changeViewMode.process();
+		result = isChangeModeSuccessful;
+		return result;
+	}
+	
+	private boolean runningViewDetail() {
+		boolean result;
+		boolean isViewDetailSuccessful = viewTaskDetail.process();
+		result = isViewDetailSuccessful;
+		return result;
+	}
+	
 	private boolean runningUndo() {
 		boolean result;
 		try{

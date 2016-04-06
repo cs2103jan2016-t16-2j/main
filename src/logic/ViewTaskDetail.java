@@ -35,9 +35,9 @@ public class ViewTaskDetail implements Operation {
 				Task toBeUpdated = findTaskFromFloatingTasks(positionIndex);
 
 				//tick the task 
-				boolean isTickSuccessful = viewTaskDetail(toBeUpdated);
+				boolean isDisplayDetailSuccessful = viewTaskDetail(toBeUpdated);
 
-				if(isTickSuccessful) {
+				if(isDisplayDetailSuccessful) {
 					return true;
 				} else {
 					state.setDisplayMessage(DisplayMessage.MESSAGE_SYSTEM_FAILED_TO_TICK);
@@ -51,9 +51,9 @@ public class ViewTaskDetail implements Operation {
 				Task toBeUpdated = findTaskFromDeadlineTasks(positionIndex);
 
 				//tick the task 
-				boolean isTickSuccessful = viewTaskDetail(toBeUpdated);
+				boolean isDisplayDetailSuccessful = viewTaskDetail(toBeUpdated);
 
-				if(isTickSuccessful) {
+				if(isDisplayDetailSuccessful) {
 					return true;
 				} else {
 					state.setDisplayMessage(DisplayMessage.MESSAGE_SYSTEM_FAILED_TO_TICK);
@@ -64,12 +64,12 @@ public class ViewTaskDetail implements Operation {
 			//If the viewMode is all, update object in all tasks list
 			if(viewMode == ViewMode.ALL){
 				// find the task in all tasks list
-				Task toBeUpdated = findTaskFromAllTasks(positionIndex);
+				Task toBeDisplayed = findTaskFromAllTasks(positionIndex);
 
 				//tick the task 
-				boolean isTickSuccessful = viewTaskDetail(toBeUpdated);
+				boolean isDisplayDetailSuccessful = viewTaskDetail(toBeDisplayed);
 
-				if(isTickSuccessful) {
+				if(isDisplayDetailSuccessful) {
 					return true;
 				} else {
 					state.setDisplayMessage(DisplayMessage.MESSAGE_SYSTEM_FAILED_TO_TICK);

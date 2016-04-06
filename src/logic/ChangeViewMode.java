@@ -17,7 +17,7 @@ public class ChangeViewMode implements Operation {
 		ViewMode newViewMode = state.getNewViewMode();
 		state.setViewMode(newViewMode);
 		
-		//Collape alArrayList<E> when switching view mode
+		//Collape alArrayList<Task> when switching view mode
 		ArrayList<Task> allTasks = state.getAllTasks();
 		for(int i = 0; i < allTasks.size(); i++){
 			Task another = allTasks.get(i);

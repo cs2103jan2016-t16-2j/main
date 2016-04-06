@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 import common.State;
 import common.Task;
+import common.ViewMode;
 
 public class SearchTasks implements Operation {
 
@@ -14,20 +15,20 @@ public class SearchTasks implements Operation {
 
 	@Override
 	public boolean process() {
+
 		ArrayList<String> keysToSearch = state.getSearchKey();
 		
 		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
 		searchedTasks.clear();
 		
 		for (String key: keysToSearch) {
-			searchTasks(key, searchedTasks);
+			searchWord(key, searchedTasks);
 		}
-		
-		
+		state.setViewMode(ViewMode.SEARCH);
 		return true;
 	}
 
-	private void searchTasks(String keyToSearch, ArrayList<Task> searchedTasks) {
+	private void searchWord(String keyToSearch, ArrayList<Task> searchedTasks) {
 		ArrayList<Task> allTasks = state.getAllTasks();
 		for(int i = 0; i < allTasks.size(); i++){
 			Task another = allTasks.get(i);

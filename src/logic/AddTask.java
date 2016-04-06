@@ -38,7 +38,7 @@ public class AddTask implements Operation {
 			//If the viewMode is all, update all tasks
 			//Depending on the taskType, the newTasks will also be added to corresponding task list
 			if(viewMode == ViewMode.ALL){
-				addToDeadlineTaskList(newTask);
+				addToAllTasksList(newTask);
 				TaskType type = newTask.getTaskType();
 				if(type.equals(TaskType.FLOATING)){
 					addToFloatingList(newTask);	

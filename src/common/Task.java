@@ -9,7 +9,7 @@ public class Task {
 	private TaskType taskType;
 
 	private final String TO_STRING = "Task [ content: %s | venue: %s | detail: %s | type: %s"
-										+ "isImportant: %b | startDate: %s | endDate: %s | creationDate: %s]";
+										+ "isImportant: %b ";//| startDate: %s | endDate: %s | creationDate: %s]";
 	
 	
 	public Task(State state) {
@@ -142,6 +142,7 @@ public class Task {
 	public String toString(){
 		String result = String.format(TO_STRING, content,venue,detail,taskType,isImportant,
 									 startDate.toString(), endDate.toString(), creationDate.toString());
+
 		return result;
 	}
 }

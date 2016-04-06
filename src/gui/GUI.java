@@ -56,8 +56,9 @@ public class GUI extends Application{
 	private int taskIndex;
 	private double vValue;
 
-	private final Color WHITE = Color.valueOf("ffffcb");
-	private final Color RED = Color.valueOf("ff5555");
+	private final Color COLOR_ZOOM = Color.PALEGOLDENROD;
+	private final Color COLOR_NORMAL = Color.WHITE;
+	private final Color COLOR_OVERDUE = Color.RED;
 	
 	private final String TITLE = "%1$s's Wallist";
 	private final String VENUE = "Venue: %1$s";
@@ -66,7 +67,7 @@ public class GUI extends Application{
 	private final int COMPONENT_GAP_H = 20;
 	private final int COMPONENT_GAP_V = 20;
 	private final int INDEX_WIDTH = 30;
-	private final int TIME_WIDTH = 350;
+	private final int TIME_WIDTH = 400;
 	private final int INPUT_BOX_HEIGHT = 30;
 	private final int HEADER_HEIGHT = 30;
 	
@@ -152,10 +153,8 @@ public class GUI extends Application{
 		}
 		
 		String taskDeadline = "";
-		StackPane indexPane, contentPane, deadlinePane;
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
 			taskDeadline = sdf.format(task.getEndDate());
-
 			if (task.getStartDate()!= null){
 				taskDeadline = sdf.format(task.getStartDate()) + " - " + taskDeadline;				
 			}
@@ -168,15 +167,31 @@ public class GUI extends Application{
 			taskLine.setId("gridPane");
 		}
 		if (task.isOverdue()){
-			color = RED;
+			color = COLOR_OVERDUE;
+		} else if (task.getIsDetailDisplayed()){
+			color = COLOR_ZOOM;
 		} else{
-			color = WHITE;
+			color = COLOR_NORMAL;
 		}
-		indexPane = indexStackPane(taskIndex);
-		contentPane = contentPane(taskContent, contentWidth);
-		deadlinePane = timePane(taskDeadline);
+		Column indexCol = new Column(Integer.toString(taskIndex), 0);
+		indexCol.setWidth(INDEX_WIDTH);
+		indexCol.setColor(color);
+		indexCol.setAlignRight();
+		Column contentCol = new Column(taskContent, 1);
+		contentCol.setWidth(contentWidth);
+		contentCol.setWrap(contentWidth);
+		contentCol.setColor(color);
+		Column timeCol = new Column(taskDeadline, 2);
+		timeCol.setWidth(TIME_WIDTH);
+		timeCol.setColor(color);
+		timeCol.setAlignLeft();
+		if (task.getIsDetailDisplayed()){
+			indexCol.setZoom();
+			contentCol.setZoom();
+			timeCol.setZoom();
+		}
 		
-		taskLine.getChildren().addAll(indexPane, contentPane, deadlinePane);
+		taskLine.getChildren().addAll(indexCol.getColumn(), contentCol.getColumn(), timeCol.getColumn());
 		tasks.getChildren().add(taskLine);
 	}
 	

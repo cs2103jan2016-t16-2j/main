@@ -99,9 +99,9 @@ public class WallistModel{
 		} else if (cmdType.equals(CommandType.UNDO)){
 			result = runningUndo();
 		} else if (cmdType.equals(CommandType.DETAIL)){
-			result = runningUndo();
+			result = runningViewDetail();
 		} else if (cmdType.equals(CommandType.CHANGEMODE)){
-			result = runningUndo();
+			result = runningChangeMode();
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
 		} else {
@@ -111,6 +111,20 @@ public class WallistModel{
 		return result;
 	}
 
+	private boolean runningChangeMode() {
+		boolean result;
+		boolean isChangeModeSuccessful = changeViewMode.process();
+		result = isChangeModeSuccessful;
+		return result;
+	}
+	
+	private boolean runningViewDetail() {
+		boolean result;
+		boolean isViewDetailSuccessful = viewTaskDetail.process();
+		result = isViewDetailSuccessful;
+		return result;
+	}
+	
 	private boolean runningUndo() {
 		boolean result;
 		try{

@@ -14,21 +14,17 @@ public class SearchTasks implements Operation {
 
 	@Override
 	public boolean process() {
-		ArrayList<String> keyToSearch = state.getSearchKey();
+
+		ArrayList<String> keysToSearch = state.getSearchKey();
 		
 		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
 		searchedTasks.clear();
-	
-		searchTasks(keyToSearch, searchedTasks);
 		
-		return true;
-	}
-
-	private void searchTasks(ArrayList<String> keyToSearch, ArrayList<Task> searchedTasks) {
-		for(int i = 0; i < keyToSearch.size(); i++){
-			String key = keyToSearch.get(i);
+		for (String key: keysToSearch) {
 			searchWord(key, searchedTasks);
 		}
+		
+		return true;
 	}
 
 	private void searchWord(String keyToSearch, ArrayList<Task> searchedTasks) {

@@ -17,12 +17,13 @@ import common.*;
 public class FileIo {
 	
 	// Attributes
-		protected File file;
-		protected Gson gson = new Gson();
-		private Type typeOfTask = new TypeToken<Task>(){}.getType();
-		private State state;
-		private boolean isConnectedToDatafile;
-		// Logger	
+	protected File file;
+	protected Gson gson = new Gson();
+	private Type typeOfTask = new TypeToken<Task>(){}.getType();
+	private State state;
+	private boolean isConnectedToDatafile;
+	
+	// Logger	
 		private final static Logger LOGGER = Logger.getLogger(FileIo.class.getName());
 		
 		public FileIo(State state) {

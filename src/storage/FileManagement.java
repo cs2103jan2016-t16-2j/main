@@ -2,6 +2,9 @@ package storage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import common.Task;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,14 +12,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 public class FileManagement {
 	
 	
 	// Attributes
-	protected File file;
-	protected Gson gson = new Gson();
+	protected File dataFile;
 	protected File configFile;
-	
+
 	// Config Attributes
 	private File directory;
 
@@ -38,10 +41,12 @@ public class FileManagement {
 		LOGGER.log(Level.INFO, "Configfile does not exist, creating new configFile...");
 		try {
 			configFile.createNewFile();
+			
 			// Default setting
-			String defaultDirectory = System.getProperty("user.home") + "/WallistDatabase";
+			String defaultDataDirectory = System.getProperty("user.home") + "/WallistDatabase";
+			this.directory = new File(defaultDataDirectory);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
-			writer.write(defaultDirectory);
+			writer.write(defaultDataDirectory);
 			writer.close();
 			return true;
 		} catch (IOException e) {
@@ -51,35 +56,38 @@ public class FileManagement {
 	}
 		
 	private boolean loadConfigFile() {
+		
 		LOGGER.log(Level.INFO, "Retrieving Congfiguration file...");
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
-			String directoryString = reader.readLine();
-			this.directory = new File(directoryString);
+			String currentConfigLine = reader.readLine();
+			this.directory = new File(currentConfigLine);
 			reader.close();
 		} catch (IOException e){
-			LOGGER.log(Level.WARNING, "Configfile is not created successfully...", e);
+			LOGGER.log(Level.WARNING, "Configfile is not loaded successfully...", e);
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
+	
+
 	/**
 	 * 
 	 * @return
 	 */
 	protected boolean connectConfigFile() {
 		this.configFile = new File("config.txt"); // connects the file
-		if (!configFile.exists()) {
+		if (!configFile.exists()) { // if not exist create a default one
 			createConfigFile();
-		} else {
-			loadConfigFile();
 		}
+		loadConfigFile();
 		return true;
 	}
 	
+
 	public File getFile() {
-		return this.file;
+		return this.dataFile;
 	}
 	
 	/**
@@ -90,12 +98,11 @@ public class FileManagement {
  	 */
  	private boolean connectDataFile() {
  		LOGGER.log(Level.INFO, "Retrieving Datafile...");
- 		this.file = new File(this.directory, "data.txt");
- 		System.out.println(this.directory);
- 		if (!file.exists()) {
+ 		this.dataFile = new File(this.directory, "data.txt");
+ 		if (!dataFile.exists()) {
  			try {
  				LOGGER.log(Level.INFO, "Datafile does not exist, creating new datafile...");
-				return file.createNewFile();
+				return dataFile.createNewFile();
 			} catch (IOException e) {
 				LOGGER.log(Level.WARNING, "Datafile is not created successfully...", e);
 				return false;
@@ -105,7 +112,18 @@ public class FileManagement {
  	}
 	
 	public boolean changeDirectory(String directoryString) {
-		
+		// read the File, stores the setting
+		// Todo
+		// input the new directory
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
+			writer.write(directoryString);
+			// other setting goes here
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 

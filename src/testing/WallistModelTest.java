@@ -1,4 +1,4 @@
-package facade;
+package testing;
 import common.*;
 import parser.TimeParser;
 

@@ -66,8 +66,7 @@ public class WallistModel{
 				CommandType cmdType = state.getCommandType();
 
 				if(isRunningSuccessful && !cmdType.equals(CommandType.UNDO)){
-					State current = state.deepCopy();
-					states.push(current);
+					states.push(state.deepCopy());
 				}
 				return isRunningSuccessful;
 			}
@@ -125,11 +124,14 @@ public class WallistModel{
 		return result;
 	}
 	
-	private boolean runningUndo() {
+	private boolean runningUndo() throws EmptyStackException{
 		boolean result;
 		try{
+			if(states.size() <= 1){
+				throw new EmptyStackException();
+			}
 			states.pop();
-			state = states.peek();
+			state.recoverFrom(states.peek());
 		} finally{
 			result = true;				
 		}

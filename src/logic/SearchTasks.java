@@ -20,21 +20,34 @@ public class SearchTasks implements Operation {
 		
 		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
 		searchedTasks.clear();
-		
-		for (String key: keysToSearch) {
+
+		for (int i = 0 ; i < keysToSearch.size(); i++) {
+			String key = keysToSearch.get(i);
 			searchWord(key, searchedTasks);
 		}
+		
 		state.setViewMode(ViewMode.SEARCH);
+		collapseAllTasks();
+
 		return true;
 	}
 
 	private void searchWord(String keyToSearch, ArrayList<Task> searchedTasks) {
 		ArrayList<Task> allTasks = state.getAllTasks();
+
 		for(int i = 0; i < allTasks.size(); i++){
 			Task another = allTasks.get(i);
-			if(another.concatString().contains(keyToSearch)){
+			if(another.concatString().contains(keyToSearch) && !searchedTasks.contains(another)){
 				searchedTasks.add(another);
 			}
+		}
+	}
+	
+	private void collapseAllTasks() {
+		ArrayList<Task> allTasks = state.getAllTasks();
+		for(int i = 0; i < allTasks.size(); i++){
+			Task another = allTasks.get(i);
+			another.setIsDetailDisplayed(false);
 		}
 	}
 

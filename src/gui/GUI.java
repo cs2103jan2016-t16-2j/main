@@ -121,8 +121,8 @@ public class GUI extends Application{
 		Label displayText = new Label(state.getDisplayMessage());
 		displayText.setId("message");
 		layout.getChildren().add(displayText);
-		FadeTransition fade = fadeAnimation(displayText);
-		fade.play();
+		FadeAnimation fade = new FadeAnimation(displayText);
+		fade.playAnimation();
 		inputBox.clear();
 	}
 
@@ -209,15 +209,10 @@ public class GUI extends Application{
 		
 		taskLine.getChildren().addAll(indexCol.getColumn(), contentCol.getColumn(), timeCol.getColumn());
 		tasks.getChildren().add(taskLine);
-	}
-	
-	private FadeTransition fadeAnimation(Label comm) {
-		FadeTransition ft = new FadeTransition(Duration.millis(1000), comm);
-		ft.setFromValue(0);
-		ft.setToValue(1);
-		ft.setCycleCount(2);
-		ft.setAutoReverse(true);
-		return ft;
+		if (taskIndex > state.getPositionIndex() - 1){
+			FadeAnimation fade = new FadeAnimation(taskLine);
+			fade.playAnimation();;
+		}
 	}
 	
 	private TextField inputComponent() {

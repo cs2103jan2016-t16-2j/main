@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class Column {
-	private Color color, zoom = Color.PALEGOLDENROD;
+	private Color color;
 	private StackPane column;
 	private Rectangle rectangle;
 	private Text text;

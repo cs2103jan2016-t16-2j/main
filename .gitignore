@@ -6,3 +6,4 @@ src/StoragePackage/.DS_Store
 main.iml
 storageTestFile.txt
 out/
+config.txt

@@ -34,5 +34,11 @@ public class Constant {
 		public static final String HEADER_CONFIG = "Configuration";
 		public static final String HEADER_UNDEFINED = "Undefined Mode";
 		
-
+		//Cofiguration displaying message
+		public static final String CONFIG_DISPLAY = "Welcome to the Configuration Mode\n" +
+													"1. To change the Storage Directory, please input the absolute path\n" +
+													"E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
+													"     for Windows users, input: C:\\Users\\username\\folder\n" +
+													"\n" +
+													"2. To change the theme, we support the following theme:\n";
 }

@@ -253,11 +253,13 @@ public class State {
 				return searchResultTasks_;
 			case FINISHED:
 				return finishedTasks_;
-			case CONFIG:
-				return null;
 			default:
 				return allTasks_;
 		}
+	}
+	
+	public String getConfigInfo(){
+		return String.format(Constant.CONFIG_DISPLAY, "Yikun to put here");
 	}
 	
 	public boolean recoverFrom(State oldState){

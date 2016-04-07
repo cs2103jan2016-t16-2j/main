@@ -35,7 +35,7 @@ public class Constant {
 		public static final String HEADER_UNDEFINED = "Undefined Mode";
 		
 		//Cofiguration displaying message
-		public static final String CONFIG_DISPLAY = "Welcome to the Configuration Mode\n" +
+		public static final String CONFIG_DISPLAY = "Welcome to the Configuration Mode\n\n" +
 													"1. To change the Storage Directory, please input the absolute path\n" +
 													"	Current Directory: %s\n" + 
 													"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +

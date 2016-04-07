@@ -20,7 +20,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -126,6 +128,26 @@ public class GUI extends Application{
 
 	private void refresh() {
 		sectionHeader.setText(state.getHeader());
+		//state.setViewMode(ViewMode.CONFIG);
+		if (state.getViewMode().equals(ViewMode.CONFIG)){
+			loadConfig();
+		}else{
+			loadTask();	
+		}
+	}
+	
+	private void loadConfig(){
+		String infoStr = state.getConfigInfo();
+		tasks.getChildren().clear();
+		tasks.setPadding(COMPONENT_PADDING);
+		Text info = new Text(infoStr); 
+		info.setFill(COLOR_NORMAL);
+		ThemeSelector themeSelector = new ThemeSelector();
+		GridPane themes = themeSelector.getTheme();
+		tasks.getChildren().addAll(info, themes);
+	}
+
+	private void loadTask() {
 		ArrayList<Task> taskList = state.getCurrentTasks();
 		tasks.getChildren().clear();
 		taskIndex = 0;
@@ -144,7 +166,7 @@ public class GUI extends Application{
 		System.out.println("Here \n" + task.getContent());
 		String taskContent = task.getContent();
 		if (task.getIsDetailDisplayed()){
-			taskContent += "\n\n‘" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	
+			taskContent += "\n\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	
 		}
 		String taskDeadline = "";
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
@@ -246,7 +268,7 @@ public class GUI extends Application{
         layout.getChildren().add(contentLayout);
         
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/gui/Leather.css");
+		scene.getStylesheets().add("/gui/Autumn.css");
 		window.setScene(scene);
 		window.show();
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -265,8 +287,8 @@ public class GUI extends Application{
 		box.setHeight(height);
 		box.setArcWidth(10);
 		box.setArcHeight(10);
-		box.setOpacity(0.1);
-		box.setFill(Color.WHITE);
+		box.setOpacity(0.3);
+		box.setFill(Color.BLACK);
 		return box;
 	}
 

@@ -8,17 +8,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class Column {
-	private Color color;
 	private StackPane column;
 	private Rectangle rectangle;
 	private Text text;
 	
 	
-	public Column(String content, int colNumber) {
+	public Column(String content, int colNumber, int width) {
 		column = new StackPane();
 		rectangle = new Rectangle();
 		text = new Text(content);
-		text.setFill(color);
+		rectangle.setWidth(width);	
+		text.setId("normal");
 		column.getChildren().addAll(rectangle, text);
 		GridPane.setConstraints(column, colNumber, 0);
 	}
@@ -26,17 +26,9 @@ public class Column {
 	public StackPane getColumn(){
 		return column;
 	}
-	
-	public void setWidth(int width){
-		rectangle.setWidth(width);		
-	}
-	
+
 	public void setWrap(int width){
 		text.setWrappingWidth(width);
-	}
-	
-	public void setColor(Color color){
-		text.setFill(color);
 	}
 	
 	public void setAlignRight(){
@@ -48,6 +40,15 @@ public class Column {
 	}
 	
 	public void setZoom(){
-		text.setId("emphasis");
+		text.setId("zoom");
 	}
+	
+	public void setOverdue(){
+		text.setId("overdue");
+	}
+	
+	public void setZoomOverdue(){
+		text.setId("zoomOverdue");
+	}
+
 }

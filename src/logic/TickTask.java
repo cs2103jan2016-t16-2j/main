@@ -111,7 +111,7 @@ public class TickTask implements Operation {
 	private boolean tickTask(int localPositionIndex, Task toBeTicked) {
 		ArrayList<Task> finishedTask = state.getFinishedTasks();
 		finishedTask.add(toBeTicked);
-		DeleteTask deleteTask = new DeleteTask(state, localPositionIndex + 1);
+		DeleteTask deleteTask = new DeleteTask(state);
 		boolean isDeletedSuccessful = deleteTask.process();
 		return isDeletedSuccessful;
 	}

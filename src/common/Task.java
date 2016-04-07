@@ -127,8 +127,12 @@ public class Task {
 
 	public String concatString(){
 		String result = "";
-		result += startDate.toString();
-		result += endDate.toString();
+		if(startDate != null){
+			result += startDate.toString();
+		}
+		if(endDate != null){
+			result += endDate.toString();
+		}
 		result += content;
 		result += venue;
 		result += detail;

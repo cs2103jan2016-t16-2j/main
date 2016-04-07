@@ -15,18 +15,23 @@ public class WallistModelTest {
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		wm.storage.executeChangeDirectory("testing.txt");
-		wm.process("clear");
-		wm.process("add hahahahah");
-		System.out.println(wm.stateHistory.size());
-		System.out.println(wm.stateFuture.size());
-		wm.process("undo");	
-		System.out.println(wm.stateHistory.size());
-		System.out.println(wm.stateFuture.size());
-
-		wm.process("redo");
-		System.out.println(wm.stateHistory.size());
-		System.out.println(wm.stateFuture.size());
+		wm.process("delete 3");
+		System.out.println(state.getCommandType());		
+		System.out.println(state.getViewMode());
+		System.out.println(state.getPositionIndex());
+		
+		//wm.storage.executeChangeDirectory("testing.txt");
+//		wm.process("clear");
+//		wm.process("add hahahahah");
+//		System.out.println(wm.stateHistory.size());
+//		System.out.println(wm.stateFuture.size());
+//		wm.process("undo");	
+//		System.out.println(wm.stateHistory.size());
+//		System.out.println(wm.stateFuture.size());
+//
+//		wm.process("redo");
+//		System.out.println(wm.stateHistory.size());
+//		System.out.println(wm.stateFuture.size());
 		
 		
 //		//clear before testing

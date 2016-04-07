@@ -64,8 +64,6 @@ public class WallistModel{
 				return false;
 			} else {
 				boolean isRunningSuccessful = running();
-				CommandType cmdType = state.getCommandType();
-
 				return isRunningSuccessful;
 			}
 		} catch (EmptyStackException e){

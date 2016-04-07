@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import common.Task;
+import common.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,14 +19,15 @@ public class FileManagement {
 	// Attributes
 	protected File dataFile;
 	protected File configFile;
-
+	private State state;
 	// Config Attributes
 	private File directory;
 
 	// Logger
 	private final static Logger LOGGER = Logger.getLogger(FileManagement.class.getName());
 	
-	public FileManagement(){
+	public FileManagement(State state){
+		this.state = state;
 		connectConfigFile();
 		connectDataFile();
 	}
@@ -61,7 +62,8 @@ public class FileManagement {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
 			String currentConfigLine = reader.readLine();
-			this.directory = new File(currentConfigLine);
+			state.setCurrentDirectory(currentConfigLine); // pass the directory to state
+			this.directory = new File(currentConfigLine); 
 			reader.close();
 		} catch (IOException e){
 			LOGGER.log(Level.WARNING, "Configfile is not loaded successfully...", e);

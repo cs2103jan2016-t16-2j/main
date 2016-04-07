@@ -23,6 +23,8 @@ public class AddTask implements Operation {
 			Task newTask = new Task(state);
 			ViewMode viewMode = state.getViewMode();
 			
+			collapseAllTasks();
+			
 			//If the viewMode is Floating, update both floating tasks and all tasks
 			if(viewMode == ViewMode.FLOATING){
 				addToFloatingList(newTask);
@@ -54,6 +56,14 @@ public class AddTask implements Operation {
 		} catch (Exception e){
 			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
 			return false;
+		}
+	}
+
+	private void collapseAllTasks() {
+		ArrayList<Task> allTasks = state.getAllTasks();
+		for(int i = 0; i < allTasks.size(); i++){
+			Task another = allTasks.get(i);
+			another.setIsDetailDisplayed(false);
 		}
 	}
 

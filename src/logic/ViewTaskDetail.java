@@ -60,6 +60,22 @@ public class ViewTaskDetail implements Operation {
 					return false;
 				}
 			}
+			
+			//If the viewMode is Search
+			if(viewMode == ViewMode.SEARCH){
+				// find the task in deadline tasks list
+				Task toBeUpdated = findTaskFromSearchedTasks(positionIndex);
+
+				//tick the task 
+				boolean isDisplayDetailSuccessful = viewTaskDetail(toBeUpdated);
+
+				if(isDisplayDetailSuccessful) {
+					return true;
+				} else {
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					return false;
+				}
+			}
 
 			//If the viewMode is all, update object in all tasks list
 			if(viewMode == ViewMode.ALL){
@@ -125,6 +141,18 @@ public class ViewTaskDetail implements Operation {
 		Task toBeUpdated = taskList.get(positionIndex);
 		return toBeUpdated;
 	}
+	
+	private Task findTaskFromSearchedTasks(int positionIndex) {
+		ArrayList<Task> taskList = state.getSearchResultTasks();
+
+		if(positionIndex >= taskList.size()){
+			throw new IndexOutOfBoundsException();	
+		}
+
+		Task toBeUpdated = taskList.get(positionIndex);
+		return toBeUpdated;
+	}
+	
 	
 	private int fromOneBaseToZeroBase(int positionIndex) {
 		positionIndex--;

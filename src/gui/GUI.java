@@ -153,6 +153,7 @@ public class GUI extends Application{
 		taskIndex = 0;
 		for (Task task: taskList){
 			displayTaskLine(task);
+			
 		}
         if (taskList.size() > 0){
         	double position = (double) (state.getPositionIndex() + 1) / taskList.size();
@@ -162,6 +163,7 @@ public class GUI extends Application{
 	
 	private void displayTaskLine(Task task) {
 		taskIndex ++;
+		System.out.println("Here \n" + task.getContent());
 		String taskContent = task.getContent();
 		if (task.getIsDetailDisplayed()){
 			taskContent += "\n\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	

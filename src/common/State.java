@@ -14,7 +14,7 @@ public class State {
 	private Date startDate_, endDate_;
 	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_;
 	private ArrayList<String> searchKey_;
-	
+	private String currentDirectory;
 
 	public State(){
 		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
@@ -41,12 +41,16 @@ public class State {
 		searchResultTasks_ = new ArrayList<Task>();
 		finishedTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
+		
 	}
 	
 	/*
 	 * List of accessors and mutators for private attributes
 	 */
-
+	public void setCurrentDirectory(String directory) {
+		this.currentDirectory = directory;
+	}
+	
 	public void setIsValid(boolean bool){
 		isValid_ = bool;
 	}

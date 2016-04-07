@@ -3,24 +3,24 @@ import common.*;
 import java.io.File;
 public class Storage {
 
-	private FileIo fileIO;
+	private FileIo fileIo;
 	private FileManagement fileManagement;
 	private boolean isConnectedToFile;
 	
 	public Storage(State state) {
-		this.fileIO = new FileIo(state);
-		this.fileManagement = new FileManagement();
+		this.fileIo = new FileIo(state);
+		this.fileManagement = new FileManagement(state);
 		this.isConnectedToFile = connectFileToIO();
 	}
 
 	public boolean executeLoadState() {
 		assert isConnectedToFile;
-		return fileIO.loadState();
+		return fileIo.loadState();
 	}
 	
 	public boolean executeSaveState() {
 		assert isConnectedToFile;
-		return fileIO.saveState();
+		return fileIo.saveState();
 	}
 	
 	public boolean executeChangeDirectory(String directory) {
@@ -36,6 +36,6 @@ public class Storage {
 	 */
 	private boolean connectFileToIO() {
 		File file = fileManagement.getFile();
-		return fileIO.setFile(file);
+		return fileIo.setFile(file);
 	}
 }

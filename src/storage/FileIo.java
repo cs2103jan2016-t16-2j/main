@@ -1,5 +1,6 @@
 package storage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Type;
@@ -69,6 +70,9 @@ public class FileIo {
 							continue;
 					}
 				}
+				Collections.sort(normalTasks, TaskComparators.compareByCreationDate);
+				Collections.sort(floatingTasks, TaskComparators.compareByCreationDate);
+				Collections.sort(allTasks, TaskComparators.compareByCreationDate);
 			} catch (IOException e) {
 				LOGGER.log(Level.WARNING, "State is not successfully loaded", e);
 				return false;

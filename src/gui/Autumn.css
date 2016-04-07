@@ -1,19 +1,17 @@
 .root {
     -fx-font-size: 12pt;    
     -fx-font-family: "Consolas";
-    
     -fx-background-image: url("Autumn.jpg");
     -fx-background-size: cover;                     
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
 
-#rectangle{
+#taskPane{
     -fx-fill: rgba(110, 80, 0, 0.5);
     -fx-arc-height: 10;
     -fx-arc-width: 10;
     -fx-padding: 10 10 10 10;
-
 }
 
 #normal{
@@ -29,7 +27,11 @@
     -fx-fill: rgba(255, 255, 255, 1);
 }
 
-#gridPane{
+#evenLine{
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+#oddLine{
     -fx-background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -45,7 +47,7 @@
 }
 
 #overdue{
-    -fx-fill: rgba(255, 50, 50, 1);
+    -fx-fill: rgba(255, 20, 20, 1);
 }
 
 #zoomOverdue{

@@ -12,7 +12,6 @@ public class Column {
 	private Rectangle rectangle;
 	private Text text;
 	
-	
 	public Column(String content, int colNumber, int width) {
 		column = new StackPane();
 		rectangle = new Rectangle();

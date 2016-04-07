@@ -1,4 +1,5 @@
 package common;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import parser.TimeParser;
@@ -11,6 +12,8 @@ public class Task {
 
 	private final String TO_STRING = "Task [ content: %s | venue: %s | detail: %s | type: %s"
 										+ "isImportant: %b | startDate: %s | endDate: %s | creationDate: %s]";
+
+	private final String DISPLAYED_DETAIL = "%1$s\n\nVenue: %2$s\nDetail: %3$s";
 	
 	
 	public Task(State state) {
@@ -163,4 +166,12 @@ public class Task {
 		Date today = Calendar.getInstance().getTime();
 		return today.after(this.endDate);
 	}
+	
+	public String getDisplayContent(){
+		if (isDetailDisplayed){
+			return String.format(DISPLAYED_DETAIL, content, venue, detail);	
+		} else{
+			return content;
+		}
+	}	
 }

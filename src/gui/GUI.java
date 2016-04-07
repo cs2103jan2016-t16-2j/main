@@ -7,7 +7,6 @@ package gui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import common.*;
 import facade.WallistModel;
 import javafx.application.Application;
@@ -28,39 +27,38 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GUI extends Application{
 	
-	static double xOffset, yOffset;
-	
 	private Stage window;
 	private Scene scene;
+	private ScrollPane taskPane;
+	private TextField inputBox;
+	private State state;
+	private String command;
 	private StackPane taskStackPane = new StackPane();
 	private VBox layout = new VBox();
 	private VBox tasks = new VBox();
 	private Label sectionHeader = new Label();
 	private Rectangle title = new Rectangle();
-	private ScrollPane taskPane;
-	private TextField inputBox;
-	private State state;
-	private int taskIndex;
-	private double vValue;
-	
 	private WallistModel wallistModel = new WallistModel();
-	private String command;
+	
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM y");
+	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
 	
 	private int taskBoxHeight;
 	private int taskBoxWidth;
 	private int contentWidth;
+	private int taskIndex;
+	private double vValue;
+	
+	private static double xOffset, yOffset;
 	
 	private final String TITLE = "    %1$s's Wallist";
 	private final String PROMPT = "Put our command here";
-	private final String VENUE = "Venue: %1$s";
-	private final String DETAIL = "Detail: %1$s";
 	private final String DURATION = "%1$s - %2$s"; 
 	
 	private final int COMPONENT_GAP_H = 20;
@@ -73,7 +71,7 @@ public class GUI extends Application{
 	private final int HEADER_HEIGHT = 30;
 	private final int STAGE_HEIGHT = 650;	
 	private final double SCROLL_PERCENTAGE = 0.1;
-		
+	
 	private final Insets COMPONENT_PADDING = new Insets(0, 20, 20, 20);
 	private final Insets CONTENT_PADDING = new Insets(5, 0, 5, 0);
 	
@@ -157,52 +155,58 @@ public class GUI extends Application{
 	
 	private void displayRow(Task task) {
 		taskIndex ++;
-		String taskContent = task.getContent();
-		if (task.getIsDetailDisplayed()){
-			taskContent += "\n\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	
-		}
-		String taskTime = "";
-		if (task.getTaskType().equals(TaskType.DEADLINE)){
-			taskTime = sdf.format(task.getEndDate());
-			if (task.getStartDate()!= null){
-				taskTime = String.format(DURATION, sdf.format(task.getStartDate()), taskTime);				
-			}
-		}
+		String taskContent = task.getDisplayContent();
+		String taskTime = getTaskTime(task);
+		String taskIdx = Integer.toString(taskIndex);
 		
 		GridPane taskLine = new GridPane();
 		taskLine.setPadding(CONTENT_PADDING);
 		taskLine.setHgap(10);
 		if (taskIndex % 2 == 0){
-			taskLine.setId("gridPane");
+			taskLine.setId("evenLine");
+		} else {
+			taskLine.setId("oddLine");
 		}
-		Column indexCol = new Column(Integer.toString(taskIndex), 0, INDEX_WIDTH);
+		Column indexCol = new Column(taskIdx, 0, INDEX_WIDTH);
 		indexCol.setAlignRight();
+		setTaskView(task, indexCol);
 		Column contentCol = new Column(taskContent, 1, contentWidth);
 		contentCol.setWrap(contentWidth);
+		setTaskView(task, contentCol);
 		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
 		timeCol.setAlignLeft();
-		
-		if (task.isOverdue()){
-			if (task.getIsDetailDisplayed()){
-				indexCol.setZoomOverdue();
-				contentCol.setZoomOverdue();
-				timeCol.setZoomOverdue();
-			} else{
-				indexCol.setOverdue();
-				contentCol.setOverdue();
-				timeCol.setOverdue();
-			}
-		} else if (task.getIsDetailDisplayed()){
-			indexCol.setZoom();
-			contentCol.setZoom();
-			timeCol.setZoom();
-		}
-		
+		setTaskView(task, timeCol);
 		taskLine.getChildren().addAll(indexCol.getColumn(), contentCol.getColumn(), timeCol.getColumn());
 		tasks.getChildren().add(taskLine);
 		if (taskIndex > state.getPositionIndex()){
 			FadeAnimation fade = new FadeAnimation(taskLine);
 			fade.playAnimation();;
+		}
+	}
+
+	private String getTaskTime(Task task) {
+		String taskTime = "";
+		if (task.getTaskType().equals(TaskType.DEADLINE)){ 
+			if (task.getStartDate() == null){
+			    taskTime = sdf.format(task.getEndDate());
+		    } else{
+			    if (sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()))){
+				    taskTime = String.format(DURATION, sdf.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
+			    } else{
+	    	    	taskTime = String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
+		    	}	
+		    }
+		}
+		return taskTime;
+	}
+
+	private void setTaskView(Task task, Column col) {
+		if (task.isOverdue() && task.getIsDetailDisplayed()){
+			col.setZoomOverdue();
+		} else if (task.isOverdue()){
+			col.setOverdue();
+		} else if (task.getIsDetailDisplayed()){
+			col.setZoom();
 		}
 	}
 	
@@ -214,6 +218,7 @@ public class GUI extends Application{
 		layout.getChildren().add(inputBox);
 		return inputBox;
 	}
+	
 
 	private ScrollPane taskComponent() {
 		Rectangle taskBox = new Rectangle();
@@ -247,6 +252,7 @@ public class GUI extends Application{
 		titlePane.getChildren().addAll(title, titleText);
         layout.getChildren().add(titlePane);
 	}
+	
 
 	private void stageSetup(Stage primaryStage) {
 		window = primaryStage;
@@ -255,7 +261,7 @@ public class GUI extends Application{
         window.getIcons().add(new Image("/title.png"));
     	layoutSetup();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/gui/Autumn.css");
+		scene.getStylesheets().add("/gui/Paris.css");
 		window.setScene(scene);
 		window.show();
 		enableEscExit();

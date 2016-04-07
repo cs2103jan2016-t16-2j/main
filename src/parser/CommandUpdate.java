@@ -149,7 +149,6 @@ public class CommandUpdate implements Command{
 		if(state_.getIsStartDateChanged()){
 			String wordList[] = content.split("from:");
 			if(wordList.length <= 1){
-				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
@@ -158,7 +157,6 @@ public class CommandUpdate implements Command{
 		}else if(state_.getIsEndDateChanged()){
 			String wordList[] = content.split("on:");
 			if(wordList.length <= 1){
-				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
@@ -167,7 +165,6 @@ public class CommandUpdate implements Command{
 		}else if(state_.getIsVenueChanged()){
 			String wordList[] = content.split("at:");
 			if(wordList.length <= 1){
-				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
@@ -187,7 +184,6 @@ public class CommandUpdate implements Command{
 		}else if(state_.getIsDetailChanged()){
 			String wordList[] = content.split("details:");
 			if(wordList.length <= 1){
-				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
@@ -205,6 +201,9 @@ public class CommandUpdate implements Command{
 				return wordList[0].trim();
 			}
 		}else{
+			if(content.trim().isEmpty()){
+				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+			}
 			state_.setIsContentChanged(true);
 			return content;
 		}

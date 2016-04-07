@@ -1,0 +1,61 @@
+.root {
+    -fx-font-size: 12pt;    
+    -fx-font-family: "Segoe UI";
+    
+    -fx-background-image: url("Leather.jpg");
+    -fx-background-size: cover;                     
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+#gridPane{
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.text-field{
+    -fx-font-size: 12pt;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: #ffffff;
+}
+
+#emphasis{
+
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI bold";
+}
+
+.label{
+    -fx-font-size: 16pt;
+    -fx-text-fill: #fffacd;
+}
+
+#message{
+    -fx-font-size: 16pt;
+    -fx-text-fill: #fffacd;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 1em;
+    -fx-padding: 10 10 10 10;
+}
+
+.scroll-pane{
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-bar{
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 2em;
+}
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding:0 20 0 0;
+}
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-shape: " ";
+    -fx-padding:2;
+}

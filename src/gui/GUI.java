@@ -142,7 +142,7 @@ public class GUI extends Application{
 		taskIndex ++;
 		String taskContent = task.getContent();
 		if (task.getIsDetailDisplayed()){
-			taskContent += "\n\n" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	
+			taskContent += "\n\n‘" + String.format(VENUE, task.getVenue()) + "\n" + String.format(DETAIL, task.getDetail());	
 		}
 		String taskDeadline = "";
 		if (task.getTaskType().equals(TaskType.DEADLINE)){
@@ -244,7 +244,7 @@ public class GUI extends Application{
         layout.getChildren().add(contentLayout);
         
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/gui/Stylesheet.css");
+		scene.getStylesheets().add("/gui/Leather.css");
 		window.setScene(scene);
 		window.show();
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {

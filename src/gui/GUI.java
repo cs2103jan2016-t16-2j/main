@@ -270,7 +270,7 @@ public class GUI extends Application{
         window.getIcons().add(new Image("/title.png"));
     	layoutSetup();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/gui/Cat.css");
+		scene.getStylesheets().add("/resources/Raindrop.css");
 		window.setScene(scene);
 		window.show();
 		enableEscExit();

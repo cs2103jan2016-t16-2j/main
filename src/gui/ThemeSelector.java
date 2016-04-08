@@ -36,11 +36,10 @@ public class ThemeSelector {
 	
 	private void addTheme(String theme, int col, int row, int scheme){
 		StackPane display = new StackPane();
-		ImageView image= new ImageView("/gui/" + theme +".jpg");
+		ImageView image= new ImageView("/resources/" + theme +".jpg");
 		image.setFitHeight(90);
 		image.setFitWidth(160);
 		Label label = new Label(theme);
-		label.setStyle("/gui/Config.css");
 		label.setId(schemes[scheme]);
 		display.getChildren().addAll(image, label);
 		GridPane.setConstraints(display, col, row);

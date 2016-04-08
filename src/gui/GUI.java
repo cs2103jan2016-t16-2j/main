@@ -106,16 +106,7 @@ public class GUI extends Application{
 	}
 	
 	private void pendingRefresh() {
-		command = inputBox.getText();
-		if (command.length() > 6) {
-			if (command.substring(0, 6).equalsIgnoreCase("search")){
-    			boolean isSuccess = wallistModel.process(command);
-	    		state = wallistModel.getState();
-	    		if (isSuccess){
-		    		refreshTaskPane();
-		    	}	
-			}
-		}
+		 
 	}
 	
 	private void refresh() {

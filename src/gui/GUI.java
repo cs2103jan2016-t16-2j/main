@@ -126,7 +126,9 @@ public class GUI extends Application{
 
 	private void refreshTaskPane() {
 		sectionHeader.setText(state.getHeader());
-		if (state.getViewMode().equals(ViewMode.CONFIG)){
+		if (state.getCommandType().equals(CommandType.EXIT)){
+			window.close();
+		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
 		}else{
 			loadTask();	

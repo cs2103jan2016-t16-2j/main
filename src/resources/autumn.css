@@ -72,6 +72,9 @@
 .label{
     -fx-font-size: 16pt;
     -fx-text-fill: rgba(255, 250, 230, 1);
+    -fx-background-radius: 1em;
+    -fx-background-color: rgba(110, 80, 0, 0.5);
+    -fx-padding: 0 20 0 20;
 }
 
 #message{

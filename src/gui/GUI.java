@@ -21,6 +21,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -38,9 +39,18 @@ public class GUI extends Application{
 	private VBox layout = new VBox();
 	private VBox tasks = new VBox();
 	private VBox configs = new VBox(10);
-	private Label sectionHeader = new Label();
+	private HBox sectionHeader = new HBox(10);
 	private Rectangle title = new Rectangle();
 	private WallistModel wallistModel = new WallistModel();
+	
+	private Label allHeader = new Label(Constant.HEADER_ALL);
+	private Label deadlineHeader = new Label(Constant.HEADER_DEADLINE);
+	private Label floatingHeader = new Label(Constant.HEADER_FLOATING);
+	private Label startHeader = new Label(Constant.HEADER_START);
+	private Label searchHeader = new Label(Constant.HEADER_SEARCH);
+	private Label configHeader = new Label(Constant.HEADER_CONFIG);
+	private Label helpHeader = new Label(Constant.HEADER_HELP);
+	private Label finishedHeader = new Label(Constant.HEADER_FINISHED);
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM y");
@@ -125,7 +135,7 @@ public class GUI extends Application{
 	}
 
 	private void refreshTaskPane() {
-		sectionHeader.setText(state.getHeader());
+		//sectionHeader.setText(state.getHeader());
 		if (state.getCommandType().equals(CommandType.EXIT)){
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
@@ -237,7 +247,7 @@ public class GUI extends Application{
 	private void headerComponent() {
 		sectionHeader.setPrefHeight(HEADER_HEIGHT);
 		sectionHeader.setAlignment(Pos.CENTER);
-		sectionHeader.setTextAlignment(TextAlignment.CENTER);
+		sectionHeader.getChildren().addAll(startHeader, allHeader, deadlineHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 		layout.getChildren().add(sectionHeader);
 	}
 	

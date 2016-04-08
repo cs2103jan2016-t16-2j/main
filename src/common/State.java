@@ -284,7 +284,6 @@ public class State {
 		ArrayList<Task> allTasks = oldState.getAllTasks();
 		ArrayList<Task> searchResultTasks = oldState.getSearchResultTasks();
 		ArrayList<Task> finishedTasks = oldState.getFinishedTasks();
-		ArrayList<Task> startTasks = oldState.getStartTasks();
 		ArrayList<String> searchKey = oldState.getSearchKey();	
 		
 		floatingTasks_ = new ArrayList<Task>();
@@ -310,11 +309,6 @@ public class State {
 		finishedTasks_ = new ArrayList<Task>();
 		for(int i = 0; i < finishedTasks.size(); i++){
 			finishedTasks_.add(finishedTasks.get(i));
-		}
-
-		startTasks_ = new ArrayList<Task>();
-		for(int i = 0; i < startTasks.size(); i++){
-			startTasks_.add(startTasks.get(i));
 		}
 		
 		searchKey_ = new ArrayList<String>();
@@ -436,6 +430,13 @@ public class State {
 			case FINISHED:
 				return finishedTasks_;
 			case START:
+				startTasks_ = new ArrayList<Task>();
+				for(int i = 0; i < deadlineTasks_.size(); i++){
+					Task task = deadlineTasks_.get(i);
+					if (task.getEndDate().getTime() < (System.currentTimeMillis())){
+						startTasks_.add(task);	
+					}
+				}
 				return startTasks_;
 			default:
 				return allTasks_;

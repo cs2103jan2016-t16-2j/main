@@ -2,7 +2,6 @@ package common;
 
 public class Constant {
 		
-		//@@author A0130369H
 		// List of all available error values for the parsedCommand
 		public static final String VALUE_ERROR_NO_ERROR = "Success";
 		public static final String VALUE_ERROR_COMMAND_NOT_FOUND = "Invalid command";

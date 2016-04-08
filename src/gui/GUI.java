@@ -1,9 +1,5 @@
+//@@author A0130717M
 package gui;
-/**
- * 
- * @author Kaidi
- *
- */
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,8 +79,8 @@ public class GUI extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
-		stageSetup(primaryStage);
 		state = wallistModel.getState();
+		stageSetup(primaryStage);
 		configSetup();
     	refreshTaskPane();
 		inputProcess();
@@ -102,9 +98,24 @@ public class GUI extends Application{
 			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	refresh();
-		        } 
+		        } else{
+		        	pendingRefresh();
+		        }
 			}
-		});
+		});		
+	}
+	
+	private void pendingRefresh() {
+		command = inputBox.getText();
+		if (command.length() > 6) {
+			if (command.substring(0, 6).equalsIgnoreCase("search")){
+    			boolean isSuccess = wallistModel.process(command);
+	    		state = wallistModel.getState();
+	    		if (isSuccess){
+		    		refreshTaskPane();
+		    	}	
+			}
+		}
 	}
 	
 	private void refresh() {
@@ -257,11 +268,16 @@ public class GUI extends Application{
         window.getIcons().add(new Image("/title.png"));
     	layoutSetup();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/resources/Raindrop.css");
+		
+		String themeSheet = "/resources/" + state.getTheme() + ".css";
+		String fontSheet = "/resources/" + state.getFont() + ".css";
+		scene.getStylesheets().addAll(themeSheet, fontSheet);
+		
 		window.setScene(scene);
 		window.show();
 		enableEscExit();
 	}
+	
 
 	private void layoutSetup() {
 		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT -  HEADER_HEIGHT - TITLE_HEIGHT;
@@ -293,7 +309,6 @@ public class GUI extends Application{
 		configs.getChildren().addAll(intro, dir, theme, themes, font);
 	}
 	
-
 	private void enableEscExit() {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override 

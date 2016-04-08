@@ -1,7 +1,6 @@
+//@@author A0130717M
 .root {
     -fx-font-size: 12pt;    
-    -fx-font-family: "Segoe";
-    
     -fx-background-image: url("Warm.jpg");
     -fx-background-size: cover;                     
     -fx-background-repeat: no-repeat;

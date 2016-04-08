@@ -6,6 +6,8 @@ import java.util.Date;
 public class State {
 	private boolean isValid_, isStartDateChanged_, isEndDateChanged_, isContentChanged_, isVenueChanged_, isDetailChanged_;
 	private String content_, detail_, userInput_, venue_, displayMessage_;
+	private Font font_;
+	private Theme theme_;
 	private TaskType taskType_;
 	private CommandType commandType_;
 	private ViewMode viewMode_;
@@ -41,12 +43,14 @@ public class State {
 		searchResultTasks_ = new ArrayList<Task>();
 		finishedTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
-		
+		theme_ = Theme.AUTUMN;
+		font_ = Font.SEGOE;
 	}
 	
 	/*
 	 * List of accessors and mutators for private attributes
 	 */
+	
 	public void setCurrentDirectory(String directory) {
 		this.currentDirectory = directory;
 	}
@@ -245,32 +249,6 @@ public class State {
 		return finishedTasks_;
 	}
 	
-	public ArrayList<Task> getCurrentTasks(){
-		switch(viewMode_){
-			case FLOATING: 
-				return floatingTasks_;
-			case DEADLINE:
-				return deadlineTasks_;
-			case ALL:
-				return allTasks_;
-			case SEARCH:
-				return searchResultTasks_;
-			case FINISHED:
-				return finishedTasks_;
-			default:
-				return allTasks_;
-		}
-	}
-	
-	public String[] getConfigInfo(){
-		String[] configInfo = new String[4];
-		configInfo[0] = Constant.CONFIG_INTRO;
-		configInfo[1] = String.format(Constant.CONFIG_DIR, "Yikun to put here");
-		configInfo[2] = Constant.CONFIG_THEME;
-		configInfo[3] = Constant.CONFIG_FONT;
-		return configInfo;
-	}
-	
 	public boolean recoverFrom(State oldState){
 		isValid_ = oldState.getIsValid();
 		isStartDateChanged_ = oldState.getIsStartDateChanged();
@@ -330,26 +308,7 @@ public class State {
 
 		return true;
 	}
-	
-	public String getHeader(){
-		switch(viewMode_){
-		case FLOATING: 
-			return Constant.HEADER_FLOATING;
-		case DEADLINE:
-			return Constant.HEADER_DEADLINE;
-		case ALL:
-			return Constant.HEADER_ALL;
-		case SEARCH:
-			return Constant.HEADER_SEARCH;
-		case FINISHED:
-			return Constant.HEADER_FINISHED;
-		case CONFIG:
-			return Constant.HEADER_CONFIG;
-		default:
-			return Constant.HEADER_ALL;
-		}
-	}
-	
+
 	public State deepCopy(){
 		State newState = new State();
 		boolean isValid = isValid_; 
@@ -441,7 +400,96 @@ public class State {
 		
 		return newState;
 	}
-
-
-
+	
+	//@@author A0130717M
+	public ArrayList<Task> getCurrentTasks(){
+		switch(viewMode_){
+			case FLOATING: 
+				return floatingTasks_;
+			case DEADLINE:
+				return deadlineTasks_;
+			case ALL:
+				return allTasks_;
+			case SEARCH:
+				return searchResultTasks_;
+			case FINISHED:
+				return finishedTasks_;
+			default:
+				return allTasks_;
+		}
+	}
+	
+	public String[] getConfigInfo(){
+		String[] configInfo = new String[4];
+		configInfo[0] = Constant.CONFIG_INTRO;
+		configInfo[1] = String.format(Constant.CONFIG_DIR, "Yikun to put here");
+		configInfo[2] = Constant.CONFIG_THEME;
+		configInfo[3] = Constant.CONFIG_FONT;
+		return configInfo;
+	}
+	
+	public String getHeader(){
+		switch(viewMode_){
+		case FLOATING: 
+			return Constant.HEADER_FLOATING;
+		case DEADLINE:
+			return Constant.HEADER_DEADLINE;
+		case ALL:
+			return Constant.HEADER_ALL;
+		case SEARCH:
+			return Constant.HEADER_SEARCH;
+		case FINISHED:
+			return Constant.HEADER_FINISHED;
+		case CONFIG:
+			return Constant.HEADER_CONFIG;
+		default:
+			return Constant.HEADER_ALL;
+		}
+	}
+	
+	public void setTheme(Theme theme) {
+		this.theme_ = theme;
+	}
+	
+	public String getTheme(){
+		switch(theme_){
+		case AUTUMN:
+			return "autumn";
+		case BOKEH:
+			return "bokeh";
+		case BRANCH:
+			return "branch";
+		case CAT:
+			return "cat";
+		case JAPANESE:
+			return "japanese";
+		case LEATHER:
+			return "leather";
+		case PARIS:
+			return "paris"; 
+		case RAINDROP:
+			return "raindrop";
+		case WARM:
+			return "warm";
+		case WHEAT:
+			return "wheat";
+		default:
+			return "autumn";
+		}
+	}
+	
+	public void setFont(Font font) {
+		this.font_ = font;
+	}
+	
+	public String getFont(){
+		switch(font_){
+		case CONSOLAS:
+			return "consolas";
+		case SEGOE:
+			return "segoe";
+		default:
+			return "segoe";
+		}
+	}
 }

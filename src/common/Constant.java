@@ -17,6 +17,18 @@ public class Constant {
 		public static final boolean VALUE_DEFAULT_BOOLEAN_FALSE = false;
 		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.ALL;
 		
+		//Cofiguration displaying message
+		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
+		public static final String CONFIG_DIR = "1. To change the Storage Directory, please input the absolute path\n" +
+												"	Current Directory: %s\n" + 
+												"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
+												"    	 for Windows users, input: C:\\Users\\username\\folder";
+		public static final String CONFIG_THEME = "2. To change the theme, please input the theme name:\n" + 
+												  "   E.g. input: theme autumn";
+		public static final String CONFIG_FONT = "3. To change the font, please input the font name:\n" +
+												 "   E.g. input: font segoe";
+		
+		//@@author A0130717M
 		//List of displayed messages
 		public static final String MESSAGE_SUCCESS = "successfully updated";
 		public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Oops, did you enter the correct index? Index should be from 1 to size of the list";
@@ -32,18 +44,5 @@ public class Constant {
 		public static final String HEADER_SEARCH = "Search Result";
 		public static final String HEADER_FINISHED = "All Finished Tasks";
 		public static final String HEADER_CONFIG = "Configuration";
-		public static final String HEADER_UNDEFINED = "Undefined Mode";
-		
-		//Cofiguration displaying message
-		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
-		public static final String CONFIG_DIR = "1. To change the Storage Directory, please input the absolute path\n" +
-												"	Current Directory: %s\n" + 
-												"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
-												"    	 for Windows users, input: C:\\Users\\username\\folder";
-		public static final String CONFIG_THEME = "2. To change the theme, please input the theme name:\n" + 
-												  "   E.g. input: theme autumn";
-		public static final String CONFIG_FONT = "3. To change the font, please input the font name:\n" +
-												 "   E.g. input: font segoe";
-													
-													
+		public static final String HEADER_UNDEFINED = "Undefined Mode";												
 }

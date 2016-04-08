@@ -1,8 +1,7 @@
+//@@author A0130717M
 .root {
     -fx-font-size: 12pt;    
-    -fx-font-family: "Segoe";
-    
-    -fx-background-image: url("Leather.jpg");
+    -fx-background-image: url("Wheat.jpg");
     -fx-background-size: cover;                     
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
@@ -23,7 +22,7 @@
 }
 
 #taskPane{
-    -fx-fill: rgba(0, 0, 0, 0.3);
+    -fx-fill: rgba(0, 0, 0, 0.5);
     -fx-arc-height: 10;
     -fx-arc-width: 10;
     -fx-padding: 10 10 10 10;
@@ -52,7 +51,7 @@
 
 .text-field{
     -fx-font-size: 12pt;
-    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-text-fill: rgba(255, 255, 255, 1);
 }
 

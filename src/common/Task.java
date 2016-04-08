@@ -23,8 +23,6 @@ public class Task {
 		} else {
 			this.content = Constant.VALUE_DEFAULT_EMPTY;
 		}
-		
-		
 
 		if(state.getIsVenueChanged()){
 			this.venue = state.getVenue();

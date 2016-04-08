@@ -75,6 +75,9 @@ public class CommandSearch implements Command{
 	public ArrayList<String> getSearchKey() {
 		ArrayList<String> keywords = new ArrayList<String>();
 		String inputKeyWords[] = content_.split(" ");
+		if(inputKeyWords.length == 0){
+			state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+		}
 		for(int i = 0; i<inputKeyWords.length; i++){
 			keywords.add(inputKeyWords[i]);
 		}

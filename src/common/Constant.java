@@ -15,7 +15,7 @@ public class Constant {
 		public static final boolean VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_DETAIL_DISPLAYED = true;
 		public static final boolean VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_IMPORTANT = false;
 		public static final boolean VALUE_DEFAULT_BOOLEAN_FALSE = false;
-		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.ALL;
+		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.START;
 		
 		//Cofiguration displaying message
 		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
@@ -44,5 +44,6 @@ public class Constant {
 		public static final String HEADER_SEARCH = "Search Result";
 		public static final String HEADER_FINISHED = "All Finished Tasks";
 		public static final String HEADER_CONFIG = "Configuration";
-		public static final String HEADER_UNDEFINED = "Undefined Mode";												
+		public static final String HEADER_UNDEFINED = "Undefined Mode";	
+		public static final String HEADER_START = "Today's Tasks and Overdue Tasks";
 }

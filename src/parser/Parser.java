@@ -7,6 +7,7 @@ import common.*;
 public class Parser {
 	
 	private State state_;
+	private ParserErrorChecker errorChecker_;
 	private CommandAdd add_;
 	private CommandChangeMode changeMode_;
 	private CommandClear clear_;
@@ -18,6 +19,9 @@ public class Parser {
 	private CommandTick tick_;
 	private CommandUndo undo_;
 	private CommandUpdate update_;
+	private CommandHelp help_;
+	private CommandUntick untick_;
+	private CommandConfig config_;
 	
 	
 	/*
@@ -27,6 +31,7 @@ public class Parser {
 	 */
  	public Parser(State state){
 		state_ = state;
+		errorChecker_ = new ParserErrorChecker(state);
 		add_ = new CommandAdd(state);
 		changeMode_ = new CommandChangeMode(state);
 		clear_ = new CommandClear(state);
@@ -38,6 +43,9 @@ public class Parser {
 		tick_ = new CommandTick(state);
 		undo_ = new CommandUndo(state);
 		update_ = new CommandUpdate(state);
+		help_ = new CommandHelp(state);
+		config_= new CommandConfig(state);
+		untick_ = new CommandUntick(state);
 		
 	}
 	
@@ -47,8 +55,7 @@ public class Parser {
 	 * Post-Cond: Updated State
 	 */
 	public boolean processInput(){
-		state_.setDisplayMessage(getErrorMessage());
-		state_.setIsValid(getIsValid());
+		errorChecker_.checkError();
 		if(state_.getIsValid()){
 			state_.setCommandType(getCommand());
 			CommandType command = state_.getCommandType();
@@ -97,6 +104,18 @@ public class Parser {
 				case UPDATE:
 					update_.processInput();
 					break;
+					
+				case HELP:
+					help_.processInput();
+					break;
+					
+				case UNTICK:
+					untick_.processInput();
+					break;
+					
+				case CONFIG:
+					config_.processInput();
+					break;
 			}
 			
 		}
@@ -109,210 +128,18 @@ public class Parser {
 	 * Pre-Cond: Input of a user
 	 * Post-Cond: CommandType
 	 */
-	private CommandType getCommand() {
+	public CommandType getCommand() {
 		String inputWords[] = state_.getUserInput().split(" ");
 		return determineCommandType(inputWords[0]);
 	}
 
-	/*
-	 * Check whether parsed command is valid
-	 * Pre-Cond: None
-	 * Post-Cond: True if command input is valid. False otherwise.
-	 */
-	private boolean getIsValid() {
-		return state_.getDisplayMessage().equals(Constant.VALUE_ERROR_NO_ERROR);
-	}
 	
-	/*
-	 * Get the error message for a given input. 
-	 * Pre-Cond: None
-	 * Post-Cond: Respective error message 
-	 */
-	private String getErrorMessage() {
-		if(isInputEmpty()){
-			return Constant.VALUE_ERROR_NO_INPUT;
-		}
-		if(isCommandInvalid()){
-			return Constant.VALUE_ERROR_COMMAND_NOT_FOUND;
-		}
-		if(isArgumentInvalid()){
-			return Constant.VALUE_ERROR_INVALID_ARGUMENT;
-		}
-		return Constant.VALUE_ERROR_NO_ERROR;
-	}
-
-	/*
-	 * Check whether the input is an empty string
-	 * Pre-Cond: None
-	 * Post-Cond: true if it is empty. false otherwise
-	 */	
-	private boolean isInputEmpty() {
-		return state_.getUserInput().length() == 0;
-	}
-	
-	/*
-	 * Check whether the input has a valid command (add, update, tick, delete, clear, exit, etc)
-	 * Pre-Cond: None
-	 * Post-Cond: True if it is valid. False otherwise
-	 */
-	private boolean isCommandInvalid() {
-		if(!isInputEmpty()){
-			CommandType commandType = getCommand();
-			switch(commandType) {
-				
-				case ADD:
-					return false;	
-				
-				case CLEAR:
-					return false;
-				
-				case DELETE:
-					return false;
-				
-				case TICK:
-					return false;	
-				
-				case UPDATE:
-					return false;
-					
-				case EXIT:
-					return false;
-					
-				case UNDO:
-					return false;
-				
-				case REDO:
-					return false;
-					
-				case CHANGEMODE:
-					return false;
-					
-				case SEARCH:
-					return false;
-				
-				case DETAIL:
-					return false;
-					
-				default: 
-					return true;
-			}
-		}
-		return false;
-	}
-	
-	/*
-	 * Check whether the input has the correct and valid argument for the given command
-	 * Pre-Cond: None
-	 * Post-Cond: True if it's invalid. False otherwise
-	 */
-	private boolean isArgumentInvalid() {
-		if(!isCommandInvalid()){
-			CommandType commandType = getCommand();
-			String content = getContentWithoutCommand();
-			try{
-				switch(commandType){
-				
-					case ADD:
-						if(content.length() == 0){
-							return true;
-						}
-						return false;
-					
-					case CLEAR:
-						if(content.isEmpty()){
-							return false;
-						}
-						return true;
-				
-					case DELETE:
-						if(content.matches("\\d+")){
-							return false;
-						}
-						return true;
-				
-					case EXIT:
-						if(content.length() != 0){
-							return true;
-						}
-						return false;
-					
-					case UNDO:
-						if(content.length() != 0){
-							return true;
-						}
-						return false;
-					
-					case REDO:
-						if(content.length() != 0){
-							return true;
-						}
-						return false;
-						
-					case SEARCH:
-						if(content.length() == 0){
-							return true;
-						}
-						return false;
-						
-					case TICK:
-						if(content.matches("\\d+")){
-							return false;
-						}
-						return true;
-					
-					case UPDATE:
-						String inputWords[] = content.split(" ");
-						if(!inputWords[0].matches("\\d+") || content.length() == 0 || inputWords.length ==1){
-							return true;
-						}
-						return false;
-					
-					case DETAIL:
-						if(content.matches("\\d+")){
-							return false;
-						}
-						return true;
-					
-					case CHANGEMODE:
-						if(content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("DEADLINE") 
-								|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("SEARCH") 
-								|| content.equalsIgnoreCase("FINISHED") || content.equalsIgnoreCase("CONFIG")){
-							return false;
-						}
-						return true;
-						
-					default: 
-						return false;
-				}
-			}
-			catch(IllegalArgumentException e){
-				return true;
-			}
-		}else{
-			return false;
-		}
-	}
-
-
-	/*
-	 * Get the content of user input without the command word
-	 */
-	private String getContentWithoutCommand() {
-		String inputWords[] = state_.getUserInput().split(" ");
-		StringBuilder sb = new StringBuilder("");
-		for(int i = 1; i < inputWords.length; i ++){
-			sb.append(inputWords[i]);
-			sb.append(" ");
-		}
-		return sb.toString().trim();
-	}
-
 	/*
 	 * Get the command type based on input
 	 * Pre-Cond: String of command
 	 * Post-Cond: CommandType of the given input
 	 */
-	private CommandType determineCommandType(String commandTypeString) {
+	public CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {
 			throw new Error("Command type string cannot be null!");
 		}

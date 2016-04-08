@@ -1,3 +1,4 @@
+//@@author A0107375E
 package common;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ public class ProjectLogger {
 	private Logger LOGGER;
 	
 	public ProjectLogger(String className) {
+		System.out.println(className);
 		LOGGER = Logger.getLogger(className);
 		
 		try {

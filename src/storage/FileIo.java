@@ -1,10 +1,12 @@
+//@@author A0107375E
 package storage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +17,11 @@ import common.*;
 
 public class FileIo {
 	
-	// Attributes
+	//============================
+	//       Attributes
+	//============================
+	
+	// basic attributes
 	protected File file;
 	protected Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
@@ -23,47 +29,56 @@ public class FileIo {
 	private boolean isConnectedToDatafile;
 	private ProjectLogger logger;
 	
-	// Logging Message
-	private final static String LOADING_STATE_SUCCESS = "Loading State from datafile...";
-	private final static String LOADING_STATE_FAILURE = "State is not successfully loaded!";
+	// logger
+	private final static Logger LOGGER = Logger.getLogger(FileManagement.class.getName());
+	
+	// logging message displayed
+	private final static String LOADING_STATE = "Loading State from datafile...";
+	private final static String LOADING_STATE_SUCCESS = "State is loaded succesfully!";
+	private final static String LOADING_STATE_FAILURE = "State is not loaded successfully !";
+	
 	private final static String SAVING_STATE_SUCCESS = "Saving state to datafile...";
 	private final static String SAVING_STATE_FAILURE = "State is not successfully saved!";
+	
 	private final static String WRITING_TASK_FAILURE = "Task is not succesfully written to datafile...";
+	
+	//============================
+	//       Constructor(s)
+	//============================
 	
 	public FileIo(State state) {
 		this.state = state;
-		logger = new ProjectLogger(FileIo.class.getName()); 
 	}
-		
+	
+	//============================
+	//       Functions
+	//============================
 	protected boolean setFile(File file) {
 		this.file = file;
 		return true;
 	}
 		
-		/**
-	 	 * This method read all JSON in the text file and convert into Task objects.
-	 	 * Store the Task Objects in a TreeSet and return it to LOGIC
-	 	 * @return a TreeSet containing all Tasks
-	 	 */
-	
-		public boolean loadState(){
-			assert isConnectedToDatafile;
-			logger.info(LOADING_STATE_SUCCESS);
-			ArrayList<Task> normalTasks = state.getDeadlineTasks();
-			ArrayList<Task> floatingTasks = state.getFloatingTasks();
-			ArrayList<Task> allTasks = state.getAllTasks();
-			Task task;
-			BufferedReader reader;
+	/**
+	  * This method read all JSON in the text file and convert into Task objects.
+	  * Store the Task Objects in a TreeSet and return it to LOGIC
+	  * @return a TreeSet containing all Tasks
+	  */
+
+	public boolean loadState(){
+		assert isConnectedToDatafile;
+		LOGGER.log(Level.INFO, LOADING_STATE);
+		
+		ArrayList<Task> normalTasks = state.getDeadlineTasks();
+		ArrayList<Task> floatingTasks = state.getFloatingTasks();
+		ArrayList<Task> allTasks = state.getAllTasks();
 			
-			try {
-				reader = new BufferedReader(new FileReader(file));
-				
-			
-				while (reader.ready()) {
-					task = readCurrentTask(reader);
-					allTasks.add(task);
-					TaskType taskType = task.getTaskType();
-					switch (taskType) {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			while (reader.ready()) {
+				Task task = readCurrentTask(reader);
+				allTasks.add(task);
+				TaskType taskType = task.getTaskType();
+				switch (taskType) {
 						case FLOATING :
 							floatingTasks.add(task);
 							break;

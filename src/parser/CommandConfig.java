@@ -1,11 +1,14 @@
+//@@author A0130369H
 package parser;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import common.Constant;
+import common.Font;
 import common.State;
 import common.TaskType;
+import common.Theme;
 import common.ViewMode;
 
 public class CommandConfig implements Command{
@@ -28,9 +31,46 @@ public class CommandConfig implements Command{
 		state_.setTaskType(getTaskType());
 		state_.setSearchKey(getSearchKey());
 		state_.setNewViewMode(getNewViewMode());
+		state_.setFont(getFont());
+		state_.setTheme(getTheme());
 		
 	}
 
+	private Theme getTheme() {
+		if(content_.equalsIgnoreCase("autumn")){
+			return Theme.AUTUMN;
+		}else if(content_.equalsIgnoreCase("bokeh")){
+			return Theme.BOKEH;
+		}else if(content_.equalsIgnoreCase("branch")){
+			return Theme.BRANCH;
+		}else if(content_.equalsIgnoreCase("cat")){
+			return Theme.CAT;
+		}else if(content_.equalsIgnoreCase("japanese")){
+			return Theme.JAPANESE;
+		}else if(content_.equalsIgnoreCase("leather")){
+			return Theme.LEATHER;
+		}else if(content_.equalsIgnoreCase("paris")){
+			return Theme.PARIS;
+		}else if(content_.equalsIgnoreCase("raindrop")){
+			return Theme.RAINDROP;
+		}else if(content_.equalsIgnoreCase("warm")){
+			return Theme.WARM;
+		}else if(content_.equalsIgnoreCase("wheat")){
+			return Theme.WHEAT;
+		}else{
+			return Theme.AUTUMN;
+		}
+	}
+	private Font getFont() {
+		if(content_.equalsIgnoreCase("consolas")){
+			return Font.CONSOLAS;
+		}else if(content_.equalsIgnoreCase("segoe")){
+			return Font.SEGOE;
+		}else{
+			return Font.SEGOE;
+		}
+	}
+	
 	@Override
 	public String getDetail() {
 		state_.setIsDetailChanged(false);
@@ -63,7 +103,7 @@ public class CommandConfig implements Command{
 	@Override
 	public String getContent() {
 		state_.setIsContentChanged(true);
-		return content_;
+		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
 	@Override

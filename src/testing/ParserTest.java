@@ -1,3 +1,4 @@
+//@@autor A0130369H
 package testing;
 
 import common.*;
@@ -45,6 +46,24 @@ public class ParserTest {
 		assertEquals(true, state.getIsDetailChanged());
 		assertEquals(Constant.VALUE_DEFAULT_EMPTY, state.getVenue());
 		assertEquals("with boyfriend", state.getDetail());
+		assertEquals("eat lunch", state.getContent());
+		assertEquals(TaskType.FLOATING, state.getTaskType());
+		assertEquals(1, state.getPositionIndex());
+		assertEquals(null, state.getStartDate());
+		assertEquals(null, state.getEndDate());
+		
+		//Test Add Float
+		state.setUserInput("Add eat lunch at:soc");
+		parser.processInput();
+		assertEquals(true, state.getIsValid());
+		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(CommandType.ADD, state.getCommandType());
+		assertEquals(false, state.getIsStartDateChanged());
+		assertEquals(false, state.getIsEndDateChanged());
+		assertEquals(true, state.getIsVenueChanged());
+		assertEquals(false, state.getIsDetailChanged());
+		assertEquals(Constant.VALUE_DEFAULT_EMPTY, state.getDetail());
+		assertEquals("soc", state.getVenue());
 		assertEquals("eat lunch", state.getContent());
 		assertEquals(TaskType.FLOATING, state.getTaskType());
 		assertEquals(1, state.getPositionIndex());
@@ -160,9 +179,27 @@ public class ParserTest {
 		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
 
 		//Test Add Deadline
-		state.setUserInput("Add eat lunch from:  to: 10/10/10 10:10 details: with boyfriend");
+		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: toapayoh");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
+		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(CommandType.ADD, state.getCommandType());
+		assertEquals(true, state.getIsStartDateChanged());
+		assertEquals(true, state.getIsEndDateChanged());
+		assertEquals(true, state.getIsVenueChanged());
+		assertEquals(false, state.getIsDetailChanged());
+		assertEquals("toapayoh", state.getVenue());
+		assertEquals(Constant.VALUE_DEFAULT_EMPTY, state.getDetail());
+		assertEquals("eat lunch", state.getContent());
+		assertEquals(TaskType.DEADLINE, state.getTaskType());
+		assertEquals(1, state.getPositionIndex());
+		assertEquals(TimeParser.stringToDate("10/10/10 10:10"), state.getStartDate());
+		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
+		
+		//Test Add Deadline
+		state.setUserInput("Add eat lunch from:  to: 10/10/10 10:10 details: with boyfriend");
+		parser.processInput();
+		assertEquals(false, state.getIsValid());
 		assertEquals(Constant.VALUE_ERROR_DATE_NOT_PARSED, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());

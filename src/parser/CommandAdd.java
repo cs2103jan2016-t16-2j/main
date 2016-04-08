@@ -1,3 +1,4 @@
+//@@author A0130369H
 package parser;
 
 import java.util.ArrayList;
@@ -40,9 +41,11 @@ public class CommandAdd implements Command{
 		}else{
 			String wordListVenue[] = wordList[wordList.length-1].split("at:");
 			if(wordListVenue.length <= 1){
+				System.out.println("HIHI");
 				state_.setIsDetailChanged(true);
 				return wordList[wordList.length-1].trim();
 			}else{
+				System.out.println("HUHU");
 				state_.setIsDetailChanged(true);
 				return wordListVenue[0].trim();
 			}

@@ -25,7 +25,7 @@ public class Storage {
 	
 	public boolean executeChangeDirectory(String directory) {
 		assert isConnectedToFile;
-		return fileManagement.changeDirectory(directory);
+		return fileManagement.changeDirectory();
 	}
 	
 	// Helper functions

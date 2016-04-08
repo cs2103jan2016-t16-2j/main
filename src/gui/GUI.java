@@ -85,6 +85,7 @@ public class GUI extends Application{
 	public void start(Stage primaryStage) throws Exception{
 		stageSetup(primaryStage);
 		state = wallistModel.getState();
+		configSetup();
     	refreshTaskPane();
 		inputProcess();
 	}
@@ -101,7 +102,7 @@ public class GUI extends Application{
 			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	refresh();
-		        }
+		        } 
 			}
 		});
 	}
@@ -123,7 +124,6 @@ public class GUI extends Application{
 
 	private void refreshTaskPane() {
 		sectionHeader.setText(state.getHeader());
-		state.setViewMode(ViewMode.CONFIG);
 		if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
 		}else{
@@ -132,19 +132,6 @@ public class GUI extends Application{
 	}
 	
 	private void loadConfig(){
-		String[] infoStr = state.getConfigInfo();
-		configs.setPadding(CONFIG_PADDING);
-		Text intro = new Text(infoStr[0]); 
-		intro.setId("normal");		
-		Text dir = new Text(infoStr[1]); 
-		dir.setId("normal");
-		Text theme = new Text(infoStr[2]); 
-		theme.setId("normal");
-		Text font = new Text(infoStr[3]); 
-		font.setId("normal");
-		ThemeSelector themeSelector = new ThemeSelector();
-		GridPane themes = themeSelector.getTheme();
-		configs.getChildren().addAll(intro, dir, theme, themes, font);
 		taskPane.setContent(configs);
 	}
 
@@ -289,6 +276,23 @@ public class GUI extends Application{
         taskPane = taskComponent();
 		inputBox = inputComponent();
 	}
+	
+	private void configSetup(){
+		String[] infoStr = state.getConfigInfo();
+		configs.setPadding(CONFIG_PADDING);
+		Text intro = new Text(infoStr[0]); 
+		intro.setId("normal");		
+		Text dir = new Text(infoStr[1]); 
+		dir.setId("normal");
+		Text theme = new Text(infoStr[2]); 
+		theme.setId("normal");
+		Text font = new Text(infoStr[3]); 
+		font.setId("normal");
+		ThemeSelector themeSelector = new ThemeSelector();
+		GridPane themes = themeSelector.getTheme();
+		configs.getChildren().addAll(intro, dir, theme, themes, font);
+	}
+	
 
 	private void enableEscExit() {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {

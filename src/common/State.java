@@ -262,8 +262,13 @@ public class State {
 		}
 	}
 	
-	public String getConfigInfo(){
-		return String.format(Constant.CONFIG_DISPLAY, "Yikun to put here");
+	public String[] getConfigInfo(){
+		String[] configInfo = new String[4];
+		configInfo[0] = Constant.CONFIG_INTRO;
+		configInfo[1] = String.format(Constant.CONFIG_DIR, "Yikun to put here");
+		configInfo[2] = Constant.CONFIG_THEME;
+		configInfo[3] = Constant.CONFIG_FONT;
+		return configInfo;
 	}
 	
 	public boolean recoverFrom(State oldState){

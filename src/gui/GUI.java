@@ -41,6 +41,7 @@ public class GUI extends Application{
 	private StackPane taskStackPane = new StackPane();
 	private VBox layout = new VBox();
 	private VBox tasks = new VBox();
+	private VBox configs = new VBox(10);
 	private Label sectionHeader = new Label();
 	private Rectangle title = new Rectangle();
 	private WallistModel wallistModel = new WallistModel();
@@ -73,6 +74,7 @@ public class GUI extends Application{
 	private final double SCROLL_PERCENTAGE = 0.1;
 	
 	private final Insets COMPONENT_PADDING = new Insets(0, 20, 20, 20);
+	private final Insets CONFIG_PADDING = new Insets(20, 20, 20, 20);
 	private final Insets CONTENT_PADDING = new Insets(5, 0, 5, 0);
 	
 	public static void launching(){
@@ -121,7 +123,7 @@ public class GUI extends Application{
 
 	private void refreshTaskPane() {
 		sectionHeader.setText(state.getHeader());
-		//state.setViewMode(ViewMode.CONFIG);
+		state.setViewMode(ViewMode.CONFIG);
 		if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
 		}else{
@@ -130,14 +132,20 @@ public class GUI extends Application{
 	}
 	
 	private void loadConfig(){
-		String infoStr = state.getConfigInfo();
-		tasks.getChildren().clear();
-		tasks.setPadding(COMPONENT_PADDING);
-		Text info = new Text(infoStr); 
-		info.setId("normal");
+		String[] infoStr = state.getConfigInfo();
+		configs.setPadding(CONFIG_PADDING);
+		Text intro = new Text(infoStr[0]); 
+		intro.setId("normal");		
+		Text dir = new Text(infoStr[1]); 
+		dir.setId("normal");
+		Text theme = new Text(infoStr[2]); 
+		theme.setId("normal");
+		Text font = new Text(infoStr[3]); 
+		font.setId("normal");
 		ThemeSelector themeSelector = new ThemeSelector();
 		GridPane themes = themeSelector.getTheme();
-		tasks.getChildren().addAll(info, themes);
+		configs.getChildren().addAll(intro, dir, theme, themes, font);
+		taskPane.setContent(configs);
 	}
 
 	private void loadTask() {
@@ -151,6 +159,7 @@ public class GUI extends Application{
         	double position = (double) (state.getPositionIndex() + 1) / taskList.size();
 		    taskPane.setVvalue(position);
         }
+		taskPane.setContent(tasks);
 	}
 	
 	private void displayRow(Task task) {
@@ -261,7 +270,7 @@ public class GUI extends Application{
         window.getIcons().add(new Image("/title.png"));
     	layoutSetup();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		scene.getStylesheets().add("/gui/Paris.css");
+		scene.getStylesheets().add("/gui/Cat.css");
 		window.setScene(scene);
 		window.show();
 		enableEscExit();
@@ -279,7 +288,6 @@ public class GUI extends Application{
 		headerComponent();
         taskPane = taskComponent();
 		inputBox = inputComponent();
-		taskPane.setContent(tasks);
 	}
 
 	private void enableEscExit() {

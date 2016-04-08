@@ -7,6 +7,20 @@
     -fx-background-position: center center;
 }
 
+#light{
+    -fx-text-fill: rgba(255, 255, 255, 1);
+    -fx-background-color: rgba(255, 200, 70, 0.2);
+    -fx-background-radius: 1em;
+    -fx-padding: 10 10 10 10;
+}
+
+#dark{
+    -fx-text-fill: rgba(110, 80, 0, 1);
+    -fx-background-color: rgba(225, 225, 225, 0.5);
+    -fx-background-radius: 1em;
+    -fx-padding: 10 10 10 10;
+}
+
 #taskPane{
     -fx-fill: rgba(40, 10, 45, 0.5);
     -fx-arc-height: 10;

@@ -35,21 +35,15 @@ public class Constant {
 		public static final String HEADER_UNDEFINED = "Undefined Mode";
 		
 		//Cofiguration displaying message
-		public static final String CONFIG_DISPLAY = "Welcome to the Configuration Mode\n\n" +
-													"1. To change the Storage Directory, please input the absolute path\n" +
-													"	Current Directory: %s\n" + 
-													"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
-													"    	 for Windows users, input: C:\\Users\\username\\folder\n" +
-													"\n" +
-													"2. To change the theme, please input the theme name:\n" + 
-													"   a. theme1" +
-													"   b. theme2" +
-													"   c. theme3" +
-													"\n" +
-													"3. To change the font, please input the font name:\n" +
-													"   a. font1" +
-													"   b. font2" +
-													"   c. font3";
+		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
+		public static final String CONFIG_DIR = "1. To change the Storage Directory, please input the absolute path\n" +
+												"	Current Directory: %s\n" + 
+												"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
+												"    	 for Windows users, input: C:\\Users\\username\\folder";
+		public static final String CONFIG_THEME = "2. To change the theme, please input the theme name:\n" + 
+												  "   E.g. input: theme autumn";
+		public static final String CONFIG_FONT = "3. To change the font, please input the font name:\n" +
+												 "   E.g. input: font segoe";
 													
 													
 }

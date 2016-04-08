@@ -81,6 +81,7 @@ public class CommandUpdate implements Command{
 		
 		if(wordListEnd.length<=1){
 			state_.setIsStartDateChanged(false);
+			state_.setIsValid(false);
 			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
 			return null;
 		}
@@ -90,6 +91,7 @@ public class CommandUpdate implements Command{
 			return date;
 		}else{
 			state_.setIsStartDateChanged(false);
+			state_.setIsValid(false);
 			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
 			return null;
 		}
@@ -109,6 +111,7 @@ public class CommandUpdate implements Command{
 				state_.setIsEndDateChanged(true);
 				if(date.before(state_.getStartDate())){
 					state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_ERROR);
+					state_.setIsValid(false);
 					state_.setIsEndDateChanged(false);
 					state_.setIsStartDateChanged(false);
 					return null;
@@ -118,6 +121,7 @@ public class CommandUpdate implements Command{
 				state_.setIsEndDateChanged(false);
 				state_.setIsStartDateChanged(false);
 				state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
+				state_.setIsValid(false);
 				return null;
 			}
 		}
@@ -133,6 +137,7 @@ public class CommandUpdate implements Command{
 		}else{
 			state_.setIsEndDateChanged(false);
 			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
+			state_.setIsValid(false);
 			return null;
 		}
 	}

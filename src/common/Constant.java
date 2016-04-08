@@ -19,14 +19,12 @@ public class Constant {
 		
 		//Cofiguration displaying message
 		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
-		public static final String CONFIG_DIR = "1. To change the Storage Directory, please input the absolute path\n" +
-												"	Current Directory: %s\n" + 
-												"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
-												"    	 for Windows users, input: C:\\Users\\username\\folder";
-		public static final String CONFIG_THEME = "2. To change the theme, please input the theme name:\n" + 
-												  "   E.g. input: theme autumn";
-		public static final String CONFIG_FONT = "3. To change the font, please input the font name:\n" +
-												 "   E.g. input: font segoe";
+		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
+												"	    Current Directory: %s\n" + 
+												"(E.g. for Mac user, input: /Users/username/folder/subfolder, " +
+												"for Windows users, input: C:\\Users\\username\\folder)";
+		public static final String CONFIG_THEME = "2. To change the theme, input the theme name: (E.g. input: theme autumn)";
+		public static final String CONFIG_FONT = "3. To change the font, input the font name: (E.g. input: font segoe)";
 		
 		//@@author A0130717M
 		//List of displayed messages
@@ -38,12 +36,13 @@ public class Constant {
 		public static final String MESSAGE_DUMMY = "DIDI is a powerful woman";
 		
 		//List of headers
-		public static final String HEADER_FLOATING = "All Tasks Without Deadlines";
-		public static final String HEADER_DEADLINE = "All Tasks With Deadlines";
-		public static final String HEADER_ALL = "All Tasks";
-		public static final String HEADER_SEARCH = "Search Result";
-		public static final String HEADER_FINISHED = "All Finished Tasks";
-		public static final String HEADER_CONFIG = "Configuration";
+		public static final String HEADER_FLOATING = "Floating";
+		public static final String HEADER_DEADLINE = "Deadlines";
+		public static final String HEADER_ALL = "All";
+		public static final String HEADER_SEARCH = "Search";
+		public static final String HEADER_FINISHED = "Finished";
+		public static final String HEADER_CONFIG = "Config";
+		public static final String HEADER_HELP = "Help";
 		public static final String HEADER_UNDEFINED = "Undefined Mode";	
-		public static final String HEADER_START = "Today's Tasks and Overdue Tasks";
+		public static final String HEADER_START = "Today";
 }

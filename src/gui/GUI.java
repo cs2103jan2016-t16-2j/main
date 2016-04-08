@@ -16,11 +16,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -36,11 +36,21 @@ public class GUI extends Application{
 	private String command;
 	private StackPane taskStackPane = new StackPane();
 	private VBox layout = new VBox();
+	private VBox tab = new VBox();
 	private VBox tasks = new VBox();
 	private VBox configs = new VBox(10);
-	private Label sectionHeader = new Label();
+	private HBox sectionHeader = new HBox(10);
 	private Rectangle title = new Rectangle();
 	private WallistModel wallistModel = new WallistModel();
+	
+	private Label allHeader;
+	private Label deadlineHeader;
+	private Label floatingHeader;
+	private Label startHeader;
+	private Label searchHeader;
+	private Label configHeader;
+	private Label helpHeader;
+	private Label finishedHeader;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM y");
@@ -125,13 +135,45 @@ public class GUI extends Application{
 	}
 
 	private void refreshTaskPane() {
-		sectionHeader.setText(state.getHeader());
+		loadHeader();
 		if (state.getCommandType().equals(CommandType.EXIT)){
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
 		}else{
 			loadTask();	
+		}
+	}
+
+	private void loadHeader() {
+		resetTab();
+		switch(state.getViewMode()){
+		case ALL:
+			allHeader.setId("tab");
+			break;
+		case DEADLINE:
+			deadlineHeader.setId("tab");
+			break;
+		case FLOATING:
+			floatingHeader.setId("tab");
+			break;
+		case FINISHED:
+			finishedHeader.setId("tab");
+			break;
+		case START:
+		    startHeader.setId("tab");
+		    break;
+		case SEARCH:
+			searchHeader.setId("tab");
+			break;
+		case HELP:
+		    helpHeader.setId("tab");
+		    break;
+		case CONFIG:
+			configHeader.setId("tab");
+			break;
+		default:
+			startHeader.setId("tab");
 		}
 	}
 	
@@ -230,15 +272,29 @@ public class GUI extends Application{
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    taskStackPane.getChildren().addAll(taskBox, taskPane);
-		layout.getChildren().add(taskStackPane);
+		tab.getChildren().add(taskStackPane);
+		layout.getChildren().add(tab);
 		return taskPane;
 	}
 
 	private void headerComponent() {
 		sectionHeader.setPrefHeight(HEADER_HEIGHT);
 		sectionHeader.setAlignment(Pos.CENTER);
-		sectionHeader.setTextAlignment(TextAlignment.CENTER);
-		layout.getChildren().add(sectionHeader);
+		resetTab();
+		tab.getChildren().add(sectionHeader);
+	}
+
+	private void resetTab() {
+		allHeader = new Label(Constant.HEADER_ALL);
+		deadlineHeader = new Label(Constant.HEADER_DEADLINE);
+		floatingHeader = new Label(Constant.HEADER_FLOATING);
+		startHeader = new Label(Constant.HEADER_START);
+		searchHeader = new Label(Constant.HEADER_SEARCH);
+		configHeader = new Label(Constant.HEADER_CONFIG);
+		helpHeader = new Label(Constant.HEADER_HELP);
+		finishedHeader = new Label(Constant.HEADER_FINISHED);
+		sectionHeader.getChildren().clear();
+		sectionHeader.getChildren().addAll(startHeader, allHeader, deadlineHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 	}
 	
 	private void titleComponent() {
@@ -264,6 +320,7 @@ public class GUI extends Application{
 		
 		String themeSheet = "/resources/" + state.getTheme() + ".css";
 		String fontSheet = "/resources/" + state.getFont() + ".css";
+		
 		scene.getStylesheets().addAll(themeSheet, fontSheet);
 		
 		window.setScene(scene);
@@ -298,8 +355,10 @@ public class GUI extends Application{
 		Text font = new Text(infoStr[3]); 
 		font.setId("normal");
 		ThemeSelector themeSelector = new ThemeSelector();
+		FontSelector fontSelector = new FontSelector();
 		GridPane themes = themeSelector.getTheme();
-		configs.getChildren().addAll(intro, dir, theme, themes, font);
+		GridPane fonts = fontSelector.getFont();
+		configs.getChildren().addAll(intro, dir, theme, themes, font, fonts);
 	}
 	
 	private void enableEscExit() {

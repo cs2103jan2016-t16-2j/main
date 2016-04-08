@@ -39,7 +39,7 @@ public class Constant {
 		public static final String CONFIG_DIR = "1. To change the Storage Directory, please input the absolute path\n" +
 												"	Current Directory: %s\n" + 
 												"	E.g. for Mac user, input: /Users/username/folder/subfolder\n" +
-												"    	 for Windows users, input: C:\\Users\\username\\folder";
+												"    	 for Windows users, input: C:\\\\Users\\username\\folder";
 		public static final String CONFIG_THEME = "2. To change the theme, please input the theme name:\n" + 
 												  "   E.g. input: theme autumn";
 		public static final String CONFIG_FONT = "3. To change the font, please input the font name:\n" +

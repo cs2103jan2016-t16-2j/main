@@ -158,7 +158,6 @@ public class Parser {
 	private boolean isCommandInvalid() {
 		if(!isInputEmpty()){
 			CommandType commandType = getCommand();
-		
 			switch(commandType) {
 				
 				case ADD:
@@ -277,7 +276,7 @@ public class Parser {
 					case CHANGEMODE:
 						if(content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("DEADLINE") 
 								|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("SEARCH") 
-								|| content.equalsIgnoreCase("FINISHED") || content.equals("CONFIG")){
+								|| content.equalsIgnoreCase("FINISHED") || content.equalsIgnoreCase("CONFIG")){
 							return false;
 						}
 						return true;

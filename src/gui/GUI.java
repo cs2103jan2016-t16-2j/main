@@ -123,7 +123,7 @@ public class GUI extends Application{
 
 	private void refreshTaskPane() {
 		sectionHeader.setText(state.getHeader());
-		state.setViewMode(ViewMode.CONFIG);
+		//state.setViewMode(ViewMode.CONFIG);
 		if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
 		}else{

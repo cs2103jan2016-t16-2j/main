@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import common.State;
 import common.Task;
 import common.ViewMode;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 public class ChangeViewMode implements Operation {
 	private State state;
@@ -16,13 +17,15 @@ public class ChangeViewMode implements Operation {
 	public boolean process() {
 		ViewMode newViewMode = state.getNewViewMode();
 		state.setViewMode(newViewMode);
-		
-		//Collape alArrayList<Task> when switching view mode
+
+		//Collapse allArrayList<Task> when switching view mode
 		ArrayList<Task> allTasks = state.getAllTasks();
 		for(int i = 0; i < allTasks.size(); i++){
 			Task another = allTasks.get(i);
 			another.setIsDetailDisplayed(false);
 		}
+		
+		
 		return true;
 	}
 

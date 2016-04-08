@@ -1,8 +1,6 @@
 package storage;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,18 +21,24 @@ public class FileIo {
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	private State state;
 	private boolean isConnectedToDatafile;
+	private ProjectLogger logger;
 	
-	// Logger	
-		private final static Logger LOGGER = Logger.getLogger(FileIo.class.getName());
+	// Logging Message
+	private final static String LOADING_STATE_SUCCESS = "Loading State from datafile...";
+	private final static String LOADING_STATE_FAILURE = "State is not successfully loaded!";
+	private final static String SAVING_STATE_SUCCESS = "Saving state to datafile...";
+	private final static String SAVING_STATE_FAILURE = "State is not successfully saved!";
+	private final static String WRITING_TASK_FAILURE = "Task is not succesfully written to datafile...";
+	
+	public FileIo(State state) {
+		this.state = state;
+		logger = new ProjectLogger(FileIo.class.getName()); 
+	}
 		
-		public FileIo(State state) {
-			this.state = state;
-		}
-		
-		protected boolean setFile(File file) {
-			this.file = file;
-			return true;
-		}
+	protected boolean setFile(File file) {
+		this.file = file;
+		return true;
+	}
 		
 		/**
 	 	 * This method read all JSON in the text file and convert into Task objects.
@@ -44,7 +48,7 @@ public class FileIo {
 	
 		public boolean loadState(){
 			assert isConnectedToDatafile;
-			LOGGER.log(Level.INFO, "Loading State from datafile...");
+			logger.info(LOADING_STATE_SUCCESS);
 			ArrayList<Task> normalTasks = state.getDeadlineTasks();
 			ArrayList<Task> floatingTasks = state.getFloatingTasks();
 			ArrayList<Task> allTasks = state.getAllTasks();
@@ -74,7 +78,7 @@ public class FileIo {
 				Collections.sort(floatingTasks, TaskComparators.compareByCreationDate);
 				Collections.sort(allTasks, TaskComparators.compareByCreationDate);
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, "State is not successfully loaded", e);
+				logger.warning(LOADING_STATE_FAILURE);
 				return false;
 			}
 			return true;
@@ -88,13 +92,13 @@ public class FileIo {
 
 		public boolean saveState(){
 			assert isConnectedToDatafile;
-			LOGGER.log(Level.INFO, "Saving state to datafile...");
+			logger.info(SAVING_STATE_SUCCESS);
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 				writeTaskToJson(writer);
 				writer.close();
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, "State is not successfully saved", e);
+				logger.warning(SAVING_STATE_FAILURE);
 				return false;
 			}
 			return true;
@@ -119,7 +123,7 @@ public class FileIo {
 					writer.write(json + "\n");
 				}
 			} catch (Exception e) {
-				LOGGER.log(Level.WARNING, "Task is not succesfully written to datafile...", e);
+				logger.warning(WRITING_TASK_FAILURE);
 				return false;
 			}
 			return true;

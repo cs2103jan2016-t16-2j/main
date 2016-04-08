@@ -1,3 +1,4 @@
+//@@ A0107375E
 package storage;
 import common.*;
 import java.io.File;
@@ -25,7 +26,7 @@ public class Storage {
 	
 	public boolean executeChangeDirectory(String directory) {
 		assert isConnectedToFile;
-		return fileManagement.changeDirectory(directory);
+		return fileManagement.changeDirectory();
 	}
 	
 	// Helper functions

@@ -14,9 +14,9 @@ public class State {
 	private ViewMode newViewMode_;	
 	private int positionIndex_;
 	private Date startDate_, endDate_;
-	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_;
+	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_, startTasks_;
 	private ArrayList<String> searchKey_;
-	private String currentDirectory;
+	private String currentDirectory_;
 
 	public State(){
 		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
@@ -42,6 +42,7 @@ public class State {
 		allTasks_ = new ArrayList<Task>();
 		searchResultTasks_ = new ArrayList<Task>();
 		finishedTasks_ = new ArrayList<Task>();
+		startTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
 		theme_ = Theme.AUTUMN;
 		font_ = Font.SEGOE;
@@ -52,7 +53,7 @@ public class State {
 	 */
 	
 	public void setCurrentDirectory(String directory) {
-		this.currentDirectory = directory;
+		this.currentDirectory_ = directory;
 	}
 	
 	public void setIsValid(boolean bool){
@@ -249,6 +250,15 @@ public class State {
 		return finishedTasks_;
 	}
 	
+	//@@author A0130717M
+	public void setStartTasks (ArrayList<Task> startTasks){
+		startTasks_ = startTasks;
+	}
+
+	public ArrayList<Task> getStartTasks(){
+		return startTasks_;
+	}
+	
 	public boolean recoverFrom(State oldState){
 		isValid_ = oldState.getIsValid();
 		isStartDateChanged_ = oldState.getIsStartDateChanged();
@@ -366,6 +376,11 @@ public class State {
 			finishedTasks.add(finishedTasks_.get(i));
 		}
 		
+		ArrayList<Task> startTasks = new ArrayList<Task>();
+		for(int i = 0; i < startTasks_.size(); i++){
+			startTasks.add(startTasks_.get(i));
+		}
+		
 		ArrayList<String> searchKey = new ArrayList<String>();
 		for(int i = 0; i < searchKey_.size(); i++){
 			searchKey.add(searchKey_.get(i));
@@ -414,6 +429,15 @@ public class State {
 				return searchResultTasks_;
 			case FINISHED:
 				return finishedTasks_;
+			case START:
+				startTasks_ = new ArrayList<Task>();
+				for(int i = 0; i < deadlineTasks_.size(); i++){
+					Task task = deadlineTasks_.get(i);
+					if (task.getEndDate().getTime() < (System.currentTimeMillis())){
+						startTasks_.add(task);	
+					}
+				}
+				return startTasks_;
 			default:
 				return allTasks_;
 		}
@@ -422,7 +446,7 @@ public class State {
 	public String[] getConfigInfo(){
 		String[] configInfo = new String[4];
 		configInfo[0] = Constant.CONFIG_INTRO;
-		configInfo[1] = String.format(Constant.CONFIG_DIR, "Yikun to put here");
+		configInfo[1] = String.format(Constant.CONFIG_DIR, currentDirectory_);
 		configInfo[2] = Constant.CONFIG_THEME;
 		configInfo[3] = Constant.CONFIG_FONT;
 		return configInfo;
@@ -442,6 +466,8 @@ public class State {
 			return Constant.HEADER_FINISHED;
 		case CONFIG:
 			return Constant.HEADER_CONFIG;
+		case START:
+			return Constant.HEADER_START;
 		default:
 			return Constant.HEADER_ALL;
 		}

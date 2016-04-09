@@ -22,7 +22,6 @@ public class DeleteTask implements Operation {
 			int positionIndex = state.getPositionIndex();
 			int positionIndexLocal = fromOneBaseToZeroBase(positionIndex);
 			
-			System.out.println(positionIndexLocal);
 			if(positionIndexLocal <0){
 				throw new IndexOutOfBoundsException();
 			}
@@ -53,6 +52,11 @@ public class DeleteTask implements Operation {
 				boolean isDeleteSuccessful = deleteUnderFinishedMode(positionIndexLocal);
 				return isDeleteSuccessful;
 			}
+			
+			if(viewMode == ViewMode.START){
+				boolean isDeleteSuccessful = deleteUnderStartMode(positionIndexLocal);
+				return isDeleteSuccessful;
+			}
 			//if above code does not return , means not current model to delete
 			state.setDisplayMessage(Constant.MESSAGE_DELETE_IN_WRONG_MODE);
 			
@@ -64,6 +68,19 @@ public class DeleteTask implements Operation {
 		}
 	}
 	
+	private boolean deleteUnderStartMode(int positionIndexLocal) throws IndexOutOfBoundsException{
+		ArrayList<Task> startingTasks = state.getTodaysTasks();
+		
+		if(positionIndexLocal >= startingTasks.size()){
+			throw new IndexOutOfBoundsException();
+		}
+
+		Task toBeDeleted = startingTasks.get(positionIndexLocal);
+		deleteTask(toBeDeleted);
+		startingTasks.remove(toBeDeleted);
+		return true;
+	}
+	
 	private boolean deleteUnderFinishedMode(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> finishedTasks = state.getFinishedTasks();
 		
@@ -71,34 +88,21 @@ public class DeleteTask implements Operation {
 			throw new IndexOutOfBoundsException();
 		}
 
-		Task toBeDeleted = finishedTasks.get(positionIndexLocal);
-		finishedTasks.remove(toBeDeleted);
+		finishedTasks.remove(positionIndexLocal);
 		
 		return true;
 	}
 	
 	private boolean deleteUnderSearchMode(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> searchedTasks = state.getSearchResultTasks();
-		ArrayList<Task> allTasks = state.getAllTasks();
 		
 		if(positionIndexLocal >= searchedTasks.size()){
 			throw new IndexOutOfBoundsException();
 		}
 
 		Task toBeDeleted = searchedTasks.get(positionIndexLocal);
-		allTasks.remove(toBeDeleted);
-		
-		TaskType taskType = toBeDeleted.getTaskType();
-		
-		if(taskType == TaskType.FLOATING){
-			ArrayList<Task> floatingTasks = state.getFloatingTasks();
-			floatingTasks.remove(toBeDeleted);
-		}
-		
-		if(taskType == TaskType.DEADLINE){
-			ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
-			deadlineTasks.remove(toBeDeleted);
-		}
+		deleteTask(toBeDeleted);
+		searchedTasks.remove(positionIndexLocal);
 		
 		return true;
 	}
@@ -112,6 +116,13 @@ public class DeleteTask implements Operation {
 		}
 
 		Task toBeDeleted = allTasks.get(positionIndexLocal);
+		deleteTask(toBeDeleted);
+		
+		return true;
+	}
+
+	private void deleteTask(Task toBeDeleted) {
+		ArrayList<Task> allTasks = state.getAllTasks();
 		allTasks.remove(toBeDeleted);
 		
 		TaskType taskType = toBeDeleted.getTaskType();
@@ -125,12 +136,9 @@ public class DeleteTask implements Operation {
 			ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
 			deadlineTasks.remove(toBeDeleted);
 		}
-		
-		return true;
 	}
 	
 	private boolean deleteUnderDeadlineMode(int positionIndexLocal) throws IndexOutOfBoundsException{
-		ArrayList<Task> allTasks = state.getAllTasks();
 		ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
 		
 		if(positionIndexLocal >= deadlineTasks.size()){
@@ -138,13 +146,11 @@ public class DeleteTask implements Operation {
 		}
 
 		Task toBeDeleted = deadlineTasks.get(positionIndexLocal);
-		deadlineTasks.remove(toBeDeleted);
-		allTasks.remove(toBeDeleted);
+		deleteTask(toBeDeleted);
 		return true;
 	}
 	
 	private boolean deletedUnderFloatingMode(int positionIndexLocal) throws IndexOutOfBoundsException {
-		ArrayList<Task> allTasks = state.getAllTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		
 		if(positionIndexLocal >= floatingTasks.size()){
@@ -152,8 +158,7 @@ public class DeleteTask implements Operation {
 		}
 
 		Task toBeDeleted = floatingTasks.get(positionIndexLocal);
-		floatingTasks.remove(toBeDeleted);
-		allTasks.remove(toBeDeleted);
+		deleteTask(toBeDeleted);
 		return true;
 	}
 	

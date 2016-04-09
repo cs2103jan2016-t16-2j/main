@@ -41,17 +41,16 @@
 }
 
 .label{
-    -fx-text-fill: rgba(200, 200, 200, 1);
-    -fx-background-color: rgba(80, 60, 50, 0.6);
+    -fx-text-fill: rgba(255, 255, 255, 1);
 }
 
 #header{
-    -fx-text-fill: rgba(200, 200, 200, 1);
+    -fx-text-fill: rgba(255, 225, 110, 1);
     -fx-background-color: rgba(80, 60, 50, 0.2);
 }
 
 #tab{
-    -fx-text-fill: rgba(255, 250, 230, 1);
+    -fx-text-fill: rgba(255, 225, 110, 1);
     -fx-background-color: rgba(110, 80, 0, 0.6);
 }
 

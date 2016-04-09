@@ -6,10 +6,12 @@ import common.*;
 import logic.AddTask;
 import logic.ChangeViewMode;
 import logic.ClearTask;
+import logic.Config;
 import logic.DeleteTask;
 import logic.Help;
 import logic.SearchTasks;
 import logic.TickTask;
+import logic.UntickTask;
 import logic.UpdateTask;
 import logic.ViewTaskDetail;
 import parser.Parser;
@@ -29,9 +31,11 @@ public class WallistModel{
 	private AddTask addTask;
 	private DeleteTask deleteTask;
 	private TickTask tickTask;
+	private UntickTask untickTask;
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
 	private Help help;
+	private Config config;
 	private SearchTasks searchTasks;
 	private ChangeViewMode changeViewMode;
 	private ViewTaskDetail viewTaskDetail;
@@ -77,9 +81,11 @@ public class WallistModel{
 		addTask = new AddTask(state);
 		deleteTask = new DeleteTask(state);
 		tickTask = new TickTask(state);
+		untickTask = new UntickTask(state);
 		updateTask = new UpdateTask(state);
 		clearTask = new ClearTask(state);
 		searchTasks = new SearchTasks(state);
+		config = new Config(state);
 		changeViewMode = new ChangeViewMode(state);
 		viewTaskDetail = new ViewTaskDetail(state);
 		help = new Help(state);
@@ -134,6 +140,9 @@ public class WallistModel{
 		} else if (cmdType.equals(CommandType.TICK)){
 			result = tickTask.process();
 			stateHistory.push(state.deepCopy());
+		} else if (cmdType.equals(CommandType.UNTICK)){
+			result = untickTask.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.UPDATE)){
 			result = updateTask.process();
 			stateHistory.push(state.deepCopy());
@@ -142,6 +151,7 @@ public class WallistModel{
 			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.SEARCH)){
 			result = searchTasks.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.UNDO)){
 			result = runningUndo();
 			return result;
@@ -150,8 +160,16 @@ public class WallistModel{
 			return result;
 		} else if (cmdType.equals(CommandType.DETAIL)){
 			result = viewTaskDetail.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.CHANGEMODE)){
 			result = changeViewMode.process();
+			stateHistory.push(state.deepCopy());
+		} else if (cmdType.equals(CommandType.CONFIG)){
+			result = config.process();
+			stateHistory.push(state.deepCopy());
+		} else if (cmdType.equals(CommandType.HELP)){
+			result = help.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
 		} else {

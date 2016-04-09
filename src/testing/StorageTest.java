@@ -14,7 +14,7 @@ import java.util.TreeSet;
 import org.junit.Test;
 import common.Task;
 import common.TaskType;
-import parser.TimeParser;
+import common.TimeParser;
 import storage.Storage;
 import common.State;
 public class StorageTest {

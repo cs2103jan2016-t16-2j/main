@@ -1,5 +1,5 @@
 //@@author A0130369H
-package parser;
+package common;
 
 import com.joestelmach.natty.*;
 

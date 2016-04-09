@@ -529,14 +529,10 @@ public class State {
 			return Constant.STYLE_BRANCH;
 		case CAT:
 			return Constant.STYLE_CAT;
-		case LEATHER:
-			return Constant.STYLE_LEATHER;
-		case PARIS:
-			return Constant.STYLE_PARIS;
+		case GREY:
+			return Constant.STYLE_GREY;
 		case WARM:
 			return Constant.STYLE_WARM;
-		case WHEAT:
-			return Constant.STYLE_WHEAT;
 		default:
 			return Constant.STYLE_AUTUMN;
 		}

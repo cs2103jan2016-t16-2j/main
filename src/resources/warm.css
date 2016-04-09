@@ -1,44 +1,22 @@
 //@@author A0130717M
 .root {
-    -fx-font-size: 12pt;    
     -fx-background-image: url("Warm.jpg");
-    -fx-background-size: cover;                     
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
-}
-
-#light{
-    -fx-text-fill: rgba(255, 255, 255, 1);
-    -fx-background-color: rgba(255, 200, 70, 0.2);
-    -fx-background-radius: 1em;
-    -fx-padding: 10 10 10 10;
-}
-
-#dark{
-    -fx-text-fill: rgba(110, 80, 0, 1);
-    -fx-background-color: rgba(225, 225, 225, 0.5);
-    -fx-background-radius: 1em;
-    -fx-padding: 10 10 10 10;
 }
 
 #taskPane{
-    -fx-fill: rgba(255, 255, 140, 0.5);
-    -fx-arc-height: 10;
-    -fx-arc-width: 10;
-    -fx-padding: 10 10 10 10;
+    -fx-fill: rgba(255, 255, 200, 0.5);
 }
 
 #normal{
-    -fx-fill: rgba(100, 100, 40, 1);
-    
+    -fx-fill: rgba(60, 26, 55, 1);
 }
 
 #title{
-    -fx-fill: rgba(255, 255, 140, 0.3);
+    -fx-fill: rgba(255, 255, 200, 0.3);
 }
 
 #titleText{
-    -fx-fill: rgba(100, 100, 40, 1);
+    -fx-fill: rgba(60, 26, 55, 1);
 }
 
 #evenLine{
@@ -50,57 +28,39 @@
 }
 
 .text-field{
-    -fx-font-size: 12pt;
-    -fx-background-color: rgba(255, 255, 140, 0.5);
-    -fx-text-fill: rgba(100, 100, 40, 1);
+    -fx-background-color: rgba(255, 255, 200, 0.5);
+    -fx-text-fill: rgba(60, 26, 55, 1);
 }
 
 #zoom{
-    -fx-font-size: 14pt;
-    -fx-fill: rgba(115, 115, 5, 1);
-}
-
-#overdue{
-    -fx-fill: rgba(255, 20, 20, 1);
-}
-
-#zoomOverdue{
-    -fx-font-size: 14pt;
-    -fx-fill: rgba(255, 20, 20, 1);
+    -fx-fill: rgba(80, 46, 75, 1);
 }
 
 .label{
-    -fx-font-size: 16pt;
-    -fx-text-fill: rgba(100, 100, 40, 1);
+    -fx-text-fill: rgba(60, 26, 55, 1);
+}
+
+#header{
+    -fx-text-fill: rgba(255, 250, 230, 1);
+    -fx-background-color: rgba(60, 26, 55, 0.3);
+}
+
+#tab{
+    -fx-text-fill: rgba(255, 250, 230, 1);
+    -fx-background-color: rgba(60, 26, 55, 0.3);
+}
+
+#consolas{
+    -fx-text-fill: rgba(260, 26, 55, 1);
+    -fx-background-color: rgba(60, 26, 55, 0.3);
+}
+
+#segoe{
+    -fx-text-fill: rgba(60, 26, 55, 1);
+    -fx-background-color: rgba(60, 26, 55, 0.3);
 }
 
 #message{
-    -fx-font-size: 16pt;
-    -fx-text-fill: rgba(100, 100, 40, 1);
-    -fx-background-color: rgba(255, 255, 140, 0.3);
-    -fx-background-radius: 1em;
-    -fx-padding: 10 10 10 10;
-}
-
-.scroll-pane{
-    -fx-background-color: transparent;
-}
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-.scroll-bar{
-    -fx-background-color: transparent;
-}
-.scroll-bar:vertical .thumb {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 2em;
-}
-.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-    -fx-padding:0 20 0 0;
-}
-.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
-    -fx-background-color: transparent;
-    -fx-shape: " ";
-    -fx-padding:2;
+    -fx-text-fill: rgba(60, 26, 55, 1);
+    -fx-background-color: rgba(255, 250, 230, 0.3);
 }

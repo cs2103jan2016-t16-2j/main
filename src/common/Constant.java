@@ -61,10 +61,8 @@ public class Constant {
 		public static final String STYLE_BOKEH = "bokeh";
 		public static final String STYLE_BRANCH = "branch";
 		public static final String STYLE_CAT = "cat";
-		public static final String STYLE_JAPANESE = "japanese";
 		public static final String STYLE_LEATHER = "leather";
 		public static final String STYLE_PARIS = "paris"; 
-		public static final String STYLE_RAINDROP = "raindrop";
 		public static final String STYLE_WARM = "warm";
 		public static final String STYLE_WHEAT = "wheat";
 		

@@ -46,7 +46,7 @@ public class State {
 		finishedTasks_ = new ArrayList<Task>();
 		todaysTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
-		theme_ = Theme.CAT;
+		theme_ = Theme.AUTUMN;
 		font_ = Font.SEGOE;
 	}
 	
@@ -529,14 +529,10 @@ public class State {
 			return Constant.STYLE_BRANCH;
 		case CAT:
 			return Constant.STYLE_CAT;
-		case JAPANESE:
-			return Constant.STYLE_JAPANESE;
 		case LEATHER:
 			return Constant.STYLE_LEATHER;
 		case PARIS:
 			return Constant.STYLE_PARIS;
-		case RAINDROP:
-			return Constant.STYLE_RAINDROP;
 		case WARM:
 			return Constant.STYLE_WARM;
 		case WHEAT:

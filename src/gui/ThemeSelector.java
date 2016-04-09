@@ -25,7 +25,6 @@ public class ThemeSelector {
 		addTheme("Leather", 0, 1, 0);
 		addTheme("Paris", 1, 1, 1);
 		addTheme("Raindrop", 2, 1, 0);
-		//addTheme("Starry", 1, 0);
 		addTheme("Warm", 3, 1, 1);
 		addTheme("Wheat", 4, 1, 0);
 	}

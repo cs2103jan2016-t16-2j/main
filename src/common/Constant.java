@@ -38,7 +38,7 @@ public class Constant {
 		
 		//List of headers
 		public static final String HEADER_FLOATING = "Floating";
-		public static final String HEADER_DEADLINE = "Deadlines";
+		public static final String HEADER_DEADLINE = "Scheduled";
 		public static final String HEADER_ALL = "All";
 		public static final String HEADER_SEARCH = "Search";
 		public static final String HEADER_FINISHED = "Finished";

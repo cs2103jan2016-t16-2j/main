@@ -3,11 +3,14 @@ package gui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import common.*;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -15,18 +18,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.WallistModel;
 
-public class GUI extends Application{
+public class Gui extends Application{
 	
 	private Stage window;
 	private Scene scene;
@@ -34,14 +39,18 @@ public class GUI extends Application{
 	private TextField inputBox;
 	private State state;
 	private String command;
+	private WallistModel wallistModel = new WallistModel();
 	private StackPane taskStackPane = new StackPane();
+	private Rectangle title = new Rectangle();
 	private VBox layout = new VBox();
 	private VBox tab = new VBox();
 	private VBox tasks = new VBox();
 	private VBox configs = new VBox(10);
 	private HBox sectionHeader = new HBox(10);
-	private Rectangle title = new Rectangle();
-	private WallistModel wallistModel = new WallistModel();
+	private HBox tableHeader = new HBox(1);
+	private Label indexHeader = new Label(" #");
+	private Label contentHeader = new Label(" Task");
+	private Label timeHeader = new Label(" Schedule");
 	
 	private Label allHeader;
 	private Label deadlineHeader;
@@ -52,9 +61,14 @@ public class GUI extends Application{
 	private Label helpHeader;
 	private Label finishedHeader;
 	
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
-	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM y");
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy HH:mm");
+	private SimpleDateFormat sdfYear = new SimpleDateFormat("yy");
+	private SimpleDateFormat sdfThisYear = new SimpleDateFormat("dd MMM HH:mm");
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yy");
+	private SimpleDateFormat sdfDateThisYear = new SimpleDateFormat("dd MMM");
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+	private SimpleDateFormat sdfDefaultTime = new SimpleDateFormat("HH:mm:ss");
+	private String defaultTime = "23:59:17";
 	
 	private int taskBoxHeight;
 	private int taskBoxWidth;
@@ -182,6 +196,7 @@ public class GUI extends Application{
 	}
 
 	private void loadTask() {
+		updateTableHeader();
 		ArrayList<Task> taskList = state.getCurrentTasks();
 		tasks.getChildren().clear();
 		taskIndex = 0;
@@ -195,10 +210,27 @@ public class GUI extends Application{
 		taskPane.setContent(tasks);
 	}
 	
+	private void updateTableHeader() {
+		tableHeader.getChildren().clear();
+		if (state.getViewMode().equals(ViewMode.FLOATING)){
+			indexHeader.setPrefWidth(INDEX_WIDTH);
+			contentHeader.setPrefWidth(contentWidth + TIME_WIDTH);
+			tableHeader.getChildren().addAll(indexHeader, contentHeader);	
+		} else {
+			indexHeader.setPrefWidth(INDEX_WIDTH);
+			contentHeader.setPrefWidth(contentWidth);
+			timeHeader.setPrefWidth(TIME_WIDTH);
+			tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
+		}
+	}
+	
 	private void displayRow(Task task) {
 		taskIndex ++;
 		String taskContent = task.getDisplayContent();
-		String taskTime = getTaskTime(task);
+		String taskTime = "";
+		if (task.getTaskType().equals(TaskType.DEADLINE)) {
+		    taskTime = getTaskTime(task);	
+		}
 		String taskIdx = Integer.toString(taskIndex);
 		
 		GridPane taskLine = new GridPane();
@@ -227,19 +259,41 @@ public class GUI extends Application{
 	}
 
 	private String getTaskTime(Task task) {
-		String taskTime = "";
-		if (task.getTaskType().equals(TaskType.DEADLINE)){ 
-			if (task.getStartDate() == null){
-			    taskTime = sdf.format(task.getEndDate());
-		    } else{
-			    if (sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()))){
-				    taskTime = String.format(DURATION, sdf.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
-			    } else{
-	    	    	taskTime = String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
-		    	}	
-		    }
+		Date startDate = task.getStartDate();
+		Date endDate = task.getEndDate();
+		boolean sameDate = false;
+		boolean startThisYear = false;
+		boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
+		boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
+		if (startDate != null){
+			startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
+			sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
 		}
-		return taskTime;
+		if (startDate == null && endThisYear && hasEndTime){
+		    return sdfDateThisYear.format(task.getEndDate());
+		} else if (startDate == null && endThisYear && !hasEndTime){
+		    return sdfThisYear.format(task.getEndDate());
+		} else if (startDate == null && hasEndTime){
+		    return sdf.format(task.getEndDate());
+	    } else if (startDate == null && !hasEndTime){
+	    	return sdfDate.format(task.getEndDate());
+	    } else if (sameDate && startThisYear){
+	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
+		} else if (sameDate && !startThisYear){
+			return String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
+	    } else if (startThisYear && endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
+	    } else if (startThisYear && endThisYear && !hasEndTime){
+	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
+	    } else if (startThisYear && !endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdf.format(task.getEndDate()));
+	    } else if (startThisYear && !endThisYear && !hasEndTime){
+	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
+	    } else if (!startThisYear && endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdf.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
+	    } else {
+	    	return String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
+	    }
 	}
 
 	private void setTaskView(Task task, Column col) {
@@ -267,16 +321,27 @@ public class GUI extends Application{
 		taskBox.setWidth(taskBoxWidth);
 		taskBox.setHeight(taskBoxHeight);
 		taskBox.setId("taskPane");
-		ScrollPane taskPane = new ScrollPane();
+		taskPane = new ScrollPane();
 		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-	    taskStackPane.getChildren().addAll(taskBox, taskPane);
+		VBox taskTable = new VBox();
+		taskTable.getChildren().addAll(tableHeader, taskPane);
+	    taskStackPane.getChildren().addAll(taskBox, taskTable);
 		tab.getChildren().add(taskStackPane);
 		layout.getChildren().add(tab);
 		return taskPane;
 	}
 
+	private void tableHeaderComponent(){
+		indexHeader.setTextAlignment(TextAlignment.CENTER);
+		contentHeader.setTextAlignment(TextAlignment.CENTER);
+		timeHeader.setTextAlignment(TextAlignment.CENTER);
+		indexHeader.setId("header");
+		contentHeader.setId("header");
+		timeHeader.setId("header");
+	}
+	
 	private void headerComponent() {
 		sectionHeader.setPrefHeight(HEADER_HEIGHT);
 		sectionHeader.setAlignment(Pos.CENTER);
@@ -339,6 +404,7 @@ public class GUI extends Application{
 		titleComponent();
         enableDrag();
 		headerComponent();
+		tableHeaderComponent();
         taskPane = taskComponent();
 		inputBox = inputComponent();
 	}

@@ -36,9 +36,9 @@ public class SearchTasks implements Operation {
 		ArrayList<Task> allTasks = state.getAllTasks();
 
 		for(int i = 0; i < allTasks.size(); i++){
-			Task another = allTasks.get(i);
-			if(another.concatString().contains(keyToSearch) && !searchedTasks.contains(another)){
-				searchedTasks.add(another);
+			Task task = allTasks.get(i);
+			if(task.concatString().contains(keyToSearch) && !searchedTasks.contains(task)){
+				searchedTasks.add(task);
 			}
 		}
 	}
@@ -46,8 +46,8 @@ public class SearchTasks implements Operation {
 	private void collapseAllTasks() {
 		ArrayList<Task> allTasks = state.getAllTasks();
 		for(int i = 0; i < allTasks.size(); i++){
-			Task another = allTasks.get(i);
-			another.setIsDetailDisplayed(false);
+			Task task = allTasks.get(i);
+			task.setIsDetailDisplayed(false);
 		}
 	}
 

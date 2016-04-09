@@ -35,7 +35,7 @@ public class TickTask implements Operation {
 				Task toBeTicked = findTaskFromFloatingTasks(localPositionIndex);
 				
 				//tick the task 
-				boolean isTickSuccessful = tickTask(localPositionIndex, toBeTicked);
+				boolean isTickSuccessful = tickTask(toBeTicked);
 				
 				if(isTickSuccessful) {
 					return true;
@@ -51,7 +51,7 @@ public class TickTask implements Operation {
 				Task toBeTicked = findTaskFromDeadlineTasks(localPositionIndex);
 				
 				//tick the task 
-				boolean isTickSuccessful = tickTask(localPositionIndex, toBeTicked);
+				boolean isTickSuccessful = tickTask(toBeTicked);
 				
 				if(isTickSuccessful) {
 					return true;
@@ -67,7 +67,7 @@ public class TickTask implements Operation {
 				Task toBeTicked = findTaskFromAllTasks(localPositionIndex);
 				
 				//tick the task 
-				boolean isTickSuccessful = tickTask(localPositionIndex, toBeTicked);
+				boolean isTickSuccessful = tickTask(toBeTicked);
 				
 				if(isTickSuccessful) {
 					return true;
@@ -77,15 +77,68 @@ public class TickTask implements Operation {
 				}
 			}
 			
+			if(viewMode == ViewMode.SEARCH){
+				// find the task in all tasks list
+				Task toBeTicked = findTaskFromSearchedTasks(localPositionIndex);
+				
+				//tick the task 
+				boolean isTickSuccessful = tickTask(toBeTicked);
+				
+				
+				if(isTickSuccessful) {
+					return true;
+				} else {
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					return false;
+				}
+			}
+			
+			if(viewMode == ViewMode.START){
+				// find the task in all tasks list
+				Task toBeTicked = findTaskFromStartingTasks(localPositionIndex);
+				
+				//tick the task 
+				boolean isTickSuccessful = tickTask(toBeTicked);
+				
+				
+				if(isTickSuccessful) {
+					return true;
+				} else {
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					return false;
+				}
+			}
 			//in wrong view mode
-			state.setDisplayMessage(Constant.MESSAGE_DELETE_IN_WRONG_MODE);
+			state.setDisplayMessage(Constant.MESSAGE_TICK_IN_WRONG_MODE);
 			return false;
 		} catch (IndexOutOfBoundsException e){
 			state.setDisplayMessage(Constant.MESSAGE_INDEX_OUT_OF_BOUND);
 			return false;
 		}
 	}
+	
+	private Task findTaskFromStartingTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+		ArrayList<Task> taskList = state.getTodaysTasks();
 
+		if(localPositionIndex >= taskList.size()){
+			throw new IndexOutOfBoundsException();	
+		}
+
+		Task toBeTicked = taskList.get(localPositionIndex);
+		return toBeTicked;
+	}
+
+	private Task findTaskFromSearchedTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+		ArrayList<Task> taskList = state.getSearchResultTasks();
+
+		if(localPositionIndex >= taskList.size()){
+			throw new IndexOutOfBoundsException();	
+		}
+
+		Task toBeTicked = taskList.get(localPositionIndex);
+		return toBeTicked;
+	}
+	
 	private Task findTaskFromAllTasks(int localPositionIndex) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getAllTasks();
 
@@ -108,7 +161,7 @@ public class TickTask implements Operation {
 		return toBeTicked;
 	}
 
-	private boolean tickTask(int localPositionIndex, Task toBeTicked) {
+	private boolean tickTask(Task toBeTicked) {
 		ArrayList<Task> finishedTask = state.getFinishedTasks();
 		finishedTask.add(toBeTicked);
 		DeleteTask deleteTask = new DeleteTask(state);

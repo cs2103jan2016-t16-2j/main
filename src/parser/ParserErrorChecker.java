@@ -62,10 +62,8 @@ public class ParserErrorChecker {
 		if(!isInputEmpty()){
 			CommandType commandType = getCommand();
 			switch(commandType) {
-				
 				case ADD:
 					return false;	
-				
 				case CLEAR:
 					return false;
 				
@@ -87,10 +85,9 @@ public class ParserErrorChecker {
 				case REDO:
 					return false;
 					
-				case CHANGEMODE:
-					return false;
-					
-				case SEARCH:
+				case CHANGEMODE: // view all/deadline
+					return false;		
+				case SEARCH: 
 					return false;
 				
 				case DETAIL:
@@ -98,10 +95,7 @@ public class ParserErrorChecker {
 					
 				case HELP:
 					return false;
-					
-				case CONFIG:
-					return false;
-					
+
 				case UNTICK:
 					return false;
 					

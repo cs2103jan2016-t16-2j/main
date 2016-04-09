@@ -101,6 +101,8 @@ public class CommandChangeMode implements Command{
 			return ViewMode.CONFIG;
 		} else if(content_.equalsIgnoreCase("FINISHED")){
 			return ViewMode.FINISHED;
+		} else if (content_.equalsIgnoreCase("HELP")) {
+			return ViewMode.HELP;
 		} else {
 			return ViewMode.UNDEFINED;
 		}

@@ -1,9 +1,7 @@
-package facade;
+package model;
 
 import java.util.EmptyStackException;
 import java.util.Stack;
-
-
 import common.*;
 import logic.AddTask;
 import logic.ChangeViewMode;
@@ -15,10 +13,16 @@ import logic.TickTask;
 import logic.UpdateTask;
 import logic.ViewTaskDetail;
 import parser.Parser;
+import storage.FileManagement;
 import storage.Storage;
+import java.util.logging.*;
 
 public class WallistModel{
-
+	
+	//============================
+	//       Attributes
+	//============================
+	
 	public Storage storage;
 	private Parser parser;
 	private State state;
@@ -33,8 +37,41 @@ public class WallistModel{
 	private ViewTaskDetail viewTaskDetail;
 	public Stack<State> stateHistory, stateFuture ;
 	
+	// logger
+	private final static Logger LOGGER = Logger.getLogger(FileManagement.class.getName());
+	
+	// logging message displayed
+	private static final String PARSER_FAILURE = "User input is not succesfully parsed!";
+	
+	//====================================
+	//       Constructor and Initiliser
+	//====================================
+	
 	public WallistModel(){
+		initialiseState(); // state must be initialised first
+		initialiseLogic();
+		initialiseStorage();
+		initialiseParser(); 
+	}
+	
+	private void initialiseParser() {
+		parser = new Parser(state);
+	}
+
+	private void initialiseStorage() {
+		storage = new Storage(state);
+		
+		storage.executeLoadState();
+	}
+
+	private void initialiseState() {
 		state = new State();
+		stateHistory = new Stack<State>();
+		stateHistory.push(state.deepCopy());
+		stateFuture = new Stack<State>();
+	}
+
+	private void initialiseLogic() {
 		addTask = new AddTask(state);
 		deleteTask = new DeleteTask(state);
 		tickTask = new TickTask(state);
@@ -44,31 +81,27 @@ public class WallistModel{
 		changeViewMode = new ChangeViewMode(state);
 		viewTaskDetail = new ViewTaskDetail(state);
 		help = new Help(state);
-		storage = new Storage(state);
-		parser = new Parser(state); 
-		storage.executeLoadState();
-		stateHistory = new Stack<State>();
-		stateHistory.push(state.deepCopy());
-		stateFuture = new Stack<State>(); 
 	}
 	
 	public State getState(){
 		return state;
 	}
 	
-	public boolean process(String msg){
+	public boolean processInputString(String inputString){
 		try{
-			state.setUserInput(msg);
-			boolean parserResult = parser.processInput();
+			state.setUserInput(inputString); // store input into state
+			boolean isParsed = parser.processInput();
 			boolean isValid = state.getIsValid();
-			boolean successfulParser = parserResult && isValid;
+			boolean isSuccesfullyParsed = isParsed && isValid;
 			
-			if(!successfulParser){
+			if (!isSuccesfullyParsed){
+				LOGGER.log(Level.WARNING, PARSER_FAILURE);
 				return false;
 			} else {
 				boolean isRunningSuccessful = running();
 				return isRunningSuccessful;
 			}
+			
 		} catch (EmptyStackException e){
 			state.setDisplayMessage(Constant.MESSAGE_EMPTY_STACK);
 			return false;
@@ -211,6 +244,7 @@ public class WallistModel{
 		return result;
 	}
 	
+	//@@ A0107375E
 	private boolean runningHelp() {
 		boolean isChangedToHelpMode = help.process();
 		boolean isSaved = storage.executeSaveState();

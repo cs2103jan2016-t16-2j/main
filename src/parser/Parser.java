@@ -61,23 +61,18 @@ public class Parser {
 			state_.setCommandType(getCommand());
 			CommandType command = state_.getCommandType();
 			switch(command){
-				
 				case ADD:
 					add_.processInput();
 					break;
-				
 				case CHANGEMODE:
 					changeMode_.processInput();
 					break;
-					
 				case CLEAR:
 					clear_.processInput();
 					break;
-					
 				case DELETE:
 					delete_.processInput();
 					break;
-					
 				case DETAIL:
 					detail_.processInput();
 					break;
@@ -161,6 +156,8 @@ public class Parser {
 			return CommandType.REDO;
 		} else if (commandTypeString.equalsIgnoreCase("search")) {
 			return CommandType.SEARCH;
+		} else if (commandTypeString.equalsIgnoreCase("help")) {
+			return CommandType.HELP;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
 		} else if (commandTypeString.equalsIgnoreCase("view")) {

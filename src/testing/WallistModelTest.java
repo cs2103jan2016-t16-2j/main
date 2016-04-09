@@ -1,6 +1,6 @@
 package testing;
 import common.*;
-import facade.WallistModel;
+import model.WallistModel;
 import parser.TimeParser;
 
 import static org.junit.Assert.*;
@@ -15,7 +15,7 @@ public class WallistModelTest {
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		wm.process("delete 3");
+		wm.processInputString("delete 3");
 		System.out.println(state.getCommandType());		
 		System.out.println(state.getViewMode());
 		System.out.println(state.getPositionIndex());

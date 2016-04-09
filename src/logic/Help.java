@@ -12,6 +12,7 @@ public class Help implements Operation {
 	
 	@Override
 	public boolean process() {
+		ViewMode currentViewMode = state.getViewMode();
 		
 		return false;
 	}

@@ -11,6 +11,7 @@ import common.TaskType;
 import common.ViewMode;
 
 public class AddTask implements Operation {
+	
 	private State state;
 
 	public AddTask(State state) {
@@ -19,44 +20,31 @@ public class AddTask implements Operation {
 
 	@Override
 	public boolean process() {
-		try {
-			Task newTask = new Task(state);
-			ViewMode viewMode = state.getViewMode();
-			
-			collapseAllTasks();
-			
-			//If the viewMode is Floating, update both floating tasks and all tasks
-			if(viewMode == ViewMode.FLOATING){
+		collapseAllTasks();
+		Task newTask = new Task(state);
+		TaskType taskType = newTask.getTaskType();
+		ViewMode currentViewMode = state.getViewMode();
+		
+		switch (taskType) { 
+			case FLOATING:
 				addToFloatingList(newTask);
-				addToAllTasksList(newTask);		
+				addToAllTasksList(newTask);
 				updateIndexUnderFloatingMode(newTask);
-			}
-
-			//If the viewMode is Deadline, update both deadline tasks and all tasks
-			if(viewMode == ViewMode.DEADLINE){
+				updateIndexUnderAllMode(newTask);
+				break;
+			case DEADLINE:
 				addToDeadlineTaskList(newTask);
 				addToAllTasksList(newTask);		
 				updateIndexUnderDeadlineMode(newTask);
-			}
-
-			//If the viewMode is all, update all tasks
-			//Depending on the taskType, the newTasks will also be added to corresponding task list
-			if(viewMode == ViewMode.ALL || viewMode == ViewMode.SEARCH){
-				addToAllTasksList(newTask);
-				TaskType type = newTask.getTaskType();
-				if(type.equals(TaskType.FLOATING)){
-					addToFloatingList(newTask);	
-				} else {
-					addToDeadlineTaskList(newTask);				
-				}
 				updateIndexUnderAllMode(newTask);
-			}
-
-			return true;
-		} catch (Exception e){
-			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
-			return false;
+				break;
+			case UNDEFINED:
+				return false;
+			default:
+				return true;
 		}
+
+		return true;
 	}
 
 	private void collapseAllTasks() {

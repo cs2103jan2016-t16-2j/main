@@ -52,6 +52,7 @@ public class WallistModel{
 		initialiseLogic();
 		initialiseStorage();
 		initialiseParser(); 
+		stateHistory.push(state.deepCopy());
 	}
 	
 	private void initialiseParser() {
@@ -67,7 +68,6 @@ public class WallistModel{
 	private void initialiseState() {
 		state = new State();
 		stateHistory = new Stack<State>();
-		stateHistory.push(state.deepCopy());
 		stateFuture = new Stack<State>();
 	}
 
@@ -117,8 +117,10 @@ public class WallistModel{
 		
 		if(cmdType.equals(CommandType.ADD)){
 			result = runningAdd();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.DELETE)){
 			result = runningDelete();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.TICK)){
 			result = runningTick();
 		} else if (cmdType.equals(CommandType.UPDATE)){
@@ -145,7 +147,6 @@ public class WallistModel{
 			result = false;
 		}
 		
-		stateHistory.push(state.deepCopy());
 
 		return result;
 	}
@@ -167,12 +168,14 @@ public class WallistModel{
 	private boolean runningUndo() throws EmptyStackException{
 		boolean result;
 		try{
+			System.out.println(stateHistory.size());
 			if(stateHistory.size() <= 1){
 				throw new EmptyStackException();
 			}
 			State currentCopy = stateHistory.peek();
 			stateFuture.push(currentCopy.deepCopy());
 			stateHistory.pop();
+			System.out.println(stateHistory.size());
 			state.recoverFrom(stateHistory.peek());
 		} finally{
 			result = true;				

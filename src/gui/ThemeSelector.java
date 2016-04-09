@@ -20,11 +20,9 @@ public class ThemeSelector {
 		addTheme("Autumn", 0, 0, 0);
 		addTheme("Bokeh", 1, 0, 0);
 		addTheme("Branch", 2, 0, 1);
-		addTheme("Cat", 3, 0, 1);
-		addTheme("Leather", 0, 1, 0);
-		addTheme("Paris", 1, 1, 1);
+		addTheme("Cat", 0, 1, 1);
+		addTheme("Grey", 1, 1, 1);
 		addTheme("Warm", 2, 1, 1);
-		addTheme("Wheat", 3, 1, 0);
 	}
 	
 	public GridPane getTheme(){

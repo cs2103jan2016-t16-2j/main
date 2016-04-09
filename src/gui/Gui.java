@@ -82,6 +82,9 @@ public class Gui extends Application{
 	private static final String PROMPT = "Put our command here";
 	private static final String DURATION = "%1$s - %2$s"; 
 	private static final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
+	private static final String THEME_SHEET = "/resources/%1$s.css";
+	private static final String FONT_SHEET = "/resources/%1$s.css";
+	private static final String BASIC_SHEET = "/resources/basic.css";
 	
 	private static final int COMPONENT_GAP_H = 20;
 	private static final int COMPONENT_GAP_V = 20;
@@ -222,10 +225,6 @@ public class Gui extends Application{
 		taskIndex = 0;
 		for (Task task: taskList){
 			displayRow(task);
-		}
-        if (taskList.size() > 0){
-        	double position = (double) (state.getPositionIndex() + 1) / taskList.size();
-		    taskPane.setVvalue(position);
         }
 		taskPane.setContent(tasks);
 	}
@@ -399,7 +398,6 @@ public class Gui extends Application{
 		titlePane.getChildren().addAll(title, titleText);
         layout.getChildren().add(titlePane);
 	}
-	
 
 	private void stageSetup(Stage primaryStage) {
 		window = primaryStage;
@@ -409,10 +407,9 @@ public class Gui extends Application{
     	layoutSetup();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		
-		String themeSheet = "/resources/" + state.getTheme() + ".css";
-		String fontSheet = "/resources/" + state.getFont() + ".css";
-		String basicSheet = "/resources/basic.css";
-		scene.getStylesheets().addAll(themeSheet, fontSheet, basicSheet);
+		String theme = String.format(THEME_SHEET, state.getTheme());
+		String font = String.format(FONT_SHEET, state.getFont());
+		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
 		
 		window.setScene(scene);
 		window.show();

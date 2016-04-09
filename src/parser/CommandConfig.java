@@ -45,18 +45,10 @@ public class CommandConfig implements Command{
 			return Theme.BRANCH;
 		}else if(content_.equalsIgnoreCase("cat")){
 			return Theme.CAT;
-		}else if(content_.equalsIgnoreCase("japanese")){
-			return Theme.JAPANESE;
-		}else if(content_.equalsIgnoreCase("leather")){
-			return Theme.LEATHER;
-		}else if(content_.equalsIgnoreCase("paris")){
-			return Theme.PARIS;
-		}else if(content_.equalsIgnoreCase("raindrop")){
-			return Theme.RAINDROP;
+		}else if(content_.equalsIgnoreCase("grey")){
+			return Theme.GREY;
 		}else if(content_.equalsIgnoreCase("warm")){
 			return Theme.WARM;
-		}else if(content_.equalsIgnoreCase("wheat")){
-			return Theme.WHEAT;
 		}else{
 			return Theme.AUTUMN;
 		}

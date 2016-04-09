@@ -2,5 +2,5 @@
 package common;
 
 public enum Theme {
-	AUTUMN, BOKEH, BRANCH, CAT, JAPANESE, LEATHER, PARIS, RAINDROP, WARM, WHEAT;
+	AUTUMN, BOKEH, BRANCH, CAT, GREY, WARM;
 }

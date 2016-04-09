@@ -124,7 +124,7 @@ public class WallistModel{
 		CommandType cmdType = state.getCommandType();
 		boolean result;
 		
-		if(cmdType.equals(CommandType.ADD)){
+		if (cmdType.equals(CommandType.ADD)) {
 			result = addTask.process();
 		} else if (cmdType.equals(CommandType.DELETE)){
 			result = deleteTask.process();
@@ -148,8 +148,6 @@ public class WallistModel{
 			result = changeViewMode.process();
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
-//		} else if (cmdType.equals(CommandType.HELP)) {
-//			result = runningHelp();
 		} else {
 			result = false;
 		}
@@ -157,8 +155,6 @@ public class WallistModel{
 		return result;
 	}
 
-	
-	
 	private boolean runningUndo() throws EmptyStackException{
 		boolean result;
 		try{

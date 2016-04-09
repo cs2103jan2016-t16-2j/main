@@ -22,7 +22,6 @@ public class Parser {
 	private CommandUntick untick_;
 	private CommandConfig config_;
 	
-	
 	/*
 	 * Initializing parser
 	 * Pre-Cond: None
@@ -106,7 +105,6 @@ public class Parser {
 		return state_.getIsValid();
 	}
 	
-	
 	/*
 	 * Get the command of an input
 	 * Pre-Cond: Input of a user
@@ -116,7 +114,6 @@ public class Parser {
 		String inputWords[] = state_.getUserInput().split(" ");
 		return determineCommandType(inputWords[0]);
 	}
-
 	
 	/*
 	 * Get the command type based on input
@@ -127,7 +124,6 @@ public class Parser {
 		if (commandTypeString == null) {
 			throw new Error("Command type string cannot be null!");
 		}
-		
 		if (commandTypeString.equalsIgnoreCase("add")) {
 			return CommandType.ADD;
 		} else if (commandTypeString.equalsIgnoreCase("delete")) {
@@ -149,14 +145,19 @@ public class Parser {
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
 		} else if (commandTypeString.equalsIgnoreCase("view")) {
-			String inputWords[] = state_.getUserInput().split(" ");
-			String argument = inputWords[1];
-			if(argument.matches("\\d+")){
-				return CommandType.DETAIL;
-			}else{
-				return CommandType.CHANGEMODE;
-			}
+			return determineViewType();
+		} else {
+			return CommandType.ERROR;	
 		}
-		return CommandType.ERROR;
+	}
+	
+	private CommandType determineViewType(){
+		String inputWords[] = state_.getUserInput().split(" ");
+		String argument = inputWords[1];
+		if(argument.matches("\\d+")){
+			return CommandType.DETAIL;
+		}else{
+			return CommandType.CHANGEMODE;
+		}
 	}
 }

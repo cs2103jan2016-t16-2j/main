@@ -419,27 +419,31 @@ public class State {
 	//@@author A0130717M
 	public ArrayList<Task> getCurrentTasks(){
 		switch(viewMode_){
-			case FLOATING: 
-				return floatingTasks_;
-			case DEADLINE:
-				return deadlineTasks_;
-			case ALL:
-				return allTasks_;
-			case SEARCH:
-				return searchResultTasks_;
-			case FINISHED:
-				return finishedTasks_;
-			case START:
-				startTasks_ = new ArrayList<Task>();
-				for(int i = 0; i < deadlineTasks_.size(); i++){
-					Task task = deadlineTasks_.get(i);
-					if (task.getEndDate().getTime() < (System.currentTimeMillis())){
-						startTasks_.add(task);	
-					}
-				}
-				return startTasks_;
-			default:
-				return allTasks_;
+		case FLOATING: 
+			return floatingTasks_;
+		case DEADLINE:
+			return deadlineTasks_;
+		case ALL:
+			return allTasks_;
+		case SEARCH:
+			return searchResultTasks_;
+		case FINISHED:
+			return finishedTasks_;
+		case START:
+			currentTask();
+			return startTasks_;
+		default:
+			return allTasks_;
+		}
+	}
+
+	private void currentTask() {
+		startTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < deadlineTasks_.size(); i++){
+			Task task = deadlineTasks_.get(i);
+			if (task.getEndDate().getTime() < (System.currentTimeMillis())){
+				startTasks_.add(task);	
+			}
 		}
 	}
 	

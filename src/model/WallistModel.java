@@ -1,4 +1,4 @@
-package facade;
+package model;
 
 import java.util.EmptyStackException;
 import java.util.Stack;

@@ -4,7 +4,6 @@ package gui;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import common.*;
-import facade.WallistModel;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,6 +24,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.WallistModel;
 
 public class GUI extends Application{
 	

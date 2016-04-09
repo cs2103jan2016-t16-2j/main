@@ -1,6 +1,6 @@
 package testing;
 import common.*;
-import facade.WallistModel;
+import model.WallistModel;
 import parser.TimeParser;
 
 import static org.junit.Assert.*;

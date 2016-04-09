@@ -42,6 +42,7 @@ public class WallistModel{
 	
 	// logging message displayed
 	private static final String PARSER_FAILURE = "User input is not succesfully parsed!";
+	private static final String PARSER_RUNNING = "Start to parse the user input...";
 	
 	//====================================
 	//       Constructor and Initiliser
@@ -88,27 +89,35 @@ public class WallistModel{
 	}
 	
 	public boolean processInputString(String inputString){
-		try{
-			state.setUserInput(inputString); // store input into state
-			boolean isParsed = parser.processInput();
-			boolean isValid = state.getIsValid();
-			boolean isSuccesfullyParsed = isParsed && isValid;
-			
-			if (!isSuccesfullyParsed){
-				LOGGER.log(Level.WARNING, PARSER_FAILURE);
-				return false;
-			} else {
-				boolean isRunningSuccessful = running();
-				return isRunningSuccessful;
-			}
-			
+		LOGGER.log(Level.INFO, PARSER_RUNNING);
+		state.setUserInput(inputString); // store input into state
+		boolean isParsed = parser.processInput();
+		boolean isValid = state.getIsValid();
+		boolean isSuccesfullyParsed = isParsed && isValid;
+		if (!isSuccesfullyParsed) {
+			LOGGER.log(Level.WARNING, PARSER_FAILURE);
+			return false;
+		} else {
+			return executeInput();
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean executeInput() {
+		boolean isRunningSuccessful;
+		try {
+			isRunningSuccessful = running();
 		} catch (EmptyStackException e){
+			LOGGER.log(Level.WARNING, PARSER_FAILURE,e);
 			state.setDisplayMessage(Constant.MESSAGE_EMPTY_STACK);
 			return false;
 		} catch (Exception e){
+			LOGGER.log(Level.WARNING, PARSER_FAILURE,e);
 			return false;
 		}
-
+		return isRunningSuccessful;
 	}
 
 	public boolean running() throws EmptyStackException{
@@ -116,17 +125,17 @@ public class WallistModel{
 		boolean result;
 		
 		if(cmdType.equals(CommandType.ADD)){
-			result = runningAdd();
+			result = addTask.process();
 		} else if (cmdType.equals(CommandType.DELETE)){
-			result = runningDelete();
+			result = deleteTask.process();
 		} else if (cmdType.equals(CommandType.TICK)){
-			result = runningTick();
+			result = tickTask.process();
 		} else if (cmdType.equals(CommandType.UPDATE)){
-			result = runningUpdate();
+			result = updateTask.process();
 		} else if (cmdType.equals(CommandType.CLEAR)){
-			result = runningClear();
+			result = clearTask.process();
 		} else if (cmdType.equals(CommandType.SEARCH)){
-			result = runningSearch();
+			result = searchTasks.process();
 		} else if (cmdType.equals(CommandType.UNDO)){
 			result = runningUndo();
 			return result;
@@ -134,35 +143,21 @@ public class WallistModel{
 			result = runningRedo();
 			return result;
 		} else if (cmdType.equals(CommandType.DETAIL)){
-			result = runningViewDetail();
+			result = viewTaskDetail.process();
 		} else if (cmdType.equals(CommandType.CHANGEMODE)){
-			result = runningChangeMode();
+			result = changeViewMode.process();
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
-		} else if (cmdType.equals(CommandType.HELP)) {
-			result = runningHelp();
+//		} else if (cmdType.equals(CommandType.HELP)) {
+//			result = runningHelp();
 		} else {
 			result = false;
 		}
-		
 		stateHistory.push(state.deepCopy());
-
 		return result;
 	}
 
-	private boolean runningChangeMode() {
-		boolean result;
-		boolean isChangeModeSuccessful = changeViewMode.process();
-		result = isChangeModeSuccessful;
-		return result;
-	}
 	
-	private boolean runningViewDetail() {
-		boolean result;
-		boolean isViewDetailSuccessful = viewTaskDetail.process();
-		result = isViewDetailSuccessful;
-		return result;
-	}
 	
 	private boolean runningUndo() throws EmptyStackException{
 		boolean result;
@@ -180,7 +175,7 @@ public class WallistModel{
 		return result;
 	}
 	
-	private boolean runningRedo() throws EmptyStackException{
+	private boolean runningRedo() throws EmptyStackException {
 		boolean result;
 		try{
 			if(stateFuture.isEmpty()){
@@ -195,63 +190,6 @@ public class WallistModel{
 		}
 		return result;
 	}
-	
-	
-	private boolean runningSearch() {
-		boolean result;
-		boolean searchResult = searchTasks.process();
-		result = searchResult;
-		return result;
-	}
-
-	private boolean runningClear() {
-		boolean result;
-		boolean clearResult = clearTask.process();
-		boolean parserResult = storage.executeSaveState();
-		result = clearResult && parserResult;
-		return result;
-	}
-
-	private boolean runningUpdate() {
-		boolean result;
-		boolean updateResult = updateTask.process();
-		boolean parserResult = storage.executeSaveState();
-		result = updateResult && parserResult;
-		return result;
-	}
-
-	private boolean runningTick() {
-		boolean result;
-		boolean tickResult = tickTask.process();
-		boolean parserResult = storage.executeSaveState();
-		result = tickResult && parserResult;
-		return result;
-	}
-
-	private boolean runningDelete() {
-		boolean result;
-		boolean deleteResult = deleteTask.process();
-		boolean parserResult = storage.executeSaveState();
-		result = deleteResult && parserResult;
-		return result;
-	}
-
-	private boolean runningAdd() {
-		boolean result;
-		boolean addResult = addTask.process();
-		boolean parserResult = storage.executeSaveState();
-		result = addResult && parserResult;
-		return result;
-	}
-	
-	//@@ A0107375E
-	private boolean runningHelp() {
-		boolean isChangedToHelpMode = help.process();
-		boolean isSaved = storage.executeSaveState();
-		boolean isSuccessful = isChangedToHelpMode && isSaved;
-		return isSuccessful;
-	}
-	
 }
 
 

@@ -57,7 +57,7 @@ public class GUI extends Application{
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy HH:mm");
 	private SimpleDateFormat sdfYear = new SimpleDateFormat("yy");
 	private SimpleDateFormat sdfThisYear = new SimpleDateFormat("dd MMM HH:mm");
-	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM \'yy");
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yy");
 	private SimpleDateFormat sdfDateThisYear = new SimpleDateFormat("dd MMM");
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat sdfDefaultTime = new SimpleDateFormat("HH:mm:ss");
@@ -240,13 +240,11 @@ public class GUI extends Application{
 			Date endDate = task.getEndDate();
 			boolean sameDate = false;
 			boolean startThisYear = false;
-			boolean hasStartTime = false;
 			boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
 			boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
 			if (startDate != null){
 				startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
 				sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
-				hasStartTime = sdfDefaultTime.format(startDate).equals(defaultTime);
 			}
 			if (startDate == null && endThisYear && hasEndTime){
 			    taskTime = sdfDateThisYear.format(task.getEndDate());

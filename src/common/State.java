@@ -419,28 +419,36 @@ public class State {
 	//@@author A0130717M
 	public ArrayList<Task> getCurrentTasks(){
 		switch(viewMode_){
-			case FLOATING: 
-				return floatingTasks_;
-			case DEADLINE:
-				return deadlineTasks_;
-			case ALL:
-				return allTasks_;
-			case SEARCH:
-				return searchResultTasks_;
-			case FINISHED:
-				return finishedTasks_;
-			case START:
-				startTasks_ = new ArrayList<Task>();
-				for(int i = 0; i < deadlineTasks_.size(); i++){
-					Task task = deadlineTasks_.get(i);
-					if (task.getEndDate().getTime() < (System.currentTimeMillis())){
-						startTasks_.add(task);	
-					}
-				}
-				return startTasks_;
-			default:
-				return allTasks_;
+		case FLOATING: 
+			return floatingTasks_;
+		case DEADLINE:
+			return deadlineTasks_;
+		case ALL:
+			return allTasks_;
+		case SEARCH:
+			return searchResultTasks_;
+		case FINISHED:
+			return finishedTasks_;
+		case START:
+			currentTasks();
+			return startTasks_;
+		default:
+			return allTasks_;
 		}
+	}
+
+	private void currentTasks() {
+		startTasks_ = new ArrayList<Task>();
+		for(int i = 0; i < deadlineTasks_.size(); i++){
+			Task task = deadlineTasks_.get(i);
+			if (task.getEndDate().getTime() < (System.currentTimeMillis())){
+				startTasks_.add(task);	
+			}
+		}
+	}
+	
+	public boolean isCurrentTasksEmpty(){
+		return this.getCurrentTasks().isEmpty();
 	}
 	
 	public String[] getConfigInfo(){
@@ -470,6 +478,23 @@ public class State {
 			return Constant.HEADER_START;
 		default:
 			return Constant.HEADER_ALL;
+		}
+	}
+	
+	public String getEmptyMessage(){
+		switch(viewMode_){
+		case START:
+			return Constant.EMPTY_TODAY;
+		case ALL:
+			return Constant.EMPTY_ALL;
+		case DEADLINE:
+			return Constant.EMPTY_DEADLINE;
+		case FLOATING:
+			return Constant.EMPTY_FLOATING;
+		case SEARCH:
+			return String.format(Constant.EMPTY_SEARCH, userInput_);
+		default:
+			return "";
 		}
 	}
 	

@@ -18,7 +18,8 @@ public class State {
 	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_, todaysTasks_;
 	private ArrayList<String> searchKey_;
 	private String currentDirectory_;
-
+	private String desiredDirectory;
+	
 	public State(){
 		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
 		isStartDateChanged_ = Constant.VALUE_DEFAULT_BOOLEAN_FALSE;
@@ -55,6 +56,14 @@ public class State {
 	
 	public void setCurrentDirectory(String directory) {
 		this.currentDirectory_ = directory;
+	}
+	
+	public String getDesiredDirectory() {
+		return this.desiredDirectory;
+	}
+	
+	public void setDesiredDirectory(String directory) {
+		this.desiredDirectory = directory;
 	}
 	
 	public void setIsValid(boolean bool){

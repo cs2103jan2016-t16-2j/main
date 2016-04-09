@@ -57,6 +57,7 @@ public class Parser {
 		if(state_.getIsValid()){
 			state_.setCommandType(getCommand());
 			CommandType command = state_.getCommandType();
+			System.out.println(command.toString());
 			switch(command){
 			case ADD:
 				add_.processInput();
@@ -98,6 +99,7 @@ public class Parser {
 				untick_.processInput();
 				break;					
 			case CONFIG:
+				System.out.println("++++");
 				config_.processInput();
 				break;
 			}		
@@ -146,6 +148,8 @@ public class Parser {
 			return CommandType.EXIT;
 		} else if (commandTypeString.equalsIgnoreCase("view")) {
 			return determineViewType();
+		} else if (commandTypeString.equalsIgnoreCase("config")) {
+			return CommandType.CONFIG;
 		} else {
 			return CommandType.ERROR;	
 		}

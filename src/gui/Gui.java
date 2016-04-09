@@ -292,8 +292,6 @@ public class Gui extends Application{
 		boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
 		boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
 		
-		System.out.println(sdfDefaultTime.format(endDate));
-		
 		if (startDate != null){
 			startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
 			sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
@@ -421,7 +419,6 @@ public class Gui extends Application{
 		enableEscExit();
 	}
 	
-
 	private void layoutSetup() {
 		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT -  HEADER_HEIGHT - TITLE_HEIGHT;
     	taskBoxWidth = (int)(STAGE_WIDTH - COMPONENT_GAP_H * 2);

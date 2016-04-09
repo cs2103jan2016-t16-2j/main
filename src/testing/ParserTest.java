@@ -3,7 +3,6 @@ package testing;
 
 import common.*;
 import parser.Parser;
-import parser.TimeParser;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

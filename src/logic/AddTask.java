@@ -21,34 +21,38 @@ public class AddTask implements Operation {
 	public boolean process() {
 		try {
 			Task newTask = new Task(state);
+			TaskType tasktype = newTask.getTaskType();
 			ViewMode viewMode = state.getViewMode();
 			
 			collapseAllTasks();
 			
-			//If the viewMode is Floating, update both floating tasks and all tasks
-			if(viewMode == ViewMode.FLOATING){
+			//Add floating task to both floating task list and all task list
+			if(tasktype == TaskType.FLOATING){
 				addToFloatingList(newTask);
 				addToAllTasksList(newTask);		
-				updateIndexUnderFloatingMode(newTask);
 			}
 
-			//If the viewMode is Deadline, update both deadline tasks and all tasks
-			if(viewMode == ViewMode.DEADLINE){
+			//Add deadline task to both deadline task list and all task list
+			if(tasktype == TaskType.DEADLINE){
 				addToDeadlineTaskList(newTask);
 				addToAllTasksList(newTask);		
+			}
+		
+			//update position index for GUI to highlight new task
+			//Under Floating view mode
+			if(viewMode == ViewMode.FLOATING){
+				updateIndexUnderFloatingMode(newTask);				
+			}
+			
+			//under deadline view mode
+			if(viewMode == ViewMode.DEADLINE){
 				updateIndexUnderDeadlineMode(newTask);
 			}
 
-			//If the viewMode is all, update all tasks
-			//Depending on the taskType, the newTasks will also be added to corresponding task list
-			if(viewMode == ViewMode.ALL || viewMode == ViewMode.SEARCH){
-				addToAllTasksList(newTask);
-				TaskType type = newTask.getTaskType();
-				if(type.equals(TaskType.FLOATING)){
-					addToFloatingList(newTask);	
-				} else {
-					addToDeadlineTaskList(newTask);				
-				}
+			//under other view mode(including all view mode), 
+			//the view mode will be switched to all view mode
+			if(viewMode != ViewMode.FLOATING && viewMode != ViewMode.DEADLINE){
+				state.setViewMode(ViewMode.ALL);
 				updateIndexUnderAllMode(newTask);
 			}
 

@@ -44,16 +44,47 @@ public class ClearTask implements Operation {
 				return true;
 			}
 			
-			return true;
+			if(viewMode == ViewMode.FINISHED){
+				clearFinishedTasks();
+				return true;
+			}
+			
+			if(viewMode == ViewMode.START){
+				clearTodaysTasks();
+				return true;
+			}
+			
+			//in wrong view mode
+			state.setDisplayMessage(Constant.MESSAGE_CLEAR_IN_WRONG_MODE);
+			return false;
+			
 		} catch (Exception e) {
 			//logging
 			state.setDisplayMessage(Constant.MESSAGE_DUMMY);
 			return false;
 		}
 	}
+	
+	private void clearTodaysTasks() {
+		ArrayList<Task> todaysTasks = state.getTodaysTasks();
+		for(int i = 0; i < todaysTasks.size(); i++){
+			Task task = todaysTasks.get(i);
+			deleteTask(task);
+		}
+		todaysTasks.clear();
+	}
+	
+	private void clearFinishedTasks() {
+		ArrayList<Task> finishedTask = state.getFinishedTasks();
+		finishedTask.clear();
+	}
 
 	private void clearSearchTasks() {
 		ArrayList<Task> searchedTaskList = state.getSearchResultTasks();
+		for(int i = 0; i < searchedTaskList.size(); i++){
+			Task task = searchedTaskList.get(i);
+			deleteTask(task);
+		}
 		searchedTaskList.clear();
 	}
 
@@ -83,6 +114,23 @@ public class ClearTask implements Operation {
 			}
 		}
 		state.setAllTasks(prunedAllTaskList);
+	}
+	
+	private void deleteTask(Task toBeDeleted) {
+		ArrayList<Task> allTasks = state.getAllTasks();
+		allTasks.remove(toBeDeleted);
+		
+		TaskType taskType = toBeDeleted.getTaskType();
+		
+		if(taskType == TaskType.FLOATING){
+			ArrayList<Task> floatingTasks = state.getFloatingTasks();
+			floatingTasks.remove(toBeDeleted);
+		}
+		
+		if(taskType == TaskType.DEADLINE){
+			ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
+			deadlineTasks.remove(toBeDeleted);
+		}
 	}
 
 }

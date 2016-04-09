@@ -34,10 +34,10 @@ public class UpdateTask implements Operation {
 				// find the task in floating tasks list
 				Task toBeUpdated = findTaskFromFloatingTasks(localPositionIndex);
 
-				//tick the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
+				//update the task 
+				boolean isUpdateSuccessful = updateTask(toBeUpdated);
 
-				if(isTickSuccessful) {
+				if(isUpdateSuccessful) {
 					return true;
 				} else {
 					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
@@ -50,10 +50,10 @@ public class UpdateTask implements Operation {
 				// find the task in deadline tasks list
 				Task toBeUpdated = findTaskFromDeadlineTasks(localPositionIndex);
 
-				//tick the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
+				//update the task 
+				boolean isUpdateSuccessful = updateTask(toBeUpdated);
 
-				if(isTickSuccessful) {
+				if(isUpdateSuccessful) {
 					return true;
 				} else {
 					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
@@ -77,8 +77,56 @@ public class UpdateTask implements Operation {
 				}
 			}
 
+			//If the viewMode is search, update object in searched tasks list
+			if(viewMode == ViewMode.SEARCH){
+				// find the task in searched tasks list
+				Task toBeUpdated = findTaskFromSearchedTasks(localPositionIndex);
+
+				//update the task 
+				boolean isTickSuccessful = updateTask(toBeUpdated);
+
+				if(isTickSuccessful) {
+					return true;
+				} else {
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					return false;
+				}
+			}
+			
+			//If the viewMode is start, update object in todays tasks list
+			if(viewMode == ViewMode.START){
+				// find the task in todays tasks list
+				Task toBeUpdated = findTaskFromStartingTasks(localPositionIndex);
+
+				//update the task 
+				boolean isTickSuccessful = updateTask(toBeUpdated);
+
+				if(isTickSuccessful) {
+					return true;
+				} else {
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					return false;
+				}
+			}
+			
+			//If the viewMode is finished, update object in finished tasks list
+			if(viewMode == ViewMode.FINISHED){
+				// find the task in finished tasks list
+				Task toBeUpdated = findTaskFromFinishedTasks(localPositionIndex);
+
+				//update the task 
+				boolean isTickSuccessful = updateTask(toBeUpdated);
+
+				if(isTickSuccessful) {
+					return true;
+				} else {
+					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+					return false;
+				}
+			}
+			
 			//in wrong view mode
-			state.setDisplayMessage(Constant.MESSAGE_DELETE_IN_WRONG_MODE);
+			state.setDisplayMessage(Constant.MESSAGE_UPDATE_IN_WRONG_MODE);
 			return false;
 		} catch (IndexOutOfBoundsException e){
 			state.setDisplayMessage(Constant.MESSAGE_INDEX_OUT_OF_BOUND);
@@ -108,6 +156,40 @@ public class UpdateTask implements Operation {
 		}
 		
 		return true;
+	}
+	
+	private Task findTaskFromFinishedTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+		ArrayList<Task> taskList = state.getFinishedTasks();
+
+		if(localPositionIndex >= taskList.size()){
+			throw new IndexOutOfBoundsException();	
+		}
+
+		Task toBeUpdated = taskList.get(localPositionIndex);
+		return toBeUpdated;
+	}
+	
+	
+	private Task findTaskFromStartingTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+		ArrayList<Task> taskList = state.getTodaysTasks();
+
+		if(localPositionIndex >= taskList.size()){
+			throw new IndexOutOfBoundsException();	
+		}
+
+		Task toBeUpdated = taskList.get(localPositionIndex);
+		return toBeUpdated;
+	}
+	
+	private Task findTaskFromSearchedTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+		ArrayList<Task> taskList = state.getSearchResultTasks();
+
+		if(localPositionIndex >= taskList.size()){
+			throw new IndexOutOfBoundsException();	
+		}
+
+		Task toBeUpdated = taskList.get(localPositionIndex);
+		return toBeUpdated;
 	}
 	
 	private Task findTaskFromAllTasks(int localPositionIndex) throws IndexOutOfBoundsException{

@@ -2,38 +2,67 @@
 package storage;
 import common.*;
 import java.io.File;
-public class Storage {
 
+public class Storage {
+	
+	//===========================
+	//       Attributes
+	//===========================
+	
 	private FileIo fileIo;
 	private FileManagement fileManagement;
-	private boolean isConnectedToFile;
+	private boolean isConnectedToFileIo;
+	
+	//===========================
+	//       Constructor
+	//===========================
 	
 	public Storage(State state) {
 		this.fileIo = new FileIo(state);
 		this.fileManagement = new FileManagement(state);
-		this.isConnectedToFile = connectFileToIO();
+		this.isConnectedToFileIo = connectFileToIO();
 	}
-
+	
+	//===========================
+	//       Functions
+	//===========================
+	
+	/**
+	 * This method loads the datafile into the State object
+	 * @return whether loading is successful
+	 */
 	public boolean executeLoadState() {
-		assert isConnectedToFile;
+		assert isConnectedToFileIo;
 		return fileIo.loadState();
 	}
 	
+	/**
+	 * This method saves the State object into the datafile
+	 * @return whether saving is successful
+	 */
 	public boolean executeSaveState() {
-		assert isConnectedToFile;
+		assert isConnectedToFileIo;
 		return fileIo.saveState();
 	}
 	
-	public boolean executeChangeDirectory(String directory) {
-		assert isConnectedToFile;
+	/**
+	 * This method changes the directory of the datafile
+	 * @param directory
+	 * @return whether changing is successful
+	 */
+	public boolean executeChangeDirectory() {
+		assert isConnectedToFileIo;
 		return fileManagement.changeDirectory();
 	}
 	
-	// Helper functions
+	//===========================
+	//     Helper Functions
+	//===========================
 	
 	
 	/**
 	 * This method connects the file with the IO part of this package.
+	 * @return whether connects to FileIo Class
 	 */
 	private boolean connectFileToIO() {
 		File file = fileManagement.getFile();

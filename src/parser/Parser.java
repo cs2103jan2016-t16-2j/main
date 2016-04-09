@@ -1,8 +1,6 @@
 //@@author A0130369H
 package parser;
 
-import java.lang.StringBuilder;
-
 import common.*;
 
 public class Parser {
@@ -23,7 +21,6 @@ public class Parser {
 	private CommandHelp help_;
 	private CommandUntick untick_;
 	private CommandConfig config_;
-	
 	
 	/*
 	 * Initializing parser
@@ -61,63 +58,52 @@ public class Parser {
 			state_.setCommandType(getCommand());
 			CommandType command = state_.getCommandType();
 			switch(command){
-				case ADD:
-					add_.processInput();
-					break;
-				case CHANGEMODE:
-					changeMode_.processInput();
-					break;
-				case CLEAR:
-					clear_.processInput();
-					break;
-				case DELETE:
-					delete_.processInput();
-					break;
-				case DETAIL:
-					detail_.processInput();
-					break;
-					
-				case EXIT:
-					exit_.processInput();
-					break;
-					
-				case REDO:
-					redo_.processInput();
-					break;
-					
-				case SEARCH:
-					search_.processInput();
-					break;
-					
-				case TICK:
-					tick_.processInput();
-					break;
-					
-				case UNDO:
-					undo_.processInput();
-					break;
-					
-				case UPDATE:
-					update_.processInput();
-					break;
-					
-				case HELP:
-					help_.processInput();
-					break;
-					
-				case UNTICK:
-					untick_.processInput();
-					break;
-					
-				case CONFIG:
-					config_.processInput();
-					break;
-			}
-			
+			case ADD:
+				add_.processInput();
+				break;
+			case CHANGEMODE:
+				changeMode_.processInput();
+				break;
+			case CLEAR:
+				clear_.processInput();
+				break;
+			case DELETE:
+				delete_.processInput();
+				break;
+			case DETAIL:
+				detail_.processInput();
+				break;	
+			case EXIT:
+				exit_.processInput();
+				break;
+			case REDO:
+				redo_.processInput();
+				break;				
+			case SEARCH:
+				search_.processInput();
+				break;				
+			case TICK:
+				tick_.processInput();
+				break;			
+			case UNDO:
+    			undo_.processInput();
+				break;				
+			case UPDATE:
+				update_.processInput();
+				break;			
+			case HELP:
+	    		help_.processInput();
+				break;				
+			case UNTICK:
+				untick_.processInput();
+				break;					
+			case CONFIG:
+				config_.processInput();
+				break;
+			}		
 		}
 		return state_.getIsValid();
 	}
-	
 	
 	/*
 	 * Get the command of an input
@@ -128,7 +114,6 @@ public class Parser {
 		String inputWords[] = state_.getUserInput().split(" ");
 		return determineCommandType(inputWords[0]);
 	}
-
 	
 	/*
 	 * Get the command type based on input
@@ -139,7 +124,6 @@ public class Parser {
 		if (commandTypeString == null) {
 			throw new Error("Command type string cannot be null!");
 		}
-		
 		if (commandTypeString.equalsIgnoreCase("add")) {
 			return CommandType.ADD;
 		} else if (commandTypeString.equalsIgnoreCase("delete")) {
@@ -161,14 +145,19 @@ public class Parser {
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
 		} else if (commandTypeString.equalsIgnoreCase("view")) {
-			String inputWords[] = state_.getUserInput().split(" ");
-			String argument = inputWords[1];
-			if(argument.matches("\\d+")){
-				return CommandType.DETAIL;
-			}else{
-				return CommandType.CHANGEMODE;
-			}
+			return determineViewType();
+		} else {
+			return CommandType.ERROR;	
 		}
-		return CommandType.ERROR;
+	}
+	
+	private CommandType determineViewType(){
+		String inputWords[] = state_.getUserInput().split(" ");
+		String argument = inputWords[1];
+		if(argument.matches("\\d+")){
+			return CommandType.DETAIL;
+		}else{
+			return CommandType.CHANGEMODE;
+		}
 	}
 }

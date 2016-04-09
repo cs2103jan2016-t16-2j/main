@@ -429,6 +429,7 @@ public class State {
 		case START:
 			refreshTodaysTasks();
 			return todaysTasks_;
+
 		default:
 			return allTasks_;
 		}
@@ -451,7 +452,11 @@ public class State {
 			if (task.getEndDate().before(endOfToday)){
 				todaysTasks_.add(task);	
 			}
-		}
+	    }
+	}
+	
+	public boolean isCurrentTasksEmpty(){
+		return this.getCurrentTasks().isEmpty();
 	}
 	
 	public String[] getConfigInfo(){
@@ -484,6 +489,23 @@ public class State {
 		}
 	}
 	
+	public String getEmptyMessage(){
+		switch(viewMode_){
+		case START:
+			return Constant.EMPTY_TODAY;
+		case ALL:
+			return Constant.EMPTY_ALL;
+		case DEADLINE:
+			return Constant.EMPTY_DEADLINE;
+		case FLOATING:
+			return Constant.EMPTY_FLOATING;
+		case SEARCH:
+			return String.format(Constant.EMPTY_SEARCH, userInput_);
+		default:
+			return "";
+		}
+	}
+	
 	public void setTheme(Theme theme) {
 		this.theme_ = theme;
 	}
@@ -491,27 +513,27 @@ public class State {
 	public String getTheme(){
 		switch(theme_){
 		case AUTUMN:
-			return "autumn";
+			return Constant.STYLE_AUTUMN;
 		case BOKEH:
-			return "bokeh";
+			return Constant.STYLE_BOKEH;
 		case BRANCH:
-			return "branch";
+			return Constant.STYLE_BRANCH;
 		case CAT:
-			return "cat";
+			return Constant.STYLE_CAT;
 		case JAPANESE:
-			return "japanese";
+			return Constant.STYLE_JAPANESE;
 		case LEATHER:
-			return "leather";
+			return Constant.STYLE_LEATHER;
 		case PARIS:
-			return "paris"; 
+			return Constant.STYLE_PARIS;
 		case RAINDROP:
-			return "raindrop";
+			return Constant.STYLE_RAINDROP;
 		case WARM:
-			return "warm";
+			return Constant.STYLE_WARM;
 		case WHEAT:
-			return "wheat";
+			return Constant.STYLE_WHEAT;
 		default:
-			return "autumn";
+			return Constant.STYLE_AUTUMN;
 		}
 	}
 	
@@ -522,11 +544,11 @@ public class State {
 	public String getFont(){
 		switch(font_){
 		case CONSOLAS:
-			return "consolas";
+			return Constant.FONT_CONSOLAS;
 		case SEGOE:
-			return "segoe";
+			return Constant.FONT_SEGOE;
 		default:
-			return "segoe";
+			return Constant.FONT_SEGOE;
 		}
 	}
 }

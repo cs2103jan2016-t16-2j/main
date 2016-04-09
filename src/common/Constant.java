@@ -22,8 +22,7 @@ public class Constant {
 		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
 		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
 												"	    Current Directory: %s\n" + 
-												"(E.g. for Mac user, input: /Users/username/folder/subfolder, " +
-												"for Windows users, input: C:\\Users\\username\\folder)";
+												"(E.g. for Mac user, input: /Users/username/folder/subfolder, for Windows users, input: C:\\Users\\username\\folder)";
 		public static final String CONFIG_THEME = "2. To change the theme, input the theme name: (E.g. input: theme autumn)";
 		public static final String CONFIG_FONT = "3. To change the font, input the font name: (E.g. input: font segoe)";
 		
@@ -49,4 +48,27 @@ public class Constant {
 		public static final String HEADER_HELP = "Help";
 		public static final String HEADER_UNDEFINED = "Undefined Mode";	
 		public static final String HEADER_START = "Today";
+		
+		//List of empty messages
+		public static final String EMPTY_TODAY = "Yeah, you have no due today!";
+		public static final String EMPTY_ALL = "Yeah, you have no tasks!";
+		public static final String EMPTY_DEADLINE = "Yeah, you have no scheduled tasks!";
+		public static final String EMPTY_FLOATING = "Yeah, you have no to-do!";
+		public static final String EMPTY_SEARCH = "Sorry, there is no result tasks when %1$s";
+		
+		//List of themes
+		public static final String STYLE_AUTUMN =  "autumn";
+		public static final String STYLE_BOKEH = "bokeh";
+		public static final String STYLE_BRANCH = "branch";
+		public static final String STYLE_CAT = "cat";
+		public static final String STYLE_JAPANESE = "japanese";
+		public static final String STYLE_LEATHER = "leather";
+		public static final String STYLE_PARIS = "paris"; 
+		public static final String STYLE_RAINDROP = "raindrop";
+		public static final String STYLE_WARM = "warm";
+		public static final String STYLE_WHEAT = "wheat";
+		
+		//List of fonts
+		public static final String FONT_CONSOLAS = "consolas";
+        public static final String FONT_SEGOE = "segoe";
 }

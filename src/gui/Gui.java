@@ -10,7 +10,6 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -24,7 +23,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -46,6 +44,7 @@ public class Gui extends Application{
 	private VBox tab = new VBox();
 	private VBox tasks = new VBox();
 	private VBox configs = new VBox(10);
+	private VBox taskTable = new VBox();
 	private HBox sectionHeader = new HBox(10);
 	private HBox tableHeader = new HBox(1);
 	private Label indexHeader = new Label(" #");
@@ -192,10 +191,14 @@ public class Gui extends Application{
 	}
 	
 	private void loadConfig(){
+		taskTable.getChildren().clear();
+		taskTable.getChildren().add(taskPane);
 		taskPane.setContent(configs);
 	}
 
 	private void loadTask() {
+		taskTable.getChildren().clear();
+		taskTable.getChildren().addAll(tableHeader, taskPane);
 		updateTableHeader();
 		ArrayList<Task> taskList = state.getCurrentTasks();
 		tasks.getChildren().clear();
@@ -325,8 +328,6 @@ public class Gui extends Application{
 		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		VBox taskTable = new VBox();
-		taskTable.getChildren().addAll(tableHeader, taskPane);
 	    taskStackPane.getChildren().addAll(taskBox, taskTable);
 		tab.getChildren().add(taskStackPane);
 		layout.getChildren().add(tab);

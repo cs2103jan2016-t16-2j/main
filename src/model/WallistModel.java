@@ -52,7 +52,8 @@ public class WallistModel{
 		initialiseState(); // state must be initialised first
 		initialiseLogic();
 		initialiseStorage();
-		initialiseParser(); 
+		initialiseParser();
+		stateHistory.push(state.deepCopy());
 	}
 	
 	private void initialiseParser() {
@@ -68,7 +69,7 @@ public class WallistModel{
 	private void initialiseState() {
 		state = new State();
 		stateHistory = new Stack<State>();
-		stateHistory.push(state.deepCopy());
+		
 		stateFuture = new Stack<State>();
 	}
 
@@ -126,14 +127,19 @@ public class WallistModel{
 		
 		if (cmdType.equals(CommandType.ADD)) {
 			result = addTask.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.DELETE)){
 			result = deleteTask.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.TICK)){
 			result = tickTask.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.UPDATE)){
 			result = updateTask.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.CLEAR)){
 			result = clearTask.process();
+			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.SEARCH)){
 			result = searchTasks.process();
 		} else if (cmdType.equals(CommandType.UNDO)){
@@ -152,7 +158,6 @@ public class WallistModel{
 			result = false;
 		}
 		storage.executeSaveState();
-		stateHistory.push(state.deepCopy());
 		return result;
 	}
 

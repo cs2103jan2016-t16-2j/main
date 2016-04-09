@@ -205,7 +205,10 @@ public class GUI extends Application{
 	private void displayRow(Task task) {
 		taskIndex ++;
 		String taskContent = task.getDisplayContent();
-		String taskTime = getTaskTime(task);
+		String taskTime = "";
+		if (task.getTaskType().equals(TaskType.DEADLINE)) {
+		    taskTime = getTaskTime(task);	
+		}
 		String taskIdx = Integer.toString(taskIndex);
 		
 		GridPane taskLine = new GridPane();
@@ -234,45 +237,41 @@ public class GUI extends Application{
 	}
 
 	private String getTaskTime(Task task) {
-		String taskTime = "";
-		if (task.getTaskType().equals(TaskType.DEADLINE)){ 
-			Date startDate = task.getStartDate();
-			Date endDate = task.getEndDate();
-			boolean sameDate = false;
-			boolean startThisYear = false;
-			boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
-			boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
-			if (startDate != null){
-				startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
-				sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
-			}
-			if (startDate == null && endThisYear && hasEndTime){
-			    taskTime = sdfDateThisYear.format(task.getEndDate());
-			} else if (startDate == null && endThisYear && !hasEndTime){
-			    taskTime = sdfThisYear.format(task.getEndDate());
-			} else if (startDate == null && hasEndTime){
-			    taskTime = sdf.format(task.getEndDate());
-		    } else if (startDate == null && !hasEndTime){
-			    taskTime = sdfDate.format(task.getEndDate());
-		    } else if (sameDate && startThisYear){
-			    taskTime = String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
-			} else if (sameDate && !startThisYear){
-	        	taskTime = String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
-		    } else if (startThisYear && endThisYear && hasEndTime){
-		    	taskTime = String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
-		    } else if (startThisYear && endThisYear && !hasEndTime){
-		    	taskTime = String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
-		    } else if (startThisYear && !endThisYear && hasEndTime){
-		    	taskTime = String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdf.format(task.getEndDate()));
-		    } else if (startThisYear && !endThisYear && !hasEndTime){
-		    	taskTime = String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
-		    } else if (!startThisYear && endThisYear && hasEndTime){
-		    	taskTime = String.format(DURATION, sdf.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
-		    } else {
-		    	taskTime = String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
-		    }
+		Date startDate = task.getStartDate();
+		Date endDate = task.getEndDate();
+		boolean sameDate = false;
+		boolean startThisYear = false;
+		boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
+		boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
+		if (startDate != null){
+			startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
+			sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
 		}
-		return taskTime;
+		if (startDate == null && endThisYear && hasEndTime){
+		    return sdfDateThisYear.format(task.getEndDate());
+		} else if (startDate == null && endThisYear && !hasEndTime){
+		    return sdfThisYear.format(task.getEndDate());
+		} else if (startDate == null && hasEndTime){
+		    return sdf.format(task.getEndDate());
+	    } else if (startDate == null && !hasEndTime){
+	    	return sdfDate.format(task.getEndDate());
+	    } else if (sameDate && startThisYear){
+	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
+		} else if (sameDate && !startThisYear){
+			return String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
+	    } else if (startThisYear && endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
+	    } else if (startThisYear && endThisYear && !hasEndTime){
+	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
+	    } else if (startThisYear && !endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdf.format(task.getEndDate()));
+	    } else if (startThisYear && !endThisYear && !hasEndTime){
+	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
+	    } else if (!startThisYear && endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdf.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
+	    } else {
+	    	return String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
+	    }
 	}
 
 	private void setTaskView(Task task, Column col) {

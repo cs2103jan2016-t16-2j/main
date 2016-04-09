@@ -1,10 +1,8 @@
 package common;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class State {
@@ -509,27 +507,27 @@ public class State {
 	public String getTheme(){
 		switch(theme_){
 		case AUTUMN:
-			return "autumn";
+			return Constant.STYLE_AUTUMN;
 		case BOKEH:
-			return "bokeh";
+			return Constant.STYLE_BOKEH;
 		case BRANCH:
-			return "branch";
+			return Constant.STYLE_BRANCH;
 		case CAT:
-			return "cat";
+			return Constant.STYLE_CAT;
 		case JAPANESE:
-			return "japanese";
+			return Constant.STYLE_JAPANESE;
 		case LEATHER:
-			return "leather";
+			return Constant.STYLE_LEATHER;
 		case PARIS:
-			return "paris"; 
+			return Constant.STYLE_PARIS;
 		case RAINDROP:
-			return "raindrop";
+			return Constant.STYLE_RAINDROP;
 		case WARM:
-			return "warm";
+			return Constant.STYLE_WARM;
 		case WHEAT:
-			return "wheat";
+			return Constant.STYLE_WHEAT;
 		default:
-			return "autumn";
+			return Constant.STYLE_AUTUMN;
 		}
 	}
 	
@@ -540,11 +538,11 @@ public class State {
 	public String getFont(){
 		switch(font_){
 		case CONSOLAS:
-			return "consolas";
+			return Constant.FONT_CONSOLAS;
 		case SEGOE:
-			return "segoe";
+			return Constant.FONT_SEGOE;
 		default:
-			return "segoe";
+			return Constant.FONT_SEGOE;
 		}
 	}
 }

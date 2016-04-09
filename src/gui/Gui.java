@@ -60,10 +60,10 @@ public class Gui extends Application{
 	private Label helpHeader;
 	private Label finishedHeader;
 	
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy HH:mm");
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
 	private SimpleDateFormat sdfYear = new SimpleDateFormat("yy");
 	private SimpleDateFormat sdfThisYear = new SimpleDateFormat("dd MMM HH:mm");
-	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yy");
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM y");
 	private SimpleDateFormat sdfDateThisYear = new SimpleDateFormat("dd MMM");
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat sdfDefaultTime = new SimpleDateFormat("HH:mm:ss");
@@ -87,7 +87,7 @@ public class Gui extends Application{
 	private static final int COMPONENT_GAP_V = 20;
 	private static final int INDEX_WIDTH = 30;
 	private static final int HEADER_INDEX_WIDTH = 50;
-	private static final int TIME_WIDTH = 400;
+	private static final int TIME_WIDTH = 380;
 	private static final int INPUT_BOX_HEIGHT = 30;
 	private static final int STAGE_WIDTH = 1000;	
 	private static final int TITLE_HEIGHT = 40;	
@@ -314,14 +314,10 @@ public class Gui extends Application{
 	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
 	    } else if (startThisYear && endThisYear && !hasEndTime){
 	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
-	    } else if (startThisYear && !endThisYear && hasEndTime){
-	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdf.format(task.getEndDate()));
-	    } else if (startThisYear && !endThisYear && !hasEndTime){
-	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
-	    } else if (!startThisYear && endThisYear && hasEndTime){
-	    	return String.format(DURATION, sdf.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
+	    } else if (!startThisYear || !endThisYear && hasEndTime){
+	    	return String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));
 	    } else {
-	    	return String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
+	    	return String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
 	    }
 	}
 
@@ -417,8 +413,8 @@ public class Gui extends Application{
 		
 		String themeSheet = "/resources/" + state.getTheme() + ".css";
 		String fontSheet = "/resources/" + state.getFont() + ".css";
-		
-		scene.getStylesheets().addAll(themeSheet, fontSheet);
+		String basicSheet = "/resources/basic.css";
+		scene.getStylesheets().addAll(themeSheet, fontSheet, basicSheet);
 		
 		window.setScene(scene);
 		window.show();

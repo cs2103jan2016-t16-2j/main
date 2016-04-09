@@ -1,7 +1,6 @@
 //@@author A0130717M
 .root {
-    -fx-font-size: 12pt;    
-    -fx-background-image: url("Raindrop.jpg");
+    -fx-font-size: 12pt;   
     -fx-background-size: cover;                     
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
@@ -22,42 +21,13 @@
 }
 
 #taskPane{
-    -fx-fill: rgba(0, 0, 0, 0.5);
     -fx-arc-height: 10;
     -fx-arc-width: 10;
     -fx-padding: 10 10 10 10;
 }
 
-#normal{
-    -fx-fill: rgba(255, 255, 255, 1);
-    
-}
-
-#title{
-    -fx-fill: rgba(0, 0, 0, 0.7);
-}
-
-#titleText{
-    -fx-fill: rgba(255, 255, 255, 1);
-}
-
-#evenLine{
-    -fx-background-color: rgba(0, 0, 0, 0.4);
-}
-
-#oddLine{
-    -fx-background-color: rgba(0, 0, 0, 0.2);
-}
-
 .text-field{
     -fx-font-size: 12pt;
-    -fx-background-color: rgba(0, 0, 0, 0.5);
-    -fx-text-fill: rgba(255, 255, 255, 1);
-}
-
-#zoom{
-    -fx-font-size: 14pt;
-    -fx-fill: rgba(255, 225, 110, 1);
 }
 
 #overdue{
@@ -69,15 +39,44 @@
     -fx-fill: rgba(255, 20, 20, 1);
 }
 
-.label{
+#empty{
     -fx-font-size: 16pt;
-    -fx-text-fill: rgba(0, 0, 0, 1);
+}
+
+.label{
+    -fx-font-size: 15pt;
+    -fx-background-radius: 1em 1em 0em 0em;
+    -fx-padding: 5 20 5 20;
+}
+
+#header{
+    -fx-font-size: 12pt;
+    -fx-background-radius: 0em 0em 0em 0em;
+    -fx-padding: 5 0 5 0;
+}
+
+#tab{
+    -fx-font-size: 16pt;
+    -fx-background-radius: 1em 1em 0em 0em;
+    -fx-padding: 5 20 5 20;
+}
+
+#consolas{
+    -fx-font-size: 12pt;
+    -fx-background-radius: 1em;
+    -fx-padding: 8 20 8 20;
+    -fx-font-family: "Consolas";
+}
+
+#segoe{
+    -fx-font-size: 12pt;
+    -fx-background-radius: 1em;
+    -fx-padding: 5 20 5 20;
+    -fx-font-family: "Segoe";
 }
 
 #message{
     -fx-font-size: 16pt;
-    -fx-text-fill: rgba(255, 255, 255, 1);
-    -fx-background-color: rgba(0, 0, 0, 0.3);
     -fx-background-radius: 1em;
     -fx-padding: 10 10 10 10;
 }

@@ -47,9 +47,9 @@ public class Gui extends Application{
 	private VBox taskTable = new VBox();
 	private HBox sectionHeader = new HBox(10);
 	private HBox tableHeader = new HBox(1);
-	private Label indexHeader = new Label(" #");
-	private Label contentHeader = new Label(" Task");
-	private Label timeHeader = new Label(" Schedule");
+	private Label indexHeader = new Label("#");
+	private Label contentHeader = new Label("   Task ");
+	private Label timeHeader = new Label("   Schedule ");
 	
 	private Label allHeader;
 	private Label deadlineHeader;
@@ -72,25 +72,28 @@ public class Gui extends Application{
 	private int taskBoxHeight;
 	private int taskBoxWidth;
 	private int contentWidth;
+	private int contentHeaderWidth;
 	private int taskIndex;
 	private double vValue;
 	
 	private static double xOffset, yOffset;
 	
-	private final String TITLE = "    %1$s's Wallist";
-	private final String PROMPT = "Put our command here";
-	private final String DURATION = "%1$s - %2$s"; 
+	private static final String TITLE = "    %1$s's Wallist";
+	private static final String PROMPT = "Put our command here";
+	private static final String DURATION = "%1$s - %2$s"; 
 	
-	private final int COMPONENT_GAP_H = 20;
-	private final int COMPONENT_GAP_V = 20;
-	private final int INDEX_WIDTH = 30;
-	private final int TIME_WIDTH = 400;
-	private final int INPUT_BOX_HEIGHT = 30;
-	private final int STAGE_WIDTH = 1000;	
-	private final int TITLE_HEIGHT = 40;	
-	private final int HEADER_HEIGHT = 30;
-	private final int STAGE_HEIGHT = 650;	
-	private final double SCROLL_PERCENTAGE = 0.1;
+	private static final int COMPONENT_GAP_H = 20;
+	private static final int COMPONENT_GAP_V = 20;
+	private static final int INDEX_WIDTH = 30;
+	private static final int HEADER_INDEX_WIDTH = 50;
+	private static final int TIME_WIDTH = 400;
+	private static final int INPUT_BOX_HEIGHT = 30;
+	private static final int STAGE_WIDTH = 1000;	
+	private static final int TITLE_HEIGHT = 40;	
+	private static final int HEADER_HEIGHT = 30;
+	private static final int STAGE_HEIGHT = 650;	
+	private static final double SCROLL_PERCENTAGE = 0.1;
+	private static final int PADDING = 10;
 	
 	private final Insets COMPONENT_PADDING = new Insets(0, 20, 20, 20);
 	private final Insets CONFIG_PADDING = new Insets(20, 20, 20, 20);
@@ -216,12 +219,12 @@ public class Gui extends Application{
 	private void updateTableHeader() {
 		tableHeader.getChildren().clear();
 		if (state.getViewMode().equals(ViewMode.FLOATING)){
-			indexHeader.setPrefWidth(INDEX_WIDTH);
-			contentHeader.setPrefWidth(contentWidth + TIME_WIDTH);
+			indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+			contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
 			tableHeader.getChildren().addAll(indexHeader, contentHeader);	
 		} else {
-			indexHeader.setPrefWidth(INDEX_WIDTH);
-			contentHeader.setPrefWidth(contentWidth);
+			indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+			contentHeader.setPrefWidth(contentHeaderWidth);
 			timeHeader.setPrefWidth(TIME_WIDTH);
 			tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
 		}
@@ -335,7 +338,7 @@ public class Gui extends Application{
 	}
 
 	private void tableHeaderComponent(){
-		indexHeader.setTextAlignment(TextAlignment.CENTER);
+		indexHeader.setAlignment(Pos.CENTER);
 		contentHeader.setTextAlignment(TextAlignment.CENTER);
 		timeHeader.setTextAlignment(TextAlignment.CENTER);
 		indexHeader.setId("header");
@@ -399,6 +402,7 @@ public class Gui extends Application{
 		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT -  HEADER_HEIGHT - TITLE_HEIGHT;
     	taskBoxWidth = (int)(STAGE_WIDTH - COMPONENT_GAP_H * 2);
     	contentWidth = taskBoxWidth - INDEX_WIDTH - TIME_WIDTH;
+    	contentHeaderWidth = contentWidth + PADDING * 2;
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setSpacing(COMPONENT_GAP_V);
 		layout.setAlignment(Pos.CENTER);

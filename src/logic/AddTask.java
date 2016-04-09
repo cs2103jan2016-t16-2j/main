@@ -3,7 +3,6 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import common.Constant;
 import common.State;
 import common.Task;
 import common.TaskComparators;
@@ -23,28 +22,71 @@ public class AddTask implements Operation {
 		collapseAllTasks();
 		Task newTask = new Task(state);
 		TaskType taskType = newTask.getTaskType();
-		ViewMode currentViewMode = state.getViewMode();
 		
 		switch (taskType) { 
 			case FLOATING:
 				addToFloatingList(newTask);
-				addToAllTasksList(newTask);
-				updateIndexUnderFloatingMode(newTask);
-				updateIndexUnderAllMode(newTask);
+				addToAllList(newTask);
+				setCurrentModeToFloating();
 				break;
 			case DEADLINE:
-				addToDeadlineTaskList(newTask);
-				addToAllTasksList(newTask);		
-				updateIndexUnderDeadlineMode(newTask);
-				updateIndexUnderAllMode(newTask);
+				addToDeadlineList(newTask);
+				addToAllList(newTask);
+				setCurrentModeToDeadline();
 				break;
 			case UNDEFINED:
 				return false;
 			default:
 				return true;
 		}
-
 		return true;
+	}
+
+	/**
+	 * 
+	 */
+	private void setCurrentModeToDeadline() {
+		state.setViewMode(ViewMode.DEADLINE);
+	}
+
+	/**
+	 * @param newTask
+	 */
+	private void addToDeadlineList(Task newTask) {
+		ArrayList<Task> taskList = state.getDeadlineTasks();
+		taskList.add(newTask);	
+		Collections.sort(taskList, TaskComparators.compareByEndDate);
+		int indexOfNewTask = state.getDeadlineTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
+	}
+
+	/**
+	 * 
+	 */
+	private void setCurrentModeToFloating() {
+		state.setViewMode(ViewMode.FLOATING);
+	}
+
+	/**
+	 * @param newTask
+	 */
+	private void addToAllList(Task newTask) {
+		ArrayList<Task> allTasks = state.getAllTasks();
+		allTasks.add(newTask);
+		Collections.sort(allTasks, TaskComparators.compareByCreationDate);
+		int indexOfNewTask = state.getAllTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
+	}
+
+	/**
+	 * @param newTask
+	 */
+	private void addToFloatingList(Task newTask) {
+		ArrayList<Task> taskList = state.getFloatingTasks();
+		taskList.add(newTask);
+		Collections.sort(taskList, TaskComparators.compareByCreationDate);
+		int indexOfNewTask = state.getFloatingTasks().indexOf(newTask);
+		state.setPositionIndex(indexOfNewTask);
 	}
 
 	private void collapseAllTasks() {
@@ -54,38 +96,4 @@ public class AddTask implements Operation {
 			another.setIsDetailDisplayed(false);
 		}
 	}
-
-	private void updateIndexUnderAllMode(Task newTask) {
-		int indexOfNewTask = state.getAllTasks().indexOf(newTask);
-		state.setPositionIndex(indexOfNewTask);
-	}
-
-	private void updateIndexUnderDeadlineMode(Task newTask) {
-		int indexOfNewTask = state.getDeadlineTasks().indexOf(newTask);
-		state.setPositionIndex(indexOfNewTask);
-	}
-
-	private void updateIndexUnderFloatingMode(Task newTask) {
-		int indexOfNewTask = state.getFloatingTasks().indexOf(newTask);
-		state.setPositionIndex(indexOfNewTask);
-	}
-
-	private void addToDeadlineTaskList(Task newTask) {
-		ArrayList<Task> taskList = state.getDeadlineTasks();
-		taskList.add(newTask);	
-		Collections.sort(taskList, TaskComparators.compareByEndDate);
-	}
-
-	private void addToAllTasksList(Task newTask) {
-		ArrayList<Task> allTasks = state.getAllTasks();
-		allTasks.add(newTask);
-		Collections.sort(allTasks, TaskComparators.compareByCreationDate);
-	}
-
-	private void addToFloatingList(Task newTask) {
-		ArrayList<Task> taskList = state.getFloatingTasks();
-		taskList.add(newTask);
-		Collections.sort(taskList, TaskComparators.compareByCreationDate);
-	}
-
 }

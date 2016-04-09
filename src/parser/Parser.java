@@ -1,8 +1,6 @@
 //@@author A0130369H
 package parser;
 
-import java.lang.StringBuilder;
-
 import common.*;
 
 public class Parser {
@@ -61,59 +59,49 @@ public class Parser {
 			state_.setCommandType(getCommand());
 			CommandType command = state_.getCommandType();
 			switch(command){
-				case ADD:
-					add_.processInput();
-					break;
-				case CHANGEMODE:
-					changeMode_.processInput();
-					break;
-				case CLEAR:
-					clear_.processInput();
-					break;
-				case DELETE:
-					delete_.processInput();
-					break;
-				case DETAIL:
-					detail_.processInput();
-					break;
-					
-				case EXIT:
-					exit_.processInput();
-					break;
-					
-				case REDO:
-					redo_.processInput();
-					break;
-					
-				case SEARCH:
-					search_.processInput();
-					break;
-					
-				case TICK:
-					tick_.processInput();
-					break;
-					
-				case UNDO:
-					undo_.processInput();
-					break;
-					
-				case UPDATE:
-					update_.processInput();
-					break;
-					
-				case HELP:
-					help_.processInput();
-					break;
-					
-				case UNTICK:
-					untick_.processInput();
-					break;
-					
-				case CONFIG:
-					config_.processInput();
-					break;
-			}
-			
+			case ADD:
+				add_.processInput();
+				break;
+			case CHANGEMODE:
+				changeMode_.processInput();
+				break;
+			case CLEAR:
+				clear_.processInput();
+				break;
+			case DELETE:
+				delete_.processInput();
+				break;
+			case DETAIL:
+				detail_.processInput();
+				break;	
+			case EXIT:
+				exit_.processInput();
+				break;
+			case REDO:
+				redo_.processInput();
+				break;				
+			case SEARCH:
+				search_.processInput();
+				break;				
+			case TICK:
+				tick_.processInput();
+				break;			
+			case UNDO:
+    			undo_.processInput();
+				break;				
+			case UPDATE:
+				update_.processInput();
+				break;			
+			case HELP:
+	    		help_.processInput();
+				break;				
+			case UNTICK:
+				untick_.processInput();
+				break;					
+			case CONFIG:
+				config_.processInput();
+				break;
+			}		
 		}
 		return state_.getIsValid();
 	}

@@ -171,7 +171,7 @@ public class Task {
 		if (isDetailDisplayed){
 			if (!venue.isEmpty() && detail.isEmpty()){
 				return String.format(DISPLAYED_VENUE, content, venue);
-			} else if (!venue.isEmpty() && detail.isEmpty()){
+			} else if (venue.isEmpty() && !detail.isEmpty()){
 				return String.format(DISPLAYED_DETAIL, content, detail);
 			} else if (!venue.isEmpty() && !detail.isEmpty()){
 				return String.format(DISPLAYED_VENUE_DETAIL, content, venue, detail);	

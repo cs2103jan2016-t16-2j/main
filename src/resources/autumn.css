@@ -77,6 +77,15 @@
     -fx-padding: 5 20 5 20;
 }
 
+#header{
+    -fx-font-size: 12pt;
+    -fx-text-fill: rgba(200, 200, 200, 1);
+    -fx-background-radius: 0em 0em 0em 0em;
+    -fx-background-color: rgba(80, 60, 50, 0.2);
+    -fx-padding: 2 0 2 0;
+
+}
+
 #tab{
     -fx-font-size: 16pt;
     -fx-text-fill: rgba(255, 250, 230, 1);

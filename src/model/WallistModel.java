@@ -151,6 +151,7 @@ public class WallistModel{
 		} else {
 			result = false;
 		}
+		storage.executeSaveState();
 		stateHistory.push(state.deepCopy());
 		return result;
 	}

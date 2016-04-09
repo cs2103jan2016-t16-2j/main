@@ -1,8 +1,6 @@
 package common;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import parser.TimeParser;
 
 public class Task {
 	private boolean isImportant, isDetailDisplayed;
@@ -37,20 +35,22 @@ public class Task {
 			this.detail = Constant.VALUE_DEFAULT_EMPTY;
 		}
 		
-		this.taskType = state.getTaskType();
 		this.isImportant = Constant.VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_IMPORTANT;
 		this.isDetailDisplayed = Constant.VALUE_DEFAULT_BOOLEAN_IS_NEW_TASK_DETAIL_DISPLAYED;
 				
-		if(taskType == TaskType.FLOATING){
-			this.startDate = null;
-			this.endDate = null;
+
+		if(state.getIsStartDateChanged()){
+			this.startDate = state.getStartDate();
 		} else {
-			if(state.getIsStartDateChanged()){
-				this.startDate = state.getStartDate();
-			} else {
-				this.startDate = null;
-			}
+			this.startDate = null;
+		}
+			
+		if(state.getIsEndDateChanged()){
 			this.endDate = state.getEndDate();
+			this.taskType = TaskType.DEADLINE;
+		} else {
+			this.endDate = null;
+			this.taskType = TaskType.FLOATING;
 		}
 		
 		this.creationDate = TimeParser.getCurrentDate();

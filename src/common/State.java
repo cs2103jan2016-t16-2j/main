@@ -1,6 +1,7 @@
 package common;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class State {
@@ -14,7 +15,7 @@ public class State {
 	private ViewMode newViewMode_;	
 	private int positionIndex_;
 	private Date startDate_, endDate_;
-	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_, startTasks_;
+	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_, todaysTasks_;
 	private ArrayList<String> searchKey_;
 	private String currentDirectory_;
 
@@ -42,7 +43,7 @@ public class State {
 		allTasks_ = new ArrayList<Task>();
 		searchResultTasks_ = new ArrayList<Task>();
 		finishedTasks_ = new ArrayList<Task>();
-		startTasks_ = new ArrayList<Task>();
+		todaysTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
 		theme_ = Theme.AUTUMN;
 		font_ = Font.SEGOE;
@@ -249,15 +250,11 @@ public class State {
 	public ArrayList<Task> getFinishedTasks(){
 		return finishedTasks_;
 	}
-	
-	//@@author A0130717M
-	public void setStartTasks (ArrayList<Task> startTasks){
-		startTasks_ = startTasks;
-	}
 
-	public ArrayList<Task> getStartTasks(){
-		return startTasks_;
+	public ArrayList<Task> getTodaysTasks(){
+		return todaysTasks_;
 	}
+	
 	
 	public boolean recoverFrom(State oldState){
 		isValid_ = oldState.getIsValid();
@@ -377,8 +374,8 @@ public class State {
 		}
 		
 		ArrayList<Task> startTasks = new ArrayList<Task>();
-		for(int i = 0; i < startTasks_.size(); i++){
-			startTasks.add(startTasks_.get(i));
+		for(int i = 0; i < startTasks.size(); i++){
+			startTasks.add(startTasks.get(i));
 		}
 		
 		ArrayList<String> searchKey = new ArrayList<String>();
@@ -430,19 +427,29 @@ public class State {
 		case FINISHED:
 			return finishedTasks_;
 		case START:
-			currentTask();
-			return startTasks_;
+			refreshTodaysTasks();
+			return todaysTasks_;
 		default:
 			return allTasks_;
 		}
 	}
-
-	private void currentTask() {
-		startTasks_ = new ArrayList<Task>();
-		for(int i = 0; i < deadlineTasks_.size(); i++){
+	
+	
+	//This method returns all tasks that are due before the end of today
+	public void refreshTodaysTasks() {
+		todaysTasks_.clear();
+		Calendar calender =  Calendar.getInstance();
+	    calender.set(calender.get(Calendar.YEAR), 
+	                 calender.get(Calendar.MONTH), 
+	                 calender.get(Calendar.DAY_OF_MONTH), 
+	                 23,59,59);
+	     
+	    Date endOfToday = calender.getTime();
+		
+	    for(int i = 0; i < deadlineTasks_.size(); i++){
 			Task task = deadlineTasks_.get(i);
-			if (task.getEndDate().getTime() < (System.currentTimeMillis())){
-				startTasks_.add(task);	
+			if (task.getEndDate().before(endOfToday)){
+				todaysTasks_.add(task);	
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package testing;
 import common.*;
 import model.WallistModel;
-import parser.TimeParser;
 
 import static org.junit.Assert.*;
 

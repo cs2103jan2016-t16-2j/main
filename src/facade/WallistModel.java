@@ -9,6 +9,7 @@ import logic.AddTask;
 import logic.ChangeViewMode;
 import logic.ClearTask;
 import logic.DeleteTask;
+import logic.Help;
 import logic.SearchTasks;
 import logic.TickTask;
 import logic.UpdateTask;
@@ -26,6 +27,7 @@ public class WallistModel{
 	private TickTask tickTask;
 	private UpdateTask updateTask;
 	private ClearTask clearTask;
+	private Help help;
 	private SearchTasks searchTasks;
 	private ChangeViewMode changeViewMode;
 	private ViewTaskDetail viewTaskDetail;
@@ -41,6 +43,7 @@ public class WallistModel{
 		searchTasks = new SearchTasks(state);
 		changeViewMode = new ChangeViewMode(state);
 		viewTaskDetail = new ViewTaskDetail(state);
+		help = new Help(state);
 		storage = new Storage(state);
 		parser = new Parser(state); 
 		storage.executeLoadState();
@@ -103,6 +106,8 @@ public class WallistModel{
 			result = runningChangeMode();
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
+		} else if (cmdType.equals(CommandType.HELP)) {
+			result = runningHelp();
 		} else {
 			result = false;
 		}
@@ -206,7 +211,13 @@ public class WallistModel{
 		return result;
 	}
 	
-
+	private boolean runningHelp() {
+		boolean isChangedToHelpMode = help.process();
+		boolean isSaved = storage.executeSaveState();
+		boolean isSuccessful = isChangedToHelpMode && isSaved;
+		return isSuccessful;
+	}
+	
 }
 
 

@@ -41,7 +41,7 @@ public class Constant {
 		public static final String HEADER_ALL = "All";
 		public static final String HEADER_SEARCH = "Search";
 		public static final String HEADER_FINISHED = "Finished";
-		public static final String HEADER_CONFIG = "Config";
+		public static final String HEADER_CONFIG = "Setting";
 		public static final String HEADER_HELP = "Help";
 		public static final String HEADER_UNDEFINED = "Undefined Mode";	
 		public static final String HEADER_START = "Today";

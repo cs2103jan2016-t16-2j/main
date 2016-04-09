@@ -46,7 +46,7 @@ public class State {
 		finishedTasks_ = new ArrayList<Task>();
 		startTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
-		theme_ = Theme.AUTUMN;
+		theme_ = Theme.CAT;
 		font_ = Font.SEGOE;
 	}
 	

@@ -30,6 +30,10 @@
     -fx-font-size: 12pt;
 }
 
+#zoom{
+    -fx-font-size: 14pt;
+}
+
 #overdue{
     -fx-fill: rgba(255, 20, 20, 1);
 }

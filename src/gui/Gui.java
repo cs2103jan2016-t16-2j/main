@@ -67,7 +67,7 @@ public class Gui extends Application{
 	private SimpleDateFormat sdfDateThisYear = new SimpleDateFormat("dd MMM");
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat sdfDefaultTime = new SimpleDateFormat("HH:mm:ss");
-	private String defaultTime = "23:59:17";
+	private String defaultTime = "23:59:59";
 	
 	private int taskBoxHeight;
 	private int taskBoxWidth;
@@ -291,6 +291,9 @@ public class Gui extends Application{
 		boolean startThisYear = false;
 		boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
 		boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
+		
+		System.out.println(sdfDefaultTime.format(endDate));
+		
 		if (startDate != null){
 			startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
 			sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));

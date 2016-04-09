@@ -1,6 +1,10 @@
 package common;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class State {
@@ -441,7 +445,7 @@ public class State {
 		startTasks_ = new ArrayList<Task>();
 		for(int i = 0; i < deadlineTasks_.size(); i++){
 			Task task = deadlineTasks_.get(i);
-			if (task.getEndDate().getTime() < (System.currentTimeMillis())){
+			if (!task.getEndDate().after(Date.from(ZonedDateTime.now().with(LocalTime.MAX).toInstant()))){
 				startTasks_.add(task);	
 			}
 		}

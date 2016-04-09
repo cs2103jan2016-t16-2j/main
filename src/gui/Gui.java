@@ -81,6 +81,7 @@ public class Gui extends Application{
 	private static final String TITLE = "    %1$s's Wallist";
 	private static final String PROMPT = "Put our command here";
 	private static final String DURATION = "%1$s - %2$s"; 
+	private static final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
 	
 	private static final int COMPONENT_GAP_H = 20;
 	private static final int COMPONENT_GAP_V = 20;
@@ -141,12 +142,13 @@ public class Gui extends Application{
 		state = wallistModel.getState();
 		if (isSuccess){
 			refreshTaskPane();
+		} else {
+			Label displayText = new Label(state.getDisplayMessage());
+			displayText.setId("message");
+			taskStackPane.getChildren().add(displayText);
+			FadeAnimation fade = new FadeAnimation(displayText);
+			fade.playAnimation();
 		}
-		Label displayText = new Label(state.getDisplayMessage());
-		displayText.setId("message");
-		taskStackPane.getChildren().add(displayText);
-		FadeAnimation fade = new FadeAnimation(displayText);
-		fade.playAnimation();
 		inputBox.clear();
 	}
 
@@ -156,7 +158,9 @@ public class Gui extends Application{
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
-		}else{
+		} else if (state.isCurrentTasksEmpty()){
+			loadEmptyPane();
+		} else{
 			loadTask();	
 		}
 	}
@@ -198,8 +202,18 @@ public class Gui extends Application{
 		taskTable.getChildren().add(taskPane);
 		taskPane.setContent(configs);
 	}
+	
+	private void loadEmptyPane(){
+		Rectangle taskBox = loadTaskBox();
+		Text emptyMessage = new Text(String.format(EMPTY_MESSAGE, state.getEmptyMessage()));
+		emptyMessage.setTextAlignment(TextAlignment.CENTER);
+		emptyMessage.setId("empty");
+		taskStackPane.getChildren().clear();
+		taskStackPane.getChildren().addAll(taskBox, emptyMessage);
+	}
 
 	private void loadTask() {
+		loadTaskPane();
 		taskTable.getChildren().clear();
 		taskTable.getChildren().addAll(tableHeader, taskPane);
 		updateTableHeader();
@@ -214,6 +228,12 @@ public class Gui extends Application{
 		    taskPane.setVvalue(position);
         }
 		taskPane.setContent(tasks);
+	}
+	
+	private void loadTaskPane() {
+		Rectangle taskBox = loadTaskBox();
+		taskStackPane.getChildren().clear();
+		taskStackPane.getChildren().addAll(taskBox, taskTable);
 	}
 	
 	private void updateTableHeader() {
@@ -260,7 +280,7 @@ public class Gui extends Application{
 		tasks.getChildren().add(taskLine);
 		if (taskIndex > state.getPositionIndex()){
 			FadeAnimation fade = new FadeAnimation(taskLine);
-			fade.playAnimation();;
+			fade.playAnimation();
 		}
 	}
 
@@ -323,10 +343,7 @@ public class Gui extends Application{
 	
 
 	private ScrollPane taskComponent() {
-		Rectangle taskBox = new Rectangle();
-		taskBox.setWidth(taskBoxWidth);
-		taskBox.setHeight(taskBoxHeight);
-		taskBox.setId("taskPane");
+		Rectangle taskBox = loadTaskBox();
 		taskPane = new ScrollPane();
 		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -335,6 +352,14 @@ public class Gui extends Application{
 		tab.getChildren().add(taskStackPane);
 		layout.getChildren().add(tab);
 		return taskPane;
+	}
+
+	private Rectangle loadTaskBox() {
+		Rectangle taskBox = new Rectangle();
+		taskBox.setWidth(taskBoxWidth);
+		taskBox.setHeight(taskBoxHeight);
+		taskBox.setId("taskPane");
+		return taskBox;
 	}
 
 	private void tableHeaderComponent(){

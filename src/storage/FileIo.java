@@ -78,7 +78,7 @@ public class FileIo {
 				addTaskToList(normalTasks, floatingTasks, allTasks, reader);
 			}
 		// sort the tasks by its creation date and pass to logic
-		Collections.sort(normalTasks, TaskComparators.compareByCreationDate);
+		Collections.sort(normalTasks, TaskComparators.compareByEndDate);
 		Collections.sort(floatingTasks, TaskComparators.compareByCreationDate);
 		Collections.sort(allTasks, TaskComparators.compareByCreationDate);
 		} catch (IOException e) {

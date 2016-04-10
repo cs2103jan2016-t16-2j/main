@@ -23,7 +23,7 @@ public class ChangeViewMode implements Operation {
 	/**
 	 * Perform change of viewMode
 	 *
-	 * @return     boolean to indication whether the addition is successful
+	 * @return     boolean to indicate whether the addition is successful
 	 * collapse all tasks when changing view mode for better visual appearance
 	 */
 	@Override

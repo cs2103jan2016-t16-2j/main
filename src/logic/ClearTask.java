@@ -28,7 +28,7 @@ public class ClearTask implements Operation {
 	 * Perform clearance of all tasks
 	 * If clearing under invalid mode(UNDEFINED, CONFIG, HELP)
 	 *
-	 * @return  boolean to indication whether the addition is successful
+	 * @return  boolean to indicate whether the addition is successful
 	 */
 	@Override
 	public boolean process() {

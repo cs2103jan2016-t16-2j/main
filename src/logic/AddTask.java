@@ -29,7 +29,7 @@ public class AddTask implements Operation {
 	 * Perform addition of new task
 	 * If the taskType is undefined, return false.
 	 *
-	 * @return     boolean to indication whether the addition is successful
+	 * @return     boolean to indicate whether the addition is successful
 	 */
 	@Override
 	public boolean process() {

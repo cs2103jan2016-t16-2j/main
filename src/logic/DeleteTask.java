@@ -30,7 +30,7 @@ public class DeleteTask implements Operation {
 	 * If the index are out of bound or delete under CONFIG, HELP or UNDEFINED mode
 	 * return false
 	 *
-	 * @return     boolean to indication whether the deletion is successful
+	 * @return     boolean to indicate whether the deletion is successful
 	 */
 	@Override
 	public boolean process() {
@@ -99,7 +99,7 @@ public class DeleteTask implements Operation {
 	
 	
 	/**
-	 * delete tasks under invalid mode
+	 * check and return the index of task to be deleted 
 	 * @return position of the task to be deleted in zero based index
 	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
 	 */

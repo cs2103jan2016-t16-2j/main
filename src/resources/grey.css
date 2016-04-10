@@ -1,0 +1,78 @@
+//@@author A0130717M
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+}
+
+#taskPane{
+    -fx-fill: rgba(255, 255, 255, 0.9);
+}
+
+#normal{
+    -fx-fill: rgba(50, 50, 50, 1);
+}
+
+#title{
+    -fx-fill: rgba(255, 255, 255, 0.3);
+}
+
+#titleText{
+    -fx-fill: rgba(255, 255, 255, 1);
+}
+
+#evenLine{
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}
+
+#oddLine{
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+}
+
+.text-field{
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+}
+
+#zoom{
+    -fx-fill: rgba(0, 0, 0, 1);
+}
+
+#overdue{
+    -fx-fill: rgba(255, 20, 20, 1);
+}
+
+#zoomOverdue{
+    -fx-fill: rgba(255, 20, 20, 1);
+}
+
+.label{
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+#header{
+    -fx-text-fill: rgba(255, 255, 255, 1);
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+#tab{
+    -fx-text-fill: rgba(50, 50, 50, 1);
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+}
+
+#empty{
+    -fx-text-fill: rgba(50, 50, 50, 1);
+}
+
+#consolas{
+    -fx-text-fill: rgba(50, 50, 50, 1);
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+
+#segoe{
+    -fx-text-fill: rgba(50, 50, 50, 1);
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+
+#message{
+    -fx-text-fill: rgba(50, 50, 50, 1);
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}

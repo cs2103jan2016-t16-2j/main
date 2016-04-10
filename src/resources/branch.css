@@ -1,0 +1,70 @@
+//@@author A0130717M
+.root {  
+    -fx-background-image: url("Branch.jpg");
+}
+
+#taskPane{
+    -fx-fill: rgba(235, 255, 160, 0.6);
+}
+
+#normal{
+    -fx-fill: rgba(50, 60, 30, 1);
+}
+
+#title{
+    -fx-fill: rgba(200, 230, 80, 0.5);
+}
+
+#titleText{
+    -fx-fill: rgba(50, 60, 10, 1);
+}
+
+#evenLine{
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+#oddLine{
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.text-field{
+    -fx-background-color: rgba(235, 255, 160, 0.7);
+    -fx-text-fill: rgba(50, 60, 10, 1);
+}
+
+#zoom{
+    -fx-fill: rgba(50, 60, 10, 1);
+}
+
+#empty{
+    -fx-fill: rgba(50, 60, 10, 1);
+}
+
+.label{
+    -fx-text-fill: rgba(50, 60, 30, 1);
+}
+
+#header{
+    -fx-text-fill: rgba(50, 60, 10, 1);
+    -fx-background-color: rgba(180, 200, 80, 0.4);
+}
+
+#tab{
+    -fx-text-fill: rgba(50, 60, 10, 1);
+    -fx-background-color: rgba(180, 200, 80, 0.4);
+}
+
+#consolas{
+    -fx-text-fill: rgba(50, 60, 30, 1);
+    -fx-background-color: rgba(200, 230, 80, 0.5);
+}
+
+#segoe{
+    -fx-text-fill: rgba(50, 60, 30, 1);
+    -fx-background-color: rgba(200, 230, 80, 0.5);
+}
+
+#message{
+    -fx-text-fill: rgba(50, 60, 10, 1);
+    -fx-background-color: rgba(200, 230, 80, 0.5);
+}

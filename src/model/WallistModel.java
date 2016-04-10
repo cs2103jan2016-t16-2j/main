@@ -174,51 +174,62 @@ public class WallistModel{
 	}
 	
 	public boolean running() throws EmptyStackException{
-		CommandType cmdType = state.getCommandType();
-		boolean result;
+		CommandType commandType = state.getCommandType();
+		boolean isRunningSuccessful = false;
 		
-		if (cmdType.equals(CommandType.ADD)) {
-			result = addTask.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.DELETE)){
-			result = deleteTask.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.TICK)){
-			result = tickTask.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.UNTICK)){
-			result = untickTask.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.UPDATE)){
-			result = updateTask.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.CLEAR)){
-			result = clearTask.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.SEARCH)){
-			result = searchTasks.process();
-		} else if (cmdType.equals(CommandType.UNDO)){
-			result = runningUndo();
-			return result;
-		} else if (cmdType.equals(CommandType.REDO)){
-			result = runningRedo();
-			return result;
-		} else if (cmdType.equals(CommandType.DETAIL)){
-			result = viewTaskDetail.process();
-		} else if (cmdType.equals(CommandType.CHANGEMODE)){
-			result = changeViewMode.process();
-		} else if (cmdType.equals(CommandType.CONFIG)){
-			result = config.process();
-			stateHistory.push(state.deepCopy());
-		} else if (cmdType.equals(CommandType.HELP)){
-			result = help.process();
-		} else if (cmdType.equals(CommandType.EXIT)){
-			result = true;
-		} else {
-			result = false;
+		switch (commandType) {
+			case ADD :
+				isRunningSuccessful = addTask.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case DELETE :
+				isRunningSuccessful = deleteTask.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case TICK :
+				isRunningSuccessful = tickTask.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case UNTICK :
+				isRunningSuccessful = untickTask.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case UPDATE :
+				isRunningSuccessful = updateTask.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case CLEAR :
+				isRunningSuccessful = clearTask.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case SEARCH :
+				isRunningSuccessful = searchTasks.process();
+				break;
+			case UNDO :
+				isRunningSuccessful = runningUndo();
+				return isRunningSuccessful;
+			case REDO :
+				isRunningSuccessful = runningRedo();
+				return isRunningSuccessful;
+			case DETAIL :
+				isRunningSuccessful = viewTaskDetail.process();
+				break;
+			case CHANGEMODE :
+				isRunningSuccessful = changeViewMode.process();
+				break;
+			case CONFIG :
+				isRunningSuccessful = config.process();
+				stateHistory.push(state.deepCopy());
+				break;
+			case HELP :
+				isRunningSuccessful = help.process();
+				break;
+			case EXIT :
+				isRunningSuccessful = true;
+			default:
+				storage.executeSaveState();
 		}
-		storage.executeSaveState(); // going to put into each process after refactoring
-		return result;
+		return isRunningSuccessful;
 	}
 	
 	

@@ -116,7 +116,7 @@ public class Gui extends Application{
 		inputProcess();
 	}
 
-	private void initVariables() {
+	private void initVariables(){
 		wallistModel = new WallistModel();
 		taskStackPane = new StackPane();
 		title = new Rectangle();
@@ -518,7 +518,7 @@ public class Gui extends Application{
 		sectionHeader.getChildren().addAll(todayHeader, allHeader, scheduledHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 	}
 	
-	//initialize titlePane layout nad style
+	//initialize titlePane layout and style
 	private void setupTitleLayout() {
 		StackPane titlePane = new StackPane();
 		titlePane.setAlignment(Pos.CENTER_LEFT);

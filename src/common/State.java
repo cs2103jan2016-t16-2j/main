@@ -533,7 +533,7 @@ public class State {
 		case FLOATING:
 			return Constant.EMPTY_FLOATING;
 		case SEARCH:
-			return String.format(Constant.EMPTY_SEARCH, userInput_);
+			return Constant.EMPTY_SEARCH;
 		default:
 			return "";
 		}

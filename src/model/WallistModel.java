@@ -227,8 +227,9 @@ public class WallistModel{
 			case EXIT :
 				isRunningSuccessful = true;
 			default:
-				storage.executeSaveState();
+				break;
 		}
+		storage.executeSaveState();
 		return isRunningSuccessful;
 	}
 	

@@ -48,7 +48,7 @@ public class Config implements Operation {
 			state.setNewDirectory(newDir);
 		}
 		
-		return false;
+		return true;
 	}
 
 }

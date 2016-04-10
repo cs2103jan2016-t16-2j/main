@@ -133,7 +133,7 @@ public class Gui extends Application{
 		timeHeader = new Label("   Schedule ");
 	}
 
-	//handle keyboard events including scrolling, entering commands and exit shortcut
+	//handle keyboard events including scrolling and entering commands
 	private void inputProcess() {
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
@@ -146,9 +146,7 @@ public class Gui extends Application{
 			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	refresh();
-		        } else if (keyEvent.getCode() == KeyCode.ESCAPE) {
-					window.close();
-				}
+		        }
 			}
 		});
 	}
@@ -351,6 +349,18 @@ public class Gui extends Application{
 		}
 	}
 
+	//enable Esc to exit
+	private void loadExit(){
+		layout.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		    @Override
+		    public void handle(KeyEvent keyEvent) {
+		        if (keyEvent.getCode() == KeyCode.ESCAPE) {
+					window.close();
+				}
+			}
+		});
+	}
+	
 	//enable click to select tab
 	private void loadClick() {
 		allHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -538,6 +548,7 @@ public class Gui extends Application{
 		window.setScene(scene);
 		window.show();
 		loadDrag();
+		loadExit();
 	}
 	
 	//initialize layout parameters, positions and spacing
@@ -597,5 +608,7 @@ public class Gui extends Application{
 		end.setId("zoom");
 		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
+	
+	
 	
 }

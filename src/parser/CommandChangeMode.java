@@ -95,7 +95,7 @@ public class CommandChangeMode implements Command{
 			return ViewMode.DEADLINE;
 		} else if(content_.equalsIgnoreCase("ALL")){
 			return ViewMode.ALL;
-		} else if(content_.equalsIgnoreCase("CONFIG")){
+		} else if(content_.equalsIgnoreCase("SETTING")){
 			return ViewMode.CONFIG;
 		} else if(content_.equalsIgnoreCase("FINISHED")){
 			return ViewMode.FINISHED;

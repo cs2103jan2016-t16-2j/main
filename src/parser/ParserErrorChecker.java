@@ -24,6 +24,8 @@ public class ParserErrorChecker {
 	//====================================
 	/**
 	 * Check whether the content of the input has any error
+	 * @return display message
+	 * @return the validity of the input
 	 */
 	public void checkError(){
 		state_.setDisplayMessage(getErrorMessage());
@@ -38,8 +40,7 @@ public class ParserErrorChecker {
 	//====================================
 	/**
 	 * Check whether parsed command is valid
-	 * Pre-Cond: None
-	 * Post-Cond: True if command input is valid. False otherwise.
+	 * @return True if the input is valid
 	 */
 	private boolean getIsValid() {
 		return state_.getDisplayMessage().equals(Constant.VALUE_ERROR_NO_ERROR);
@@ -47,8 +48,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Get the error message for a given input. 
-	 * Pre-Cond: None
-	 * Post-Cond: Respective error message 
+	 * @return The respective error message
 	 */
 	private String getErrorMessage() {
 		if(isInputEmpty()){
@@ -62,8 +62,7 @@ public class ParserErrorChecker {
 
 	/**
 	 * Check whether the input is an empty string
-	 * Pre-Cond: None
-	 * Post-Cond: true if it is empty. false otherwise
+	 * @return True if it's empty input
 	 */	
 	private boolean isInputEmpty() {
 		return state_.getUserInput().length() == 0;
@@ -71,8 +70,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Check whether the input has a valid command (add, update, tick, delete, clear, exit, etc)
-	 * Pre-Cond: None
-	 * Post-Cond: True if it is valid. False otherwise
+	 * @return True if the command is invalid
 	 */
 	private boolean isCommandInvalid() {
 		if(!isInputEmpty()){
@@ -129,8 +127,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Check whether the input has the correct and valid argument for the given command
-	 * Pre-Cond: None
-	 * Post-Cond: Respective error message
+	 * @return respective error message
 	 */
 	private String checkInvalidArgument() {
 		if(!isCommandInvalid()){
@@ -238,6 +235,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Check if content is a valid theme or font
+	 * @return True if it is
 	 */
 	private boolean isContentValidFontOrTheme(String content) {
 		return content.equalsIgnoreCase("CONSOLAS") || content.equalsIgnoreCase("SEGOE")
@@ -250,6 +248,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Check if the content is a valid viewmode
+	 * @return True if it is
 	 */
 	private boolean isContentValidViewMode(String content) {
 		return content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("SCHEDULED") 
@@ -259,6 +258,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Check whether the content has the required index and update content
+	 * @return true if it has one argument only
 	 */
 	private boolean hasContentOneArgument(String[] inputWords) {
 		return inputWords.length ==1;
@@ -266,6 +266,7 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Check if the content is a number
+	 * @return true if it is
 	 */
 	private boolean isContentNumber(String content) {
 		return content.matches("\\d+");
@@ -273,6 +274,7 @@ public class ParserErrorChecker {
 
 	/**
 	 * Check whether the content is empty
+	 * @return true if it is empty
 	 */
 	private boolean isContentEmpty(String content) {
 		return content.isEmpty();
@@ -281,6 +283,7 @@ public class ParserErrorChecker {
 
 	/**
 	 * Get the content of user input without the command word
+	 * @return the user input without the command word
 	 */
 	private String getContentWithoutCommand() {
 		String inputWords[] = state_.getUserInput().split(" ");
@@ -293,8 +296,8 @@ public class ParserErrorChecker {
 	}
 	/**
 	 * Get the command of an input
-	 * Pre-Cond: Input of a user
-	 * Post-Cond: CommandType
+	 * @param Input of the user
+	 * @return The command type
 	 */
 	private CommandType getCommand() {
 		String inputWords[] = state_.getUserInput().split(" ");
@@ -304,8 +307,8 @@ public class ParserErrorChecker {
 	
 	/**
 	 * Get the command type based on input
-	 * Pre-Cond: String of command
-	 * Post-Cond: CommandType of the given input
+	 * @param String of the command
+	 * @return CommandType of the command
 	 */
 	private CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {

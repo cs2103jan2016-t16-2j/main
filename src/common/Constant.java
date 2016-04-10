@@ -25,7 +25,7 @@ public class Constant {
 		public static final boolean VALUE_DEFAULT_BOOLEAN_FALSE = false;
 		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.START;
 		
-		//Cofiguration displaying message
+		//Setting displaying message
 		public static final String CONFIG_INTRO = "Welcome to Wallist Setting";
 		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
 												"	  Current Directory: %s\n" + 
@@ -36,7 +36,7 @@ public class Constant {
 		
 		//@@author A0130717M
 
-		//Configuration displaying message
+		//Help manual displaying message
 		public static final String HELP_INTRO = "Welcome to Wallist Help Manual";
 		public static final String HELP_ADD = "1. To add a task, input \"add + task name + (on: deadline) or (from: start to: end)\n" + 
 				                              "(at: location) + (detail: details)\"\n" + 

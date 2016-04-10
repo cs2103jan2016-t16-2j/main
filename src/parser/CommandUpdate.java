@@ -11,13 +11,30 @@ import common.TimeParser;
 import common.ViewMode;
 
 public class CommandUpdate implements Command{
+	//============================
+	//       Attributes
+	//============================
 	private State state_;
 	private String content_;
 	
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
+	/**
+	 * Initialize the command
+	 * @param state
+	 */
 	public CommandUpdate(State state){
 		state_ = state;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
 	}
+	
+	//====================================
+	//       Public Functions
+	//====================================
+	/**
+	 * Process the input and update the state accordingly
+	 */
 	@Override
 	public void processInput() {
 		content_ = getContentWithoutCommand(state_);
@@ -33,8 +50,13 @@ public class CommandUpdate implements Command{
 		
 	}
 
-	@Override
-	public String getDetail() {
+	//====================================
+	//       Helper Functions
+	//====================================
+	/**
+	 * The following methods update the state
+	 */
+	private String getDetail() {
 		String content = getContentWithoutIndex();
 		String wordList[] = content.split("details:");
 		if(wordList.length <= 1){
@@ -52,8 +74,8 @@ public class CommandUpdate implements Command{
 		}
 	}
 
-	@Override
-	public String getVenue() {
+	 
+	private String getVenue() {
 		String content = getContentWithoutIndex();
 		String wordList[] = content.split("at:");
 		if(wordList.length <= 1){
@@ -71,8 +93,8 @@ public class CommandUpdate implements Command{
 		}
 	}
 
-	@Override
-	public Date getStartDate() {
+	 
+	private Date getStartDate() {
 		String wordList[] = content_.split("from:");
 		if(wordList.length<=1){
 			state_.setIsStartDateChanged(false);
@@ -99,8 +121,8 @@ public class CommandUpdate implements Command{
 		}
 	}
 
-	@Override
-	public Date getEndDate() {
+	 
+	private Date getEndDate() {
 		if(state_.getIsStartDateChanged()){
 			String wordList[] = content_.split("to:");
 			if(wordList.length<=1){
@@ -144,14 +166,14 @@ public class CommandUpdate implements Command{
 		}
 	}
 
-	@Override
-	public int getPositionIndex() {
+	 
+	private int getPositionIndex() {
 		String wordList[] = content_.split(" ");
 		return Integer.parseInt(wordList[0]);
 	}
 
-	@Override
-	public String getContent() {
+	 
+	private String getContent() {
 		String content = getContentWithoutIndex().trim();
 		if(state_.getIsStartDateChanged()){
 			String wordList[] = content.split("from:");
@@ -226,8 +248,8 @@ public class CommandUpdate implements Command{
 		return sb.toString().trim();
 	}
 	
-	@Override
-	public TaskType getTaskType() {
+	 
+	private TaskType getTaskType() {
 		if(state_.getIsEndDateChanged()){
 			return TaskType.DEADLINE;
 		}else{
@@ -235,13 +257,13 @@ public class CommandUpdate implements Command{
 		}
 	}
 
-	@Override
-	public ArrayList<String> getSearchKey() {
+	 
+	private ArrayList<String> getSearchKey() {
 		return new ArrayList<String>();
 	}
 	
-	@Override
-	public ViewMode getNewViewMode() {
+	 
+	private ViewMode getNewViewMode() {
 		return ViewMode.UNDEFINED;
 	}
 }

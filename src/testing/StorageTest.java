@@ -23,7 +23,6 @@ public class StorageTest {
 	public void testChangeDirectory() {
 		State state = new State();
 		Storage storage = new Storage(state);
-		
 	}
 	
 	

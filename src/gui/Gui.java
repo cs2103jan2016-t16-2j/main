@@ -289,7 +289,8 @@ public class Gui extends Application{
 	private Column loadTimeCol(Task task) {
 		String taskTime = "";
 		if (task.getTaskType().equals(TaskType.DEADLINE)) {
-		    taskTime = getTaskTime(task);	
+			TaskTimeDisplay taskTimeDisplay = new TaskTimeDisplay(task);
+			taskTime = taskTimeDisplay.getTaskTime();	
 		}
 		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
 		timeCol.setAlignLeft();

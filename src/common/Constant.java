@@ -19,7 +19,7 @@ public class Constant {
 		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.START;
 		
 		//Cofiguration displaying message
-		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
+		public static final String CONFIG_INTRO = "Welcome to Wallist Setting";
 		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
 												"	  Current Directory: %s\n" + 
 												"(E.g. for Mac user, input: /Users/username/folder/subfolder,\n" +
@@ -29,14 +29,20 @@ public class Constant {
 		
 		//@@author A0130717M
 
-		//Cofiguration displaying message
-		public static final String HELP_INTRO = "";
-		public static final String HELP_ADD = "";
-		public static final String HELP_DELETE = "";
-		public static final String HELP_TICK = "";
-		public static final String HELP_UPDATE = "";
-		public static final String HELP_VIEW = "";
-		public static final String HELP_EXIT = "";
+		//Configuration displaying message
+		public static final String HELP_INTRO = "Welcome to Wallist Help Manual";
+		public static final String HELP_ADD = "1. To add a task, input \"add + task name + (on: deadline) or (from: start to: end)\n" + 
+				                              "(at: location) + (detail: details)\"\n" + 
+				                              "(E.g. add homework due on: tomorrow)";
+		public static final String HELP_DELETE = "2. To delete a task, input \"delete + task index\"";
+		public static final String HELP_TICK = "3. To mark a task as finished, input \"tick + task index\"\n" + 
+		                                       "To unmark a task, go to finished tab and input \"untick + task index\"";
+		public static final String HELP_UPDATE = "4. To update a task, input \"update + task index + changes\"\n" +
+		                                         "(E.g. update 1 at: seminar room)";
+		public static final String HELP_VIEW = "5. To view any task details, input \"view + task index\"\n" +
+		                                       "To switch tab, input \"view + tab name\", for search, setting and help, simply enter the tab name";
+		public static final String HELP_EXIT = "6. To exit Wallist, input \"exit\" or Esc key";
+		public static final String HELP_END = "Thank you for supporting ©Wallist";
 		
 		//List of displayed messages
 		public static final String MESSAGE_SUCCESS = "successfully updated";

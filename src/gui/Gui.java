@@ -33,19 +33,20 @@ public class Gui extends Application{
 	private Stage window;
 	
 	//scene attributes
-	private StackPane taskStackPane ;
-	private Rectangle title ;
+	private StackPane taskStackPane;
+	private Rectangle title;
 	private Rectangle mainBox;
-	private VBox layout ;
-	private VBox tab ;
-	private VBox tasks ;
+	private VBox layout;
+	private VBox tab;
+	private VBox tasks;
+	private VBox help;
 	private VBox configs;
-	private VBox taskTable ;
+	private VBox taskTable;
 	private HBox sectionHeader;
-	private HBox tableHeader ;
-	private Label indexHeader ;
-	private Label contentHeader ;
-	private Label timeHeader ;
+	private HBox tableHeader;
+	private Label indexHeader;
+	private Label contentHeader;
+	private Label timeHeader;
 	private Scene scene;
 	private ScrollPane taskPane;
 	private TextField inputBox;
@@ -94,7 +95,7 @@ public class Gui extends Application{
 	private final double SCROLL_PERCENTAGE = 0.1;
 	
 	private final Insets COMPONENT_PADDING = new Insets(0, 20, 20, 20);
-	private final Insets CONFIG_PADDING = new Insets(20, 30, 20, 30);
+	private final Insets INFO_PADDING = new Insets(20, 30, 20, 30);
 	private final Insets CONTENT_PADDING = new Insets(5, 0, 5, 0);
 	
 	//launching function
@@ -108,6 +109,7 @@ public class Gui extends Application{
 		state = wallistModel.getState();
 		setupStage(primaryStage);
 		setupConfig();
+		setupHelp();
     	refreshTaskPane();
 		inputProcess();
 	}
@@ -119,6 +121,7 @@ public class Gui extends Application{
 		layout = new VBox();
 		tab = new VBox();
 		tasks = new VBox();
+		help = new VBox(15);
 		configs = new VBox(10);
 		taskTable = new VBox();
 		sectionHeader = new HBox(10);
@@ -173,6 +176,8 @@ public class Gui extends Application{
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			loadConfig();
+		} else if (state.getViewMode().equals(ViewMode.HELP)){
+			loadHelp();
 		} else if (state.isCurrentTasksEmpty()){
 			loadEmptyPane();
 		} else{
@@ -210,6 +215,13 @@ public class Gui extends Application{
 		default:
 			todayHeader.setId("tab");
 		}
+	}
+	
+	private void loadHelp() {
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().add(taskPane);
+		taskPane.setContent(help);
 	}
 	
 	private void loadConfig(){
@@ -434,7 +446,7 @@ public class Gui extends Application{
 	
 	private void setupConfig(){
 		String[] infoStr = state.getConfigInfo();
-		configs.setPadding(CONFIG_PADDING);
+		configs.setPadding(INFO_PADDING);
 		Text intro = new Text(infoStr[0]); 
 		intro.setId("normal");		
 		Text dir = new Text(infoStr[1]); 
@@ -448,6 +460,28 @@ public class Gui extends Application{
 		GridPane themes = themeSelector.getTheme();
 		GridPane fonts = fontSelector.getFont();
 		configs.getChildren().addAll(intro, dir, theme, themes, font, fonts);
+	}
+	
+	private void setupHelp(){
+		String[] helpStr = state.getHelpManual();
+		help.setPadding(INFO_PADDING);
+		Text intro = new Text(helpStr[0]); 
+		intro.setId("zoom");		
+		Text add = new Text(helpStr[1]); 
+		add.setId("normal");
+		Text delete = new Text(helpStr[2]); 
+		delete.setId("normal");
+		Text tick = new Text(helpStr[3]); 
+		tick.setId("normal");
+		Text update = new Text(helpStr[4]); 
+		update.setId("normal");		
+		Text view = new Text(helpStr[5]); 
+		view.setId("normal");
+		Text exit = new Text(helpStr[6]); 
+		exit.setId("normal");
+		Text end = new Text(helpStr[7]); 
+		end.setId("zoom");
+		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
 	
 	private void loadClick() {

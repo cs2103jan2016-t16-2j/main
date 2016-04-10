@@ -477,6 +477,19 @@ public class State {
 		return configInfo;
 	}
 	
+	public String[] getHelpManual(){
+		String[] helpManual = new String[8];
+		helpManual[0] = Constant.HELP_INTRO;
+		helpManual[1] = Constant.HELP_ADD;
+		helpManual[2] = Constant.HELP_DELETE;
+		helpManual[3] = Constant.HELP_TICK;
+		helpManual[4] = Constant.HELP_UPDATE;
+		helpManual[5] = Constant.HELP_VIEW;
+		helpManual[6] = Constant.HELP_EXIT;
+		helpManual[7] = Constant.HELP_END;
+		return helpManual;
+	}
+	
 	public String getHeader(){
 		switch(viewMode_){
 		case FLOATING: 

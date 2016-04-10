@@ -34,7 +34,7 @@ public class ParserTest {
 		assertEquals(null, state.getEndDate());
 
 		//Test Add Float
-		state.setUserInput("Add eat lunch details: with boyfriend");
+		state.setUserInput("Add eat lunch detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
 		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
@@ -124,7 +124,7 @@ public class ParserTest {
 		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());		
 		
 		//Test Add Deadline
-		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH details: with boyfriend");
+		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
 		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
@@ -142,7 +142,7 @@ public class ParserTest {
 		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
 		
 		//Test Add Deadline
-		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 details: with boyfriend at: TOA PAYOH ");
+		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 detail: with boyfriend at: TOA PAYOH ");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
 		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
@@ -160,7 +160,7 @@ public class ParserTest {
 		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
 
 		//Test Add Deadline
-		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 details: with boyfriend");
+		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
 		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
@@ -196,7 +196,7 @@ public class ParserTest {
 		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
 		
 		//Test Add Deadline
-		state.setUserInput("Add eat lunch from:  to: 10/10/10 10:10 details: with boyfriend");
+		state.setUserInput("Add eat lunch from:  to: 10/10/10 10:10 detail: with boyfriend");
 		parser.processInput();
 		assertEquals(false, state.getIsValid());
 		assertEquals(Constant.VALUE_ERROR_DATE_NOT_PARSED, state.getDisplayMessage());

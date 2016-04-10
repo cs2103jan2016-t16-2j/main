@@ -19,6 +19,7 @@ public class State {
 	private ArrayList<String> searchKey_;
 	private String currentDirectory_;
 	private String desiredDirectory;
+	private int errorFrequency;
 	
 	public State(){
 		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
@@ -48,6 +49,7 @@ public class State {
 		searchKey_ = new ArrayList<String>();
 		theme_ = Theme.AUTUMN;
 		font_ = Font.SEGOE;
+		errorFrequency = 0;
 	}
 	
 	/*
@@ -171,7 +173,12 @@ public class State {
 	}
 	
 	public void setDisplayMessage(String errorMessage){
-		displayMessage_ = errorMessage;
+		if (errorFrequency >= Constant.THRESHOLD_ERROR_FREQUENCY){
+			resetErrorFrequency();
+			displayMessage_ = Constant.ERROR_RECOMMENDATION;
+		} else {
+			displayMessage_ = errorMessage;
+		}
 	}
 
 	public String getDisplayMessage(){
@@ -564,5 +571,13 @@ public class State {
 		default:
 			return Constant.FONT_SEGOE;
 		}
+	}
+	
+	public void incErrorFrequency(){
+		errorFrequency ++;
+	}
+	
+	public void resetErrorFrequency(){
+		errorFrequency = 0;
 	}
 }

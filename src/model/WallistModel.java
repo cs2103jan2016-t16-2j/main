@@ -153,7 +153,6 @@ public class WallistModel{
 			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.SEARCH)){
 			result = searchTasks.process();
-			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.UNDO)){
 			result = runningUndo();
 			return result;
@@ -162,16 +161,13 @@ public class WallistModel{
 			return result;
 		} else if (cmdType.equals(CommandType.DETAIL)){
 			result = viewTaskDetail.process();
-			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.CHANGEMODE)){
 			result = changeViewMode.process();
-			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.CONFIG)){
 			result = config.process();
 			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.HELP)){
 			result = help.process();
-			stateHistory.push(state.deepCopy());
 		} else if (cmdType.equals(CommandType.EXIT)){
 			result = true;
 		} else {

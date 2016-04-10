@@ -122,7 +122,7 @@ public class FileManagement {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
 			String currentConfigLine = reader.readLine();
 			this.state.setCurrentDirectory(currentConfigLine);
-			
+			this.directory = new File(currentConfigLine);
 			String themeString = reader.readLine();
 			this.state.setTheme(Theme.valueOf(themeString));
 			
@@ -169,8 +169,11 @@ public class FileManagement {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
 			writer.write(currentDirectoryString);
+			writer.newLine();
 			writer.write(theme.toString());
+			writer.newLine();
 			writer.write(font.toString());
+			writer.newLine();
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();

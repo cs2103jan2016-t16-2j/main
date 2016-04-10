@@ -50,7 +50,7 @@ public class Storage {
 	 * @param directory
 	 * @return whether changing is successful
 	 */
-	public boolean executeChangeDirectory() {
+	public boolean executeSaveConfig() {
 		assert isConnectedToFileIo;
 		return fileManagement.saveConfigFile();
 	}

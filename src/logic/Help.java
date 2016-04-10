@@ -12,9 +12,11 @@ public class Help implements Operation {
 	
 	@Override
 	public boolean process() {
-		ViewMode currentViewMode = state.getViewMode();
+
+		ViewMode newViewMode = state.getNewViewMode();
+		state.setViewMode(newViewMode);
 		
-		return false;
+		return true;
 	}
 
 }

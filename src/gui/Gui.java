@@ -263,14 +263,13 @@ public class Gui extends Application{
 	}
 	
 	private void displayRow(Task task) {
-		taskIndex ++;
-		String taskContent = task.getDisplayContent();
-		String taskTime = "";
-		if (task.getTaskType().equals(TaskType.DEADLINE)) {
-		    taskTime = getTaskTime(task);	
-		}
-		String taskIdx = Integer.toString(taskIndex);
-		
+		Column indexCol = loadIndexCol(task);
+		Column contentCol = loadContentCol(task);
+		Column timeCol = loadTimeCol(task);
+		setupTaskRow(indexCol, contentCol, timeCol);
+	}
+
+	private void setupTaskRow(Column indexCol, Column contentCol, Column timeCol) {
 		GridPane taskLine = new GridPane();
 		taskLine.setPadding(CONTENT_PADDING);
 		taskLine.setHgap(10);
@@ -279,21 +278,40 @@ public class Gui extends Application{
 		} else {
 			taskLine.setId("oddLine");
 		}
-		Column indexCol = new Column(taskIdx, 0, INDEX_WIDTH);
-		indexCol.setAlignRight();
-		setTaskView(task, indexCol);
-		Column contentCol = new Column(taskContent, 1, contentWidth);
-		contentCol.setWrap(contentWidth);
-		setTaskView(task, contentCol);
-		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
-		timeCol.setAlignLeft();
-		setTaskView(task, timeCol);
 		taskLine.getChildren().addAll(indexCol.getColumn(), contentCol.getColumn(), timeCol.getColumn());
 		tasks.getChildren().add(taskLine);
 		if (taskIndex > state.getPositionIndex()){
 			FadeAnimation fade = new FadeAnimation(taskLine);
 			fade.playAnimation();
 		}
+	}
+
+	private Column loadTimeCol(Task task) {
+		String taskTime = "";
+		if (task.getTaskType().equals(TaskType.DEADLINE)) {
+		    taskTime = getTaskTime(task);	
+		}
+		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
+		timeCol.setAlignLeft();
+		setTaskView(task, timeCol);
+		return timeCol;
+	}
+
+	private Column loadContentCol(Task task) {
+		String taskContent = task.getDisplayContent();
+		Column contentCol = new Column(taskContent, 1, contentWidth);
+		contentCol.setWrap(contentWidth);
+		setTaskView(task, contentCol);
+		return contentCol;
+	}
+
+	private Column loadIndexCol(Task task) {
+		taskIndex ++;
+		String taskIdx = Integer.toString(taskIndex);
+		Column indexCol = new Column(taskIdx, 0, INDEX_WIDTH);
+		indexCol.setAlignRight();
+		setTaskView(task, indexCol);
+		return indexCol;
 	}
 
 	private String getTaskTime(Task task) {
@@ -341,7 +359,7 @@ public class Gui extends Application{
 		}
 	}
 	
-	private TextField inputComponent() {
+	private TextField loadInputComponent() {
 		TextField inputBox = new TextField();
 		inputBox.setPrefHeight(INPUT_BOX_HEIGHT);
 		inputBox.setMaxHeight(INPUT_BOX_HEIGHT);
@@ -351,7 +369,7 @@ public class Gui extends Application{
 	}
 	
 
-	private ScrollPane taskComponent() {
+	private ScrollPane loadTaskComponent() {
 		Rectangle taskBox = loadTaskBox();
 		taskPane = new ScrollPane();
 		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
@@ -371,7 +389,7 @@ public class Gui extends Application{
 		return taskBox;
 	}
 
-	private void tableHeaderComponent(){
+	private void loadTableHeaderComponent(){
 		indexHeader.setAlignment(Pos.CENTER);
 		contentHeader.setTextAlignment(TextAlignment.CENTER);
 		timeHeader.setTextAlignment(TextAlignment.CENTER);
@@ -380,7 +398,7 @@ public class Gui extends Application{
 		timeHeader.setId("header");
 	}
 	
-	private void headerComponent() {
+	private void loadHeaderComponent() {
 		sectionHeader.setPrefHeight(HEADER_HEIGHT);
 		sectionHeader.setAlignment(Pos.CENTER);
 		resetTab();
@@ -400,7 +418,7 @@ public class Gui extends Application{
 		sectionHeader.getChildren().addAll(startHeader, allHeader, deadlineHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 	}
 	
-	private void titleComponent() {
+	private void loadTitleComponent() {
 		StackPane titlePane = new StackPane();
 		titlePane.setAlignment(Pos.CENTER_LEFT);
         Text titleText = new Text(String.format(TITLE, System.getProperty("user.name")));
@@ -437,12 +455,12 @@ public class Gui extends Application{
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setSpacing(COMPONENT_GAP_V);
 		layout.setAlignment(Pos.CENTER);
-		titleComponent();
+		loadTitleComponent();
         enableDrag();
-		headerComponent();
-		tableHeaderComponent();
-        taskPane = taskComponent();
-		inputBox = inputComponent();
+		loadHeaderComponent();
+		loadTableHeaderComponent();
+        taskPane = loadTaskComponent();
+		inputBox = loadInputComponent();
 	}
 	
 	private void configSetup(){

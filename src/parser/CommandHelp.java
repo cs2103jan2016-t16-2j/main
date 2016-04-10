@@ -79,7 +79,7 @@ public class CommandHelp implements Command{
 	
 	@Override
 	public ViewMode getNewViewMode() {
-		return ViewMode.UNDEFINED;
+		return ViewMode.HELP;
 	}
 
 }

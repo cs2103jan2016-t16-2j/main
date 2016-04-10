@@ -6,12 +6,25 @@ import common.Constant;
 import common.State;
 
 public class ParserErrorChecker {
+	
+	//============================
+	//       Attributes
+	//============================
 	private State state_;
 	
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
 	public ParserErrorChecker(State state){
 		state_ = state;
 	}
 	
+	//====================================
+	//       Public Functions
+	//====================================
+	/**
+	 * Check whether the content of the input has any error
+	 */
 	public void checkError(){
 		state_.setDisplayMessage(getErrorMessage());
 		state_.setIsValid(getIsValid());
@@ -20,7 +33,10 @@ public class ParserErrorChecker {
 		}
 	}
 	
-	/*
+	//====================================
+	//       Helper Functions
+	//====================================
+	/**
 	 * Check whether parsed command is valid
 	 * Pre-Cond: None
 	 * Post-Cond: True if command input is valid. False otherwise.
@@ -29,7 +45,7 @@ public class ParserErrorChecker {
 		return state_.getDisplayMessage().equals(Constant.VALUE_ERROR_NO_ERROR);
 	}
 	
-	/*
+	/**
 	 * Get the error message for a given input. 
 	 * Pre-Cond: None
 	 * Post-Cond: Respective error message 
@@ -44,7 +60,7 @@ public class ParserErrorChecker {
 		return checkInvalidArgument();
 	}
 
-	/*
+	/**
 	 * Check whether the input is an empty string
 	 * Pre-Cond: None
 	 * Post-Cond: true if it is empty. false otherwise
@@ -53,7 +69,7 @@ public class ParserErrorChecker {
 		return state_.getUserInput().length() == 0;
 	}
 	
-	/*
+	/**
 	 * Check whether the input has a valid command (add, update, tick, delete, clear, exit, etc)
 	 * Pre-Cond: None
 	 * Post-Cond: True if it is valid. False otherwise
@@ -111,10 +127,10 @@ public class ParserErrorChecker {
 		return false;
 	}
 	
-	/*
+	/**
 	 * Check whether the input has the correct and valid argument for the given command
 	 * Pre-Cond: None
-	 * Post-Cond: True if it's invalid. False otherwise
+	 * Post-Cond: Respective error message
 	 */
 	private String checkInvalidArgument() {
 		if(!isCommandInvalid()){
@@ -220,7 +236,7 @@ public class ParserErrorChecker {
 		}
 	}
 	
-	/*
+	/**
 	 * Check if content is a valid theme or font
 	 */
 	private boolean isContentValidFontOrTheme(String content) {
@@ -232,7 +248,7 @@ public class ParserErrorChecker {
 			|| content.equalsIgnoreCase("WARM") || content.equalsIgnoreCase("WHEAT");
 	}
 	
-	/*
+	/**
 	 * Check if the content is a valid viewmode
 	 */
 	private boolean isContentValidViewMode(String content) {
@@ -241,21 +257,21 @@ public class ParserErrorChecker {
 				|| content.equalsIgnoreCase("SETTING") || content.equalsIgnoreCase("TODAY");
 	}
 	
-	/*
+	/**
 	 * Check whether the content has the required index and update content
 	 */
 	private boolean hasContentOneArgument(String[] inputWords) {
 		return inputWords.length ==1;
 	}
 	
-	/*
+	/**
 	 * Check if the content is a number
 	 */
 	private boolean isContentNumber(String content) {
 		return content.matches("\\d+");
 	}
 
-	/*
+	/**
 	 * Check whether the content is empty
 	 */
 	private boolean isContentEmpty(String content) {
@@ -263,7 +279,7 @@ public class ParserErrorChecker {
 	}
 
 
-	/*
+	/**
 	 * Get the content of user input without the command word
 	 */
 	private String getContentWithoutCommand() {
@@ -275,7 +291,7 @@ public class ParserErrorChecker {
 		}
 		return sb.toString().trim();
 	}
-	/*
+	/**
 	 * Get the command of an input
 	 * Pre-Cond: Input of a user
 	 * Post-Cond: CommandType
@@ -286,7 +302,7 @@ public class ParserErrorChecker {
 	}
 
 	
-	/*
+	/**
 	 * Get the command type based on input
 	 * Pre-Cond: String of command
 	 * Post-Cond: CommandType of the given input
@@ -321,14 +337,21 @@ public class ParserErrorChecker {
 		} else if (commandTypeString.equalsIgnoreCase("setting")) {
 			return CommandType.CONFIG;
 		}else if (commandTypeString.equalsIgnoreCase("view")) {
-			String inputWords[] = state_.getUserInput().split(" ");
-			String argument = inputWords[1];
-			if(isContentNumber(argument)){
-				return CommandType.DETAIL;
-			}else{
-				return CommandType.CHANGEMODE;
-			}
+			return getViewCommand();
 		}
 		return CommandType.ERROR;
+	}
+	
+	/**
+	 * Check whether it is a detail command or a changemode command
+	 */
+	private CommandType getViewCommand() {
+		String inputWords[] = state_.getUserInput().split(" ");
+		String argument = inputWords[1];
+		if(isContentNumber(argument)){
+			return CommandType.DETAIL;
+		}else{
+			return CommandType.CHANGEMODE;
+		}
 	}
 }

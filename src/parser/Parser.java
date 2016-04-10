@@ -5,6 +5,10 @@ import common.*;
 
 public class Parser {
 	
+	//============================
+	//       Attributes
+	//============================
+	
 	private State state_;
 	private ParserErrorChecker errorChecker_;
 	private CommandAdd add_;
@@ -22,11 +26,10 @@ public class Parser {
 	private CommandUntick untick_;
 	private CommandConfig config_;
 	
-	/*
-	 * Initializing parser
-	 * Pre-Cond: None
-	 * Post-Cond: A parser instance
-	 */
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
+	
  	public Parser(State state){
 		state_ = state;
 		errorChecker_ = new ParserErrorChecker(state);
@@ -47,10 +50,10 @@ public class Parser {
 		
 	}
 	
-	/*
+	/**
 	 * Break down a string of input into smaller parts for logic to process
 	 * Pre-Cond: Input of the user in the state
-	 * Post-Cond: Updated State
+	 * Post-Cond: Respective command function will process the input
 	 */
 	public boolean processInput(){
 		errorChecker_.checkError();

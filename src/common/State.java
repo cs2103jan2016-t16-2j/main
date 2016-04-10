@@ -7,8 +7,8 @@ import java.util.Date;
 public class State {
 	private boolean isValid_, isStartDateChanged_, isEndDateChanged_, isContentChanged_, isVenueChanged_, isDetailChanged_;
 	private String content_, detail_, userInput_, venue_, displayMessage_;
-	private Font font_;
-	private Theme theme_;
+	private Font font_, newFont_;
+	private Theme theme_, newTheme_;
 	private TaskType taskType_;
 	private CommandType commandType_;
 	private ViewMode viewMode_;
@@ -18,7 +18,7 @@ public class State {
 	private ArrayList<Task> floatingTasks_,deadlineTasks_, allTasks_, searchResultTasks_, finishedTasks_, todaysTasks_;
 	private ArrayList<String> searchKey_;
 	private String currentDirectory_;
-	private String desiredDirectory;
+	private String newDirectory_;
 	
 	public State(){
 		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
@@ -47,7 +47,9 @@ public class State {
 		todaysTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
 		theme_ = Theme.AUTUMN;
+		newTheme_ = null;
 		font_ = Font.SEGOE;
+		newFont_ = null;
 	}
 	
 	/*
@@ -58,12 +60,16 @@ public class State {
 		this.currentDirectory_ = directory;
 	}
 	
-	public String getDesiredDirectory() {
-		return this.desiredDirectory;
+	public String getCurrentDirectory(String directory) {
+		return this.currentDirectory_ ;
 	}
 	
-	public void setDesiredDirectory(String directory) {
-		this.desiredDirectory = directory;
+	public void setNewDirectory(String directory) {
+		this.newDirectory_ = directory;
+	}
+	
+	public String getNewDirectory() {
+		return this.newDirectory_;
 	}
 	
 	public void setIsValid(boolean bool){
@@ -519,7 +525,19 @@ public class State {
 		this.theme_ = theme;
 	}
 	
-	public String getTheme(){
+	public Theme getTheme() {
+		return this.theme_;
+	}
+	
+	public void setNewTheme(Theme theme) {
+		this.newTheme_ = theme;
+	}
+	
+	public Theme getNewTheme() {
+		return this.newTheme_;
+	}
+	
+	public String getThemeInString(){
 		switch(theme_){
 		case AUTUMN:
 			return Constant.STYLE_AUTUMN;
@@ -538,11 +556,23 @@ public class State {
 		}
 	}
 	
+	public void setNewFont(Font font) {
+		this.newFont_ = font;
+	}
+	
+	public Font getNewFont() {
+		return this.newFont_;
+	}
+	
 	public void setFont(Font font) {
 		this.font_ = font;
 	}
 	
-	public String getFont(){
+	public Font getFont() {
+		return this.font_;
+	}
+	
+	public String getFontInString(){
 		switch(font_){
 		case CONSOLAS:
 			return Constant.FONT_CONSOLAS;

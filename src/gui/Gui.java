@@ -408,8 +408,8 @@ public class Gui extends Application{
     	layoutSetup();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		
-		String theme = String.format(THEME_SHEET, state.getTheme());
-		String font = String.format(FONT_SHEET, state.getFont());
+		String theme = String.format(THEME_SHEET, state.getThemeInString());
+		String font = String.format(FONT_SHEET, state.getFontInString());
 		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
 		
 		window.setScene(scene);

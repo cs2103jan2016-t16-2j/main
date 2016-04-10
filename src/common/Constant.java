@@ -78,7 +78,7 @@ public class Constant {
 		public static final String EMPTY_ALL = "Yeah, you have no tasks in your Wallist!";
 		public static final String EMPTY_DEADLINE = "Yeah, you have no scheduled tasks in your Wallist!";
 		public static final String EMPTY_FLOATING = "Yeah, you have no to-do in your Wallist!";
-		public static final String EMPTY_SEARCH = "Sorry, there is no result tasks when %1$s in your Wallist";
+		public static final String EMPTY_SEARCH = "Sorry, there is no such result in your Wallist";
 			
 		//List of themes
 		public static final String STYLE_AUTUMN =  "autumn";

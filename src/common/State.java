@@ -475,6 +475,30 @@ public class State {
 	    }
 	}
 	
+	public int getAllTasksSize(){
+		return allTasks_.size();
+	}
+	
+	public int[] getDueTasksSize() {
+		int[] size = new int[2];
+		Calendar endOfDay =  Calendar.getInstance();
+	    endOfDay.set(endOfDay.get(Calendar.YEAR), endOfDay.get(Calendar.MONTH), 
+	    		     endOfDay.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+	    Date endOfToday = endOfDay.getTime();
+
+		Date now =  Calendar.getInstance().getTime();
+		
+	    for(int i = 0; i < deadlineTasks_.size(); i++){
+			Date due = deadlineTasks_.get(i).getEndDate();
+			if (due.before(now)){
+				size[1] ++;
+			} else if (due.before(endOfToday)){
+				size[0] ++;
+			}
+	    }
+	    return size;
+	}
+	
 	public boolean isCurrentTasksEmpty(){
 		return this.getCurrentTasks().isEmpty();
 	}
@@ -533,7 +557,7 @@ public class State {
 		case FLOATING:
 			return Constant.EMPTY_FLOATING;
 		case SEARCH:
-			return String.format(Constant.EMPTY_SEARCH, userInput_);
+			return Constant.EMPTY_SEARCH;
 		default:
 			return "";
 		}

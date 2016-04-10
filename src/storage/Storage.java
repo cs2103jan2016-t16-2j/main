@@ -65,7 +65,7 @@ public class Storage {
 	 * @return whether connects to FileIo Class
 	 */
 	private boolean connectFileToIO() {
-		File file = fileManagement.getFile();
+		File file = fileManagement.getDataFile();
 		return fileIo.setFile(file);
 	}
 }

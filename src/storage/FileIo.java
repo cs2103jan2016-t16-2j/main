@@ -71,7 +71,7 @@ public class FileIo {
 		ArrayList<Task> normalTasks = state.getDeadlineTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		ArrayList<Task> allTasks = state.getAllTasks();
-			
+		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			while (reader.ready()) {

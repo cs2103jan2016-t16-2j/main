@@ -75,8 +75,10 @@ public class WallistModel{
 		boolean isParsed = isSuccessfullyParsed(inputString);
 		if (!isParsed) {
 			LOGGER.log(Level.WARNING, PARSER_FAILURE);
+			state.incErrorFrequency();
 			return false;
 		} else {
+			state.resetErrorFrequency();
 			return executeInput();
 		}
 	}

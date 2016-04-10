@@ -91,12 +91,10 @@ public class CommandChangeMode implements Command{
 	private ViewMode determineViewMode() {
 		if(content_.equalsIgnoreCase("FLOATING")){
 			return ViewMode.FLOATING;
-		} else if(content_.equalsIgnoreCase("DEADLINE")){
+		} else if(content_.equalsIgnoreCase("SCHEDULED")){
 			return ViewMode.DEADLINE;
 		} else if(content_.equalsIgnoreCase("ALL")){
 			return ViewMode.ALL;
-		} else if(content_.equalsIgnoreCase("SEARCH")){
-			return ViewMode.SEARCH;
 		} else if(content_.equalsIgnoreCase("CONFIG")){
 			return ViewMode.CONFIG;
 		} else if(content_.equalsIgnoreCase("FINISHED")){

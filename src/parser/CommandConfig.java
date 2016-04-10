@@ -122,7 +122,7 @@ public class CommandConfig implements Command{
 		}else if(content_.equalsIgnoreCase("warm")){
 			return Theme.WARM;
 		}else{
-			return Theme.AUTUMN;
+			return state_.getTheme();
 		}
 	}
 	private Font getFont() {
@@ -131,7 +131,7 @@ public class CommandConfig implements Command{
 		}else if(content_.equalsIgnoreCase("segoe")){
 			return Font.SEGOE;
 		}else{
-			return Font.SEGOE;
+			return state_.getFont();
 		}
 	}
 

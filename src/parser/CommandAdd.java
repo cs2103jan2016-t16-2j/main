@@ -57,18 +57,16 @@ public class CommandAdd implements Command{
 	 * The following methods update the state
 	 */
 	private String getDetail() {
-		String wordList[] = content_.split("details:");
+		String wordList[] = content_.split("detail:");
 		if(wordList.length <= 1){
 			state_.setIsDetailChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
 			String wordListVenue[] = wordList[wordList.length-1].split("at:");
 			if(wordListVenue.length <= 1){
-				System.out.println("HIHI");
 				state_.setIsDetailChanged(true);
 				return wordList[wordList.length-1].trim();
 			}else{
-				System.out.println("HUHU");
 				state_.setIsDetailChanged(true);
 				return wordListVenue[0].trim();
 			}
@@ -82,7 +80,7 @@ public class CommandAdd implements Command{
 			state_.setIsVenueChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
-			String wordListDetails[] = wordList[wordList.length-1].split("details:");
+			String wordListDetails[] = wordList[wordList.length-1].split("detail:");
 			if(wordListDetails.length <= 1){
 				state_.setIsVenueChanged(true);
 				return wordList[wordList.length-1].trim();
@@ -202,7 +200,7 @@ public class CommandAdd implements Command{
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			if(state_.getIsDetailChanged()){
-				String wordListDetail[] = wordList[0].split("details:");
+				String wordListDetail[] = wordList[0].split("detail:");
 				if(wordList.length <= 1 || wordList[0].isEmpty()){
 					state_.setIsContentChanged(true);
 					return wordList[0].trim();
@@ -215,7 +213,7 @@ public class CommandAdd implements Command{
 				return wordList[0].trim();
 			}
 		}else if(state_.getIsDetailChanged()){
-			String wordList[] = content_.split("details:");
+			String wordList[] = content_.split("detail:");
 			if(wordList.length <= 1 || wordList[0].isEmpty()){
 				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);

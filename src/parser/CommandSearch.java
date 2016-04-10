@@ -10,13 +10,30 @@ import common.TaskType;
 import common.ViewMode;
 
 public class CommandSearch implements Command{
+	//============================
+	//       Attributes
+	//============================
 	private State state_;
 	private String content_;
 	
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
+	/**
+	 * Initialize the command
+	 * @param state
+	 */
 	public CommandSearch(State state){
 		state_ = state;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
 	}
+	
+	//====================================
+	//       Public Functions
+	//====================================
+	/**
+	 * Process the input and update the state accordingly
+	 */
 	@Override
 	public void processInput() {
 		content_ = getContentWithoutCommand(state_);
@@ -32,52 +49,57 @@ public class CommandSearch implements Command{
 		
 	}
 
-	@Override
-	public String getDetail() {
+	//====================================
+	//       Helper Functions
+	//====================================
+	/**
+	 * The following methods update the state
+	 */
+	private String getDetail() {
 		state_.setIsDetailChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
-	@Override
-	public String getVenue() {
+	 
+	private String getVenue() {
 		state_.setIsVenueChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
-	@Override
-	public Date getStartDate() {
+	 
+	private Date getStartDate() {
 		state_.setIsStartDateChanged(false);
 		return null;
 	}
 
-	@Override
-	public Date getEndDate() {
+	 
+	private Date getEndDate() {
 		state_.setIsEndDateChanged(false);
 		return null;
 	}
 
-	@Override
-	public int getPositionIndex() {
+	 
+	private int getPositionIndex() {
 		return Constant.VALUE_DEFAULT_POSITION_INDEX;
 	}
 
-	@Override
-	public String getContent() {
+	 
+	private String getContent() {
 		state_.setIsContentChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
-	@Override
-	public TaskType getTaskType() {
+	 
+	private TaskType getTaskType() {
 		return TaskType.UNDEFINED;
 	}
 
-	@Override
-	public ArrayList<String> getSearchKey() {
+	 
+	private ArrayList<String> getSearchKey() {
 		ArrayList<String> keywords = new ArrayList<String>();
 		String inputKeyWords[] = content_.split(" ");
 		if(inputKeyWords.length == 0){
-			state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
+			state_.setDisplayMessage(Constant.VALUE_ERROR_SEARCH_EMPTY);
 		}
 		for(int i = 0; i<inputKeyWords.length; i++){
 			keywords.add(inputKeyWords[i]);
@@ -85,8 +107,8 @@ public class CommandSearch implements Command{
 		return keywords;
 	}
 	
-	@Override
-	public ViewMode getNewViewMode() {
+	 
+	private ViewMode getNewViewMode() {
 		return ViewMode.SEARCH;
 	}
 

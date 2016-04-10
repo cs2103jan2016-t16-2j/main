@@ -10,13 +10,30 @@ import common.TaskType;
 import common.ViewMode;
 
 public class CommandHelp implements Command{
+	//============================
+	//       Attributes
+	//============================
 	private State state_;
 	private String content_;
 	
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
+	/**
+	 * Initialize the command
+	 * @param state
+	 */
 	public CommandHelp(State state){
 		state_ = state;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
 	}
+	
+	//====================================
+	//       Public Functions
+	//====================================
+	/**
+	 * Process the input and update the state accordingly
+	 */
 	@Override
 	public void processInput() {
 		content_ = getContentWithoutCommand(state_);
@@ -32,53 +49,58 @@ public class CommandHelp implements Command{
 		
 	}
 
-	@Override
-	public String getDetail() {
+	//====================================
+	//       Helper Functions
+	//====================================
+	/**
+	 * The following methods update the state
+	 */
+	private String getDetail() {
 		state_.setIsDetailChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
-	@Override
-	public String getVenue() {
+	 
+	private String getVenue() {
 		state_.setIsVenueChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
-	@Override
-	public Date getStartDate() {
+	 
+	private Date getStartDate() {
 		state_.setIsStartDateChanged(false);
 		return null;
 	}
 
-	@Override
-	public Date getEndDate() {
+	 
+	private Date getEndDate() {
 		state_.setIsEndDateChanged(false);
 		return null;
 	}
 
-	@Override
-	public int getPositionIndex() {
+	 
+	private int getPositionIndex() {
 		return Constant.VALUE_DEFAULT_POSITION_INDEX;
 	}
 
-	@Override
-	public String getContent() {
+	 
+	private String getContent() {
 		state_.setIsContentChanged(false);
 		return Constant.VALUE_DEFAULT_EMPTY;
 	}
 
-	@Override
-	public TaskType getTaskType() {
+	 
+	private TaskType getTaskType() {
 		return TaskType.UNDEFINED;
 	}
 
-	@Override
-	public ArrayList<String> getSearchKey() {
+	 
+	private ArrayList<String> getSearchKey() {
 		return new ArrayList<String>();
 	}
 	
-	@Override
-	public ViewMode getNewViewMode() {
+	 
+	private ViewMode getNewViewMode() {
 		return ViewMode.HELP;
 	}
 

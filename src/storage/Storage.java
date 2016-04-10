@@ -52,7 +52,7 @@ public class Storage {
 	 */
 	public boolean executeChangeDirectory() {
 		assert isConnectedToFileIo;
-		return fileManagement.changeDirectory();
+		return fileManagement.saveConfigFile();
 	}
 	
 	//===========================

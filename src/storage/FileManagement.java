@@ -24,11 +24,15 @@ public class FileManagement {
 	
 	// configuration attributes
 	private File directory;
-	private String newDirectory;
+	private Theme theme;
+	private Font font;
 	
-	// file name & directory
+	// config setting
 	
 	private static final String DEFAULT_DIRECTORY = System.getProperty("user.home") + "/WallistDatabase"; 
+	private static final String DEFAULT_THEME = "AUTUMN";
+	private static final String DEFAULT_FONT = "SEGOE";
+	
 	private static final String CONFIG_FILE_NAME = "config.txt";
 	private static final String DATA_FILE_NAME = "data.txt";
 	private static final String ARCHIVE_FILE_NAME = "archive.txt";
@@ -56,6 +60,7 @@ public class FileManagement {
 	private static final String CREATE_ARCHIVE = "Archive file does not exist, creating new archivefile...";
 	private static final String CREATE_ARCHIVE_SUCCESS = "Archive file is created successfully!";
 	private static final String CREATE_ARCHIVE_FAILURE = "Archive file is not created successfully!";
+	
 	
 	//============================
 	//       Constructor(s)
@@ -85,9 +90,16 @@ public class FileManagement {
 			
 			//default configuration setting
 			String defaultDataDirectory = DEFAULT_DIRECTORY;
+			String defaultTheme = DEFAULT_THEME;
+			String defaultFont = DEFAULT_FONT;
 			this.directory = new File(defaultDataDirectory);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
 			writer.write(defaultDataDirectory);
+			writer.newLine();
+			writer.write(defaultTheme);
+			writer.newLine();
+			writer.write(defaultFont);
+			writer.newLine();
 			writer.close();
 			
 		} catch (IOException e) {
@@ -109,8 +121,13 @@ public class FileManagement {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
 			String currentConfigLine = reader.readLine();
-			state.setCurrentDirectory(currentConfigLine); // pass the directory to state
-			this.directory = new File(currentConfigLine); 
+			this.state.setCurrentDirectory(currentConfigLine);
+			
+			String themeString = reader.readLine();
+			this.state.setTheme(Theme.valueOf(themeString));
+			
+			String fontString = reader.readLine();
+			this.state.setFont(Font.valueOf(fontString));
 			reader.close();
 		} catch (IOException e){
 			LOGGER.log(Level.WARNING, LOAD_CONFIG_FAILURE);
@@ -140,6 +157,27 @@ public class FileManagement {
 		return true;
 	}
 	
+	/**
+ 	 * This method changes the directory in the configuration file
+ 	 * @param directoryString
+ 	 * @return boolean value of whether it is successful
+ 	 */
+	public boolean saveConfigFile() {
+		this.theme = state.getTheme();
+		this.font = state.getFont();
+		String currentDirectoryString = state.getCurrentDirectory();
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
+			writer.write(currentDirectoryString);
+			writer.write(theme.toString());
+			writer.write(font.toString());
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
 	public File getDataFile() {
 		return this.dataFile;
@@ -222,22 +260,6 @@ public class FileManagement {
 		return true;
  	}
  	
- 	/**
- 	 * This method changes the directory in the configuration file
- 	 * @param directoryString
- 	 * @return boolean value of whether it is successful
- 	 */
-	public boolean changeDirectory() {
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
-			writer.write(newDirectory);
-			// other setting goes here
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
+ 	
 
 }

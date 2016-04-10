@@ -582,10 +582,15 @@ public class State {
 	public String getThemeInString(){
 		switch(theme_){
 		case AUTUMN:
+
+			System.out.println(Constant.STYLE_AUTUMN);
 			return Constant.STYLE_AUTUMN;
 		case BOKEH:
+			System.out.println(Constant.STYLE_BOKEH);
 			return Constant.STYLE_BOKEH;
 		case BRANCH:
+
+			System.out.println(Constant.STYLE_BRANCH);
 			return Constant.STYLE_BRANCH;
 		case CAT:
 			return Constant.STYLE_CAT;

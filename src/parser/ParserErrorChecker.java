@@ -241,9 +241,7 @@ public class ParserErrorChecker {
 		return content.equalsIgnoreCase("CONSOLAS") || content.equalsIgnoreCase("SEGOE")
 			|| content.equalsIgnoreCase("AUTUMN") || content.equalsIgnoreCase("BOKEH")
 			|| content.equalsIgnoreCase("BRANCH") || content.equalsIgnoreCase("CAT")
-			|| content.equalsIgnoreCase("JAPANESE") || content.equalsIgnoreCase("LEATHER")
-			|| content.equalsIgnoreCase("PARIS") || content.equalsIgnoreCase("RAINDROP")
-			|| content.equalsIgnoreCase("WARM") || content.equalsIgnoreCase("WHEAT");
+			|| content.equalsIgnoreCase("GREY") || content.equalsIgnoreCase("WARM");
 	}
 	
 	/**

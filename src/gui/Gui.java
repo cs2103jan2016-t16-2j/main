@@ -185,6 +185,7 @@ public class Gui extends Application{
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			displayConfig();
+			loadStyleSheet();
 		} else if (state.getViewMode().equals(ViewMode.HELP)){
 			displayHelp();
 		} else if (state.isCurrentTasksEmpty()){
@@ -250,6 +251,14 @@ public class Gui extends Application{
 		Column contentCol = loadContentCol(task);
 		Column timeCol = loadTimeCol(task);
 		loadTaskRow(indexCol, contentCol, timeCol);
+	}
+	
+	//get styles and font when changes
+	private void loadStyleSheet() {
+		String theme = String.format(THEME_SHEET, state.getThemeInString());
+		String font = String.format(FONT_SHEET, state.getFontInString());
+		scene.getStylesheets().clear();
+		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
 	}
 
 	//load header tab according to current view mode
@@ -565,11 +574,7 @@ public class Gui extends Application{
         window.getIcons().add(new Image(TITLE_IMAGE));
     	setupLayout();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		
-		String theme = String.format(THEME_SHEET, state.getThemeInString());
-		String font = String.format(FONT_SHEET, state.getFontInString());
-
-		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
+		loadStyleSheet();
 		window.setScene(scene);
 		window.show();
 		loadDrag();

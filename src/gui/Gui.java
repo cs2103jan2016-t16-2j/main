@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -83,6 +84,7 @@ public class Gui extends Application{
 	private final String THEME_SHEET = "/resources/%1$s.css";
 	private final String FONT_SHEET = "/resources/%1$s.css";
 	private final String BASIC_SHEET = "/resources/basic.css";
+	private final String TITLE_IMAGE = "/resources/title.png";
 	
 	private final int COMPONENT_GAP_H = 20;
 	private final int COMPONENT_GAP_V = 20;
@@ -530,24 +532,29 @@ public class Gui extends Application{
 		sectionHeader.getChildren().addAll(todayHeader, allHeader, scheduledHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 	}
 	
-	//initialize titlePane layout and style
-	private void setupTitleLayout() {
+	//initialize notificationPane layout and style
+	private void setupNotificationLayout() {
 		StackPane notificationPane = new StackPane();
 		notificationPane.setAlignment(Pos.CENTER_RIGHT);
 		notificationText = new Text();
 		notificationText.setId("titleText");
+		StackPane titlePane = setupTitleLayout();
+		notificationPane.getChildren().addAll(titlePane, notificationText);
+        layout.getChildren().add(notificationPane);
+	}
+
+	//initialize titlePane layout and style
+	private StackPane setupTitleLayout() {
 		StackPane titlePane = new StackPane();
 		titlePane.setAlignment(Pos.CENTER_LEFT);
-		String userName = String.format(TITLE, System.getProperty("user.name"));
+		String userName = String.format(TITLE, System.getProperty("user.name"));;
         Text titleText = new Text(userName);
         titleText.setId("titleText");
 		title.setWidth(STAGE_WIDTH);
 		title.setHeight(TITLE_HEIGHT);
 		title.setId("title");
 		titlePane.getChildren().addAll(title, titleText);
-		
-		notificationPane.getChildren().addAll(titlePane, notificationText);
-        layout.getChildren().add(notificationPane);
+		return titlePane;
 	}
 
 	//initialize stage size, properties and style
@@ -555,7 +562,7 @@ public class Gui extends Application{
 		window = primaryStage;
 		window.initStyle(StageStyle.UNDECORATED);
         window.setResizable(true);
-        window.getIcons().add(new Image("/title.png"));
+        window.getIcons().add(new Image(TITLE_IMAGE));
     	setupLayout();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		
@@ -578,7 +585,7 @@ public class Gui extends Application{
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setSpacing(COMPONENT_GAP_V);
 		layout.setAlignment(Pos.CENTER);
-		setupTitleLayout();
+		setupNotificationLayout();
 		setupHeaderLayout();
 		setupTableHeaderLayout();
         taskPane = setupMainLayout();

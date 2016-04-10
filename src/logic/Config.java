@@ -3,6 +3,7 @@ package logic;
 import common.Font;
 import common.State;
 import common.Theme;
+import common.ViewMode;
 
 public class Config implements Operation {
 	//============================
@@ -26,9 +27,14 @@ public class Config implements Operation {
 	 */
 	@Override
 	public boolean process() {
+		
 		Font newFont = state.getNewFont();
 		Theme newTheme = state.getNewTheme();
 		String newDir = state.getNewDirectory();
+		
+
+		ViewMode newViewMode = state.getNewViewMode();
+		state.setViewMode(newViewMode);
 		
 		if(newFont != null){
 			state.setFont(newFont);

@@ -60,6 +60,7 @@ public class Gui extends Application{
 	private Label configHeader;
 	private Label helpHeader;
 	private Label finishedHeader;
+	private Text notificationText;
 	
 	//Wallist model
 	private WallistModel wallistModel;
@@ -76,6 +77,7 @@ public class Gui extends Application{
 	
 	//Constants
 	private final String TITLE = "    %1$s's Wallist";
+    private final String NOTIFICATION = "You have %1$s tasks, %2$s due today, %3$s overdue    ";
 	private final String PROMPT = "Input your command here";
 	private final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
 	private final String THEME_SHEET = "/resources/%1$s.css";
@@ -113,6 +115,7 @@ public class Gui extends Application{
 		setupConfig();
 		setupHelp();
     	refreshTaskPane();
+		refreshNotification();
 		inputProcess();
 	}
 
@@ -162,6 +165,15 @@ public class Gui extends Application{
 			displayMessage();
 		}
 		inputBox.clear();
+		refreshNotification();
+	}
+
+	//display notifications in title bar
+	private void refreshNotification() {
+		int allTasks = state.getAllTasksSize();
+		int[] dueTasks = state.getDueTasksSize();
+		String notification = String.format(NOTIFICATION, allTasks, dueTasks[0], dueTasks[1]);
+		notificationText.setText(notification);
 	}
 
 	//display correct content in mainPane
@@ -520,6 +532,10 @@ public class Gui extends Application{
 	
 	//initialize titlePane layout and style
 	private void setupTitleLayout() {
+		StackPane notificationPane = new StackPane();
+		notificationPane.setAlignment(Pos.CENTER_RIGHT);
+		notificationText = new Text();
+		notificationText.setId("titleText");
 		StackPane titlePane = new StackPane();
 		titlePane.setAlignment(Pos.CENTER_LEFT);
 		String userName = String.format(TITLE, System.getProperty("user.name"));
@@ -529,7 +545,9 @@ public class Gui extends Application{
 		title.setHeight(TITLE_HEIGHT);
 		title.setId("title");
 		titlePane.getChildren().addAll(title, titleText);
-        layout.getChildren().add(titlePane);
+		
+		notificationPane.getChildren().addAll(titlePane, notificationText);
+        layout.getChildren().add(notificationPane);
 	}
 
 	//initialize stage size, properties and style
@@ -608,7 +626,6 @@ public class Gui extends Application{
 		end.setId("zoom");
 		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
-	
 	
 	
 }

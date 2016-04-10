@@ -9,13 +9,14 @@ import javafx.scene.layout.StackPane;
 public class ThemeSelector {
 
 	private GridPane themes;
-	private final int GAP = 30;
+	private final int HGAP = 50;
+	private final int VGAP = 30;
 	private String[] schemes = {"light", "dark"};
 	
 	public ThemeSelector(){
 		themes = new GridPane();
-		themes.setHgap(GAP);
-		themes.setVgap(GAP);
+		themes.setHgap(HGAP);
+		themes.setVgap(VGAP);
 		
 		addTheme("Autumn", 0, 0, 0);
 		addTheme("Bokeh", 1, 0, 0);

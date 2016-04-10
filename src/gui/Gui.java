@@ -100,7 +100,7 @@ public class Gui extends Application{
 	private static final int PADDING = 10;
 	
 	private final Insets COMPONENT_PADDING = new Insets(0, 20, 20, 20);
-	private final Insets CONFIG_PADDING = new Insets(20, 20, 20, 20);
+	private final Insets CONFIG_PADDING = new Insets(20, 30, 20, 30);
 	private final Insets CONTENT_PADDING = new Insets(5, 0, 5, 0);
 	
 	public static void launching(){
@@ -201,6 +201,7 @@ public class Gui extends Application{
 	}
 	
 	private void loadConfig(){
+		loadTaskPane();
 		taskTable.getChildren().clear();
 		taskTable.getChildren().add(taskPane);
 		taskPane.setContent(configs);
@@ -214,7 +215,7 @@ public class Gui extends Application{
 		taskStackPane.getChildren().clear();
 		taskStackPane.getChildren().addAll(taskBox, emptyMessage);
 	}
-
+	
 	private void loadTask() {
 		loadTaskPane();
 		taskTable.getChildren().clear();

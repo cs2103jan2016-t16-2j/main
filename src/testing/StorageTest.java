@@ -23,7 +23,7 @@ public class StorageTest {
 	public void testChangeDirectory() {
 		State state = new State();
 		Storage storage = new Storage(state);
-		storage.executeChangeDirectory("/Users/Shadowsong/WallistDatabase2");
+		//storage.executeChangeDirectory("/Users/Shadowsong/WallistDatabase2");
 	}
 	
 	

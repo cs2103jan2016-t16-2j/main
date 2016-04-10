@@ -31,8 +31,8 @@ public class CommandConfig implements Command{
 		state_.setTaskType(getTaskType());
 		state_.setSearchKey(getSearchKey());
 		state_.setNewViewMode(getNewViewMode());
-		state_.setFont(getFont());
-		state_.setTheme(getTheme());
+		state_.setNewFont(getFont());
+		state_.setNewTheme(getTheme());
 		
 	}
 

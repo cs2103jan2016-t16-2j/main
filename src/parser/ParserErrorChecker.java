@@ -180,7 +180,7 @@ public class ParserErrorChecker {
 						return true;
 					
 					case CHANGEMODE:
-						if(content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("DEADLINE") 
+						if(content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("SCHEDULED") 
 								|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("FINISHED") 
 								|| content.equalsIgnoreCase("CONFIG") || content.equalsIgnoreCase("TODAY")){
 							return false;

@@ -21,12 +21,23 @@ public class Constant {
 		//Cofiguration displaying message
 		public static final String CONFIG_INTRO = "Welcome to the Configuration Mode";
 		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
-												"	    Current Directory: %s\n" + 
-												"(E.g. for Mac user, input: /Users/username/folder/subfolder, for Windows users, input: C:\\Users\\username\\folder)";
+												"	  Current Directory: %s\n" + 
+												"(E.g. for Mac user, input: /Users/username/folder/subfolder,\n" +
+												"for Windows users, input: C:\\Users\\username\\folder)";
 		public static final String CONFIG_THEME = "2. To change the theme, input the theme name: (E.g. input: theme autumn)";
 		public static final String CONFIG_FONT = "3. To change the font, input the font name: (E.g. input: font segoe)";
 		
 		//@@author A0130717M
+
+		//Cofiguration displaying message
+		public static final String HELP_INTRO = "";
+		public static final String HELP_ADD = "";
+		public static final String HELP_DELETE = "";
+		public static final String HELP_TICK = "";
+		public static final String HELP_UPDATE = "";
+		public static final String HELP_VIEW = "";
+		public static final String HELP_EXIT = "";
+		
 		//List of displayed messages
 		public static final String MESSAGE_SUCCESS = "successfully updated";
 		public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Oops, did you enter the correct index? Index should be from 1 to size of the list";
@@ -50,12 +61,12 @@ public class Constant {
 		public static final String HEADER_START = "Today";
 		
 		//List of empty messages
-		public static final String EMPTY_TODAY = "Yeah, you have no due today!";
-		public static final String EMPTY_ALL = "Yeah, you have no tasks!";
-		public static final String EMPTY_DEADLINE = "Yeah, you have no scheduled tasks!";
-		public static final String EMPTY_FLOATING = "Yeah, you have no to-do!";
-		public static final String EMPTY_SEARCH = "Sorry, there is no result tasks when %1$s";
-		
+		public static final String EMPTY_TODAY = "Yeah, you have no due today in your Wallist!";
+		public static final String EMPTY_ALL = "Yeah, you have no tasks in your Wallist!";
+		public static final String EMPTY_DEADLINE = "Yeah, you have no scheduled tasks in your Wallist!";
+		public static final String EMPTY_FLOATING = "Yeah, you have no to-do in your Wallist!";
+		public static final String EMPTY_SEARCH = "Sorry, there is no result tasks when %1$s in your Wallist";
+			
 		//List of themes
 		public static final String STYLE_AUTUMN =  "autumn";
 		public static final String STYLE_BOKEH = "bokeh";

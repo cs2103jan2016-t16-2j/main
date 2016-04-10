@@ -19,6 +19,7 @@ public class State {
 	private ArrayList<String> searchKey_;
 	private String currentDirectory_;
 	private String newDirectory_;
+	private int errorFrequency;
 	
 	public State(){
 		isValid_ = Constant.VALUE_DEFAULT_BOOLEAN_TRUE;
@@ -50,6 +51,7 @@ public class State {
 		newTheme_ = null;
 		font_ = Font.SEGOE;
 		newFont_ = null;
+		errorFrequency = 0;
 	}
 	
 	/*
@@ -177,7 +179,12 @@ public class State {
 	}
 	
 	public void setDisplayMessage(String errorMessage){
-		displayMessage_ = errorMessage;
+		if (errorFrequency >= Constant.THRESHOLD_ERROR_FREQUENCY){
+			resetErrorFrequency();
+			displayMessage_ = Constant.ERROR_RECOMMENDATION;
+		} else {
+			displayMessage_ = errorMessage;
+		}
 	}
 
 	public String getDisplayMessage(){
@@ -455,11 +462,9 @@ public class State {
 	public void refreshTodaysTasks() {
 		todaysTasks_.clear();
 		Calendar calender =  Calendar.getInstance();
-	    calender.set(calender.get(Calendar.YEAR), 
-	                 calender.get(Calendar.MONTH), 
-	                 calender.get(Calendar.DAY_OF_MONTH), 
-	                 23,59,59);
-	     
+	    calender.set(calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), 
+	    		     calender.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+	    
 	    Date endOfToday = calender.getTime();
 		
 	    for(int i = 0; i < deadlineTasks_.size(); i++){
@@ -481,6 +486,19 @@ public class State {
 		configInfo[2] = Constant.CONFIG_THEME;
 		configInfo[3] = Constant.CONFIG_FONT;
 		return configInfo;
+	}
+	
+	public String[] getHelpManual(){
+		String[] helpManual = new String[8];
+		helpManual[0] = Constant.HELP_INTRO;
+		helpManual[1] = Constant.HELP_ADD;
+		helpManual[2] = Constant.HELP_DELETE;
+		helpManual[3] = Constant.HELP_TICK;
+		helpManual[4] = Constant.HELP_UPDATE;
+		helpManual[5] = Constant.HELP_VIEW;
+		helpManual[6] = Constant.HELP_EXIT;
+		helpManual[7] = Constant.HELP_END;
+		return helpManual;
 	}
 	
 	public String getHeader(){
@@ -581,5 +599,13 @@ public class State {
 		default:
 			return Constant.FONT_SEGOE;
 		}
+	}
+	
+	public void incErrorFrequency(){
+		errorFrequency ++;
+	}
+	
+	public void resetErrorFrequency(){
+		errorFrequency = 0;
 	}
 }

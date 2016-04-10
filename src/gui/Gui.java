@@ -1,11 +1,9 @@
 //@@author A0130717M
 package gui;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import common.*;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -31,91 +29,111 @@ import model.WallistModel;
 
 public class Gui extends Application{
 	
+	//stage attributes
 	private Stage window;
+	
+	//scene attributes
+	private StackPane taskStackPane;
+	private Rectangle title;
+	private Rectangle mainBox;
+	private VBox layout;
+	private VBox tab;
+	private VBox tasks;
+	private VBox help;
+	private VBox configs;
+	private VBox taskTable;
+	private HBox sectionHeader;
+	private HBox tableHeader;
+	private Label indexHeader;
+	private Label contentHeader;
+	private Label timeHeader;
 	private Scene scene;
 	private ScrollPane taskPane;
 	private TextField inputBox;
 	private State state;
 	private String command;
-	private WallistModel wallistModel = new WallistModel();
-	private StackPane taskStackPane = new StackPane();
-	private Rectangle title = new Rectangle();
-	private VBox layout = new VBox();
-	private VBox tab = new VBox();
-	private VBox tasks = new VBox();
-	private VBox configs = new VBox(10);
-	private VBox taskTable = new VBox();
-	private HBox sectionHeader = new HBox(10);
-	private HBox tableHeader = new HBox(1);
-	private Label indexHeader = new Label("#");
-	private Label contentHeader = new Label("   Task ");
-	private Label timeHeader = new Label("   Schedule ");
-	
 	private Label allHeader;
-	private Label deadlineHeader;
+	private Label scheduledHeader;
 	private Label floatingHeader;
-	private Label startHeader;
+	private Label todayHeader;
 	private Label searchHeader;
 	private Label configHeader;
 	private Label helpHeader;
 	private Label finishedHeader;
 	
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM y HH:mm");
-	private SimpleDateFormat sdfYear = new SimpleDateFormat("yy");
-	private SimpleDateFormat sdfThisYear = new SimpleDateFormat("dd MMM HH:mm");
-	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM y");
-	private SimpleDateFormat sdfDateThisYear = new SimpleDateFormat("dd MMM");
-	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
-	private SimpleDateFormat sdfDefaultTime = new SimpleDateFormat("HH:mm:ss");
-	private String defaultTime = "23:59:59";
+	//Wallist model
+	private WallistModel wallistModel;
 	
+	//Variables
 	private int taskBoxHeight;
 	private int taskBoxWidth;
 	private int contentWidth;
 	private int contentHeaderWidth;
 	private int taskIndex;
 	private double vValue;
+	private double xOffset;
+	private double yOffset;
 	
-	private static double xOffset, yOffset;
+	//Constants
+	private final String TITLE = "    %1$s's Wallist";
+	private final String PROMPT = "Input your command here";
+	private final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
+	private final String THEME_SHEET = "/resources/%1$s.css";
+	private final String FONT_SHEET = "/resources/%1$s.css";
+	private final String BASIC_SHEET = "/resources/basic.css";
 	
-	private static final String TITLE = "    %1$s's Wallist";
-	private static final String PROMPT = "Put our command here";
-	private static final String DURATION = "%1$s - %2$s"; 
-	private static final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
-	private static final String THEME_SHEET = "/resources/%1$s.css";
-	private static final String FONT_SHEET = "/resources/%1$s.css";
-	private static final String BASIC_SHEET = "/resources/basic.css";
-	
-	private static final int COMPONENT_GAP_H = 20;
-	private static final int COMPONENT_GAP_V = 20;
-	private static final int INDEX_WIDTH = 30;
-	private static final int HEADER_INDEX_WIDTH = 50;
-	private static final int TIME_WIDTH = 380;
-	private static final int INPUT_BOX_HEIGHT = 30;
-	private static final int STAGE_WIDTH = 1000;	
-	private static final int TITLE_HEIGHT = 40;	
-	private static final int HEADER_HEIGHT = 30;
-	private static final int STAGE_HEIGHT = 650;	
-	private static final double SCROLL_PERCENTAGE = 0.1;
-	private static final int PADDING = 10;
+	private final int COMPONENT_GAP_H = 20;
+	private final int COMPONENT_GAP_V = 20;
+	private final int INDEX_WIDTH = 30;
+	private final int HEADER_INDEX_WIDTH = 50;
+	private final int TIME_WIDTH = 380;
+	private final int INPUT_BOX_HEIGHT = 30;
+	private final int STAGE_WIDTH = 1000;	
+	private final int TITLE_HEIGHT = 40;	
+	private final int HEADER_HEIGHT = 30;
+	private final int STAGE_HEIGHT = 650;	
+	private final int PADDING = 10;
+	private final double SCROLL_PERCENTAGE = 0.1;
 	
 	private final Insets COMPONENT_PADDING = new Insets(0, 20, 20, 20);
-	private final Insets CONFIG_PADDING = new Insets(20, 30, 20, 30);
+	private final Insets INFO_PADDING = new Insets(20, 30, 20, 30);
 	private final Insets CONTENT_PADDING = new Insets(5, 0, 5, 0);
 	
+	//launching function
 	public static void launching(){
 		launch();
 	}
 	
+	//start program, including initialize Wallist model
 	@Override
 	public void start(Stage primaryStage) throws Exception{
+		initVariables();
 		state = wallistModel.getState();
-		stageSetup(primaryStage);
-		configSetup();
+		setupStage(primaryStage);
+		setupConfig();
+		setupHelp();
     	refreshTaskPane();
 		inputProcess();
 	}
 
+	private void initVariables() {
+		wallistModel = new WallistModel();
+		taskStackPane = new StackPane();
+		title = new Rectangle();
+		layout = new VBox();
+		tab = new VBox();
+		tasks = new VBox();
+		help = new VBox(15);
+		configs = new VBox(10);
+		taskTable = new VBox();
+		sectionHeader = new HBox(10);
+		tableHeader = new HBox(1);
+		indexHeader = new Label("#");
+		contentHeader = new Label("   Task ");
+		timeHeader = new Label("   Schedule ");
+	}
+
+	//handle keyboard events including scrolling, entering commands and exit shortcut
 	private void inputProcess() {
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
@@ -128,17 +146,14 @@ public class Gui extends Application{
 			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	refresh();
-		        } else{
-		        	pendingRefresh();
-		        }
+		        } else if (keyEvent.getCode() == KeyCode.ESCAPE) {
+					window.close();
+				}
 			}
-		});		
+		});
 	}
-	
-	private void pendingRefresh() {
-		 
-	}
-	
+
+	//passing command to model and refresh the stage content 
 	private void refresh() {
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.processInputString(command);
@@ -146,36 +161,94 @@ public class Gui extends Application{
 		if (isSuccess){
 			refreshTaskPane();
 		} else {
-			Label displayText = new Label(state.getDisplayMessage());
-			displayText.setId("message");
-			taskStackPane.getChildren().add(displayText);
-			FadeAnimation fade = new FadeAnimation(displayText);
-			fade.playAnimation();
+			displayMessage();
 		}
 		inputBox.clear();
 	}
 
+	//display correct content in mainPane
 	private void refreshTaskPane() {
 		loadHeader();
 		if (state.getCommandType().equals(CommandType.EXIT)){
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
-			loadConfig();
+			displayConfig();
+		} else if (state.getViewMode().equals(ViewMode.HELP)){
+			displayHelp();
 		} else if (state.isCurrentTasksEmpty()){
-			loadEmptyPane();
+			displayEmpty();
 		} else{
-			loadTask();	
+			displayTask();	
 		}
 	}
 
+	//pop feedback when action is not successful
+	private void displayMessage() {
+		Label displayText = new Label(state.getDisplayMessage());
+		displayText.setId("message");
+		taskStackPane.getChildren().add(displayText);
+		FadeAnimation fade = new FadeAnimation(displayText);
+		fade.playAnimation();
+	}
+	
+	//display help manual in mainPane
+	private void displayHelp() {
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().add(taskPane);
+		taskPane.setContent(help);
+	}
+	
+	//display setting in mainPane
+	private void displayConfig(){
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().add(taskPane);
+		taskPane.setContent(configs);
+	}
+	
+	//display empty message when no tasks in current mode
+	private void displayEmpty(){
+		String message = String.format(EMPTY_MESSAGE, state.getEmptyMessage());
+		Text emptyMessage = new Text(message);
+		emptyMessage.setTextAlignment(TextAlignment.CENTER);
+		emptyMessage.setId("empty");
+		taskStackPane.getChildren().clear();
+		taskStackPane.getChildren().addAll(mainBox, emptyMessage);
+	}
+	
+	//display tasks in mainPane in rows
+	private void displayTask() {
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().addAll(tableHeader, taskPane);
+		loadTableHeader();
+		ArrayList<Task> taskList = state.getCurrentTasks();
+		tasks.getChildren().clear();
+		taskIndex = 0;
+		for (Task task: taskList){
+			displayTaskRow(task);
+        }
+		taskPane.setContent(tasks);
+	}
+
+	//display each row by three columns
+	private void displayTaskRow(Task task) {
+		Column indexCol = loadIndexCol(task);
+		Column contentCol = loadContentCol(task);
+		Column timeCol = loadTimeCol(task);
+		loadTaskRow(indexCol, contentCol, timeCol);
+	}
+
+	//load header tab according to current view mode
 	private void loadHeader() {
-		resetTab();
+		setupHeaderTab();
 		switch(state.getViewMode()){
 		case ALL:
 			allHeader.setId("tab");
 			break;
 		case DEADLINE:
-			deadlineHeader.setId("tab");
+			scheduledHeader.setId("tab");
 			break;
 		case FLOATING:
 			floatingHeader.setId("tab");
@@ -184,7 +257,7 @@ public class Gui extends Application{
 			finishedHeader.setId("tab");
 			break;
 		case START:
-		    startHeader.setId("tab");
+		    todayHeader.setId("tab");
 		    break;
 		case SEARCH:
 			searchHeader.setId("tab");
@@ -196,69 +269,28 @@ public class Gui extends Application{
 			configHeader.setId("tab");
 			break;
 		default:
-			startHeader.setId("tab");
+			todayHeader.setId("tab");
 		}
 	}
 	
-	private void loadConfig(){
-		loadTaskPane();
-		taskTable.getChildren().clear();
-		taskTable.getChildren().add(taskPane);
-		taskPane.setContent(configs);
-	}
-	
-	private void loadEmptyPane(){
-		Rectangle taskBox = loadTaskBox();
-		Text emptyMessage = new Text(String.format(EMPTY_MESSAGE, state.getEmptyMessage()));
-		emptyMessage.setTextAlignment(TextAlignment.CENTER);
-		emptyMessage.setId("empty");
-		taskStackPane.getChildren().clear();
-		taskStackPane.getChildren().addAll(taskBox, emptyMessage);
-	}
-	
-	private void loadTask() {
-		loadTaskPane();
-		taskTable.getChildren().clear();
-		taskTable.getChildren().addAll(tableHeader, taskPane);
-		updateTableHeader();
-		ArrayList<Task> taskList = state.getCurrentTasks();
-		tasks.getChildren().clear();
-		taskIndex = 0;
-		for (Task task: taskList){
-			displayRow(task);
-        }
-		taskPane.setContent(tasks);
-	}
-	
+	//load task layout in mainPane
 	private void loadTaskPane() {
-		Rectangle taskBox = loadTaskBox();
 		taskStackPane.getChildren().clear();
-		taskStackPane.getChildren().addAll(taskBox, taskTable);
+		taskStackPane.getChildren().addAll(mainBox, taskTable);
 	}
 	
-	private void updateTableHeader() {
+	//load table header when loading task
+	private void loadTableHeader() {
 		tableHeader.getChildren().clear();
 		if (state.getViewMode().equals(ViewMode.FLOATING)){
-			indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
-			contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
-			tableHeader.getChildren().addAll(indexHeader, contentHeader);	
+			setupFloatingTableHeader();	
 		} else {
-			indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
-			contentHeader.setPrefWidth(contentHeaderWidth);
-			timeHeader.setPrefWidth(TIME_WIDTH);
-			tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
+			setupTableHeader();
 		}
 	}
-	
-	private void displayRow(Task task) {
-		taskIndex ++;
-		String taskContent = task.getDisplayContent();
-		String taskTime = "";
-		if (task.getTaskType().equals(TaskType.DEADLINE)) {
-		    taskTime = getTaskTime(task);	
-		}
-		String taskIdx = Integer.toString(taskIndex);
-		
+
+	//load task rows and refresh the ones that are changed
+	private void loadTaskRow(Column indexCol, Column contentCol, Column timeCol) {
 		GridPane taskLine = new GridPane();
 		taskLine.setPadding(CONTENT_PADDING);
 		taskLine.setHgap(10);
@@ -267,15 +299,6 @@ public class Gui extends Application{
 		} else {
 			taskLine.setId("oddLine");
 		}
-		Column indexCol = new Column(taskIdx, 0, INDEX_WIDTH);
-		indexCol.setAlignRight();
-		setTaskView(task, indexCol);
-		Column contentCol = new Column(taskContent, 1, contentWidth);
-		contentCol.setWrap(contentWidth);
-		setTaskView(task, contentCol);
-		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
-		timeCol.setAlignLeft();
-		setTaskView(task, timeCol);
 		taskLine.getChildren().addAll(indexCol.getColumn(), contentCol.getColumn(), timeCol.getColumn());
 		tasks.getChildren().add(taskLine);
 		if (taskIndex > state.getPositionIndex()){
@@ -284,42 +307,41 @@ public class Gui extends Application{
 		}
 	}
 
-	private String getTaskTime(Task task) {
-		Date startDate = task.getStartDate();
-		Date endDate = task.getEndDate();
-		boolean sameDate = false;
-		boolean startThisYear = false;
-		boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
-		boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
-		
-		if (startDate != null){
-			startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
-			sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
+	//load schedules column
+	private Column loadTimeCol(Task task) {
+		String taskTime = "";
+		if (task.getTaskType().equals(TaskType.DEADLINE)) {
+			TaskTimeDisplay taskTimeDisplay = new TaskTimeDisplay(task);
+			taskTime = taskTimeDisplay.getTaskTime();	
 		}
-		if (startDate == null && endThisYear && hasEndTime){
-		    return sdfDateThisYear.format(task.getEndDate());
-		} else if (startDate == null && endThisYear && !hasEndTime){
-		    return sdfThisYear.format(task.getEndDate());
-		} else if (startDate == null && hasEndTime){
-		    return sdf.format(task.getEndDate());
-	    } else if (startDate == null && !hasEndTime){
-	    	return sdfDate.format(task.getEndDate());
-	    } else if (sameDate && startThisYear){
-	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
-		} else if (sameDate && !startThisYear){
-			return String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
-	    } else if (startThisYear && endThisYear && hasEndTime){
-	    	return String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
-	    } else if (startThisYear && endThisYear && !hasEndTime){
-	    	return String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
-	    } else if (!startThisYear || !endThisYear && hasEndTime){
-	    	return String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));
-	    } else {
-	    	return String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
-	    }
+		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
+		timeCol.setAlignLeft();
+		timeCol.setWrap(TIME_WIDTH);
+		loadTaskView(task, timeCol);
+		return timeCol;
 	}
 
-	private void setTaskView(Task task, Column col) {
+	//load task content and details column
+	private Column loadContentCol(Task task) {
+		String taskContent = task.getDisplayContent();
+		Column contentCol = new Column(taskContent, 1, contentWidth);
+		contentCol.setWrap(contentWidth);
+		loadTaskView(task, contentCol);
+		return contentCol;
+	}
+
+	//load task index column
+	private Column loadIndexCol(Task task) {
+		taskIndex ++;
+		String taskIdx = Integer.toString(taskIndex);
+		Column indexCol = new Column(taskIdx, 0, INDEX_WIDTH);
+		indexCol.setAlignRight();
+		loadTaskView(task, indexCol);
+		return indexCol;
+	}
+	
+	//determine whether task details are displayed and whether task is overdue
+	private void loadTaskView(Task task, Column col) {
 		if (task.isOverdue() && task.getIsDetailDisplayed()){
 			col.setZoomOverdue();
 		} else if (task.isOverdue()){
@@ -328,8 +350,102 @@ public class Gui extends Application{
 			col.setZoom();
 		}
 	}
+
+	//enable click to select tab
+	private void loadClick() {
+		allHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.ALL);
+            	refreshTaskPane();
+            }
+        });
+		scheduledHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.DEADLINE);
+            	refreshTaskPane();
+            }
+        });
+		floatingHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.FLOATING);
+            	refreshTaskPane();
+            }
+        });
+		finishedHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.FINISHED);
+            	refreshTaskPane();
+            }
+        });
+		searchHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.SEARCH);
+            	refreshTaskPane();
+            }
+        });
+		configHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.CONFIG);
+            	refreshTaskPane();
+            }
+        });
+		helpHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.HELP);
+            	refreshTaskPane();
+            }
+        });
+		todayHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	state.setViewMode(ViewMode.START);
+            	refreshTaskPane();
+            }
+        });
+	}
 	
-	private TextField inputComponent() {
+	//enable drag to move the stage
+	private void loadDrag() {
+		title.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = window.getX() - event.getScreenX();
+                yOffset = window.getY() - event.getScreenY();
+            }
+        });
+		title.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                window.setX(event.getScreenX() + xOffset);
+                window.setY(event.getScreenY() + yOffset);
+            }
+        });
+	}
+	
+	//initialize table header setting with index, content and schedules
+	private void setupTableHeader() {
+		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+		contentHeader.setPrefWidth(contentHeaderWidth);
+		timeHeader.setPrefWidth(TIME_WIDTH);
+		tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
+	}
+
+	//initialize table header setting with index and content
+	private void setupFloatingTableHeader() {
+		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+		contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
+		tableHeader.getChildren().addAll(indexHeader, contentHeader);
+	}
+	
+	//initialize text input area
+	private TextField setupInputLayout() {
 		TextField inputBox = new TextField();
 		inputBox.setPrefHeight(INPUT_BOX_HEIGHT);
 		inputBox.setMaxHeight(INPUT_BOX_HEIGHT);
@@ -338,28 +454,29 @@ public class Gui extends Application{
 		return inputBox;
 	}
 	
-
-	private ScrollPane taskComponent() {
-		Rectangle taskBox = loadTaskBox();
+	//initialize mainPane layout
+	private ScrollPane setupMainLayout() {
+		setupMainBox();
 		taskPane = new ScrollPane();
 		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
 		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-	    taskStackPane.getChildren().addAll(taskBox, taskTable);
+	    taskStackPane.getChildren().addAll(mainBox, taskTable);
 		tab.getChildren().add(taskStackPane);
 		layout.getChildren().add(tab);
 		return taskPane;
 	}
 
-	private Rectangle loadTaskBox() {
-		Rectangle taskBox = new Rectangle();
-		taskBox.setWidth(taskBoxWidth);
-		taskBox.setHeight(taskBoxHeight);
-		taskBox.setId("taskPane");
-		return taskBox;
+	//initialize mainPane style
+	private void setupMainBox() {
+		mainBox = new Rectangle();
+		mainBox.setWidth(taskBoxWidth);
+		mainBox.setHeight(taskBoxHeight);
+		mainBox.setId("taskPane");
 	}
 
-	private void tableHeaderComponent(){
+	//initialize table header layout and style
+	private void setupTableHeaderLayout(){
 		indexHeader.setAlignment(Pos.CENTER);
 		contentHeader.setTextAlignment(TextAlignment.CENTER);
 		timeHeader.setTextAlignment(TextAlignment.CENTER);
@@ -368,30 +485,35 @@ public class Gui extends Application{
 		timeHeader.setId("header");
 	}
 	
-	private void headerComponent() {
+	//initialize header tab layout and style
+	private void setupHeaderLayout() {
 		sectionHeader.setPrefHeight(HEADER_HEIGHT);
 		sectionHeader.setAlignment(Pos.CENTER);
-		resetTab();
+		setupHeaderTab();
 		tab.getChildren().add(sectionHeader);
 	}
 
-	private void resetTab() {
+	//initialize each tabs in header
+	private void setupHeaderTab() {
 		allHeader = new Label(Constant.HEADER_ALL);
-		deadlineHeader = new Label(Constant.HEADER_DEADLINE);
+		scheduledHeader = new Label(Constant.HEADER_DEADLINE);
 		floatingHeader = new Label(Constant.HEADER_FLOATING);
-		startHeader = new Label(Constant.HEADER_START);
+		todayHeader = new Label(Constant.HEADER_START);
 		searchHeader = new Label(Constant.HEADER_SEARCH);
 		configHeader = new Label(Constant.HEADER_CONFIG);
 		helpHeader = new Label(Constant.HEADER_HELP);
 		finishedHeader = new Label(Constant.HEADER_FINISHED);
+		loadClick();
 		sectionHeader.getChildren().clear();
-		sectionHeader.getChildren().addAll(startHeader, allHeader, deadlineHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
+		sectionHeader.getChildren().addAll(todayHeader, allHeader, scheduledHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 	}
 	
-	private void titleComponent() {
+	//initialize titlePane layout nad style
+	private void setupTitleLayout() {
 		StackPane titlePane = new StackPane();
 		titlePane.setAlignment(Pos.CENTER_LEFT);
-        Text titleText = new Text(String.format(TITLE, System.getProperty("user.name")));
+		String userName = String.format(TITLE, System.getProperty("user.name"));
+        Text titleText = new Text(userName);
         titleText.setId("titleText");
 		title.setWidth(STAGE_WIDTH);
 		title.setHeight(TITLE_HEIGHT);
@@ -400,42 +522,44 @@ public class Gui extends Application{
         layout.getChildren().add(titlePane);
 	}
 
-	private void stageSetup(Stage primaryStage) {
+	//initialize stage size, properties and style
+	private void setupStage(Stage primaryStage) {
 		window = primaryStage;
 		window.initStyle(StageStyle.UNDECORATED);
         window.setResizable(true);
         window.getIcons().add(new Image("/title.png"));
-    	layoutSetup();
+    	setupLayout();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
 		
 		String theme = String.format(THEME_SHEET, state.getThemeInString());
 		String font = String.format(FONT_SHEET, state.getFontInString());
+
 		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
-		
 		window.setScene(scene);
 		window.show();
-		enableEscExit();
+		loadDrag();
 	}
 	
-	private void layoutSetup() {
-		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT -  HEADER_HEIGHT - TITLE_HEIGHT;
+	//initialize layout parameters, positions and spacing
+	private void setupLayout() {
+		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - HEADER_HEIGHT - TITLE_HEIGHT;
     	taskBoxWidth = (int)(STAGE_WIDTH - COMPONENT_GAP_H * 2);
     	contentWidth = taskBoxWidth - INDEX_WIDTH - TIME_WIDTH;
     	contentHeaderWidth = contentWidth + PADDING * 2;
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setSpacing(COMPONENT_GAP_V);
 		layout.setAlignment(Pos.CENTER);
-		titleComponent();
-        enableDrag();
-		headerComponent();
-		tableHeaderComponent();
-        taskPane = taskComponent();
-		inputBox = inputComponent();
+		setupTitleLayout();
+		setupHeaderLayout();
+		setupTableHeaderLayout();
+        taskPane = setupMainLayout();
+		inputBox = setupInputLayout();
 	}
 	
-	private void configSetup(){
+	//initialize setting page content
+	private void setupConfig(){
 		String[] infoStr = state.getConfigInfo();
-		configs.setPadding(CONFIG_PADDING);
+		configs.setPadding(INFO_PADDING);
 		Text intro = new Text(infoStr[0]); 
 		intro.setId("normal");		
 		Text dir = new Text(infoStr[1]); 
@@ -451,32 +575,27 @@ public class Gui extends Application{
 		configs.getChildren().addAll(intro, dir, theme, themes, font, fonts);
 	}
 	
-	private void enableEscExit() {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override 
-			public void handle(KeyEvent keyEvent) {
-				if (keyEvent.getCode() == KeyCode.ESCAPE) {
-					window.close();
-				}
-			}
-		});
+	//initialize help page content
+	private void setupHelp(){
+		String[] helpStr = state.getHelpManual();
+		help.setPadding(INFO_PADDING);
+		Text intro = new Text(helpStr[0]); 
+		intro.setId("zoom");		
+		Text add = new Text(helpStr[1]); 
+		add.setId("normal");
+		Text delete = new Text(helpStr[2]); 
+		delete.setId("normal");
+		Text tick = new Text(helpStr[3]); 
+		tick.setId("normal");
+		Text update = new Text(helpStr[4]); 
+		update.setId("normal");		
+		Text view = new Text(helpStr[5]); 
+		view.setId("normal");
+		Text exit = new Text(helpStr[6]); 
+		exit.setId("normal");
+		Text end = new Text(helpStr[7]); 
+		end.setId("zoom");
+		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
-
-	private void enableDrag() {
-		title.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = window.getX() - event.getScreenX();
-                yOffset = window.getY() - event.getScreenY();
-            }
-        });
-		
-		title.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                window.setX(event.getScreenX() + xOffset);
-                window.setY(event.getScreenY() + yOffset);
-            }
-        });
-	}
+	
 }

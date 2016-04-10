@@ -3,7 +3,6 @@ package gui;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 
 public class FontSelector {
 
@@ -18,12 +17,12 @@ public class FontSelector {
 		Label consolas = new Label("Consolas");
 		consolas.setId("consolas");
 		GridPane.setConstraints(consolas, 0, 0);
-		fonts.getChildren().addAll(consolas);
 	
 		Label segoe = new Label("Segoe");
 		segoe.setId("segoe");
 		GridPane.setConstraints(segoe, 1, 0);
-		fonts.getChildren().addAll(segoe);
+		
+		fonts.getChildren().addAll(consolas, segoe);
 	}
 	
 	public GridPane getFont(){

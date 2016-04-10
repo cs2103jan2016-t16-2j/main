@@ -2,3 +2,14 @@
 .root { 
     -fx-font-family: "Consolas";
 }
+
+.label{
+    -fx-font-size: 16pt;
+    -fx-padding: 10 5 10 5;
+}
+
+
+#tab{
+    -fx-font-size: 16pt;
+    -fx-padding: 10 5 10 5;
+}

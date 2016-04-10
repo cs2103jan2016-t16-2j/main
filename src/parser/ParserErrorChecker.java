@@ -181,8 +181,7 @@ public class ParserErrorChecker {
 					
 					case CHANGEMODE:
 						if(content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("DEADLINE") 
-								|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("SEARCH") 
-								|| content.equalsIgnoreCase("FINISHED") || content.equalsIgnoreCase("CONFIG")){
+								|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("FINISHED") || content.equalsIgnoreCase("CONFIG")){
 							return false;
 						}
 						return true;

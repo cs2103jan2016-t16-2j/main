@@ -98,8 +98,7 @@ public class Parser {
 			case UNTICK:
 				untick_.processInput();
 				break;					
-			case CONFIG:
-				System.out.println("++++");
+			case CONFIG:;
 				config_.processInput();
 				break;
 			}		

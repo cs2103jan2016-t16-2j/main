@@ -55,7 +55,6 @@ public class Parser {
 	public boolean processInput(){
 		errorChecker_.checkError();
 		if(state_.getIsValid()){
-			state_.setCommandType(getCommand());
 			CommandType command = state_.getCommandType();
 			System.out.println(command.toString());
 			switch(command){
@@ -104,63 +103,5 @@ public class Parser {
 			}		
 		}
 		return state_.getIsValid();
-	}
-	
-	/*
-	 * Get the command of an input
-	 * Pre-Cond: Input of a user
-	 * Post-Cond: CommandType
-	 */
-	public CommandType getCommand() {
-		String inputWords[] = state_.getUserInput().split(" ");
-		return determineCommandType(inputWords[0]);
-	}
-	
-	/*
-	 * Get the command type based on input
-	 * Pre-Cond: String of command
-	 * Post-Cond: CommandType of the given input
-	 */
-	public CommandType determineCommandType(String commandTypeString) {
-		if (commandTypeString == null) {
-			throw new Error("Command type string cannot be null!");
-		}
-		if (commandTypeString.equalsIgnoreCase("add")) {
-			return CommandType.ADD;
-		} else if (commandTypeString.equalsIgnoreCase("delete")) {
-			return CommandType.DELETE;
-		} else if (commandTypeString.equalsIgnoreCase("update")) {
-			return CommandType.UPDATE;
-		} else if (commandTypeString.equalsIgnoreCase("clear")) {
-			return CommandType.CLEAR;
-		} else if (commandTypeString.equalsIgnoreCase("tick")) {
-			return CommandType.TICK;
-		} else if (commandTypeString.equalsIgnoreCase("undo")) {
-			return CommandType.UNDO;
-		} else if (commandTypeString.equalsIgnoreCase("redo")) {
-			return CommandType.REDO;
-		} else if (commandTypeString.equalsIgnoreCase("search")) {
-			return CommandType.SEARCH;
-		} else if (commandTypeString.equalsIgnoreCase("help")) {
-			return CommandType.HELP;
-		} else if (commandTypeString.equalsIgnoreCase("exit")) {
-			return CommandType.EXIT;
-		} else if (commandTypeString.equalsIgnoreCase("view")) {
-			return determineViewType();
-		} else if (commandTypeString.equalsIgnoreCase("config")) {
-			return CommandType.CONFIG;
-		} else {
-			return CommandType.ERROR;	
-		}
-	}
-	
-	private CommandType determineViewType(){
-		String inputWords[] = state_.getUserInput().split(" ");
-		String argument = inputWords[1];
-		if(argument.matches("\\d+")){
-			return CommandType.DETAIL;
-		}else{
-			return CommandType.CHANGEMODE;
-		}
 	}
 }

@@ -6,13 +6,26 @@ import common.Task;
 import common.ViewMode;
 
 public class SearchTasks implements Operation {
-
+	//============================
+	//       Attributes
+	//============================
 	private State state;
 
+	
+	//====================================
+	//       Constructor and Initiliser
+	//====================================
+	
 	public SearchTasks(State state) {
 		this.state = state;
 	}
-
+	
+	
+	/**
+	 * Perform searching of all tasks on a set of Strings
+	 *
+	 * @return  boolean to indicate whether the addition is successful
+	 */
 	@Override
 	public boolean process() {
 
@@ -32,6 +45,13 @@ public class SearchTasks implements Operation {
 		return true;
 	}
 
+	
+	/**
+	 * search all tasks and add all tasks that contain the keyword to search
+	 * @param keyToSearch     String object to be searched
+	 * @param searchedTasks   ArrayList that contains all the tasks searched
+	 * @return  boolean to indicate whether the addition is successful
+	 */
 	private void searchWord(String keyToSearch, ArrayList<Task> searchedTasks) {
 		ArrayList<Task> allTasks = state.getAllTasks();
 

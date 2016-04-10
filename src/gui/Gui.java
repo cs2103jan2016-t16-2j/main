@@ -146,13 +146,17 @@ public class Gui extends Application{
 		if (isSuccess){
 			refreshTaskPane();
 		} else {
-			Label displayText = new Label(state.getDisplayMessage());
-			displayText.setId("message");
-			taskStackPane.getChildren().add(displayText);
-			FadeAnimation fade = new FadeAnimation(displayText);
-			fade.playAnimation();
+			loadDisplayMessage();
 		}
 		inputBox.clear();
+	}
+
+	private void loadDisplayMessage() {
+		Label displayText = new Label(state.getDisplayMessage());
+		displayText.setId("message");
+		taskStackPane.getChildren().add(displayText);
+		FadeAnimation fade = new FadeAnimation(displayText);
+		fade.playAnimation();
 	}
 
 	private void refreshTaskPane() {
@@ -239,15 +243,23 @@ public class Gui extends Application{
 	private void updateTableHeader() {
 		tableHeader.getChildren().clear();
 		if (state.getViewMode().equals(ViewMode.FLOATING)){
-			indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
-			contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
-			tableHeader.getChildren().addAll(indexHeader, contentHeader);	
+			loatFloatingTableHeader();	
 		} else {
-			indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
-			contentHeader.setPrefWidth(contentHeaderWidth);
-			timeHeader.setPrefWidth(TIME_WIDTH);
-			tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
+			loadTableHeader();
 		}
+	}
+
+	private void loadTableHeader() {
+		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+		contentHeader.setPrefWidth(contentHeaderWidth);
+		timeHeader.setPrefWidth(TIME_WIDTH);
+		tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
+	}
+
+	private void loatFloatingTableHeader() {
+		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+		contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
+		tableHeader.getChildren().addAll(indexHeader, contentHeader);
 	}
 	
 	private void displayRow(Task task) {

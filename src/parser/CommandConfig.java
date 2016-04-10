@@ -110,7 +110,7 @@ public class CommandConfig implements Command{
 	
 	@Override
 	public ViewMode getNewViewMode() {
-		return ViewMode.UNDEFINED;
+		return ViewMode.CONFIG;
 	}
 
 }

@@ -1,3 +1,4 @@
+//@@author A0107375E
 package model;
 
 import java.util.EmptyStackException;
@@ -48,9 +49,9 @@ public class WallistModel{
 	private static final String PARSER_FAILURE = "User input is not succesfully parsed!";
 	private static final String PARSER_RUNNING = "Start to parse the user input...";
 	
-	//====================================
-	//       Constructor and Initiliser
-	//====================================
+	//========================
+	//       Constructor 
+	//========================
 	
 	public WallistModel(){
 		initialiseState(); // state must be initialised first
@@ -60,25 +61,64 @@ public class WallistModel{
 		initialiseStateTracker();
 	}
 	
+	//========================
+	//       Functions 
+	//========================
+	
+	/**
+	 * This method takes in the actual user input and execute functions accordingly
+	 * @param inputString
+	 * @return whether it is successfully executed
+	 */
+	public boolean processInputString(String inputString){
+		LOGGER.log(Level.INFO, PARSER_RUNNING);
+		boolean isParsed = isSuccessfullyParsed(inputString);
+		if (!isParsed) {
+			LOGGER.log(Level.WARNING, PARSER_FAILURE);
+			return false;
+		} else {
+			return executeInput();
+		}
+	}
+	
+	//===========================
+	//       Helper functions 
+	//===========================
+	
+	/**
+	 * This method initialises the initial state
+	 */
 	private void initialiseStateTracker() {
 		stateHistory.push(state.deepCopy());
 	}
 	
+	/**
+	 * This method initialises the Parser
+	 */
 	private void initialiseParser() {
 		parser = new Parser(state);
 	}
 
+	/**
+	 * This method initialises the Storage
+	 */
 	private void initialiseStorage() {
 		storage = new Storage(state);
 		storage.executeLoadState();
 	}
-
+	
+	/**
+	 * This method initialises the State related objects
+	 */
 	private void initialiseState() {
 		state = new State();
 		stateHistory = new Stack<State>();
 		stateFuture = new Stack<State>();
 	}
 
+	/**
+	 * This method initialises the Logic components
+	 */
 	private void initialiseLogic() {
 		addTask = new AddTask(state);
 		deleteTask = new DeleteTask(state);
@@ -93,26 +133,30 @@ public class WallistModel{
 		help = new Help(state);
 	}
 	
+	/**
+	 * This method passes the state to GUI
+	 * @return the current State object
+	 */
 	public State getState(){
 		return state;
 	}
 	
-	public boolean processInputString(String inputString){
-		LOGGER.log(Level.INFO, PARSER_RUNNING);
+	/**
+	 * This method checks whether the input String can be successfully parsed
+	 * @param inputString
+	 * @return
+	 */
+	private boolean isSuccessfullyParsed(String inputString) {
 		state.setUserInput(inputString); // store input into state
 		boolean isParsed = parser.processInput();
 		boolean isValid = state.getIsValid();
 		boolean isSuccesfullyParsed = isParsed && isValid;
-		if (!isSuccesfullyParsed) {
-			LOGGER.log(Level.WARNING, PARSER_FAILURE);
-			return false;
-		} else {
-			return executeInput();
-		}
+		return isSuccesfullyParsed;
 	}
-
+	
 	/**
-	 * @return
+	 * This method executes the commands using the information stored in the State object
+	 * @return whether it is successful
 	 */
 	private boolean executeInput() {
 		boolean isRunningSuccessful;
@@ -128,7 +172,7 @@ public class WallistModel{
 		}
 		return isRunningSuccessful;
 	}
-
+	
 	public boolean running() throws EmptyStackException{
 		CommandType cmdType = state.getCommandType();
 		boolean result;
@@ -176,7 +220,9 @@ public class WallistModel{
 		storage.executeSaveState(); // going to put into each process after refactoring
 		return result;
 	}
-
+	
+	
+	// functions to be refactored
 	private boolean runningUndo() throws EmptyStackException{
 		if(stateHistory.size() <= 1){
 			throw new EmptyStackException();
@@ -198,6 +244,7 @@ public class WallistModel{
 		stateFuture.pop();
 		return true;
 	}
+
 }
 
 

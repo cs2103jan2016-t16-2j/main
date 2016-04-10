@@ -71,11 +71,12 @@ public class Gui extends Application{
 	private int contentHeaderWidth;
 	private int taskIndex;
 	private double vValue;
-	private double xOffset, yOffset;
+	private double xOffset;
+	private double yOffset;
 	
 	//Constants
 	private final String TITLE = "    %1$s's Wallist";
-	private final String PROMPT = "Put our command here";
+	private final String PROMPT = "Input your command here";
 	private final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
 	private final String THEME_SHEET = "/resources/%1$s.css";
 	private final String FONT_SHEET = "/resources/%1$s.css";
@@ -103,6 +104,7 @@ public class Gui extends Application{
 		launch();
 	}
 	
+	//start program, including initialize Wallist model
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		initVariables();
@@ -131,6 +133,7 @@ public class Gui extends Application{
 		timeHeader = new Label("   Schedule ");
 	}
 
+	//handle keyboard events including scrolling, entering commands and exit shortcut
 	private void inputProcess() {
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
@@ -150,6 +153,7 @@ public class Gui extends Application{
 		});
 	}
 
+	//passing command to model and refresh the stage content 
 	private void refresh() {
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.processInputString(command);
@@ -157,36 +161,88 @@ public class Gui extends Application{
 		if (isSuccess){
 			refreshTaskPane();
 		} else {
-			loadDisplayMessage();
+			displayMessage();
 		}
 		inputBox.clear();
 	}
 
-	private void loadDisplayMessage() {
+	//display correct content in mainPane
+	private void refreshTaskPane() {
+		loadHeader();
+		if (state.getCommandType().equals(CommandType.EXIT)){
+			window.close();
+		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
+			displayConfig();
+		} else if (state.getViewMode().equals(ViewMode.HELP)){
+			displayHelp();
+		} else if (state.isCurrentTasksEmpty()){
+			displayEmpty();
+		} else{
+			displayTask();	
+		}
+	}
+
+	//pop feedback when action is not successful
+	private void displayMessage() {
 		Label displayText = new Label(state.getDisplayMessage());
 		displayText.setId("message");
 		taskStackPane.getChildren().add(displayText);
 		FadeAnimation fade = new FadeAnimation(displayText);
 		fade.playAnimation();
 	}
-
-	private void refreshTaskPane() {
-		loadHeader();
-		if (state.getCommandType().equals(CommandType.EXIT)){
-			window.close();
-		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
-			loadConfig();
-		} else if (state.getViewMode().equals(ViewMode.HELP)){
-			loadHelp();
-		} else if (state.isCurrentTasksEmpty()){
-			loadEmptyPane();
-		} else{
-			loadTask();	
-		}
+	
+	//display help manual in mainPane
+	private void displayHelp() {
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().add(taskPane);
+		taskPane.setContent(help);
+	}
+	
+	//display setting in mainPane
+	private void displayConfig(){
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().add(taskPane);
+		taskPane.setContent(configs);
+	}
+	
+	//display empty message when no tasks in current mode
+	private void displayEmpty(){
+		String message = String.format(EMPTY_MESSAGE, state.getEmptyMessage());
+		Text emptyMessage = new Text(message);
+		emptyMessage.setTextAlignment(TextAlignment.CENTER);
+		emptyMessage.setId("empty");
+		taskStackPane.getChildren().clear();
+		taskStackPane.getChildren().addAll(mainBox, emptyMessage);
+	}
+	
+	//display tasks in mainPane in rows
+	private void displayTask() {
+		loadTaskPane();
+		taskTable.getChildren().clear();
+		taskTable.getChildren().addAll(tableHeader, taskPane);
+		loadTableHeader();
+		ArrayList<Task> taskList = state.getCurrentTasks();
+		tasks.getChildren().clear();
+		taskIndex = 0;
+		for (Task task: taskList){
+			displayTaskRow(task);
+        }
+		taskPane.setContent(tasks);
 	}
 
+	//display each row by three columns
+	private void displayTaskRow(Task task) {
+		Column indexCol = loadIndexCol(task);
+		Column contentCol = loadContentCol(task);
+		Column timeCol = loadTimeCol(task);
+		loadTaskRow(indexCol, contentCol, timeCol);
+	}
+
+	//load header tab according to current view mode
 	private void loadHeader() {
-		loadTab();
+		setupHeaderTab();
 		switch(state.getViewMode()){
 		case ALL:
 			allHeader.setId("tab");
@@ -217,78 +273,24 @@ public class Gui extends Application{
 		}
 	}
 	
-	private void loadHelp() {
-		loadTaskPane();
-		taskTable.getChildren().clear();
-		taskTable.getChildren().add(taskPane);
-		taskPane.setContent(help);
-	}
-	
-	private void loadConfig(){
-		loadTaskPane();
-		taskTable.getChildren().clear();
-		taskTable.getChildren().add(taskPane);
-		taskPane.setContent(configs);
-	}
-	
-	private void loadEmptyPane(){
-		//mainBox = loadMainBox();
-		Text emptyMessage = new Text(String.format(EMPTY_MESSAGE, state.getEmptyMessage()));
-		emptyMessage.setTextAlignment(TextAlignment.CENTER);
-		emptyMessage.setId("empty");
-		taskStackPane.getChildren().clear();
-		taskStackPane.getChildren().addAll(mainBox, emptyMessage);
-	}
-	
-	private void loadTask() {
-		loadTaskPane();
-		taskTable.getChildren().clear();
-		taskTable.getChildren().addAll(tableHeader, taskPane);
-		updateTableHeader();
-		ArrayList<Task> taskList = state.getCurrentTasks();
-		tasks.getChildren().clear();
-		taskIndex = 0;
-		for (Task task: taskList){
-			displayRow(task);
-        }
-		taskPane.setContent(tasks);
-	}
-	
+	//load task layout in mainPane
 	private void loadTaskPane() {
 		taskStackPane.getChildren().clear();
 		taskStackPane.getChildren().addAll(mainBox, taskTable);
 	}
 	
-	private void updateTableHeader() {
+	//load table header when loading task
+	private void loadTableHeader() {
 		tableHeader.getChildren().clear();
 		if (state.getViewMode().equals(ViewMode.FLOATING)){
-			loatFloatingTableHeader();	
+			setupFloatingTableHeader();	
 		} else {
-			loadTableHeader();
+			setupTableHeader();
 		}
 	}
 
-	private void loadTableHeader() {
-		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
-		contentHeader.setPrefWidth(contentHeaderWidth);
-		timeHeader.setPrefWidth(TIME_WIDTH);
-		tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
-	}
-
-	private void loatFloatingTableHeader() {
-		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
-		contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
-		tableHeader.getChildren().addAll(indexHeader, contentHeader);
-	}
-	
-	private void displayRow(Task task) {
-		Column indexCol = loadIndexCol(task);
-		Column contentCol = loadContentCol(task);
-		Column timeCol = loadTimeCol(task);
-		setupTaskRow(indexCol, contentCol, timeCol);
-	}
-
-	private void setupTaskRow(Column indexCol, Column contentCol, Column timeCol) {
+	//load task rows and refresh the ones that are changed
+	private void loadTaskRow(Column indexCol, Column contentCol, Column timeCol) {
 		GridPane taskLine = new GridPane();
 		taskLine.setPadding(CONTENT_PADDING);
 		taskLine.setHgap(10);
@@ -305,6 +307,7 @@ public class Gui extends Application{
 		}
 	}
 
+	//load schedules column
 	private Column loadTimeCol(Task task) {
 		String taskTime = "";
 		if (task.getTaskType().equals(TaskType.DEADLINE)) {
@@ -313,28 +316,32 @@ public class Gui extends Application{
 		}
 		Column timeCol = new Column(taskTime, 2, TIME_WIDTH);
 		timeCol.setAlignLeft();
-		setTaskView(task, timeCol);
+		timeCol.setWrap(TIME_WIDTH);
+		loadTaskView(task, timeCol);
 		return timeCol;
 	}
 
+	//load task content and details column
 	private Column loadContentCol(Task task) {
 		String taskContent = task.getDisplayContent();
 		Column contentCol = new Column(taskContent, 1, contentWidth);
 		contentCol.setWrap(contentWidth);
-		setTaskView(task, contentCol);
+		loadTaskView(task, contentCol);
 		return contentCol;
 	}
 
+	//load task index column
 	private Column loadIndexCol(Task task) {
 		taskIndex ++;
 		String taskIdx = Integer.toString(taskIndex);
 		Column indexCol = new Column(taskIdx, 0, INDEX_WIDTH);
 		indexCol.setAlignRight();
-		setTaskView(task, indexCol);
+		loadTaskView(task, indexCol);
 		return indexCol;
 	}
 	
-	private void setTaskView(Task task, Column col) {
+	//determine whether task details are displayed and whether task is overdue
+	private void loadTaskView(Task task, Column col) {
 		if (task.isOverdue() && task.getIsDetailDisplayed()){
 			col.setZoomOverdue();
 		} else if (task.isOverdue()){
@@ -343,147 +350,8 @@ public class Gui extends Application{
 			col.setZoom();
 		}
 	}
-	
-	private TextField loadInputLayout() {
-		TextField inputBox = new TextField();
-		inputBox.setPrefHeight(INPUT_BOX_HEIGHT);
-		inputBox.setMaxHeight(INPUT_BOX_HEIGHT);
-		inputBox.setPromptText(PROMPT);
-		layout.getChildren().add(inputBox);
-		return inputBox;
-	}
-	
-	private ScrollPane loadMainLayout() {
-		loadMainBox();
-		taskPane = new ScrollPane();
-		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
-		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-	    taskStackPane.getChildren().addAll(mainBox, taskTable);
-		tab.getChildren().add(taskStackPane);
-		layout.getChildren().add(tab);
-		return taskPane;
-	}
 
-	private void loadMainBox() {
-		mainBox = new Rectangle();
-		mainBox.setWidth(taskBoxWidth);
-		mainBox.setHeight(taskBoxHeight);
-		mainBox.setId("taskPane");
-	}
-
-	private void loadTableHeaderLayout(){
-		indexHeader.setAlignment(Pos.CENTER);
-		contentHeader.setTextAlignment(TextAlignment.CENTER);
-		timeHeader.setTextAlignment(TextAlignment.CENTER);
-		indexHeader.setId("header");
-		contentHeader.setId("header");
-		timeHeader.setId("header");
-	}
-	
-	private void loadHeaderLayout() {
-		sectionHeader.setPrefHeight(HEADER_HEIGHT);
-		sectionHeader.setAlignment(Pos.CENTER);
-		loadTab();
-		tab.getChildren().add(sectionHeader);
-	}
-
-	private void loadTab() {
-		allHeader = new Label(Constant.HEADER_ALL);
-		scheduledHeader = new Label(Constant.HEADER_DEADLINE);
-		floatingHeader = new Label(Constant.HEADER_FLOATING);
-		todayHeader = new Label(Constant.HEADER_START);
-		searchHeader = new Label(Constant.HEADER_SEARCH);
-		configHeader = new Label(Constant.HEADER_CONFIG);
-		helpHeader = new Label(Constant.HEADER_HELP);
-		finishedHeader = new Label(Constant.HEADER_FINISHED);
-		loadClick();
-		sectionHeader.getChildren().clear();
-		sectionHeader.getChildren().addAll(todayHeader, allHeader, scheduledHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
-	}
-	
-	private void loadTitleLayout() {
-		StackPane titlePane = new StackPane();
-		titlePane.setAlignment(Pos.CENTER_LEFT);
-        Text titleText = new Text(String.format(TITLE, System.getProperty("user.name")));
-        titleText.setId("titleText");
-		title.setWidth(STAGE_WIDTH);
-		title.setHeight(TITLE_HEIGHT);
-		title.setId("title");
-		titlePane.getChildren().addAll(title, titleText);
-        layout.getChildren().add(titlePane);
-	}
-
-	private void setupStage(Stage primaryStage) {
-		window = primaryStage;
-		window.initStyle(StageStyle.UNDECORATED);
-        window.setResizable(true);
-        window.getIcons().add(new Image("/title.png"));
-    	setupLayout();
-		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		String theme = String.format(THEME_SHEET, state.getTheme());
-		String font = String.format(FONT_SHEET, state.getFont());
-		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
-		window.setScene(scene);
-		window.show();
-		loadDrag();
-	}
-	
-	private void setupLayout() {
-		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - HEADER_HEIGHT - TITLE_HEIGHT;
-    	taskBoxWidth = (int)(STAGE_WIDTH - COMPONENT_GAP_H * 2);
-    	contentWidth = taskBoxWidth - INDEX_WIDTH - TIME_WIDTH;
-    	contentHeaderWidth = contentWidth + PADDING * 2;
-		layout.setPadding(COMPONENT_PADDING);
-		layout.setSpacing(COMPONENT_GAP_V);
-		layout.setAlignment(Pos.CENTER);
-		loadTitleLayout();
-		loadHeaderLayout();
-		loadTableHeaderLayout();
-        taskPane = loadMainLayout();
-		inputBox = loadInputLayout();
-	}
-	
-	private void setupConfig(){
-		String[] infoStr = state.getConfigInfo();
-		configs.setPadding(INFO_PADDING);
-		Text intro = new Text(infoStr[0]); 
-		intro.setId("normal");		
-		Text dir = new Text(infoStr[1]); 
-		dir.setId("normal");
-		Text theme = new Text(infoStr[2]); 
-		theme.setId("normal");
-		Text font = new Text(infoStr[3]); 
-		font.setId("normal");
-		ThemeSelector themeSelector = new ThemeSelector();
-		FontSelector fontSelector = new FontSelector();
-		GridPane themes = themeSelector.getTheme();
-		GridPane fonts = fontSelector.getFont();
-		configs.getChildren().addAll(intro, dir, theme, themes, font, fonts);
-	}
-	
-	private void setupHelp(){
-		String[] helpStr = state.getHelpManual();
-		help.setPadding(INFO_PADDING);
-		Text intro = new Text(helpStr[0]); 
-		intro.setId("zoom");		
-		Text add = new Text(helpStr[1]); 
-		add.setId("normal");
-		Text delete = new Text(helpStr[2]); 
-		delete.setId("normal");
-		Text tick = new Text(helpStr[3]); 
-		tick.setId("normal");
-		Text update = new Text(helpStr[4]); 
-		update.setId("normal");		
-		Text view = new Text(helpStr[5]); 
-		view.setId("normal");
-		Text exit = new Text(helpStr[6]); 
-		exit.setId("normal");
-		Text end = new Text(helpStr[7]); 
-		end.setId("zoom");
-		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
-	}
-	
+	//enable click to select tab
 	private void loadClick() {
 		allHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -543,6 +411,7 @@ public class Gui extends Application{
         });
 	}
 	
+	//enable drag to move the stage
 	private void loadDrag() {
 		title.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -558,6 +427,173 @@ public class Gui extends Application{
                 window.setY(event.getScreenY() + yOffset);
             }
         });
+	}
+	
+	//initialize table header setting with index, content and schedules
+	private void setupTableHeader() {
+		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+		contentHeader.setPrefWidth(contentHeaderWidth);
+		timeHeader.setPrefWidth(TIME_WIDTH);
+		tableHeader.getChildren().addAll(indexHeader, contentHeader, timeHeader);
+	}
+
+	//initialize table header setting with index and content
+	private void setupFloatingTableHeader() {
+		indexHeader.setPrefWidth(HEADER_INDEX_WIDTH);
+		contentHeader.setPrefWidth(contentHeaderWidth + TIME_WIDTH);
+		tableHeader.getChildren().addAll(indexHeader, contentHeader);
+	}
+	
+	//initialize text input area
+	private TextField setupInputLayout() {
+		TextField inputBox = new TextField();
+		inputBox.setPrefHeight(INPUT_BOX_HEIGHT);
+		inputBox.setMaxHeight(INPUT_BOX_HEIGHT);
+		inputBox.setPromptText(PROMPT);
+		layout.getChildren().add(inputBox);
+		return inputBox;
+	}
+	
+	//initialize mainPane layout
+	private ScrollPane setupMainLayout() {
+		setupMainBox();
+		taskPane = new ScrollPane();
+		taskPane.setPrefSize(taskBoxWidth, taskBoxHeight);
+		taskPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		taskPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+	    taskStackPane.getChildren().addAll(mainBox, taskTable);
+		tab.getChildren().add(taskStackPane);
+		layout.getChildren().add(tab);
+		return taskPane;
+	}
+
+	//initialize mainPane style
+	private void setupMainBox() {
+		mainBox = new Rectangle();
+		mainBox.setWidth(taskBoxWidth);
+		mainBox.setHeight(taskBoxHeight);
+		mainBox.setId("taskPane");
+	}
+
+	//initialize table header layout and style
+	private void setupTableHeaderLayout(){
+		indexHeader.setAlignment(Pos.CENTER);
+		contentHeader.setTextAlignment(TextAlignment.CENTER);
+		timeHeader.setTextAlignment(TextAlignment.CENTER);
+		indexHeader.setId("header");
+		contentHeader.setId("header");
+		timeHeader.setId("header");
+	}
+	
+	//initialize header tab layout and style
+	private void setupHeaderLayout() {
+		sectionHeader.setPrefHeight(HEADER_HEIGHT);
+		sectionHeader.setAlignment(Pos.CENTER);
+		setupHeaderTab();
+		tab.getChildren().add(sectionHeader);
+	}
+
+	//initialize each tabs in header
+	private void setupHeaderTab() {
+		allHeader = new Label(Constant.HEADER_ALL);
+		scheduledHeader = new Label(Constant.HEADER_DEADLINE);
+		floatingHeader = new Label(Constant.HEADER_FLOATING);
+		todayHeader = new Label(Constant.HEADER_START);
+		searchHeader = new Label(Constant.HEADER_SEARCH);
+		configHeader = new Label(Constant.HEADER_CONFIG);
+		helpHeader = new Label(Constant.HEADER_HELP);
+		finishedHeader = new Label(Constant.HEADER_FINISHED);
+		loadClick();
+		sectionHeader.getChildren().clear();
+		sectionHeader.getChildren().addAll(todayHeader, allHeader, scheduledHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
+	}
+	
+	//initialize titlePane layout nad style
+	private void setupTitleLayout() {
+		StackPane titlePane = new StackPane();
+		titlePane.setAlignment(Pos.CENTER_LEFT);
+		String userName = String.format(TITLE, System.getProperty("user.name"));
+        Text titleText = new Text(userName);
+        titleText.setId("titleText");
+		title.setWidth(STAGE_WIDTH);
+		title.setHeight(TITLE_HEIGHT);
+		title.setId("title");
+		titlePane.getChildren().addAll(title, titleText);
+        layout.getChildren().add(titlePane);
+	}
+
+	//initialize stage size, properties and style
+	private void setupStage(Stage primaryStage) {
+		window = primaryStage;
+		window.initStyle(StageStyle.UNDECORATED);
+        window.setResizable(true);
+        window.getIcons().add(new Image("/title.png"));
+    	setupLayout();
+		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
+		String theme = String.format(THEME_SHEET, state.getTheme());
+		String font = String.format(FONT_SHEET, state.getFont());
+		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
+		window.setScene(scene);
+		window.show();
+		loadDrag();
+	}
+	
+	//initialize layout parameters, positions and spacing
+	private void setupLayout() {
+		taskBoxHeight = STAGE_HEIGHT - COMPONENT_GAP_V * 4 - INPUT_BOX_HEIGHT - HEADER_HEIGHT - TITLE_HEIGHT;
+    	taskBoxWidth = (int)(STAGE_WIDTH - COMPONENT_GAP_H * 2);
+    	contentWidth = taskBoxWidth - INDEX_WIDTH - TIME_WIDTH;
+    	contentHeaderWidth = contentWidth + PADDING * 2;
+		layout.setPadding(COMPONENT_PADDING);
+		layout.setSpacing(COMPONENT_GAP_V);
+		layout.setAlignment(Pos.CENTER);
+		setupTitleLayout();
+		setupHeaderLayout();
+		setupTableHeaderLayout();
+        taskPane = setupMainLayout();
+		inputBox = setupInputLayout();
+	}
+	
+	//initialize setting page content
+	private void setupConfig(){
+		String[] infoStr = state.getConfigInfo();
+		configs.setPadding(INFO_PADDING);
+		Text intro = new Text(infoStr[0]); 
+		intro.setId("normal");		
+		Text dir = new Text(infoStr[1]); 
+		dir.setId("normal");
+		Text theme = new Text(infoStr[2]); 
+		theme.setId("normal");
+		Text font = new Text(infoStr[3]); 
+		font.setId("normal");
+		ThemeSelector themeSelector = new ThemeSelector();
+		FontSelector fontSelector = new FontSelector();
+		GridPane themes = themeSelector.getTheme();
+		GridPane fonts = fontSelector.getFont();
+		configs.getChildren().addAll(intro, dir, theme, themes, font, fonts);
+	}
+	
+	//initialize help page content
+	private void setupHelp(){
+		String[] helpStr = state.getHelpManual();
+		help.setPadding(INFO_PADDING);
+		Text intro = new Text(helpStr[0]); 
+		intro.setId("zoom");		
+		Text add = new Text(helpStr[1]); 
+		add.setId("normal");
+		Text delete = new Text(helpStr[2]); 
+		delete.setId("normal");
+		Text tick = new Text(helpStr[3]); 
+		tick.setId("normal");
+		Text update = new Text(helpStr[4]); 
+		update.setId("normal");		
+		Text view = new Text(helpStr[5]); 
+		view.setId("normal");
+		Text exit = new Text(helpStr[6]); 
+		exit.setId("normal");
+		Text end = new Text(helpStr[7]); 
+		end.setId("zoom");
+		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
 	
 }

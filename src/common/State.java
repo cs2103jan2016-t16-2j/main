@@ -456,11 +456,9 @@ public class State {
 	public void refreshTodaysTasks() {
 		todaysTasks_.clear();
 		Calendar calender =  Calendar.getInstance();
-	    calender.set(calender.get(Calendar.YEAR), 
-	                 calender.get(Calendar.MONTH), 
-	                 calender.get(Calendar.DAY_OF_MONTH), 
-	                 23,59,59);
-	     
+	    calender.set(calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), 
+	    		     calender.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+	    
 	    Date endOfToday = calender.getTime();
 		
 	    for(int i = 0; i < deadlineTasks_.size(); i++){

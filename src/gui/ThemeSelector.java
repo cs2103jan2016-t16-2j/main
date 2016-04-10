@@ -12,6 +12,8 @@ public class ThemeSelector {
 	private GridPane themes;
 	private final int HGAP = 60;
 	private final int VGAP = 20;
+	private final int WIDTH = 160;
+	private final int HEIGHT = 90;
 	private String[] schemes = {"light", "dark"};
 	private final String source = "/resources/%1$s.jpg";
 	
@@ -35,8 +37,8 @@ public class ThemeSelector {
 		StackPane display = new StackPane();
 		String imageName = String.format(source, theme);
 		ImageView image= new ImageView(imageName);
-		image.setFitHeight(90);
-		image.setFitWidth(160);
+		image.setFitHeight(HEIGHT);
+		image.setFitWidth(WIDTH);
 		Label label = new Label(theme);
 		label.setId(schemes[scheme]);
 		display.getChildren().addAll(image, label);

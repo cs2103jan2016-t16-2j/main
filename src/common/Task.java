@@ -169,15 +169,20 @@ public class Task {
 	
 	public String getDisplayContent(){
 		if (isDetailDisplayed){
-			if (!venue.isEmpty() && detail.isEmpty()){
-				return String.format(DISPLAYED_VENUE, content, venue);
-			} else if (venue.isEmpty() && !detail.isEmpty()){
-				return String.format(DISPLAYED_DETAIL, content, detail);
-			} else if (!venue.isEmpty() && !detail.isEmpty()){
-				return String.format(DISPLAYED_VENUE_DETAIL, content, venue, detail);	
-			} else{
-				return content;
-			}
+			return getDetailedContent();
+		} else{
+			return content;
+		}
+	}
+
+
+	private String getDetailedContent() {
+		if (!venue.isEmpty() && detail.isEmpty()){
+			return String.format(DISPLAYED_VENUE, content, venue);
+		} else if (venue.isEmpty() && !detail.isEmpty()){
+			return String.format(DISPLAYED_DETAIL, content, detail);
+		} else if (!venue.isEmpty() && !detail.isEmpty()){
+			return String.format(DISPLAYED_VENUE_DETAIL, content, venue, detail);	
 		} else{
 			return content;
 		}

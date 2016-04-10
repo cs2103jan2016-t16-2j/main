@@ -64,12 +64,12 @@
 
 #consolas{
     -fx-text-fill: rgba(50, 50, 50, 1);
-    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-color: rgba(50, 50, 50, 0.1);
 }
 
 #segoe{
     -fx-text-fill: rgba(50, 50, 50, 1);
-    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-color: rgba(50, 50, 50, 0.1);
 }
 
 #message{

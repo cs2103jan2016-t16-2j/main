@@ -46,6 +46,7 @@ public class UntickTask implements Operation {
 				int localPositionIndex = getAndValidatePositionIndex();
 				Task taskToBeUnticked = state.getFinishedTasks().get(localPositionIndex);
 				TaskType taskType = taskToBeUnticked.getTaskType();
+				state.getFinishedTasks().remove(localPositionIndex);
 				
 				if(taskType == TaskType.DEADLINE){
 					addDeadlineTask(taskToBeUnticked);

@@ -309,6 +309,7 @@ public class TickTask implements Operation {
 		finishedTask.add(toBeTicked);
 		DeleteTask deleteTask = new DeleteTask(state);
 		boolean isDeletedSuccessful = deleteTask.process();
+		state.setViewMode(ViewMode.FINISHED);
 		return isDeletedSuccessful;
 	}
 

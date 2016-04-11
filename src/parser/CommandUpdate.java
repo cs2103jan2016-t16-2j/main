@@ -59,12 +59,12 @@ public class CommandUpdate implements Command{
 	private String getDetail() {
 		String content = getContentWithoutIndex();
 		String wordList[] = content.split("detail:");
-		if(wordList.length <= 1){
+		if(hasContentSplit(wordList)){
 			state_.setIsDetailChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
 			String wordListVenue[] = wordList[wordList.length-1].split("at:");
-			if(wordListVenue.length <= 1){
+			if(hasContentSplit(wordListVenue)){
 				state_.setIsDetailChanged(true);
 				return wordList[wordList.length-1].trim();
 			}else{
@@ -73,17 +73,16 @@ public class CommandUpdate implements Command{
 			}
 		}
 	}
-
 	 
 	private String getVenue() {
 		String content = getContentWithoutIndex();
 		String wordList[] = content.split("at:");
-		if(wordList.length <= 1){
+		if(hasContentSplit(wordList)){
 			state_.setIsVenueChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
 			String wordListDetails[] = wordList[wordList.length-1].split("detail:");
-			if(wordListDetails.length <= 1){
+			if(hasContentSplit(wordListDetails)){
 				state_.setIsVenueChanged(true);
 				return wordList[wordList.length-1].trim();
 			}else{
@@ -96,14 +95,14 @@ public class CommandUpdate implements Command{
 	 
 	private Date getStartDate() {
 		String wordList[] = content_.split("from:");
-		if(wordList.length<=1){
+		if(hasContentSplit(wordList)){
 			state_.setIsStartDateChanged(false);
 			return null;
 		}
 		String endDate = wordList[wordList.length-1].trim();
 		String wordListEnd[] = endDate.split("to:");
 		
-		if(wordListEnd.length<=1){
+		if(hasContentSplit(wordListEnd)){
 			state_.setIsStartDateChanged(false);
 			state_.setIsValid(false);
 			state_.setDisplayMessage(Constant.VALUE_ERROR_DATE_NOT_PARSED);
@@ -125,7 +124,7 @@ public class CommandUpdate implements Command{
 	private Date getEndDate() {
 		if(state_.getIsStartDateChanged()){
 			String wordList[] = content_.split("to:");
-			if(wordList.length<=1){
+			if(hasContentSplit(wordList)){
 				state_.setIsEndDateChanged(false);
 				state_.setIsStartDateChanged(false);
 				return null;
@@ -150,7 +149,7 @@ public class CommandUpdate implements Command{
 			}
 		}
 		String wordList[] = content_.split("on:");
-		if(wordList.length<=1){
+		if(hasContentSplit(wordList)){
 			state_.setIsEndDateChanged(false);
 			return null;
 		}
@@ -177,7 +176,7 @@ public class CommandUpdate implements Command{
 		String content = getContentWithoutIndex().trim();
 		if(state_.getIsStartDateChanged()){
 			String wordList[] = content.split("from:");
-			if(wordList.length <= 1 || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
@@ -185,7 +184,7 @@ public class CommandUpdate implements Command{
 			return wordList[0].trim();
 		}else if(state_.getIsEndDateChanged()){
 			String wordList[] = content.split("on:");
-			if(wordList.length <= 1 || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
@@ -193,13 +192,13 @@ public class CommandUpdate implements Command{
 			return wordList[0].trim();
 		}else if(state_.getIsVenueChanged()){
 			String wordList[] = content.split("at:");
-			if(wordList.length <= 1 || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			if(state_.getIsDetailChanged()){
 				String wordListDetail[] = wordList[0].split("detail:");
-				if(wordList.length <= 1 || wordList[0].isEmpty()){
+				if(hasContentSplit(wordList) || wordList[0].isEmpty()){
 					state_.setIsContentChanged(true);
 					return wordList[0].trim();
 				}else{
@@ -212,13 +211,13 @@ public class CommandUpdate implements Command{
 			}
 		}else if(state_.getIsDetailChanged()){
 			String wordList[] = content.split("detail:");
-			if(wordList.length <= 1 || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			if(state_.getIsVenueChanged()){
 				String wordListVenue[] = wordList[0].split("at:");
-				if(wordList.length <= 1 || wordList[0].isEmpty()){
+				if(hasContentSplit(wordList) || wordList[0].isEmpty()){
 					state_.setIsContentChanged(true);
 					return wordList[0].trim();
 				}else{
@@ -237,7 +236,11 @@ public class CommandUpdate implements Command{
 			return content;
 		}
 	}
-
+	
+	/**
+	 * Get the content of the input without the index
+	 * @return String of the content
+	 */
 	private String getContentWithoutIndex() {
 		String inputWords[] = content_.split(" ");
 		StringBuilder sb = new StringBuilder("");
@@ -265,5 +268,14 @@ public class CommandUpdate implements Command{
 	 
 	private ViewMode getNewViewMode() {
 		return ViewMode.UNDEFINED;
+	}
+	
+	/**
+	 * Check whether the content can be split
+	 * @param wordList
+	 * @return True if it can't
+	 */
+	private boolean hasContentSplit(String[] wordList) {
+		return wordList.length <= 1;
 	}
 }

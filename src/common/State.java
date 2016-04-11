@@ -617,7 +617,7 @@ public class State {
 	}
 	
 	public String getFontInString(){
-		switch(newFont_){
+		switch(font_){
 		case CONSOLAS:
 			return Constant.FONT_CONSOLAS;
 		case SEGOE:

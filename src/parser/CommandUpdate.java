@@ -63,7 +63,7 @@ public class CommandUpdate implements Command{
 			state_.setIsDetailChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
-			String wordListVenue[] = getLastWord(wordList).split("at:");
+			String wordListVenue[] = splitVenue(getLastWord(wordList));
 			if(hasContentSplit(wordListVenue)){
 				state_.setIsDetailChanged(true);
 				return getLastWord(wordList);
@@ -76,7 +76,7 @@ public class CommandUpdate implements Command{
 	 
 	private String getVenue() {
 		String content = getContentWithoutIndex();
-		String wordList[] = content.split("at:");
+		String wordList[] = splitVenue(content);
 		if(hasContentSplit(wordList)){
 			state_.setIsVenueChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
@@ -191,7 +191,7 @@ public class CommandUpdate implements Command{
 			state_.setIsContentChanged(true);
 			return getFirstWord(wordList);
 		}else if(state_.getIsVenueChanged()){
-			String wordList[] = content.split("at:");
+			String wordList[] = splitVenue(content);
 			if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 				state_.setIsContentChanged(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
@@ -216,7 +216,7 @@ public class CommandUpdate implements Command{
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			if(state_.getIsVenueChanged()){
-				String wordListVenue[] = getFirstWord(wordList).split("at:");
+				String wordListVenue[] = splitVenue(getFirstWord(wordList));
 				if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 					state_.setIsContentChanged(true);
 					return getFirstWord(wordList);
@@ -268,32 +268,6 @@ public class CommandUpdate implements Command{
 	 
 	private ViewMode getNewViewMode() {
 		return ViewMode.UNDEFINED;
-	}
-	
-	/**
-	 * Check whether the content can be split
-	 * @param wordList
-	 * @return True if it can't
-	 */
-	private boolean hasContentSplit(String[] wordList) {
-		return wordList.length <= 1;
-	}
-	
-	/**
-	 * Split the content using the detail keyword
-	 * @param content
-	 * @return A list of split content
-	 */
-	private String[] splitDetail(String content) {
-		return content.split("detail:");
-	}
-	
-	private String getFirstWord(String[] wordListVenue) {
-		return wordListVenue[0].trim();
-	}
-
-	private String getLastWord(String[] wordList) {
-		return wordList[wordList.length-1].trim();
 	}
 
 }

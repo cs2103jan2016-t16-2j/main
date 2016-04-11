@@ -25,32 +25,31 @@ public class TaskTimeDisplay {
 		boolean sameDate = false;
 		boolean startThisYear = false;
 		boolean endThisYear = sdfYear.format(endDate).equals(sdfYear.format(System.currentTimeMillis()));
-		boolean hasEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
-		
+		boolean noEndTime = sdfDefaultTime.format(endDate).equals(defaultTime);
 		if (startDate != null){
 			startThisYear = sdfYear.format(startDate).equals(sdfYear.format(System.currentTimeMillis()));
 			sameDate = sdfDate.format(task.getStartDate()).equals(sdfDate.format(task.getEndDate()));
 		}
-		if (startDate == null && endThisYear && hasEndTime){
+		if (startDate == null && endThisYear && noEndTime){
 		    timeDisplay = sdfDateThisYear.format(task.getEndDate());
-		} else if (startDate == null && endThisYear && !hasEndTime){
+		} else if (startDate == null && endThisYear && !noEndTime){
 		    timeDisplay = sdfThisYear.format(task.getEndDate());
-		} else if (startDate == null && hasEndTime){
-		    timeDisplay = sdf.format(task.getEndDate());
-	    } else if (startDate == null && !hasEndTime){
-	    	timeDisplay = sdfDate.format(task.getEndDate());
+		} else if (startDate == null && noEndTime){
+		    timeDisplay = sdfDate.format(task.getEndDate());
+	    } else if (startDate == null && !noEndTime){
+	    	timeDisplay = sdf.format(task.getEndDate());
 	    } else if (sameDate && startThisYear){
 	    	timeDisplay = String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfTime.format(task.getEndDate()));		
 		} else if (sameDate && !startThisYear){
 			timeDisplay = String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));				
-	    } else if (startThisYear && endThisYear && hasEndTime){
-	    	timeDisplay = String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
-	    } else if (startThisYear && endThisYear && !hasEndTime){
+	    } else if (startThisYear && endThisYear && noEndTime){
 	    	timeDisplay = String.format(DURATION, sdfDateThisYear.format(task.getStartDate()), sdfDateThisYear.format(task.getEndDate()));
-	    } else if (!startThisYear || !endThisYear && hasEndTime){
-	    	timeDisplay = String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));
-	    } else {
+	    } else if (startThisYear && endThisYear && !noEndTime){
+	    	timeDisplay = String.format(DURATION, sdfThisYear.format(task.getStartDate()), sdfThisYear.format(task.getEndDate()));
+	    } else if (!startThisYear || !endThisYear && noEndTime){
 	    	timeDisplay = String.format(DURATION, sdfDate.format(task.getStartDate()), sdfDate.format(task.getEndDate()));
+	    } else {
+	    	timeDisplay = String.format(DURATION, sdf.format(task.getStartDate()), sdf.format(task.getEndDate()));
 	    }
 	}
 	

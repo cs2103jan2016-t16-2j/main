@@ -24,11 +24,15 @@ public class FileManagement {
 	
 	// configuration attributes
 	private File directory;
-	private String newDirectory;
+	private Theme theme;
+	private Font font;
 	
-	// file name & directory
+	// config setting
 	
 	private static final String DEFAULT_DIRECTORY = System.getProperty("user.home") + "/WallistDatabase"; 
+	private static final String DEFAULT_THEME = "AUTUMN";
+	private static final String DEFAULT_FONT = "SEGOE";
+	
 	private static final String CONFIG_FILE_NAME = "config.txt";
 	private static final String DATA_FILE_NAME = "data.txt";
 	private static final String ARCHIVE_FILE_NAME = "archive.txt";
@@ -57,6 +61,7 @@ public class FileManagement {
 	private static final String CREATE_ARCHIVE_SUCCESS = "Archive file is created successfully!";
 	private static final String CREATE_ARCHIVE_FAILURE = "Archive file is not created successfully!";
 	
+	
 	//============================
 	//       Constructor(s)
 	//============================
@@ -72,7 +77,6 @@ public class FileManagement {
 	//       Functions
 	//============================
 	
-	// configuration file
 	/**
 	 * This method creates a default configuration file.
 	 * @return boolean value of whether it is successful
@@ -81,20 +85,16 @@ public class FileManagement {
 		LOGGER.log(Level.INFO, CREATE_CONFIG);
 		
 		try {
-			configFile.createNewFile();
-			
-			//default configuration setting
-			String defaultDataDirectory = DEFAULT_DIRECTORY;
-			this.directory = new File(defaultDataDirectory);
+			configFile.createNewFile(); // create a new empty text file
 			BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
-			writer.write(defaultDataDirectory);
+			initialiseConfigFile(writer);
 			writer.close();
-			
 		} catch (IOException e) {
 			LOGGER.log(Level.WARNING, CREATE_CONFIG_FAILURE, e);
 			e.printStackTrace();
 			return false;
 		}
+		
 		LOGGER.log(Level.INFO, CREATE_CONFIG_SUCCESS);
 		return true;
 	}
@@ -108,9 +108,7 @@ public class FileManagement {
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
-			String currentConfigLine = reader.readLine();
-			state.setCurrentDirectory(currentConfigLine); // pass the directory to state
-			this.directory = new File(currentConfigLine); 
+			setStateAsConfigured(reader);
 			reader.close();
 		} catch (IOException e){
 			LOGGER.log(Level.WARNING, LOAD_CONFIG_FAILURE);
@@ -121,7 +119,6 @@ public class FileManagement {
 		LOGGER.log(Level.INFO, LOAD_CONFIG_SUCCESS);
 		return true;
 	}
-	
 
 	/**
 	 * This method method connect the configuration file with this class, or create a new one if 
@@ -139,16 +136,27 @@ public class FileManagement {
 		loadConfigFile();
 		return true;
 	}
-	
 
-	public File getDataFile() {
-		return this.dataFile;
+	/**
+ 	 * This method changes the directory in the configuration file
+ 	 * @param directoryString
+ 	 * @return boolean value of whether it is successful
+ 	 */
+	public boolean saveConfigFile() {
+		this.theme = state.getTheme();
+		this.font = state.getFont();
+		String currentDirectoryString = state.getCurrentDirectory();
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
+			saveConfigSettings(currentDirectoryString, writer);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
-	
-	public File getFinishedFile() {
-		return this.finishedFile;
-	}
-	
+
 	/**
  	 * This method method connect the data file with this class, or create a new one if 
 	 * no data file exists
@@ -221,23 +229,158 @@ public class FileManagement {
 		LOGGER.log(Level.INFO, CREATE_DATA_SUCCESS);
 		return true;
  	}
- 	
- 	/**
- 	 * This method changes the directory in the configuration file
- 	 * @param directoryString
- 	 * @return boolean value of whether it is successful
- 	 */
-	public boolean changeDirectory() {
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFile));
-			writer.write(newDirectory);
-			// other setting goes here
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+	
+	
+	//=============================
+	//       Helper Functions
+	//=============================
+	// 		Helper functions
+	//=============================
+	
+	/**
+	 * This method set the state object according to the settings in the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setStateAsConfigured(BufferedReader reader) throws IOException {
+		setDirectoryInConfig(reader);
+		setThemeInConfig(reader);
+		setFontInConfig(reader);
 	}
 
+	
+	/**
+	 * This method set the font according to the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setFontInConfig(BufferedReader reader) throws IOException {
+		String fontString = reader.readLine();
+		this.state.setFont(Font.valueOf(fontString));
+	}
+
+	/**
+	 * This method set the theme according to the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setThemeInConfig(BufferedReader reader) throws IOException {
+		String themeString = reader.readLine();
+		this.state.setTheme(Theme.valueOf(themeString));
+	}
+
+	
+	/**
+	 * This method set the directory according to the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setDirectoryInConfig(BufferedReader reader) throws IOException {
+		String currentConfigLine = reader.readLine();
+		this.state.setCurrentDirectory(currentConfigLine);
+		this.directory = new File(currentConfigLine);
+	}
+	
+	/**
+	 * This method writes the default configration setting into the configuration file
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseConfigFile(BufferedWriter writer) throws IOException {
+		//default configuration setting
+		initialiseDirectoryInConfig(writer);
+		initialiseThemeInConfig(writer);
+		initialiseFontInConfig(writer);
+	}
+
+	
+	/**
+	 * This method initialises the font as 'SEGOE'
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseFontInConfig(BufferedWriter writer) throws IOException {
+		String defaultFont = DEFAULT_FONT;
+		saveDirectorySetting(defaultFont, writer);
+	}
+	
+	/**
+	 * This method initialises the theme as 'AUTUMN'
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseThemeInConfig(BufferedWriter writer) throws IOException {
+		String defaultTheme = DEFAULT_THEME;
+		saveDirectorySetting(defaultTheme, writer);
+	}
+
+	/**
+	 * This method initialises the directory in user's root directory
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseDirectoryInConfig(BufferedWriter writer) throws IOException {
+		String defaultDataDirectory = DEFAULT_DIRECTORY;
+		this.directory = new File(defaultDataDirectory);
+		saveDirectorySetting(defaultDataDirectory, writer);
+	}
+	
+	/**
+	 * This method saves all configuartion settings
+	 * @param currentDirectoryString
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void saveConfigSettings(String currentDirectoryString, BufferedWriter writer) throws IOException {
+		saveDirectorySetting(currentDirectoryString, writer);
+		saveThemeSetting(writer);
+		saveFontSetting(writer);
+	}
+	
+	/**
+	 * This method saves the font
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void saveFontSetting(BufferedWriter writer) throws IOException {
+		writer.write(font.toString());
+		writer.newLine();
+	}
+
+	/**
+	 * This method saves the theme
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void saveThemeSetting(BufferedWriter writer) throws IOException {
+		writer.write(theme.toString());
+		writer.newLine();
+	}
+
+	/**
+	 * This method saves the directory
+	 * @param currentDirectoryString
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void saveDirectorySetting(String currentDirectoryString, BufferedWriter writer) throws IOException {
+		writer.write(currentDirectoryString);
+		writer.newLine();
+	}
+	
+	/**
+	 * This method returns the datafile to Storage
+	 * @return
+	 */
+	public File getDataFile() {
+		return this.dataFile;
+	}
+	
+	/**
+	 * This method returns the finished file to storage
+	 * @return
+	 */
+	public File getFinishedFile() {
+		return this.finishedFile;
+	}
 }

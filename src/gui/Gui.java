@@ -162,6 +162,7 @@ public class Gui extends Application{
 		state = wallistModel.getState();
 		if (isSuccess){
 			refreshTaskPane();
+			loadStyleSheet();
 		} else {
 			displayMessage();
 		}
@@ -184,7 +185,6 @@ public class Gui extends Application{
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			displayConfig();
-			loadStyleSheet();
 		} else if (state.getViewMode().equals(ViewMode.HELP)){
 			displayHelp();
 		} else if (state.isCurrentTasksEmpty()){
@@ -601,7 +601,7 @@ public class Gui extends Application{
 		String[] infoStr = state.getConfigInfo();
 		configs.setPadding(INFO_PADDING);
 		Text intro = new Text(infoStr[0]); 
-		intro.setId("normal");		
+		intro.setId("zoom");		
 		Text dir = new Text(infoStr[1]); 
 		dir.setId("normal");
 		Text theme = new Text(infoStr[2]); 

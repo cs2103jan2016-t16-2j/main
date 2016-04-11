@@ -1,4 +1,3 @@
-//@@author A0107375E
 package model;
 
 import java.util.EmptyStackException;
@@ -117,6 +116,9 @@ public class WallistModel{
 		storage.executeLoadState();
 	}
 	
+	public void resetStorage(){
+		storage = new Storage(new State());
+	}
 	/**
 	 * This method initialises the State related objects
 	 */
@@ -239,6 +241,7 @@ public class WallistModel{
 			default:
 				break;
 		}
+		storage.executeSaveConfig();
 		storage.executeSaveState();
 		return isRunningSuccessful;
 	}

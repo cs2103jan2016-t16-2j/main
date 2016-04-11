@@ -56,4 +56,28 @@ interface Command {
 	default String[] splitVenue(String content) {
 		return content.split("at:");
 	}
+	
+	default String[] splitStartDate(String content) {
+		return content.split("from:");
+	}
+	
+	default String[] splitEndDateWithStartDate(String endDate) {
+		return endDate.split("to:");
+	}
+	
+	default boolean isDateNull(Date date) {
+		return date == null;
+	}
+	
+
+	default String[] splitEndDate(String content) {
+		return content.split("on:");
+	}
+	
+	default boolean isContentInvalid(String content) {
+		return content.contains("at:") || content.contains("to:") 
+				|| content.contains("from:") || content.contains("on:") 
+				|| content.contains("detail:");  
+		
+	}
 }

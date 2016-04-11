@@ -48,9 +48,9 @@ public class State {
 		todaysTasks_ = new ArrayList<Task>();
 		searchKey_ = new ArrayList<String>();
 		theme_ = Theme.AUTUMN;
-		newTheme_ = null;
+		newTheme_ = Theme.AUTUMN;
 		font_ = Font.SEGOE;
-		newFont_ = null;
+		newFont_ = Font.SEGOE;
 		errorFrequency = 0;
 	}
 	
@@ -62,7 +62,7 @@ public class State {
 		this.currentDirectory_ = directory;
 	}
 	
-	public String getCurrentDirectory(String directory) {
+	public String getCurrentDirectory() {
 		return this.currentDirectory_ ;
 	}
 	
@@ -580,7 +580,7 @@ public class State {
 	}
 	
 	public String getThemeInString(){
-		switch(theme_){
+		switch(newTheme_){
 		case AUTUMN:
 			return Constant.STYLE_AUTUMN;
 		case BOKEH:
@@ -615,7 +615,7 @@ public class State {
 	}
 	
 	public String getFontInString(){
-		switch(font_){
+		switch(newFont_){
 		case CONSOLAS:
 			return Constant.FONT_CONSOLAS;
 		case SEGOE:

@@ -245,11 +245,16 @@ public class CommandUpdate implements Command{
 			if(content.trim().isEmpty()){
 				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 			}
-			state_.setIsContentChanged(true);
+			if(isContentInvalid(content)){
+				state_.setIsContentChanged(false);
+				state_.setDisplayMessage(Constant.VALUE_ERROR_WRONG_FORMAT);
+			}else{
+				state_.setIsContentChanged(true);
+			}
 			return content;
 		}
 	}
-	
+
 	/**
 	 * Get the content of the input without the index
 	 * @return String of the content

@@ -16,6 +16,7 @@ public class Constant {
 		public static final String VALUE_ERROR_ARGUMENT_NOT_NUMBER = "Do you put the index correctly?";
 		public static final String VALUE_ERROR_DATE_NOT_PARSED = "Wrong date format?";
 		public static final String VALUE_ERROR_DATE_ERROR = "Oops, starting date can't be later than end date";
+		public static final String VALUE_ERROR_WRONG_FORMAT = "Seems like you put the wrong input format";
 		
 		//List of all available success message for parser
 		public static final String VALUE_SUCCESS_NO_ERROR = "Success";

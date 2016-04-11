@@ -246,7 +246,12 @@ public class CommandAdd implements Command{
 				return getFirstWord(wordList);
 			}
 		}else{
-			state_.setIsContentChanged(true);
+			if(isContentInvalid(content_)){
+				state_.setIsContentChanged(false);
+				state_.setDisplayMessage(Constant.VALUE_ERROR_WRONG_FORMAT);
+			}else{
+				state_.setIsContentChanged(true);
+			}
 			return content_;
 		}
 	}

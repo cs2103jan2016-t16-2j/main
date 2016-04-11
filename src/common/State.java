@@ -558,6 +558,8 @@ public class State {
 			return Constant.EMPTY_FLOATING;
 		case SEARCH:
 			return Constant.EMPTY_SEARCH;
+		case FINISHED:
+			return Constant.EMPTY_FINISHED;
 		default:
 			return "";
 		}
@@ -580,7 +582,7 @@ public class State {
 	}
 	
 	public String getThemeInString(){
-		switch(newTheme_){
+		switch(theme_){
 		case AUTUMN:
 			return Constant.STYLE_AUTUMN;
 		case BOKEH:

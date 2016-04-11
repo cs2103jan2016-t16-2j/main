@@ -169,7 +169,7 @@ public class WallistModelTest {
 		wm.processInputString("Add eat lunch from: 10/10/16 10:10 to: 12/12/17 12:12 at: TOA PAYOH detail: with boyfriend");
 		wm.processInputString("Add cs2103 meeting on: 5/5/16 10:10");
 		wm.processInputString("Add cs2103 project");
-		wm.processInputString("Add cs2103 revise");
+		wm.processInputString("Add cs2103 revision");
 		wm.processInputString("Add bt3101 assignment");
 		
 	}

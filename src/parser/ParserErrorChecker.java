@@ -43,7 +43,24 @@ public class ParserErrorChecker {
 	 * @return True if the input is valid
 	 */
 	private boolean getIsValid() {
-		return state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_NO_ERROR);
+		return isTaskValid();
+	}
+
+	private boolean isTaskValid() {
+		return state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_NO_ERROR)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_ADD)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_UPDATE)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_TICK)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_UNTICK)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_UNDO)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_REDO)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_CLEAR)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_DELETE)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_SEARCH)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_DETAIL)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_VIEW_MODE)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_CONFIG)
+				|| state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_HELP);
 	}
 	
 	/**

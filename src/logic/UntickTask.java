@@ -49,12 +49,13 @@ public class UntickTask implements Operation {
 				
 				if(taskType == TaskType.DEADLINE){
 					addDeadlineTask(taskToBeUnticked);
+					return true;
 				}
 				
 				if(taskType == TaskType.FLOATING){
 					addFloatingTask(taskToBeUnticked);
+					return true;
 				}
-
 			}
 		} catch (IndexOutOfBoundsException e){
 			untickWithInvalidPositionIndex();
@@ -78,15 +79,9 @@ public class UntickTask implements Operation {
 	 * @return position of the task to be deleted in zero based index
 	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
 	 */
-	private int getAndValidatePositionIndex() {
-		int positionIndex = state.getPositionIndex();
-
-		// Convert 1 base index to 0 base index
-		int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
-
-		if(localPositionIndex < 0){
-			throw new IndexOutOfBoundsException();
-		}
+	private int getAndValidatePositionIndex() throws IndexOutOfBoundsException{
+		LogicUtils logicUtils = new LogicUtils(state);
+		int localPositionIndex = logicUtils.getAndValidatePositionIndex();
 		return localPositionIndex;
 	}
 	
@@ -179,20 +174,11 @@ public class UntickTask implements Operation {
 	 * to collapse all tasks
 	 */
 	private void collapseAllTasks() {
-		ArrayList<Task> allTasks = state.getAllTasks();
-		for(int i = 0; i < allTasks.size(); i++){
-			Task another = allTasks.get(i);
-			another.setIsDetailDisplayed(false);
-		}
+		LogicUtils logicUtils = new LogicUtils(state);
+		logicUtils.collapseAllTasks();
 	}
 	
-	/**
-	 * return a number that is 1 less than the input
-	 * @param num   number to be subtracted
-	 * @return subtracted number that is 1 less than the input
-	 */
-	private int fromOneBaseToZeroBase(int num) {
-		int newNew = num - 1;
-		return newNew;
-	}
+	
+
+	
 }

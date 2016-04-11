@@ -15,7 +15,6 @@ public class AddTask implements Operation {
 	//       Attributes
 	//============================
 	private State state;
-
 	
 	//====================================
 	//       Constructor and Initiliser
@@ -132,16 +131,12 @@ public class AddTask implements Operation {
 		state.setViewMode(viewMode);
 	}
 
-
 	/**
 	 * change the isDetailDisplayed attribute of every task to false 
 	 * to collapse all tasks
 	 */
 	private void collapseAllTasks() {
-		ArrayList<Task> allTasks = state.getAllTasks();
-		for(int i = 0; i < allTasks.size(); i++){
-			Task another = allTasks.get(i);
-			another.setIsDetailDisplayed(false);
-		}
+		LogicUtils logicUtils = new LogicUtils(state);
+		logicUtils.collapseAllTasks();
 	}
 }

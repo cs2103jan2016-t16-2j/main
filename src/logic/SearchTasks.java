@@ -63,12 +63,13 @@ public class SearchTasks implements Operation {
 		}
 	}
 	
+	/**
+	 * change the isDetailDisplayed attribute of every task to false 
+	 * to collapse all tasks
+	 */
 	private void collapseAllTasks() {
-		ArrayList<Task> allTasks = state.getAllTasks();
-		for(int i = 0; i < allTasks.size(); i++){
-			Task task = allTasks.get(i);
-			task.setIsDetailDisplayed(false);
-		}
+		LogicUtils logicUtils = new LogicUtils(state);
+		logicUtils.collapseAllTasks();
 	}
 
 }

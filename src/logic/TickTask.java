@@ -76,6 +76,17 @@ public class TickTask implements Operation {
 		}
 	}
 
+	/**
+	 * check and return the index of task to be ticked 
+	 * @return position of the task to be deleted in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
+	 */
+	private int getAndValidatePositionIndex() throws IndexOutOfBoundsException{
+		LogicUtils logicUtils = new LogicUtils(state);
+		int localPositionIndex = logicUtils.getAndValidatePositionIndex();
+		return localPositionIndex;
+	}
+
 	
 	/**
 	 * tick tasks with invalid position index
@@ -201,22 +212,6 @@ public class TickTask implements Operation {
 		}
 	}
 
-	/**
-	 * check and return the index of task to be ticked 
-	 * @return position of the task to be deleted in zero based index
-	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
-	 */
-	private int getAndValidatePositionIndex() {
-		int positionIndex = state.getPositionIndex();
-
-		// Convert 1 base index to 0 base index
-		int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
-
-		if(localPositionIndex < 0){
-			throw new IndexOutOfBoundsException();
-		}
-		return localPositionIndex;
-	}
 	
 	/**
 	 * find task from starting task list
@@ -318,14 +313,5 @@ public class TickTask implements Operation {
 	}
 
 	
-	/**
-	 * return a number that is 1 less than the input
-	 * @param num   number to be subtracted
-	 * @return subtracted number that is 1 less than the input
-	 */
-	private int fromOneBaseToZeroBase(int num) {
-		int newNew = num - 1;
-		return newNew;
-	}
 }
 

@@ -9,6 +9,7 @@ import logic.ClearTask;
 import logic.Config;
 import logic.DeleteTask;
 import logic.Help;
+import logic.LogicUtils;
 import logic.SearchTasks;
 import logic.TickTask;
 import logic.UntickTask;
@@ -29,6 +30,7 @@ public class WallistModel{
 	private Parser parser;
 	private State state;
 	private AddTask addTask;
+	private LogicUtils logicUtils;
 	private DeleteTask deleteTask;
 	private TickTask tickTask;
 	private UntickTask untickTask;
@@ -114,6 +116,7 @@ public class WallistModel{
 	private void initialiseStorage() {
 		storage = new Storage(state);
 		storage.executeLoadState();
+		logicUtils.collapseAllTasks();
 	}
 	
 	public void resetState(){
@@ -145,6 +148,7 @@ public class WallistModel{
 		config = new Config(state, storage);
 		changeViewMode = new ChangeViewMode(state);
 		viewTaskDetail = new ViewTaskDetail(state);
+		logicUtils = new LogicUtils(state);
 		help = new Help(state);
 	}
 	
@@ -249,8 +253,10 @@ public class WallistModel{
 		return isRunningSuccessful;
 	}
 	
-	
-	// functions to be refactored
+	/*
+	 * reverse the state to last state
+	 * @return a boolean to indicate whether undo is successful
+	 */
 	private boolean runningUndo() throws EmptyStackException{
 		if(stateHistory.size() <= 1){
 			throw new EmptyStackException();
@@ -262,6 +268,10 @@ public class WallistModel{
 		return true;
 	}
 	
+	/*
+	 * reverse the state to next state
+	 * @return a boolean to indicate whether redo is successful
+	 */
 	private boolean runningRedo() throws EmptyStackException {
 		if(stateFuture.isEmpty()){
 			throw new EmptyStackException();
@@ -273,6 +283,8 @@ public class WallistModel{
 		return true;
 	}
 	
+	
+	//accessor for testing
 	public Storage getStorage(){
 		return storage;
 	}

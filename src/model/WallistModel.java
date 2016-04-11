@@ -26,7 +26,7 @@ public class WallistModel{
 	//       Attributes
 	//============================
 	
-	public Storage storage;
+	private Storage storage;
 	private Parser parser;
 	private State state;
 	private AddTask addTask;
@@ -79,8 +79,16 @@ public class WallistModel{
 			return false;
 		} else {
 			state.resetErrorFrequency();
-			return executeInput();
+			boolean isExecutionSuccessful = executeInput();
+			if(isExecutionSuccessful){
+				displaySuccessfulMessage();
+			}
+			return isExecutionSuccessful;
 		}
+	}
+
+	private void displaySuccessfulMessage() {
+		state.setDisplayMessage(Constant.MESSAGE_SUCCESS);
 	}
 	
 	//===========================
@@ -259,6 +267,32 @@ public class WallistModel{
 		stateFuture.pop();
 		return true;
 	}
+	
+	public Storage getStorage(){
+		return storage;
+	}
+	public Parser getParser(){
+		return parser;
+	}
+	public AddTask AddTask(){
+		return addTask;
+	}
+	public DeleteTask getDeleteTask(){
+		return deleteTask;
+	}
+//	private Parser parser;
+//	private State state;
+//	private AddTask addTask;
+//	private DeleteTask deleteTask;
+//	private TickTask tickTask;
+//	private UntickTask untickTask;
+//	private UpdateTask updateTask;
+//	private ClearTask clearTask;
+//	private Help help;
+//	private Config config;
+//	private SearchTasks searchTasks;
+//	private ChangeViewMode changeViewMode;
+//	private ViewTaskDetail viewTaskDetail; 
 
 }
 

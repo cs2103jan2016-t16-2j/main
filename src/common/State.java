@@ -62,7 +62,7 @@ public class State {
 		this.currentDirectory_ = directory;
 	}
 	
-	public String getCurrentDirectory(String directory) {
+	public String getCurrentDirectory() {
 		return this.currentDirectory_ ;
 	}
 	

@@ -242,6 +242,7 @@ public class WallistModel{
 			default:
 				break;
 		}
+		storage.executeSaveConfig();
 		storage.executeSaveState();
 		return isRunningSuccessful;
 	}

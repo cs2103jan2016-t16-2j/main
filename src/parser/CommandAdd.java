@@ -57,18 +57,19 @@ public class CommandAdd implements Command{
 	 * The following methods update the state
 	 */
 	private String getDetail() {
-		String wordList[] = content_.split("detail:");
+		String wordList[] = splitDetail(content_);
 		if(hasContentSplit(wordList)){
 			state_.setIsDetailChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
-			String wordListVenue[] = wordList[wordList.length-1].split("at:");
+			// Check if the content has venue specified
+			String wordListVenue[] = getLastWord(wordList).split("at:");
 			if(hasContentSplit(wordListVenue)){
 				state_.setIsDetailChanged(true);
-				return wordList[wordList.length-1].trim();
+				return getLastWord(wordList);
 			}else{
 				state_.setIsDetailChanged(true);
-				return wordListVenue[0].trim();
+				return getFirstWord(wordListVenue);
 			}
 		}
 	}
@@ -79,13 +80,13 @@ public class CommandAdd implements Command{
 			state_.setIsVenueChanged(false);
 			return Constant.VALUE_DEFAULT_EMPTY;
 		}else{
-			String wordListDetails[] = wordList[wordList.length-1].split("detail:");
+			String wordListDetails[] = splitDetail(getLastWord(wordList));
 			if(hasContentSplit(wordListDetails)){
 				state_.setIsVenueChanged(true);
-				return wordList[wordList.length-1].trim();
+				return getLastWord(wordList);
 			}else{
 				state_.setIsVenueChanged(true);
-				return wordListDetails[0].trim();
+				return getFirstWord(wordListDetails);
 			}
 		}
 	}
@@ -97,7 +98,7 @@ public class CommandAdd implements Command{
 			state_.setIsStartDateChanged(false);
 			return null;
 		}
-		String endDate = wordList[wordList.length-1].trim();
+		String endDate = getLastWord(wordList);
 		String wordListEnd[] = endDate.split("to:");
 		
 		if(hasContentSplit(wordListEnd)){
@@ -106,7 +107,7 @@ public class CommandAdd implements Command{
 			state_.setIsValid(false);
 			return null;
 		}
-		Date date = TimeParser.stringToDate(wordListEnd[0].trim());
+		Date date = TimeParser.stringToDate(getFirstWord(wordListEnd));
 		if(date != null){
 			state_.setIsStartDateChanged(true);
 			return date;
@@ -127,7 +128,7 @@ public class CommandAdd implements Command{
 				state_.setIsStartDateChanged(false);
 				return null;
 			}
-			Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim());
+			Date date = TimeParser.stringToDate(getLastWord(wordList));
 			if(date != null){
 				state_.setIsEndDateChanged(true);
 				if(date.before(state_.getStartDate())){
@@ -151,7 +152,7 @@ public class CommandAdd implements Command{
 			state_.setIsEndDateChanged(false);
 			return null;
 		}
-		Date date = TimeParser.stringToDate(wordList[wordList.length-1].trim());
+		Date date = TimeParser.stringToDate(getLastWord(wordList));
 		if(date != null){
 			state_.setIsEndDateChanged(true);
 			return date;
@@ -172,65 +173,65 @@ public class CommandAdd implements Command{
 	private String getContent() {
 		if(state_.getIsStartDateChanged()){
 			String wordList[] = content_.split("from:");
-			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				state_.setIsValid(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContentChanged(true);
-			return wordList[0].trim();
+			return getFirstWord(wordList);
 		}else if(state_.getIsEndDateChanged()){
 			String wordList[] = content_.split("on:");
-			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				state_.setIsValid(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			state_.setIsContentChanged(true);
-			return wordList[0].trim();
+			return getFirstWord(wordList);
 		}else if(state_.getIsVenueChanged()){
 			String wordList[] = content_.split("at:");
-			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
+			if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				state_.setIsValid(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			if(state_.getIsDetailChanged()){
-				String wordListDetail[] = wordList[0].split("detail:");
-				if(hasContentSplit(wordList) || wordList[0].isEmpty()){
+				String wordListDetail[] = splitDetail(getFirstWord(wordList));
+				if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 					state_.setIsContentChanged(true);
-					return wordList[0].trim();
+					return getFirstWord(wordList);
 				}else{
 					state_.setIsContentChanged(true);
-					return wordListDetail[0].trim();
+					return getFirstWord(wordListDetail);
 				}
 			}else{
 				state_.setIsContentChanged(true);
-				return wordList[0].trim();
+				return getFirstWord(wordList);
 			}
 		}else if(state_.getIsDetailChanged()){
-			String wordList[] = content_.split("detail:");
-			if(hasContentSplit(wordList) || wordList[0].isEmpty()){
+			String wordList[] = splitDetail(content_);
+			if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 				state_.setDisplayMessage(Constant.VALUE_ERROR_NO_INPUT);
 				state_.setIsContentChanged(false);
 				state_.setIsValid(false);
 				return Constant.VALUE_DEFAULT_EMPTY;
 			}
 			if(state_.getIsVenueChanged()){
-				String wordListVenue[] = wordList[0].split("at:");
-				if(hasContentSplit(wordList) || wordList[0].isEmpty()){
+				String wordListVenue[] = getFirstWord(wordList).split("at:");
+				if(hasContentSplit(wordList) || getFirstWord(wordList).isEmpty()){
 					state_.setIsContentChanged(true);
-					return wordList[0].trim();
+					return getFirstWord(wordList);
 				}else{
 					state_.setIsContentChanged(true);
-					return wordListVenue[0].trim();
+					return getFirstWord(wordListVenue);
 				}
 			}else{
 				state_.setIsContentChanged(true);
-				return wordList[0].trim();
+				return getFirstWord(wordList);
 			}
 		}else{
 			state_.setIsContentChanged(true);
@@ -267,5 +268,21 @@ public class CommandAdd implements Command{
 	private boolean hasContentSplit(String[] wordList) {
 		return wordList.length <= 1;
 	}
+	
+	/**
+	 * Split the content using the detail keyword
+	 * @param content
+	 * @return A list of split content
+	 */
+	private String[] splitDetail(String content) {
+		return content.split("detail:");
+	}
+	
+	private String getFirstWord(String[] wordListVenue) {
+		return wordListVenue[0].trim();
+	}
 
+	private String getLastWord(String[] wordList) {
+		return wordList[wordList.length-1].trim();
+	}
 }

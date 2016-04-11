@@ -56,10 +56,11 @@ public class Parser {
 	 * Post-Cond: Respective command function will process the input
 	 */
 	public boolean processInput(){
+
+		state_.setContent(state_.getContent().trim());
 		errorChecker_.checkError();
 		if(state_.getIsValid()){
 			CommandType command = state_.getCommandType();
-			System.out.println(command.toString());
 			switch(command){
 			case ADD:
 				add_.processInput();

@@ -79,8 +79,9 @@ public class Constant {
 		public static final String MESSAGE_UPDATE_IN_WRONG_MODE = "Oops, you cannot update here";		
 		public static final String MESSAGE_UNTICK_IN_WRONG_MODE = "Oops, you cannot untick here";		
 		public static final String MESSAGE_SYSTEM_FAILED_TO_TICK = "Oops, there is an error when ticking the task";	
+		public static final String MESSAGE_CANNOT_VIEW_SEARCH = "Oops, you can not view search mode";
 		public static final String MESSAGE_DUMMY = "Oops, something wrong has occurred";
-		
+	
 		//List of headers
 		public static final String HEADER_FLOATING = "Floating";
 		public static final String HEADER_DEADLINE = "Scheduled";

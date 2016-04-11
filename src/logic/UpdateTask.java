@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import common.Constant;
 import common.State;
 import common.Task;
+import common.TaskType;
 import common.ViewMode;
 
 public class UpdateTask implements Operation {
@@ -181,8 +182,16 @@ public class UpdateTask implements Operation {
 		
 		if(state.getIsEndDateChanged()){
 			task.setEndDate(state.getEndDate());
+			task.setTaskType(TaskType.DEADLINE);
 		}
 		
+		if(task.getTaskType() == TaskType.DEADLINE){
+			state.setViewMode(ViewMode.DEADLINE);
+		}
+		
+		if(task.getTaskType() == TaskType.FLOATING){
+			state.setViewMode(ViewMode.FLOATING);
+		}
 	}
 	
 	/**

@@ -13,10 +13,21 @@ public class LogicUtils {
 		this.state = state;
 	}
 	
+	
+	/**
+	 * change the isDetailDisplayed attribute of every task to false 
+	 * to collapse all tasks
+	 */
 	public void collapseAllTasks() {
 		ArrayList<Task> allTasks = state.getAllTasks();
 		for(int i = 0; i < allTasks.size(); i++){
 			Task another = allTasks.get(i);
+			another.setIsDetailDisplayed(false);
+		}
+		
+		ArrayList<Task> finishedTasks = state.getFinishedTasks();
+		for(int i = 0; i < finishedTasks.size(); i++){
+			Task another = finishedTasks.get(i);
 			another.setIsDetailDisplayed(false);
 		}
 	}

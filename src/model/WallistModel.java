@@ -276,29 +276,54 @@ public class WallistModel{
 	public Storage getStorage(){
 		return storage;
 	}
+
 	public Parser getParser(){
 		return parser;
 	}
-	public AddTask AddTask(){
+	
+	public AddTask getAddTask(){
 		return addTask;
 	}
+	
 	public DeleteTask getDeleteTask(){
 		return deleteTask;
 	}
-//	private Parser parser;
-//	private State state;
-//	private AddTask addTask;
-//	private DeleteTask deleteTask;
-//	private TickTask tickTask;
-//	private UntickTask untickTask;
-//	private UpdateTask updateTask;
-//	private ClearTask clearTask;
-//	private Help help;
-//	private Config config;
-//	private SearchTasks searchTasks;
-//	private ChangeViewMode changeViewMode;
-//	private ViewTaskDetail viewTaskDetail; 
+	
+	public TickTask getTickTask(){
+		return tickTask;
+	}
+	
+	public UntickTask getUntickTask(){
+		return untickTask;
+	}
+	
+	public UpdateTask getUpdateTask(){
+		return updateTask;
+	}
+	
+	public ClearTask getClearTask(){
+		return clearTask;
+	}
 
+	public Help getHelp(){
+		return help;
+	}
+	
+	public Config getConfig(){
+		return config;
+	}
+	
+	public SearchTasks getSearchTasks(){
+		return searchTasks;
+	}
+	
+	public ChangeViewMode getChangeViewMode(){
+		return changeViewMode;
+	}
+	
+	public ViewTaskDetail getViewTaskDetail(){
+		return viewTaskDetail;
+	}
 }
 
 

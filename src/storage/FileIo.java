@@ -22,9 +22,9 @@ public class FileIo {
 	//============================
 	
 	// basic attributes
-	protected File dataFile;
+	private File dataFile;
 	private File archiveFile;
-	protected Gson gson = new Gson();
+	private Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	private State state;
 	private boolean isConnectedToDatafile;
@@ -173,7 +173,7 @@ public class FileIo {
 	 * This method will write the state into the text file
 	 * @boolean boolean value of whether this is successful
 	 */
-	protected boolean writeTasksToFile(BufferedWriter writer) {
+	private boolean writeTasksToFile(BufferedWriter writer) {
 		ArrayList<Task> allTasks = this.state.getAllTasks();
 		try {
 			for (Task task: allTasks) {

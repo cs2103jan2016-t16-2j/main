@@ -15,13 +15,13 @@ import common.TaskType;
 import common.ViewMode;
 import model.WallistModel;
 
-public class SearchTasksTest {
+public class TickTaskTest {
 
 	@Test
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		SearchTasks searchTask = wm.getSearchTasks();
+		TickTask ticktask = wm.getTickTask();
 		AddTask addTask = wm.getAddTask();
 		clearState(state);
 		
@@ -49,17 +49,13 @@ public class SearchTasksTest {
 		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
 		
 		
-		assertEquals("A", deadlineTasks.get(1).getContent());
-
-		ArrayList<String> keywords = new ArrayList<String>();
-		keywords.add("unique");
-		state.setSearchKey(keywords);
-		searchTask.process();
-		assertEquals(ViewMode.SEARCH, state.getViewMode());
-		assertEquals(1, state.getSearchResultTasks().size());
-		assertEquals("unique", state.getSearchResultTasks().get(0).getContent());
-		assertEquals(endTestThird, state.getSearchResultTasks().get(0).getEndDate());
-
+		state.setViewMode(ViewMode.DEADLINE);
+		state.setPositionIndex(1);
+		boolean isTickSuccessful = ticktask.process();
+		assertEquals(ViewMode.FINISHED, state.getViewMode());
+		
+		assertEquals(true, isTickSuccessful);
+		
 	}
 	
 

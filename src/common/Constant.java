@@ -49,7 +49,7 @@ public class Constant {
 		public static final String HELP_VIEW = "5. To view any task details, input \"view + task index\"\n" +
 		                                       "To switch tab, input \"view + tab name\", for search, setting and help, simply enter the tab name";
 		public static final String HELP_EXIT = "6. To exit Wallist, input \"exit\" or Esc key";
-		public static final String HELP_END = "Thank you for supporting �Wallist";
+		public static final String HELP_END = "Thank you for supporting Wallist";
 		
 		//List of displayed messages
 		public static final String MESSAGE_SUCCESS = "successfully updated";

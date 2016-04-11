@@ -1,6 +1,8 @@
+//@@author A0130717M
 package testing;
 import common.*;
 import model.WallistModel;
+import storage.Storage;
 
 import static org.junit.Assert.*;
 
@@ -11,14 +13,74 @@ import org.junit.Test;
 public class WallistModelTest {
 
 	@Test
-	public void test() {
+	public void test(){
 		WallistModel wm = new WallistModel();
+		wm.storage = new Storage(new State());
 		State state = wm.getState();
-		wm.processInputString("delete 3");
-		System.out.println(state.getCommandType());		
-		System.out.println(state.getViewMode());
-		System.out.println(state.getPositionIndex());
+		Task currentTask;
+
+		//test initialization
+		assertEquals(Theme.AUTUMN, state.getTheme());
+		assertEquals(Font.SEGOE, state.getFont());
+		assertEquals(ViewMode.START, state.getViewMode());
+		assertEquals(CommandType.UNDEFINED, state.getCommandType());
+		assertEquals(true, state.isCurrentTasksEmpty());
+		assertEquals(Constant.EMPTY_TODAY, state.getEmptyMessage());
 		
+		//test help
+		wm.processInputString("Help");
+
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.HELP, state.getViewMode());
+		assertEquals(Constant.HELP_INTRO, state.getHelpManual()[0]);
+		assertEquals(Constant.HELP_ADD, state.getHelpManual()[1]);
+		assertEquals(Constant.HELP_DELETE, state.getHelpManual()[2]);
+		assertEquals(Constant.HELP_TICK, state.getHelpManual()[3]);
+		assertEquals(Constant.HELP_UPDATE, state.getHelpManual()[4]);
+		assertEquals(Constant.HELP_VIEW, state.getHelpManual()[5]);
+		assertEquals(Constant.HELP_EXIT, state.getHelpManual()[6]);
+		assertEquals(Constant.HELP_END, state.getHelpManual()[7]);
+		
+		//test help
+		wm.processInputString("View Setting");
+
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.CONFIG, state.getViewMode());
+		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[0]);
+
+		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[1]);
+
+		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[2]);
+
+		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[3]);
+		
+		//test add deadline
+		wm.processInputString("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
+
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		currentTask = state.getCurrentTasks().get(0);
+		assertEquals(TaskType.DEADLINE, currentTask.getTaskType());
+		assertEquals(ViewMode.DEADLINE, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
+		assertEquals("eat lunch\n\nVenue: TOA PAYOH\nDetail: with boyfriend", currentTask.getDisplayContent());
+		assertEquals(TimeParser.stringToDate("10/10/10 10:10"), state.getStartDate());
+		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
+
+		//test add floating
+		wm.processInputString("Add meeting");
+
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		currentTask = state.getCurrentTasks().get(0);
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
+		assertEquals("meeting", state.getCurrentTasks().get(0).getDisplayContent());
+		
+
 		//wm.storage.executeChangeDirectory("testing.txt");
 //		wm.process("clear");
 //		wm.process("add hahahahah");

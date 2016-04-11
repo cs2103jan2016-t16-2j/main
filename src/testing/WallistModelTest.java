@@ -70,24 +70,24 @@ public class WallistModelTest {
 	}
 	@Test
 	public void testAddScheduled(){	
-		wm.processInputString("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		wm.processInputString("Add camp from: 3/3/16 00:00 to: 4/3/16 22:00 at: Malaysia detail: with Max");
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(4, state.getCurrentTasks().size());
 		currentTask = state.getCurrentTasks().get(0);
 		assertEquals(TaskType.DEADLINE, currentTask.getTaskType());
 		assertEquals(ViewMode.DEADLINE, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
-		assertEquals("eat lunch\n\nVenue: TOA PAYOH\nDetail: with boyfriend", currentTask.getDisplayContent());
-		assertEquals(TimeParser.stringToDate("10/10/10 10:10"), state.getStartDate());
-		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
+		assertEquals("camp\n\nVenue: Malaysia\nDetail: with Max", currentTask.getDisplayContent());
+		assertEquals(TimeParser.stringToDate("3/3/16 00:00"), state.getStartDate());
+		assertEquals(TimeParser.stringToDate("4/3/16 22:00"), state.getEndDate());
 	}
 	@Test
 	public void testAddFloating(){	
 		wm.processInputString("Add meeting");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(4, state.getCurrentTasks().size());
 		currentTask = state.getCurrentTasks().get(0);
 		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());

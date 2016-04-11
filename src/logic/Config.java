@@ -3,6 +3,7 @@ package logic;
 import common.Font;
 import common.State;
 import common.Theme;
+import storage.Storage;
 import common.ViewMode;
 
 public class Config implements Operation {
@@ -10,14 +11,16 @@ public class Config implements Operation {
 	//       Attributes
 	//============================
 	private State state;
+	private Storage storage;
 
 	
 	//====================================
 	//       Constructor and Initiliser
 	//====================================
 	
-	public Config(State state) {
+	public Config(State state, Storage storage) {
 		this.state = state;
+		this.storage = storage;
 	}
 
 	/**
@@ -46,6 +49,7 @@ public class Config implements Operation {
 		
 		if(newDir != null){
 			state.setNewDirectory(newDir);
+			storage.executeChangeDirectory();
 		}
 		
 		return true;

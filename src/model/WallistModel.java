@@ -1,4 +1,3 @@
-//@@author A0107375E
 package model;
 
 import java.util.EmptyStackException;

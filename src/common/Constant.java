@@ -42,7 +42,7 @@ public class Constant {
 		public static final String HELP_VIEW = "5. To view any task details, input \"view + task index\"\n" +
 		                                       "To switch tab, input \"view + tab name\", for search, setting and help, simply enter the tab name";
 		public static final String HELP_EXIT = "6. To exit Wallist, input \"exit\" or Esc key";
-		public static final String HELP_END = "Thank you for supporting ©Wallist";
+		public static final String HELP_END = "Thank you for supporting ï¿½Wallist";
 		
 		//List of displayed messages
 		public static final String MESSAGE_SUCCESS = "successfully updated";
@@ -52,6 +52,7 @@ public class Constant {
 		public static final String MESSAGE_CLEAR_IN_WRONG_MODE = "Oops, you cannot clear here";	
 		public static final String MESSAGE_TICK_IN_WRONG_MODE = "Oops, you cannot tick here";	
 		public static final String MESSAGE_UPDATE_IN_WRONG_MODE = "Oops, you cannot update here";		
+		public static final String MESSAGE_UNTICK_IN_WRONG_MODE = "Oops, you cannot untick here";		
 		public static final String MESSAGE_SYSTEM_FAILED_TO_TICK = "Oops, there is an error when ticking the task";	
 		public static final String MESSAGE_DUMMY = "Oops, something wrong has occurred";
 		

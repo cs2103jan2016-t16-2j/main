@@ -1,6 +1,6 @@
 //@@author A0130717M
 .root {
-    -fx-background-image: url("Warm.jpg");
+    -fx-background-image: url("/resources/warm.jpg");
 }
 
 #taskPane{
@@ -51,7 +51,7 @@
 }
 
 #consolas{
-    -fx-text-fill: rgba(260, 26, 55, 1);
+    -fx-text-fill: rgba(60, 26, 55, 1);
     -fx-background-color: rgba(60, 26, 55, 0.3);
 }
 

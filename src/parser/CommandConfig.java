@@ -12,13 +12,30 @@ import common.Theme;
 import common.ViewMode;
 
 public class CommandConfig implements Command{
+	//============================
+	//       Attributes
+	//============================
 	private State state_;
 	private String content_;
 	
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
+	/**
+	 * Initialize the command
+	 * @param state
+	 */
 	public CommandConfig(State state){
 		state_ = state;
 		content_ = Constant.VALUE_DEFAULT_EMPTY;
 	}
+	
+	//====================================
+	//       Public Functions
+	//====================================
+	/**
+	 * Process the input and update the state accordingly
+	 */
 	@Override
 	public void processInput() {
 		content_ = getContentWithoutCommand(state_);
@@ -31,11 +48,66 @@ public class CommandConfig implements Command{
 		state_.setTaskType(getTaskType());
 		state_.setSearchKey(getSearchKey());
 		state_.setNewViewMode(getNewViewMode());
-		state_.setFont(getFont());
-		state_.setTheme(getTheme());
+		state_.setNewFont(getFont());
+		state_.setNewTheme(getTheme());
 		
 	}
 
+	//====================================
+	//       Helper Functions
+	//====================================
+	/**
+	 * The following methods update the state
+	 */
+	private String getDetail() {
+		state_.setIsDetailChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+
+	 
+	private String getVenue() {
+		state_.setIsVenueChanged(false);
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+
+	 
+	private Date getStartDate() {
+		state_.setIsStartDateChanged(false);
+		return null;
+	}
+
+	 
+	private Date getEndDate() {
+		state_.setIsEndDateChanged(false);
+		return null;
+	}
+
+	 
+	private int getPositionIndex() {
+		return Constant.VALUE_DEFAULT_POSITION_INDEX;
+	}
+
+	 
+	private String getContent() {
+		state_.setIsContentChanged(true);
+		return Constant.VALUE_DEFAULT_EMPTY;
+	}
+
+	 
+	private TaskType getTaskType() {
+		return TaskType.UNDEFINED;
+	}
+
+	 
+	private ArrayList<String> getSearchKey() {
+		return new ArrayList<String>();
+	}
+	
+	 
+	private ViewMode getNewViewMode() {
+		return ViewMode.CONFIG;
+	}
+	
 	private Theme getTheme() {
 		if(content_.equalsIgnoreCase("autumn")){
 			return Theme.AUTUMN;
@@ -50,7 +122,7 @@ public class CommandConfig implements Command{
 		}else if(content_.equalsIgnoreCase("warm")){
 			return Theme.WARM;
 		}else{
-			return Theme.AUTUMN;
+			return state_.getTheme();
 		}
 	}
 	private Font getFont() {
@@ -59,58 +131,8 @@ public class CommandConfig implements Command{
 		}else if(content_.equalsIgnoreCase("segoe")){
 			return Font.SEGOE;
 		}else{
-			return Font.SEGOE;
+			return state_.getFont();
 		}
-	}
-	
-	@Override
-	public String getDetail() {
-		state_.setIsDetailChanged(false);
-		return Constant.VALUE_DEFAULT_EMPTY;
-	}
-
-	@Override
-	public String getVenue() {
-		state_.setIsVenueChanged(false);
-		return Constant.VALUE_DEFAULT_EMPTY;
-	}
-
-	@Override
-	public Date getStartDate() {
-		state_.setIsStartDateChanged(false);
-		return null;
-	}
-
-	@Override
-	public Date getEndDate() {
-		state_.setIsEndDateChanged(false);
-		return null;
-	}
-
-	@Override
-	public int getPositionIndex() {
-		return Constant.VALUE_DEFAULT_POSITION_INDEX;
-	}
-
-	@Override
-	public String getContent() {
-		state_.setIsContentChanged(true);
-		return Constant.VALUE_DEFAULT_EMPTY;
-	}
-
-	@Override
-	public TaskType getTaskType() {
-		return TaskType.UNDEFINED;
-	}
-
-	@Override
-	public ArrayList<String> getSearchKey() {
-		return new ArrayList<String>();
-	}
-	
-	@Override
-	public ViewMode getNewViewMode() {
-		return ViewMode.UNDEFINED;
 	}
 
 }

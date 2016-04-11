@@ -13,3 +13,7 @@
     -fx-font-size: 16pt;
     -fx-padding: 5 10 5 10;
 }
+
+#titleText{
+    -fx-font-size: 14pt;
+}

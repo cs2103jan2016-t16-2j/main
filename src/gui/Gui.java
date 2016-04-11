@@ -60,6 +60,7 @@ public class Gui extends Application{
 	private Label configHeader;
 	private Label helpHeader;
 	private Label finishedHeader;
+	private Text notificationText;
 	
 	//Wallist model
 	private WallistModel wallistModel;
@@ -76,11 +77,13 @@ public class Gui extends Application{
 	
 	//Constants
 	private final String TITLE = "    %1$s's Wallist";
+    private final String NOTIFICATION = "You have %1$s tasks, %2$s due today, %3$s overdue    ";
 	private final String PROMPT = "Input your command here";
 	private final String EMPTY_MESSAGE = "%1$s\n\n\n\n"; 
 	private final String THEME_SHEET = "/resources/%1$s.css";
 	private final String FONT_SHEET = "/resources/%1$s.css";
 	private final String BASIC_SHEET = "/resources/basic.css";
+	private final String TITLE_IMAGE = "/resources/title.png";
 	
 	private final int COMPONENT_GAP_H = 20;
 	private final int COMPONENT_GAP_V = 20;
@@ -113,10 +116,11 @@ public class Gui extends Application{
 		setupConfig();
 		setupHelp();
     	refreshTaskPane();
+		refreshNotification();
 		inputProcess();
 	}
 
-	private void initVariables() {
+	private void initVariables(){
 		wallistModel = new WallistModel();
 		taskStackPane = new StackPane();
 		title = new Rectangle();
@@ -133,7 +137,7 @@ public class Gui extends Application{
 		timeHeader = new Label("   Schedule ");
 	}
 
-	//handle keyboard events including scrolling, entering commands and exit shortcut
+	//handle keyboard events including scrolling and entering commands
 	private void inputProcess() {
 		inputBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 		    @Override
@@ -146,9 +150,7 @@ public class Gui extends Application{
 			        taskPane.setVvalue(vValue - SCROLL_PERCENTAGE);
 			    } else if (keyEvent.getCode() == KeyCode.ENTER)  {
 		        	refresh();
-		        } else if (keyEvent.getCode() == KeyCode.ESCAPE) {
-					window.close();
-				}
+		        }
 			}
 		});
 	}
@@ -164,6 +166,15 @@ public class Gui extends Application{
 			displayMessage();
 		}
 		inputBox.clear();
+		refreshNotification();
+	}
+
+	//display notifications in title bar
+	private void refreshNotification() {
+		int allTasks = state.getAllTasksSize();
+		int[] dueTasks = state.getDueTasksSize();
+		String notification = String.format(NOTIFICATION, allTasks, dueTasks[0], dueTasks[1]);
+		notificationText.setText(notification);
 	}
 
 	//display correct content in mainPane
@@ -173,6 +184,7 @@ public class Gui extends Application{
 			window.close();
 		} else if (state.getViewMode().equals(ViewMode.CONFIG)){
 			displayConfig();
+			loadStyleSheet();
 		} else if (state.getViewMode().equals(ViewMode.HELP)){
 			displayHelp();
 		} else if (state.isCurrentTasksEmpty()){
@@ -238,6 +250,14 @@ public class Gui extends Application{
 		Column contentCol = loadContentCol(task);
 		Column timeCol = loadTimeCol(task);
 		loadTaskRow(indexCol, contentCol, timeCol);
+	}
+	
+	//get styles and font when changes
+	private void loadStyleSheet() {
+		String theme = String.format(THEME_SHEET, state.getThemeInString());
+		String font = String.format(FONT_SHEET, state.getFontInString());
+		scene.getStylesheets().clear();
+		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
 	}
 
 	//load header tab according to current view mode
@@ -351,6 +371,18 @@ public class Gui extends Application{
 		}
 	}
 
+	//enable Esc to exit
+	private void loadExit(){
+		layout.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		    @Override
+		    public void handle(KeyEvent keyEvent) {
+		        if (keyEvent.getCode() == KeyCode.ESCAPE) {
+					window.close();
+				}
+			}
+		});
+	}
+	
 	//enable click to select tab
 	private void loadClick() {
 		allHeader.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -508,18 +540,29 @@ public class Gui extends Application{
 		sectionHeader.getChildren().addAll(todayHeader, allHeader, scheduledHeader, floatingHeader, finishedHeader, searchHeader, configHeader, helpHeader);
 	}
 	
-	//initialize titlePane layout nad style
-	private void setupTitleLayout() {
+	//initialize notificationPane layout and style
+	private void setupNotificationLayout() {
+		StackPane notificationPane = new StackPane();
+		notificationPane.setAlignment(Pos.CENTER_RIGHT);
+		notificationText = new Text();
+		notificationText.setId("titleText");
+		StackPane titlePane = setupTitleLayout();
+		notificationPane.getChildren().addAll(titlePane, notificationText);
+        layout.getChildren().add(notificationPane);
+	}
+
+	//initialize titlePane layout and style
+	private StackPane setupTitleLayout() {
 		StackPane titlePane = new StackPane();
 		titlePane.setAlignment(Pos.CENTER_LEFT);
-		String userName = String.format(TITLE, System.getProperty("user.name"));
+		String userName = String.format(TITLE, System.getProperty("user.name"));;
         Text titleText = new Text(userName);
         titleText.setId("titleText");
 		title.setWidth(STAGE_WIDTH);
 		title.setHeight(TITLE_HEIGHT);
 		title.setId("title");
 		titlePane.getChildren().addAll(title, titleText);
-        layout.getChildren().add(titlePane);
+		return titlePane;
 	}
 
 	//initialize stage size, properties and style
@@ -527,17 +570,14 @@ public class Gui extends Application{
 		window = primaryStage;
 		window.initStyle(StageStyle.UNDECORATED);
         window.setResizable(true);
-        window.getIcons().add(new Image("/title.png"));
+        window.getIcons().add(new Image(TITLE_IMAGE));
     	setupLayout();
 		scene = new Scene(layout, STAGE_WIDTH, STAGE_HEIGHT);
-		
-		String theme = String.format(THEME_SHEET, state.getThemeInString());
-		String font = String.format(FONT_SHEET, state.getFontInString());
-
-		scene.getStylesheets().addAll(theme, font, BASIC_SHEET);
+		loadStyleSheet();
 		window.setScene(scene);
 		window.show();
 		loadDrag();
+		loadExit();
 	}
 	
 	//initialize layout parameters, positions and spacing
@@ -549,7 +589,7 @@ public class Gui extends Application{
 		layout.setPadding(COMPONENT_PADDING);
 		layout.setSpacing(COMPONENT_GAP_V);
 		layout.setAlignment(Pos.CENTER);
-		setupTitleLayout();
+		setupNotificationLayout();
 		setupHeaderLayout();
 		setupTableHeaderLayout();
         taskPane = setupMainLayout();
@@ -597,5 +637,6 @@ public class Gui extends Application{
 		end.setId("zoom");
 		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
+	
 	
 }

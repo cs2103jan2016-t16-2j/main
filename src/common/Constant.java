@@ -5,9 +5,16 @@ public class Constant {
 		
 		// List of all available error values for the parsedCommand
 		public static final String VALUE_ERROR_NO_ERROR = "Success";
-		public static final String VALUE_ERROR_COMMAND_NOT_FOUND = "Invalid command";
+		public static final String VALUE_ERROR_COMMAND_NOT_FOUND = "Invalid command. Check your command again?";
 		public static final String VALUE_ERROR_NO_INPUT = "Empty input";
 		public static final String VALUE_ERROR_INVALID_ARGUMENT = "Invalid argument";
+		public static final String VALUE_ERROR_ADD_EMPTY = "What do you want to add?";
+		public static final String VALUE_ERROR_SEARCH_EMPTY = "What do you want to search?";
+		public static final String VALUE_ERROR_UPDATE_WRONG_ARGUMENT = "Your input seems wrong. You may type Help for input format";
+		public static final String VALUE_ERROR_INVALID_VIEW_MODE = "We do not have that view mode. Try again?";
+		public static final String VALUE_ERROR_INVALID_CONFIG = "We do not have that font or themes. Check for any typos?";
+		public static final String VALUE_ERROR_ARGUMENT_NOT_EMPTY = "This command has no argument, remember?";
+		public static final String VALUE_ERROR_ARGUMENT_NOT_NUMBER = "Do you put the index correctly?";
 		public static final String VALUE_ERROR_DATE_NOT_PARSED = "Wrong date format?";
 		public static final String VALUE_ERROR_DATE_ERROR = "Oops, starting date can't be later than end date";
 		public static final String VALUE_DEFAULT_EMPTY = "";
@@ -18,7 +25,7 @@ public class Constant {
 		public static final boolean VALUE_DEFAULT_BOOLEAN_FALSE = false;
 		public static final ViewMode VALUE_DEFAULT_VIEW_MODE = ViewMode.START;
 		
-		//Cofiguration displaying message
+		//Setting displaying message
 		public static final String CONFIG_INTRO = "Welcome to Wallist Setting";
 		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
 												"	  Current Directory: %s\n" + 
@@ -29,7 +36,7 @@ public class Constant {
 		
 		//@@author A0130717M
 
-		//Configuration displaying message
+		//Help manual displaying message
 		public static final String HELP_INTRO = "Welcome to Wallist Help Manual";
 		public static final String HELP_ADD = "1. To add a task, input \"add + task name + (on: deadline) or (from: start to: end)\n" + 
 				                              "(at: location) + (detail: details)\"\n" + 
@@ -72,7 +79,7 @@ public class Constant {
 		public static final String EMPTY_ALL = "Yeah, you have no tasks in your Wallist!";
 		public static final String EMPTY_DEADLINE = "Yeah, you have no scheduled tasks in your Wallist!";
 		public static final String EMPTY_FLOATING = "Yeah, you have no to-do in your Wallist!";
-		public static final String EMPTY_SEARCH = "Sorry, there is no result tasks when %1$s in your Wallist";
+		public static final String EMPTY_SEARCH = "Sorry, there is no such result in your Wallist";
 			
 		//List of themes
 		public static final String STYLE_AUTUMN =  "autumn";

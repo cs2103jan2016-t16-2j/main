@@ -22,7 +22,8 @@ public class FileIo {
 	//============================
 	
 	// basic attributes
-	protected File file;
+	protected File dataFile;
+	private File archiveFile;
 	protected Gson gson = new Gson();
 	private Type typeOfTask = new TypeToken<Task>(){}.getType();
 	private State state;
@@ -54,9 +55,12 @@ public class FileIo {
 	//============================
 	//       Functions
 	//============================
-	protected boolean setFile(File file) {
-		this.file = file;
-		return true;
+	protected void setDataFile(File file) {
+		this.dataFile = file;
+	}
+	
+	protected void setArchiveFile(File file) {
+		this.archiveFile = file;
 	}
 		
 	/**
@@ -71,11 +75,17 @@ public class FileIo {
 		ArrayList<Task> normalTasks = state.getDeadlineTasks();
 		ArrayList<Task> floatingTasks = state.getFloatingTasks();
 		ArrayList<Task> allTasks = state.getAllTasks();
-			
+		ArrayList<Task> finishedTasks = state.getFinishedTasks();
+		
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = new BufferedReader(new FileReader(dataFile));
 			while (reader.ready()) {
 				addTaskToList(normalTasks, floatingTasks, allTasks, reader);
+			}
+			
+			BufferedReader archiveReader = new BufferedReader(new FileReader(archiveFile));
+			while(archiveReader.ready()) {
+				addTaskToFinishedList(finishedTasks, archiveReader);
 			}
 		// sort the tasks by its creation date and pass to logic
 		Collections.sort(normalTasks, TaskComparators.compareByEndDate);
@@ -87,6 +97,11 @@ public class FileIo {
 		}
 		LOGGER.log(Level.INFO, LOAD_STATE_SUCCESS);
 		return true;
+	}
+
+	private void addTaskToFinishedList(ArrayList<Task> finishedTasks, BufferedReader archiveReader) {
+		Task task = readOneTask(archiveReader);
+		finishedTasks.add(task);
 	}
 
 	/**
@@ -122,9 +137,12 @@ public class FileIo {
 		LOGGER.log(Level.INFO, SAVE_STATE);
 		
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writeTasksToFile(writer);
-			writer.close();
+			BufferedWriter dataWriter = new BufferedWriter(new FileWriter(dataFile));
+			BufferedWriter archiveWriter = new BufferedWriter(new FileWriter(archiveFile));
+			writeTasksToFile(dataWriter);
+			writeTasksToArchiveFile(archiveWriter);
+			dataWriter.close();
+			archiveWriter.close();
 		} catch (IOException e) {
 			LOGGER.log(Level.WARNING, SAVE_STATE_FAILURE, e);
 			return false;
@@ -134,6 +152,23 @@ public class FileIo {
 		return true;
 	}
 		
+	private boolean writeTasksToArchiveFile(BufferedWriter archiveWriter) {
+		ArrayList<Task> finishedTasks = this.state.getFinishedTasks();
+		try {
+			for (Task task: finishedTasks) {
+				String taskInJsonFormat = gson.toJson(task);
+				archiveWriter.write(taskInJsonFormat);
+				archiveWriter.newLine();
+			}
+			
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, WRITE_TASK_FAILURE, e);
+			return false;
+		}
+		return true;
+		
+	}
+
 	/**
 	 * This method will write the state into the text file
 	 * @boolean boolean value of whether this is successful
@@ -146,6 +181,7 @@ public class FileIo {
 				writer.write(taskInJsonFormat);
 				writer.newLine();
 			}
+			
 		} catch (Exception e) {
 			LOGGER.log(Level.WARNING, WRITE_TASK_FAILURE, e);
 			return false;

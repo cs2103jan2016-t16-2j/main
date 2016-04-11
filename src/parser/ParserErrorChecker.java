@@ -6,30 +6,49 @@ import common.Constant;
 import common.State;
 
 public class ParserErrorChecker {
+	
+	//============================
+	//       Attributes
+	//============================
 	private State state_;
 	
+	//====================================
+	//       Constructor and Initialiser
+	//====================================
 	public ParserErrorChecker(State state){
 		state_ = state;
 	}
 	
+	//====================================
+	//       Public Functions
+	//====================================
+	/**
+	 * Check whether the content of the input has any error
+	 * @return display message
+	 * @return the validity of the input
+	 */
 	public void checkError(){
 		state_.setDisplayMessage(getErrorMessage());
 		state_.setIsValid(getIsValid());
+		if(state_.getIsValid()){
+			state_.setCommandType(getCommand());
+		}
 	}
 	
-	/*
+	//====================================
+	//       Helper Functions
+	//====================================
+	/**
 	 * Check whether parsed command is valid
-	 * Pre-Cond: None
-	 * Post-Cond: True if command input is valid. False otherwise.
+	 * @return True if the input is valid
 	 */
 	private boolean getIsValid() {
 		return state_.getDisplayMessage().equals(Constant.VALUE_ERROR_NO_ERROR);
 	}
 	
-	/*
+	/**
 	 * Get the error message for a given input. 
-	 * Pre-Cond: None
-	 * Post-Cond: Respective error message 
+	 * @return The respective error message
 	 */
 	private String getErrorMessage() {
 		if(isInputEmpty()){
@@ -38,41 +57,37 @@ public class ParserErrorChecker {
 		if(isCommandInvalid()){
 			return Constant.VALUE_ERROR_COMMAND_NOT_FOUND;
 		}
-		if(isArgumentInvalid()){
-			return Constant.VALUE_ERROR_INVALID_ARGUMENT;
-		}
-		return Constant.VALUE_ERROR_NO_ERROR;
+		return checkInvalidArgument();
 	}
 
-	/*
+	/**
 	 * Check whether the input is an empty string
-	 * Pre-Cond: None
-	 * Post-Cond: true if it is empty. false otherwise
+	 * @return True if it's empty input
 	 */	
 	private boolean isInputEmpty() {
 		return state_.getUserInput().length() == 0;
 	}
 	
-	/*
+	/**
 	 * Check whether the input has a valid command (add, update, tick, delete, clear, exit, etc)
-	 * Pre-Cond: None
-	 * Post-Cond: True if it is valid. False otherwise
+	 * @return True if the command is invalid
 	 */
 	private boolean isCommandInvalid() {
 		if(!isInputEmpty()){
 			CommandType commandType = getCommand();
 			switch(commandType) {
 				case ADD:
-					return false;	
+					return false;
+					
 				case CLEAR:
 					return false;
-				
+					
 				case DELETE:
 					return false;
-				
+					
 				case TICK:
 					return false;	
-				
+					
 				case UPDATE:
 					return false;
 					
@@ -85,8 +100,9 @@ public class ParserErrorChecker {
 				case REDO:
 					return false;
 					
-				case CHANGEMODE: // view all/deadline
-					return false;		
+				case CHANGEMODE:
+					return false;	
+					
 				case SEARCH: 
 					return false;
 				
@@ -98,6 +114,9 @@ public class ParserErrorChecker {
 
 				case UNTICK:
 					return false;
+				
+				case CONFIG:
+					return false;
 					
 				default: 
 					return true;
@@ -106,12 +125,11 @@ public class ParserErrorChecker {
 		return false;
 	}
 	
-	/*
+	/**
 	 * Check whether the input has the correct and valid argument for the given command
-	 * Pre-Cond: None
-	 * Post-Cond: True if it's invalid. False otherwise
+	 * @return respective error message
 	 */
-	private boolean isArgumentInvalid() {
+	private String checkInvalidArgument() {
 		if(!isCommandInvalid()){
 			CommandType commandType = getCommand();
 			String content = getContentWithoutCommand();
@@ -119,111 +137,151 @@ public class ParserErrorChecker {
 				switch(commandType){
 				
 					case ADD:
-						if(content.length() == 0){
-							return true;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_ADD_EMPTY;
 						}
-						return false;
+						return Constant.VALUE_ERROR_NO_ERROR;
 					
 					case CLEAR:
-						if(content.isEmpty()){
-							return false;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return true;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 				
 					case DELETE:
-						if(content.matches("\\d+")){
-							return false;
+						if(isContentNumber(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return true;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 				
 					case EXIT:
-						if(content.length() != 0){
-							return true;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return false;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 					
 					case UNDO:
-						if(content.length() != 0){
-							return true;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return false;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 					
 					case REDO:
-						if(content.length() != 0){
-							return true;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return false;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 						
 					case SEARCH:
-						if(content.length() == 0){
-							return true;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_SEARCH_EMPTY;
 						}
-						return false;
+						return Constant.VALUE_ERROR_NO_ERROR;
 						
 					case TICK:
-						if(content.matches("\\d+")){
-							return false;
+						if(isContentNumber(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return true;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 					
 					case UPDATE:
 						String inputWords[] = content.split(" ");
-						if(!inputWords[0].matches("\\d+") || content.length() == 0 || inputWords.length ==1){
-							return true;
+						if(!isContentNumber(inputWords[0]) || isContentEmpty(content) || hasContentOneArgument(inputWords)){
+							return Constant.VALUE_ERROR_UPDATE_WRONG_ARGUMENT;
 						}
-						return false;
+						return Constant.VALUE_ERROR_NO_ERROR;
 					
 					case DETAIL:
-						if(content.matches("\\d+")){
-							return false;
+						if(isContentNumber(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return true;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 					
 					case CHANGEMODE:
-						if(content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("DEADLINE") 
-								|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("FINISHED") || content.equalsIgnoreCase("CONFIG")){
-							return false;
+						if(isContentValidViewMode(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return true;
+						return Constant.VALUE_ERROR_INVALID_VIEW_MODE;
 					
 					case HELP:
-						if(content.length() != 0){
-							return true;
+						if(isContentEmpty(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return false;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 					
 					case CONFIG:
-						if(content.equalsIgnoreCase("CONSOLAS") || content.equalsIgnoreCase("SEGOE")
-							|| content.equalsIgnoreCase("AUTUMN") || content.equalsIgnoreCase("BOKEH")
-							|| content.equalsIgnoreCase("BRANCH") || content.equalsIgnoreCase("CAT")
-							|| content.equalsIgnoreCase("JAPANESE") || content.equalsIgnoreCase("LEATHER")
-							|| content.equalsIgnoreCase("PARIS") || content.equalsIgnoreCase("RAINDROP")
-							|| content.equalsIgnoreCase("WARM") || content.equalsIgnoreCase("WHEAT")){
-							return false;
+						if(isContentValidFontOrTheme(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}else{
-							return true;
+							return Constant.VALUE_ERROR_INVALID_CONFIG;
 						}
 					case UNTICK:
-						if(content.matches("\\d+")){
-							return false;
+						if(isContentNumber(content)){
+							return Constant.VALUE_ERROR_NO_ERROR;
 						}
-						return true;
+						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 						
 					default: 
-						return false;
+						return Constant.VALUE_ERROR_NO_ERROR;
 				}
 			}
 			catch(IllegalArgumentException e){
-				return true;
+				return Constant.VALUE_ERROR_INVALID_ARGUMENT;
 			}
 		}else{
-			return false;
+			return Constant.VALUE_ERROR_COMMAND_NOT_FOUND;
 		}
+	}
+	
+	/**
+	 * Check if content is a valid theme or font
+	 * @return True if it is
+	 */
+	private boolean isContentValidFontOrTheme(String content) {
+		return content.equalsIgnoreCase("CONSOLAS") || content.equalsIgnoreCase("SEGOE")
+			|| content.equalsIgnoreCase("AUTUMN") || content.equalsIgnoreCase("BOKEH")
+			|| content.equalsIgnoreCase("BRANCH") || content.equalsIgnoreCase("CAT")
+			|| content.equalsIgnoreCase("GREY") || content.equalsIgnoreCase("WARM");
+	}
+	
+	/**
+	 * Check if the content is a valid viewmode
+	 * @return True if it is
+	 */
+	private boolean isContentValidViewMode(String content) {
+		return content.equalsIgnoreCase("FLOATING") || content.equalsIgnoreCase("SCHEDULED") 
+				|| content.equalsIgnoreCase("ALL") || content.equalsIgnoreCase("FINISHED") 
+				|| content.equalsIgnoreCase("SETTING") || content.equalsIgnoreCase("TODAY");
+	}
+	
+	/**
+	 * Check whether the content has the required index and update content
+	 * @return true if it has one argument only
+	 */
+	private boolean hasContentOneArgument(String[] inputWords) {
+		return inputWords.length ==1;
+	}
+	
+	/**
+	 * Check if the content is a number
+	 * @return true if it is
+	 */
+	private boolean isContentNumber(String content) {
+		return content.matches("\\d+");
+	}
+
+	/**
+	 * Check whether the content is empty
+	 * @return true if it is empty
+	 */
+	private boolean isContentEmpty(String content) {
+		return content.isEmpty();
 	}
 
 
-	/*
+	/**
 	 * Get the content of user input without the command word
+	 * @return the user input without the command word
 	 */
 	private String getContentWithoutCommand() {
 		String inputWords[] = state_.getUserInput().split(" ");
@@ -234,10 +292,10 @@ public class ParserErrorChecker {
 		}
 		return sb.toString().trim();
 	}
-	/*
+	/**
 	 * Get the command of an input
-	 * Pre-Cond: Input of a user
-	 * Post-Cond: CommandType
+	 * @param Input of the user
+	 * @return The command type
 	 */
 	private CommandType getCommand() {
 		String inputWords[] = state_.getUserInput().split(" ");
@@ -245,10 +303,10 @@ public class ParserErrorChecker {
 	}
 
 	
-	/*
+	/**
 	 * Get the command type based on input
-	 * Pre-Cond: String of command
-	 * Post-Cond: CommandType of the given input
+	 * @param String of the command
+	 * @return CommandType of the command
 	 */
 	private CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {
@@ -273,15 +331,28 @@ public class ParserErrorChecker {
 			return CommandType.SEARCH;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
-		} else if (commandTypeString.equalsIgnoreCase("view")) {
-			String inputWords[] = state_.getUserInput().split(" ");
-			String argument = inputWords[1];
-			if(argument.matches("\\d+")){
-				return CommandType.DETAIL;
-			}else{
-				return CommandType.CHANGEMODE;
-			}
+		}  else if (commandTypeString.equalsIgnoreCase("help")) {
+			return CommandType.HELP;
+		}  else if (commandTypeString.equalsIgnoreCase("untick")) {
+			return CommandType.UNTICK;
+		} else if (commandTypeString.equalsIgnoreCase("setting")) {
+			return CommandType.CONFIG;
+		}else if (commandTypeString.equalsIgnoreCase("view")) {
+			return getViewCommand();
 		}
 		return CommandType.ERROR;
+	}
+	
+	/**
+	 * Check whether it is a detail command or a changemode command
+	 */
+	private CommandType getViewCommand() {
+		String inputWords[] = state_.getUserInput().split(" ");
+		String argument = inputWords[1];
+		if(isContentNumber(argument)){
+			return CommandType.DETAIL;
+		}else{
+			return CommandType.CHANGEMODE;
+		}
 	}
 }

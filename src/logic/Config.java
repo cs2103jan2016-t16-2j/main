@@ -52,7 +52,6 @@ public class Config implements Operation {
 			
 		}
 		
-		storage.executeSaveConfig();
 		return true;
 	}
 

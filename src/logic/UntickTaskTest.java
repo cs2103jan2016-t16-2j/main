@@ -15,13 +15,15 @@ import common.TaskType;
 import common.ViewMode;
 import model.WallistModel;
 
-public class TickTaskTest {
+public class UntickTaskTest {
+
 
 	@Test
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
 		TickTask ticktask = wm.getTickTask();
+		UntickTask untickTask = wm.getUntickTask();
 		AddTask addTask = wm.getAddTask();
 		clearState(state);
 		
@@ -57,6 +59,16 @@ public class TickTaskTest {
 		assertEquals(1, state.getFinishedTasks().size());
 		assertEquals("C", state.getFinishedTasks().get(0).getContent());
 
+		state.setViewMode(ViewMode.FINISHED);
+		state.setPositionIndex(1);
+		boolean isUntickSuccessful = untickTask.process();
+		assertEquals(true, isUntickSuccessful);
+		assertEquals(ViewMode.DEADLINE, state.getViewMode());
+		assertEquals(0, state.getFinishedTasks().size());
+		assertEquals(endTestFirst, deadlineTasks.get(0).getEndDate());
+		assertEquals(endTestSecond, deadlineTasks.get(1).getEndDate());
+		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
+		
 
 	}
 	
@@ -117,3 +129,4 @@ public class TickTaskTest {
 	}
 
 }
+

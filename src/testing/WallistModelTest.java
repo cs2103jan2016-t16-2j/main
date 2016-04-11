@@ -29,34 +29,53 @@ public class WallistModelTest {
 		
 		//test help
 		wm.processInputString("Help");
-
 		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.HELP, state.getViewMode());
-		assertEquals(Constant.HELP_INTRO, state.getHelpManual()[0]);
-		assertEquals(Constant.HELP_ADD, state.getHelpManual()[1]);
-		assertEquals(Constant.HELP_DELETE, state.getHelpManual()[2]);
-		assertEquals(Constant.HELP_TICK, state.getHelpManual()[3]);
-		assertEquals(Constant.HELP_UPDATE, state.getHelpManual()[4]);
-		assertEquals(Constant.HELP_VIEW, state.getHelpManual()[5]);
-		assertEquals(Constant.HELP_EXIT, state.getHelpManual()[6]);
-		assertEquals(Constant.HELP_END, state.getHelpManual()[7]);
 		
-		//test help
+		//test setting
 		wm.processInputString("View Setting");
-
 		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.CONFIG, state.getViewMode());
-		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[0]);
 
-		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[1]);
-
-		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[2]);
-
-		assertEquals(Constant.HELP_INTRO, state.getConfigInfo()[3]);
+		//test view today
+		wm.processInputString("View Today");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.START, state.getViewMode());
+		
+		//test view all
+		wm.processInputString("View All");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.ALL, state.getViewMode());
+		
+		//test view all
+		wm.processInputString("View All");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.ALL, state.getViewMode());
+		
+		//test view scheduled
+		wm.processInputString("View Scheduled");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.DEADLINE, state.getViewMode());				
+		
+		//test view floating
+		wm.processInputString("View Floating");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());				
+		
+		//test view finished
+		wm.processInputString("View Finished");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.FINISHED, state.getViewMode());				
+		
+		//test view finished
+		wm.processInputString("View Finished");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(ViewMode.FINISHED, state.getViewMode());				
+				
+				
 		
 		//test add deadline
 		wm.processInputString("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
-
 		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(false, state.isCurrentTasksEmpty());
 		assertEquals(1, state.getCurrentTasks().size());
@@ -70,7 +89,6 @@ public class WallistModelTest {
 
 		//test add floating
 		wm.processInputString("Add meeting");
-
 		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(false, state.isCurrentTasksEmpty());
 		assertEquals(1, state.getCurrentTasks().size());
@@ -79,134 +97,47 @@ public class WallistModelTest {
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals("meeting", state.getCurrentTasks().get(0).getDisplayContent());
-		
 
-		//wm.storage.executeChangeDirectory("testing.txt");
-//		wm.process("clear");
-//		wm.process("add hahahahah");
-//		System.out.println(wm.stateHistory.size());
-//		System.out.println(wm.stateFuture.size());
-//		wm.process("undo");	
-//		System.out.println(wm.stateHistory.size());
-//		System.out.println(wm.stateFuture.size());
-//
-//		wm.process("redo");
-//		System.out.println(wm.stateHistory.size());
-//		System.out.println(wm.stateFuture.size());
+		//test add wrong date format
+		wm.processInputString("Add meeting on: someday");
+		assertEquals(Constant.VALUE_ERROR_DATE_NOT_PARSED, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
+
+		//test add wrong date
+		wm.processInputString("Add meeting from: 12/12/12 12:12 to: 10/10/10 10:10");
+		assertEquals(Constant.VALUE_ERROR_DATE_ERROR, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
 		
+		//test delete wrong argument
+		wm.processInputString("Delete meeting");
+		assertEquals(Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		
-//		//clear before testing
-//		wm.process("clear float");
-//		wm.process("clear deadline");
-//
-//		//testing add a floating task
-//		wm.process("add Boxin is testing");
-//		assertEquals(newTask.getContent(), state.getFloatingTasks().get(0).getContent());
-//
-//		//testing add a task with deadline
-//		wm.process("add boxin is testing something on 11/11/11 11:11");
-//		String dateString = "11/11/11 11:11";
-//		Date date= TimeParser.stringToDate(dateString);
-		//System.out.println(state.getNormalTasks().size());
-//		assertEquals(date, state.getNormalTasks().first().getEndDate());
-//		System.out.println(state.getNormalTasks().first().getContent());
-//		assertEquals("boxin is testing something", state.getNormalTasks().first().getContent());
-//		
-//		//testing add another deadline task for correct order
-//		wm.process("add boxin is testing something very late on 12/11/11 11:11");
-//		assertEquals("boxin is testing something very late", state.getNormalTasks().last().getContent());
-//		//System.out.println(state.getNormalTasks().last().getContent());
-//
-//		// testing the very late date -- boundary testing
-//		wm.process("add boxin is testing something very late2 on 12/11/35 11:12");
-//		//System.out.println(state.getNormalTasks().last().getContent());
-//		assertEquals("boxin is testing something very late2", state.getNormalTasks().last().getContent());
-//		
-//		//testing at venue in add
-////		wm.process("add boxin is testing venue at SOC on 12/11/00 11:12");
-////		assertEquals("boxin is testing something", state.getNormalTasks().first().getContent());
-//
-///* right now tasks in the normal tasks list is 
-// * 
-// * add boxin is testing venue at SOC on 12/11/00 11:12 (not yet there)
-// * 
-// * add boxin is testing something on 11/11/11 11:11
-// * 
-// * add boxin is testing something very late on 12/11/11 11:11
-// * 
-// * add boxin is testing something very late2 on 12/11/35 11:12
-// * 
-// */
-//		//testing delete
-//		
-//		/* right now tasks in the normal tasks list is 
-//		 * 
-//		 * add boxin is testing something on 11/11/11 11:11
-//		 * 
-//		 * add boxin is testing something very late on 12/11/11 11:11
-//		 * 
-//		 * add boxin is testing something very late2 on 12/11/35 11:12
-//		 * 
-//		 */
-//		assertEquals(3, state.getNormalTasks().size());
-//		System.out.println(wm.states.size());
-//
-//		wm.process("delete 1 deadline");
-//		System.out.println(wm.states.size());
-//
-//		/* right now tasks in the normal tasks list is 
-//		 * 
-//		 * add boxin is testing something very late on 12/11/11 11:11
-//		 * 
-//		 * add boxin is testing something very late2 on 12/11/35 11:12
-//		 * 
-//		 */
-//		assertEquals("boxin is testing something very late", state.getNormalTasks().first().getContent());
-//		assertEquals("boxin is testing something very late2", state.getNormalTasks().last().getContent());
-//		
-//		assertEquals(2, state.getNormalTasks().size());
-//			
-//		//System.out.println(wm.states.size());
-//		//test undo
-//		//wm.process("undo");
-//		//wm.process("undo");
-//		//wm.process("undo");
-//		System.out.println(wm.states.size());
-//
-//		wm.getState().setCommand(CommandType.UNDO);
-//		System.out.println(wm.getState().getCommand());
-//		wm.running();
-//		System.out.println(wm.getState().getCommand());
-//		System.out.println(wm.getState().getContent());
-//
-//		System.out.println(wm.states.size());
-//
-////		wm.process("undo");
-////		wm.process("undo");
-////		wm.process("undo");
-////		wm.process("undo");
-//		
-//		assertEquals(2, state.getNormalTasks().size());
-//
-////		assertEquals(CommandType.UNDO, state.getCommand());
-////		assertEquals(false, wm.states.empty());
-////		assertEquals(2, wm.states.peek().getNormalTasks().size());
-//
-////		
-////		//testing update
-//		wm.process("update 1 deadline hahahaha");
-////		assertEquals("hahahaha", state.getNormalTasks().first().getContent());
-////		
-////		//testing tick
-//		wm.process("tick 1 deadline hahahaha");
-////		assertEquals(true, state.getNormalTasks().first().getIsFinished());
-////				
-//		//testing clear
-//		wm.process("clear deadline");
-//		assertEquals(0, state.getNormalTasks().size());
-//			
-		//System.out.println(newTask.getContent());
-		//System.out.println(state.getFloatingTasks().get(0).getContent());
+		//test delete wrong argument
+		wm.processInputString("Delete 2");
+		assertEquals(Constant.MESSAGE_INDEX_OUT_OF_BOUND, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+				
+		//test delete
+		wm.processInputString("Delete 1");
+		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(false, state.isCurrentTasksEmpty());
+		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		
 	}
 
 }

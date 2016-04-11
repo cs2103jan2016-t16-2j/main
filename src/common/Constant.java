@@ -99,6 +99,7 @@ public class Constant {
 		public static final String EMPTY_DEADLINE = "Yeah, you have no scheduled tasks in your Wallist!";
 		public static final String EMPTY_FLOATING = "Yeah, you have no to-do in your Wallist!";
 		public static final String EMPTY_SEARCH = "Sorry, there is no such result in your Wallist";
+		public static final String EMPTY_FINISHED = "Sorry, there is no finished tasks in your Wallist";
 			
 		//List of themes
 		public static final String STYLE_AUTUMN =  "autumn";

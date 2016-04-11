@@ -6,7 +6,6 @@ import model.WallistModel;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class WallistModelTest {
@@ -14,10 +13,9 @@ public class WallistModelTest {
 	State state;
 	Task currentTask;
 	
-	@Ignore
 	@Test
 	public void testInitialization(){
-		wm.resetStorage();
+		wm.resetState();
 		state = wm.getState();
 		assertEquals(Theme.AUTUMN, state.getTheme());
 		assertEquals(Font.SEGOE, state.getFont());
@@ -26,55 +24,53 @@ public class WallistModelTest {
 		assertEquals(true, state.isCurrentTasksEmpty());
 		assertEquals(Constant.EMPTY_TODAY, state.getEmptyMessage());
 	}
+	
 	@Test
 	public void testHelp(){
 		wm.processInputString("Help");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.HELP, state.getViewMode());
 	}
+	
 	@Test
 	public void testSetting(){
 		wm.processInputString("View Setting");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.CONFIG, state.getViewMode());
 	}
+	
 	@Test
 	public void testViewToday(){
 		wm.processInputString("View Today");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.START, state.getViewMode());
 	}
+	
 	@Test
 	public void testViewAll(){
 		wm.processInputString("View All");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.ALL, state.getViewMode());
 	}
+	
 	@Test
 	public void testViewScheduled(){
 		wm.processInputString("View Scheduled");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.DEADLINE, state.getViewMode());				
 	}
+	
 	@Test
 	public void testViewFloating(){
 		wm.processInputString("View Floating");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());				
 	}
 	@Test
 	public void testViewFinished(){
 		wm.processInputString("View Finished");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.FINISHED, state.getViewMode());				
 	}
+	
 	@Test
 	public void testAddScheduled(){	
 		wm.processInputString("Add camp from: 3/3/16 00:00 to: 4/3/16 22:00 at: Malaysia detail: with Max");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
 		assertEquals(4, state.getCurrentTasks().size());
-		currentTask = state.getCurrentTasks().get(0);
+		currentTask = state.getCurrentTasks().get(3);
 		assertEquals(TaskType.DEADLINE, currentTask.getTaskType());
 		assertEquals(ViewMode.DEADLINE, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
@@ -82,83 +78,132 @@ public class WallistModelTest {
 		assertEquals(TimeParser.stringToDate("3/3/16 00:00"), state.getStartDate());
 		assertEquals(TimeParser.stringToDate("4/3/16 22:00"), state.getEndDate());
 	}
+	
 	@Test
 	public void testAddFloating(){	
 		wm.processInputString("Add meeting");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
 		assertEquals(4, state.getCurrentTasks().size());
 		currentTask = state.getCurrentTasks().get(0);
 		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals("meeting", state.getCurrentTasks().get(0).getDisplayContent());
-
-		//test add wrong date format
+    }
+	
+	@Test
+	public void testAddWrongDateFormat(){	
 		wm.processInputString("Add meeting on: someday");
-		assertEquals(Constant.VALUE_ERROR_DATE_NOT_PARSED, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
-		assertEquals(ViewMode.FLOATING, state.getViewMode());
-		assertEquals(CommandType.ADD, state.getCommandType());
-
-		//test add wrong date
-		wm.processInputString("Add meeting from: 12/12/12 12:12 to: 10/10/10 10:10");
-		assertEquals(Constant.VALUE_ERROR_DATE_ERROR, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(Constant.VALUE_ERROR_WRONG_FORMAT, state.getDisplayMessage());
+		assertEquals(3, state.getCurrentTasks().size());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
     }
 	
 	@Test
-	public void testClear(){
+	public void testAddWrongDate(){
+		wm.processInputString("Add meeting from: 12/12/12 12:12 to: 10/10/10 10:10");
+		assertEquals(Constant.VALUE_ERROR_WRONG_FORMAT, state.getDisplayMessage());
+		assertEquals(3, state.getCurrentTasks().size());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
+    }
+	
+	@Test
+	public void testClearAll(){
 		wm.resetStorage();
 		state = wm.getState();	
-		
-		//test clear in all
 		wm.processInputString("View All");
 		wm.processInputString("Clear");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(true, state.isCurrentTasksEmpty());
 		assertEquals(0, state.getAllTasks().size());
 		assertEquals(ViewMode.ALL, state.getViewMode());
 		assertEquals(CommandType.CLEAR, state.getCommandType());		
-		
-		//test clear in all
-		wm.processInputString("View All");
+    }
+	
+	@Test
+	public void testClearFloating(){
+		wm.processInputString("View Floating");
 		wm.processInputString("Clear");
-		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(true, state.isCurrentTasksEmpty());
-		assertEquals(0, state.getAllTasks().size());
-		assertEquals(ViewMode.ALL, state.getViewMode());
+		assertEquals(0, state.getFloatingTasks().size());
+		assertEquals(false, state.getDeadlineTasks().isEmpty());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		assertEquals(CommandType.CLEAR, state.getCommandType());
-				
-		
-		//test delete wrong argument
+    }
+	
+	@Test
+	public void testClearScheduled(){
+		wm.processInputString("View Scheduled");
+		wm.processInputString("Clear");
+		assertEquals(0, state.getDeadlineTasks().size());
+		assertEquals(false, state.getFloatingTasks().isEmpty());
+		assertEquals(ViewMode.DEADLINE, state.getViewMode());
+		assertEquals(CommandType.CLEAR, state.getCommandType());
+    }
+	
+	@Test
+	public void testDeleteWrongArg(){	
 		wm.processInputString("Delete meeting");
 		assertEquals(Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
-		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(3, state.getCurrentTasks().size());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
-		
-		//test delete wrong argument
-		wm.processInputString("Delete 2");
+    }
+	
+	@Test
+	public void testDeleteWrongIndex(){	
+		wm.processInputString("Delete 4");
 		assertEquals(Constant.MESSAGE_INDEX_OUT_OF_BOUND, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
-		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(3, state.getCurrentTasks().size());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
-				
-		//test delete
+    }
+	
+	
+	@Test
+	public void testDelete(){	
 		wm.processInputString("Delete 1");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
-		assertEquals(false, state.isCurrentTasksEmpty());
-		assertEquals(1, state.getCurrentTasks().size());
-		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(2, state.getCurrentTasks().size());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		
+	}
+
+	@Test
+	public void testTickWrongArg(){	
+		wm.processInputString("Tick meeting");
+		assertEquals(Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER, state.getDisplayMessage());
+		assertEquals(3, state.getCurrentTasks().size());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+	}
+	
+	@Test
+	public void testTickWrongIndex(){	
+		wm.processInputString("Tick 4");
+		assertEquals(Constant.MESSAGE_INDEX_OUT_OF_BOUND, state.getDisplayMessage());
+		assertEquals(3, state.getCurrentTasks().size());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+	}
+	
+	@Test
+	public void testTick(){	
+		wm.processInputString("Tick 3");
+		assertEquals(2, state.getCurrentTasks().size());
+		assertEquals(1, state.getFinishedTasks().size());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		wm.processInputString("View Finished");
+		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(ViewMode.FINISHED, state.getViewMode());
+	}
+	
+	@Test
+	public void update(){	
+		wm.processInputString("Update 2 cs2103 homework at: SOC");
+		assertEquals(3, state.getCurrentTasks().size());
+		currentTask = state.getCurrentTasks().get(2);
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.DEADLINE, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
+		assertEquals("camp\n\nVenue: Malaysia\nDetail: with Max", currentTask.getDisplayContent());
+		assertEquals(TimeParser.stringToDate("3/3/16 00:00"), state.getStartDate());
+		assertEquals(TimeParser.stringToDate("4/3/16 22:00"), state.getEndDate());
 	}
 
 	@Before
@@ -169,8 +214,7 @@ public class WallistModelTest {
 		wm.processInputString("Add eat lunch from: 10/10/16 10:10 to: 12/12/17 12:12 at: TOA PAYOH detail: with boyfriend");
 		wm.processInputString("Add cs2103 meeting on: 5/5/16 10:10");
 		wm.processInputString("Add cs2103 project");
-		wm.processInputString("Add cs2103 revise");
+		wm.processInputString("Add cs2103 revision");
 		wm.processInputString("Add bt3101 assignment");
-		
 	}
 }

@@ -197,7 +197,7 @@ public class WallistModelTest {
 	public void update(){	
 		wm.processInputString("Update 2 cs2103 homework at: SOC");
 		assertEquals(3, state.getCurrentTasks().size());
-		currentTask = state.getCurrentTasks().get(2);
+		currentTask = state.getCurrentTasks().get(1);
 		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
 		assertEquals(ViewMode.DEADLINE, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());

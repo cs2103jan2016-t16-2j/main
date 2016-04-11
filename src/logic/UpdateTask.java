@@ -8,133 +8,161 @@ import common.Task;
 import common.ViewMode;
 
 public class UpdateTask implements Operation {
+	//============================
+	//       Attributes
+	//============================
 	private State state;
 
+	
+	//====================================
+	//       Constructor and Initiliser
+	//====================================
+	
 	public UpdateTask(State state) {
 		this.state = state;
 	}
-
+	
+	
+	/**
+	 * Perform update of tasks
+	 * If the index are out of bound or tick under FINISHED, CONFIG, HELP or UNDEFINED mode
+	 * return false
+	 * 
+	 * @return  boolean to indicate whether the update is successful
+	 */
 	@Override
 	public boolean process() {
 		try {
-			int positionIndex = state.getPositionIndex();
-
-			// Convert 1 base index to 0 base index
-			int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
-
-			if(localPositionIndex < 0){
-				throw new IndexOutOfBoundsException();
-			}
-
-			//Search different task list depends on current view mode
 			ViewMode viewMode = state.getViewMode();
-
-			//If the viewMode is Floating, find object in floating tasks list
-			if(viewMode == ViewMode.FLOATING){
-				// find the task in floating tasks list
-				Task toBeUpdated = findTaskFromFloatingTasks(localPositionIndex);
-
-				//update the task 
-				boolean isUpdateSuccessful = updateTask(toBeUpdated);
-
-				if(isUpdateSuccessful) {
+			int positionIndexLocal = getAndValidatePositionIndex();
+						
+			switch (viewMode) { 
+				case FLOATING:
+					updateUnderFloatingMode(positionIndexLocal);
 					return true;
-				} else {
-					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
-					return false;
-				}
-			}
-
-			//If the viewMode is Deadline, update object deadline tasks list
-			if(viewMode == ViewMode.DEADLINE){
-				// find the task in deadline tasks list
-				Task toBeUpdated = findTaskFromDeadlineTasks(localPositionIndex);
-
-				//update the task 
-				boolean isUpdateSuccessful = updateTask(toBeUpdated);
-
-				if(isUpdateSuccessful) {
+				case DEADLINE:
+					updateUnderDeadlineMode(positionIndexLocal);
 					return true;
-				} else {
-					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
-					return false;
-				}
-			}
-
-			//If the viewMode is all, update object in all tasks list
-			if(viewMode == ViewMode.ALL){
-				// find the task in all tasks list
-				Task toBeUpdated = findTaskFromAllTasks(localPositionIndex);
-
-				//tick the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
-
-				if(isTickSuccessful) {
+				case ALL:
+					updateUnderAllMode(positionIndexLocal);
 					return true;
-				} else {
-					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
-					return false;
-				}
-			}
-
-			//If the viewMode is search, update object in searched tasks list
-			if(viewMode == ViewMode.SEARCH){
-				// find the task in searched tasks list
-				Task toBeUpdated = findTaskFromSearchedTasks(localPositionIndex);
-
-				//update the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
-
-				if(isTickSuccessful) {
+				case SEARCH:
+					updateUnderSearchMode(positionIndexLocal);
 					return true;
-				} else {
-					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
-					return false;
-				}
-			}
-			
-			//If the viewMode is start, update object in todays tasks list
-			if(viewMode == ViewMode.START){
-				// find the task in todays tasks list
-				Task toBeUpdated = findTaskFromStartingTasks(localPositionIndex);
-
-				//update the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
-
-				if(isTickSuccessful) {
+				case START:
+					updateUnderStartMode(positionIndexLocal);
 					return true;
-				} else {
-					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
-					return false;
-				}
-			}
-			
-			//If the viewMode is finished, update object in finished tasks list
-			if(viewMode == ViewMode.FINISHED){
-				// find the task in finished tasks list
-				Task toBeUpdated = findTaskFromFinishedTasks(localPositionIndex);
-
-				//update the task 
-				boolean isTickSuccessful = updateTask(toBeUpdated);
-
-				if(isTickSuccessful) {
+				case FINISHED:
+					updateUnderFinishedMode(positionIndexLocal);
 					return true;
-				} else {
-					state.setDisplayMessage(Constant.MESSAGE_SYSTEM_FAILED_TO_TICK);
+				case UNDEFINED:
+					updateUnderInvalidMode();
 					return false;
-				}
-			}
-			
-			//in wrong view mode
-			state.setDisplayMessage(Constant.MESSAGE_UPDATE_IN_WRONG_MODE);
-			return false;
+				case CONFIG:
+					updateUnderInvalidMode();
+					return false;
+				case HELP:
+					updateUnderInvalidMode();
+					return false;
+				default:
+					return false;
+			}	
+
 		} catch (IndexOutOfBoundsException e){
-			state.setDisplayMessage(Constant.MESSAGE_INDEX_OUT_OF_BOUND);
+			updateWithInvalidPositionIndex();
 			return false;
 		}
 	}
+
 	
-	private boolean updateTask(Task task){
+	/**
+	 * tick tasks with invalid position index
+	 * (smaller than 0 or larger than max index)
+	 * set error message 
+	 */
+	private void updateWithInvalidPositionIndex() {
+		state.setDisplayMessage(Constant.MESSAGE_INDEX_OUT_OF_BOUND);
+	}
+	
+	/**
+	 * tick task under invalid mode
+	 * set error message 
+	 * 
+	 */
+	private void updateUnderInvalidMode() {
+		state.setDisplayMessage(Constant.MESSAGE_UPDATE_IN_WRONG_MODE);
+	}
+	
+	/**
+	 * update task under finished mode
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in finished tasks list.
+	 */
+	private void updateUnderFinishedMode(int positionIndexLocal) {
+		Task toBeUpdated = findTaskFromFinishedTasks(positionIndexLocal);
+
+		updateTask(toBeUpdated);
+	}
+
+	/**
+	 * update task under start mode
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in starting tasks list.
+	 */
+	private void updateUnderStartMode(int positionIndexLocal) {
+		Task toBeUpdated = findTaskFromStartingTasks(positionIndexLocal);
+
+		updateTask(toBeUpdated);
+	}
+
+	/**
+	 * update task under search mode
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in searched tasks list.
+	 */
+	private void updateUnderSearchMode(int positionIndexLocal) {
+		Task toBeUpdated = findTaskFromSearchedTasks(positionIndexLocal);
+
+		updateTask(toBeUpdated);
+	}
+	
+	/**
+	 * update task under all mode
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in all tasks list.
+	 */
+	private void updateUnderAllMode(int positionIndexLocal) {
+		Task toBeUpdated = findTaskFromAllTasks(positionIndexLocal);
+		updateTask(toBeUpdated);
+	}
+
+	/**
+	 * update task under deadline mode
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in deadline tasks list.
+	 */
+	private void updateUnderDeadlineMode(int positionIndexLocal) {
+		Task toBeUpdated = findTaskFromDeadlineTasks(positionIndexLocal);
+
+		updateTask(toBeUpdated);
+	}
+
+	/**
+	 * update task under floating mode
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in floating tasks list.
+	 */
+	private void updateUnderFloatingMode(int positionIndexLocal) {
+		Task toBeUpdated = findTaskFromFloatingTasks(positionIndexLocal);
+
+		updateTask(toBeUpdated);
+	}
+	
+	/**
+	 * update a task 
+	 * @param task       the task that is to be updated
+	 */
+	private void updateTask(Task task){
 		if(state.getIsContentChanged()){
 			task.setContent(state.getContent());
 		}
@@ -155,79 +183,138 @@ public class UpdateTask implements Operation {
 			task.setEndDate(state.getEndDate());
 		}
 		
-		return true;
 	}
 	
-	private Task findTaskFromFinishedTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+	/**
+	 * find the task to be updated from finished tasks list
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in finished tasks list.
+	 * @return the task at postionIndexLocal position
+	 */
+	private Task findTaskFromFinishedTasks(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getFinishedTasks();
 
-		if(localPositionIndex >= taskList.size()){
+		if(positionIndexLocal >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(localPositionIndex);
+		Task toBeUpdated = taskList.get(positionIndexLocal);
 		return toBeUpdated;
 	}
 	
-	
-	private Task findTaskFromStartingTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+	/**
+	 * find the task to be updated from starting tasks list
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in starting tasks list.
+	 * @return the task at postionIndexLocal position
+	 */
+	private Task findTaskFromStartingTasks(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getTodaysTasks();
 
-		if(localPositionIndex >= taskList.size()){
+		if(positionIndexLocal >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(localPositionIndex);
+		Task toBeUpdated = taskList.get(positionIndexLocal);
 		return toBeUpdated;
 	}
 	
-	private Task findTaskFromSearchedTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+	/**
+	 * find the task to be updated from searched tasks list
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in searched tasks list.
+	 * @return the task at postionIndexLocal position
+	 */
+	private Task findTaskFromSearchedTasks(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getSearchResultTasks();
 
-		if(localPositionIndex >= taskList.size()){
+		if(positionIndexLocal >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(localPositionIndex);
+		Task toBeUpdated = taskList.get(positionIndexLocal);
 		return toBeUpdated;
 	}
 	
-	private Task findTaskFromAllTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+	/**
+	 * find the task to be updated from all tasks list
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in all tasks list.
+	 * @return the task at postionIndexLocal position
+	 */
+	private Task findTaskFromAllTasks(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getAllTasks();
 
-		if(localPositionIndex >= taskList.size()){
+		if(positionIndexLocal >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(localPositionIndex);
+		Task toBeUpdated = taskList.get(positionIndexLocal);
 		return toBeUpdated;
 	}
 
-	private Task findTaskFromDeadlineTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+	
+	/**
+	 * find the task to be updated from deadline tasks list
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in deadline tasks list.
+	 * @return the task at postionIndexLocal position
+	 */
+	private Task findTaskFromDeadlineTasks(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getDeadlineTasks();
 
-		if(localPositionIndex >= taskList.size()){
+		if(positionIndexLocal >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(localPositionIndex);
+		Task toBeUpdated = taskList.get(positionIndexLocal);
 		return toBeUpdated;
 	}
 	
-	private Task findTaskFromFloatingTasks(int localPositionIndex) throws IndexOutOfBoundsException{
+	
+	/**
+	 * find the task to be updated from floating tasks list
+	 * @param positionIndexLocal   position of the task to be updated in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in floating tasks list.
+	 * @return the task at postionIndexLocal position
+	 */
+	private Task findTaskFromFloatingTasks(int positionIndexLocal) throws IndexOutOfBoundsException{
 		ArrayList<Task> taskList = state.getFloatingTasks();
 
-		if(localPositionIndex >= taskList.size()){
+		if(positionIndexLocal >= taskList.size()){
 			throw new IndexOutOfBoundsException();	
 		}
 
-		Task toBeUpdated = taskList.get(localPositionIndex);
+		Task toBeUpdated = taskList.get(positionIndexLocal);
 		return toBeUpdated;
 	}
 	
+	
+	/**
+	 * check and return the index of task to be ticked 
+	 * @return position of the task to be deleted in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
+	 */
+	private int getAndValidatePositionIndex() {
+		int positionIndex = state.getPositionIndex();
+
+		// Convert 1 base index to 0 base index
+		int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
+
+		if(localPositionIndex < 0){
+			throw new IndexOutOfBoundsException();
+		}
+		return localPositionIndex;
+	}
+	
+	/**
+	 * return a number that is 1 less than the input
+	 * @param num   number to be subtracted
+	 * @return subtracted number that is 1 less than the input
+	 */
 	private int fromOneBaseToZeroBase(int num) {
-		int newNum = num - 1;
-		return newNum;
+		int newNew = num - 1;
+		return newNew;
 	}
 
 }

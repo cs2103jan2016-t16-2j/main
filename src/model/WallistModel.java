@@ -1,3 +1,4 @@
+//@@author A0107354L
 package model;
 
 import java.util.EmptyStackException;
@@ -335,6 +336,10 @@ public class WallistModel{
 	
 	public ViewTaskDetail getViewTaskDetail(){
 		return viewTaskDetail;
+	}
+	
+	public LogicUtils getLogicUtils(){
+		return logicUtils;
 	}
 }
 

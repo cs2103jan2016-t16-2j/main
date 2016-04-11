@@ -43,7 +43,7 @@ public class ParserErrorChecker {
 	 * @return True if the input is valid
 	 */
 	private boolean getIsValid() {
-		return state_.getDisplayMessage().equals(Constant.VALUE_ERROR_NO_ERROR);
+		return state_.getDisplayMessage().equals(Constant.VALUE_SUCCESS_NO_ERROR);
 	}
 	
 	/**
@@ -140,35 +140,35 @@ public class ParserErrorChecker {
 						if(isContentEmpty(content)){
 							return Constant.VALUE_ERROR_ADD_EMPTY;
 						}
-						return Constant.VALUE_ERROR_NO_ERROR;
+						return Constant.VALUE_SUCCESS_ADD;
 					
 					case CLEAR:
 						if(isContentEmpty(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_CLEAR;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 				
 					case DELETE:
 						if(isContentNumber(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_DELETE;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 				
 					case EXIT:
 						if(isContentEmpty(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_NO_ERROR;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 					
 					case UNDO:
 						if(isContentEmpty(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_UNDO;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 					
 					case REDO:
 						if(isContentEmpty(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_REDO;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 						
@@ -176,11 +176,11 @@ public class ParserErrorChecker {
 						if(isContentEmpty(content)){
 							return Constant.VALUE_ERROR_SEARCH_EMPTY;
 						}
-						return Constant.VALUE_ERROR_NO_ERROR;
+						return Constant.VALUE_SUCCESS_SEARCH;
 						
 					case TICK:
 						if(isContentNumber(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_TICK;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 					
@@ -189,40 +189,40 @@ public class ParserErrorChecker {
 						if(!isContentNumber(inputWords[0]) || isContentEmpty(content) || hasContentOneArgument(inputWords)){
 							return Constant.VALUE_ERROR_UPDATE_WRONG_ARGUMENT;
 						}
-						return Constant.VALUE_ERROR_NO_ERROR;
+						return Constant.VALUE_SUCCESS_UPDATE;
 					
 					case DETAIL:
 						if(isContentNumber(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_DETAIL;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 					
 					case CHANGEMODE:
 						if(isContentValidViewMode(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_VIEW_MODE;
 						}
 						return Constant.VALUE_ERROR_INVALID_VIEW_MODE;
 					
 					case HELP:
 						if(isContentEmpty(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_HELP;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_EMPTY;
 					
 					case CONFIG:
 						if(isContentValidFontOrTheme(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_CONFIG;
 						}else{
 							return Constant.VALUE_ERROR_INVALID_CONFIG;
 						}
 					case UNTICK:
 						if(isContentNumber(content)){
-							return Constant.VALUE_ERROR_NO_ERROR;
+							return Constant.VALUE_SUCCESS_UNTICK;
 						}
 						return Constant.VALUE_ERROR_ARGUMENT_NOT_NUMBER;
 						
 					default: 
-						return Constant.VALUE_ERROR_NO_ERROR;
+						return Constant.VALUE_SUCCESS_NO_ERROR;
 				}
 			}
 			catch(IllegalArgumentException e){

@@ -19,7 +19,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -37,7 +37,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -55,7 +55,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch at:soc");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -73,7 +73,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch on: 12/12/12");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -91,7 +91,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -109,7 +109,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -127,7 +127,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -145,7 +145,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 detail: with boyfriend at: TOA PAYOH ");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -163,7 +163,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -181,7 +181,7 @@ public class ParserTest {
 		state.setUserInput("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: toapayoh");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_ADD, state.getDisplayMessage());
 		assertEquals(CommandType.ADD, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -224,7 +224,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -242,7 +242,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -260,7 +260,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch at:soc");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -278,7 +278,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch on: 12/12/12");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -296,7 +296,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -314,7 +314,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -332,7 +332,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -350,7 +350,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 detail: with boyfriend at: TOA PAYOH ");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -368,7 +368,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 detail: with boyfriend");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -386,7 +386,7 @@ public class ParserTest {
 		state.setUserInput("Update 3 eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: toapayoh");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UPDATE, state.getDisplayMessage());
 		assertEquals(CommandType.UPDATE, state.getCommandType());
 		assertEquals(true, state.getIsStartDateChanged());
 		assertEquals(true, state.getIsEndDateChanged());
@@ -428,7 +428,7 @@ public class ParserTest {
 		state.setUserInput("clear");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_CLEAR, state.getDisplayMessage());
 		assertEquals(CommandType.CLEAR, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -446,7 +446,7 @@ public class ParserTest {
 		state.setUserInput("delete 3");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_DELETE, state.getDisplayMessage());
 		assertEquals(CommandType.DELETE, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -464,7 +464,7 @@ public class ParserTest {
 		state.setUserInput("tick 3");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_TICK, state.getDisplayMessage());
 		assertEquals(CommandType.TICK, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -482,7 +482,7 @@ public class ParserTest {
 		state.setUserInput("redo");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_REDO, state.getDisplayMessage());
 		assertEquals(CommandType.REDO, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -500,7 +500,7 @@ public class ParserTest {
 		state.setUserInput("undo");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_UNDO, state.getDisplayMessage());
 		assertEquals(CommandType.UNDO, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -518,7 +518,7 @@ public class ParserTest {
 		state.setUserInput("exit");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_NO_ERROR, state.getDisplayMessage());
 		assertEquals(CommandType.EXIT, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -535,7 +535,7 @@ public class ParserTest {
 		state.setUserInput("view 1");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_DETAIL, state.getDisplayMessage());
 		assertEquals(CommandType.DETAIL, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());
@@ -552,7 +552,7 @@ public class ParserTest {
 		state.setUserInput("view floating");
 		parser.processInput();
 		assertEquals(true, state.getIsValid());
-		assertEquals(Constant.VALUE_ERROR_NO_ERROR, state.getDisplayMessage());
+		assertEquals(Constant.VALUE_SUCCESS_VIEW_MODE, state.getDisplayMessage());
 		assertEquals(CommandType.CHANGEMODE, state.getCommandType());
 		assertEquals(false, state.getIsStartDateChanged());
 		assertEquals(false, state.getIsEndDateChanged());

@@ -3,8 +3,7 @@ package common;
 
 public class Constant {
 		
-		// List of all available error values for the parsedCommand
-		public static final String VALUE_ERROR_NO_ERROR = "Success";
+		// List of all available error values for the parser
 		public static final String VALUE_ERROR_COMMAND_NOT_FOUND = "Invalid command. Check your command again?";
 		public static final String VALUE_ERROR_NO_INPUT = "Empty input";
 		public static final String VALUE_ERROR_INVALID_ARGUMENT = "Invalid argument";
@@ -17,6 +16,24 @@ public class Constant {
 		public static final String VALUE_ERROR_ARGUMENT_NOT_NUMBER = "Do you put the index correctly?";
 		public static final String VALUE_ERROR_DATE_NOT_PARSED = "Wrong date format?";
 		public static final String VALUE_ERROR_DATE_ERROR = "Oops, starting date can't be later than end date";
+		
+		//List of all available success message for parser
+		public static final String VALUE_SUCCESS_NO_ERROR = "Success";
+		public static final String VALUE_SUCCESS_ADD = "A task has been added!";
+		public static final String VALUE_SUCCESS_CLEAR = "Tasks have been cleared!";
+		public static final String VALUE_SUCCESS_DELETE = "A task has been deleted";
+		public static final String VALUE_SUCCESS_UNDO = "Undo";
+		public static final String VALUE_SUCCESS_REDO = "Redo";
+		public static final String VALUE_SUCCESS_SEARCH = "Searching the keyword...";
+		public static final String VALUE_SUCCESS_TICK = "A task has been finished!";
+		public static final String VALUE_SUCCESS_UPDATE = "A task has been updated!";
+		public static final String VALUE_SUCCESS_DETAIL = "Checking the detail of a task...";
+		public static final String VALUE_SUCCESS_VIEW_MODE = "Changing view mode...";
+		public static final String VALUE_SUCCESS_HELP = "Here's your help!";
+		public static final String VALUE_SUCCESS_CONFIG = "Changing the setting...";
+		public static final String VALUE_SUCCESS_UNTICK = "A task has been marked unfinished";
+		
+		// List of all default values for state
 		public static final String VALUE_DEFAULT_EMPTY = "";
 		public static final int VALUE_DEFAULT_POSITION_INDEX = 1;
 		public static final boolean VALUE_DEFAULT_BOOLEAN_TRUE = true;

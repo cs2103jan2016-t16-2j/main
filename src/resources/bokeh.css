@@ -1,6 +1,6 @@
 //@@author A0130717M
 .root {
-    -fx-background-image: url("Bokeh.jpg");
+    -fx-background-image: url("/resources/bokeh.jpg");
 }
 
 #taskPane{

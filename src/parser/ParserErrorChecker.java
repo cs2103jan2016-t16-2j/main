@@ -348,7 +348,7 @@ public class ParserErrorChecker {
 			return CommandType.SEARCH;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return CommandType.EXIT;
-		}  else if (commandTypeString.equalsIgnoreCase("help")) {
+		}  else if (commandTypeString.equalsIgnoreCase("help") || commandTypeString.equalsIgnoreCase("?")) {
 			return CommandType.HELP;
 		}  else if (commandTypeString.equalsIgnoreCase("untick")) {
 			return CommandType.UNTICK;

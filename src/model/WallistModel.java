@@ -117,6 +117,9 @@ public class WallistModel{
 		storage.executeLoadState();
 	}
 	
+	public void resetStorage(){
+		storage = new Storage(new State());
+	}
 	/**
 	 * This method initialises the State related objects
 	 */

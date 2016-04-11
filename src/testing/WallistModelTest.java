@@ -2,79 +2,74 @@
 package testing;
 import common.*;
 import model.WallistModel;
-import storage.Storage;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
-
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class WallistModelTest {
-
+	WallistModel wm = new WallistModel();
+	State state;
+	Task currentTask;
+	
+	@Ignore
 	@Test
-	public void test(){
-		WallistModel wm = new WallistModel();
-		wm.storage = new Storage(new State());
-		State state = wm.getState();
-		Task currentTask;
-
-		//test initialization
+	public void testInitialization(){
+		wm.resetStorage();
+		state = wm.getState();
 		assertEquals(Theme.AUTUMN, state.getTheme());
 		assertEquals(Font.SEGOE, state.getFont());
 		assertEquals(ViewMode.START, state.getViewMode());
 		assertEquals(CommandType.UNDEFINED, state.getCommandType());
 		assertEquals(true, state.isCurrentTasksEmpty());
 		assertEquals(Constant.EMPTY_TODAY, state.getEmptyMessage());
-		
-		//test help
+	}
+	@Test
+	public void testHelp(){
 		wm.processInputString("Help");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.HELP, state.getViewMode());
-		
-		//test setting
+	}
+	@Test
+	public void testSetting(){
 		wm.processInputString("View Setting");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.CONFIG, state.getViewMode());
-
-		//test view today
+	}
+	@Test
+	public void testViewToday(){
 		wm.processInputString("View Today");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.START, state.getViewMode());
-		
-		//test view all
+	}
+	@Test
+	public void testViewAll(){
 		wm.processInputString("View All");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.ALL, state.getViewMode());
-		
-		//test view all
-		wm.processInputString("View All");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
-		assertEquals(ViewMode.ALL, state.getViewMode());
-		
-		//test view scheduled
+	}
+	@Test
+	public void testViewScheduled(){
 		wm.processInputString("View Scheduled");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.DEADLINE, state.getViewMode());				
-		
-		//test view floating
+	}
+	@Test
+	public void testViewFloating(){
 		wm.processInputString("View Floating");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());				
-		
-		//test view finished
+	}
+	@Test
+	public void testViewFinished(){
 		wm.processInputString("View Finished");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(ViewMode.FINISHED, state.getViewMode());				
-		
-		//test view finished
-		wm.processInputString("View Finished");
-		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
-		assertEquals(ViewMode.FINISHED, state.getViewMode());				
-				
-				
-		
-		//test add deadline
+	}
+	@Test
+	public void testAddScheduled(){	
 		wm.processInputString("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
 		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(false, state.isCurrentTasksEmpty());
@@ -86,8 +81,9 @@ public class WallistModelTest {
 		assertEquals("eat lunch\n\nVenue: TOA PAYOH\nDetail: with boyfriend", currentTask.getDisplayContent());
 		assertEquals(TimeParser.stringToDate("10/10/10 10:10"), state.getStartDate());
 		assertEquals(TimeParser.stringToDate("12/12/12 12:12"), state.getEndDate());
-
-		//test add floating
+	}
+	@Test
+	public void testAddFloating(){	
 		wm.processInputString("Add meeting");
 		//assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
 		assertEquals(false, state.isCurrentTasksEmpty());
@@ -113,6 +109,31 @@ public class WallistModelTest {
 		assertEquals(1, state.getCurrentTasks().size());
 		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
+    }
+	
+	@Test
+	public void testClear(){
+		wm.resetStorage();
+		state = wm.getState();	
+		
+		//test clear in all
+		wm.processInputString("View All");
+		wm.processInputString("Clear");
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(true, state.isCurrentTasksEmpty());
+		assertEquals(0, state.getAllTasks().size());
+		assertEquals(ViewMode.ALL, state.getViewMode());
+		assertEquals(CommandType.CLEAR, state.getCommandType());		
+		
+		//test clear in all
+		wm.processInputString("View All");
+		wm.processInputString("Clear");
+		assertEquals(Constant.MESSAGE_SUCCESS, state.getDisplayMessage());
+		assertEquals(true, state.isCurrentTasksEmpty());
+		assertEquals(0, state.getAllTasks().size());
+		assertEquals(ViewMode.ALL, state.getViewMode());
+		assertEquals(CommandType.CLEAR, state.getCommandType());
+				
 		
 		//test delete wrong argument
 		wm.processInputString("Delete meeting");
@@ -140,4 +161,16 @@ public class WallistModelTest {
 		
 	}
 
+	@Before
+	public void before(){
+		wm.resetStorage();
+		state = wm.getState();
+		wm.processInputString("Add eat lunch from: 10/10/10 10:10 to: 12/12/12 12:12 at: TOA PAYOH detail: with boyfriend");
+		wm.processInputString("Add eat lunch from: 10/10/16 10:10 to: 12/12/17 12:12 at: TOA PAYOH detail: with boyfriend");
+		wm.processInputString("Add cs2103 meeting on: 5/5/16 10:10");
+		wm.processInputString("Add cs2103 project");
+		wm.processInputString("Add cs2103 revise");
+		wm.processInputString("Add bt3101 assignment");
+		
+	}
 }

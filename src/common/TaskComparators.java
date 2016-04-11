@@ -6,7 +6,7 @@ public class TaskComparators {
 
 	public static Comparator<Task> compareByEndDate = new Comparator<Task>(){
 		public int compare(Task a, Task b){
-			return  b.getEndDate().compareTo(b.getEndDate()); 
+			return  a.getEndDate().compareTo(b.getEndDate()); 
 		}
 	};
 

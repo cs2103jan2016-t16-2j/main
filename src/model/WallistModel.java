@@ -273,7 +273,7 @@ public class WallistModel{
 	public Parser getParser(){
 		return parser;
 	}
-	public AddTask AddTask(){
+	public AddTask getAddTask(){
 		return addTask;
 	}
 	public DeleteTask getDeleteTask(){

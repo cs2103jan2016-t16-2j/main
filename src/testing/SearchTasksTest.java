@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -13,17 +14,17 @@ import common.State;
 import common.Task;
 import common.TaskType;
 import common.ViewMode;
+import logic.AddTask;
+import logic.SearchTasks;
 import model.WallistModel;
 
-public class UntickTaskTest {
-
+public class SearchTasksTest {
 
 	@Test
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		TickTask ticktask = wm.getTickTask();
-		UntickTask untickTask = wm.getUntickTask();
+		SearchTasks searchTask = wm.getSearchTasks();
 		AddTask addTask = wm.getAddTask();
 		clearState(state);
 		
@@ -51,24 +52,16 @@ public class UntickTaskTest {
 		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
 		
 		
-		state.setViewMode(ViewMode.DEADLINE);
-		state.setPositionIndex(1);
-		boolean isTickSuccessful = ticktask.process();
-		assertEquals(true, isTickSuccessful);
-		assertEquals(ViewMode.FINISHED, state.getViewMode());
-		assertEquals(1, state.getFinishedTasks().size());
-		assertEquals("C", state.getFinishedTasks().get(0).getContent());
+		assertEquals("A", deadlineTasks.get(1).getContent());
 
-		state.setViewMode(ViewMode.FINISHED);
-		state.setPositionIndex(1);
-		boolean isUntickSuccessful = untickTask.process();
-		assertEquals(true, isUntickSuccessful);
-		assertEquals(ViewMode.DEADLINE, state.getViewMode());
-		assertEquals(0, state.getFinishedTasks().size());
-		assertEquals(endTestFirst, deadlineTasks.get(0).getEndDate());
-		assertEquals(endTestSecond, deadlineTasks.get(1).getEndDate());
-		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
-		
+		ArrayList<String> keywords = new ArrayList<String>();
+		keywords.add("unique");
+		state.setSearchKey(keywords);
+		searchTask.process();
+		assertEquals(ViewMode.SEARCH, state.getViewMode());
+		assertEquals(1, state.getSearchResultTasks().size());
+		assertEquals("unique", state.getSearchResultTasks().get(0).getContent());
+		assertEquals(endTestThird, state.getSearchResultTasks().get(0).getEndDate());
 
 	}
 	
@@ -129,4 +122,3 @@ public class UntickTaskTest {
 	}
 
 }
-

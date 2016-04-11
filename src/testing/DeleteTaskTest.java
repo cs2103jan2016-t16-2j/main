@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -13,15 +14,17 @@ import common.State;
 import common.Task;
 import common.TaskType;
 import common.ViewMode;
+import logic.AddTask;
+import logic.DeleteTask;
 import model.WallistModel;
 
-public class SearchTasksTest {
+public class DeleteTaskTest {
 
 	@Test
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		SearchTasks searchTask = wm.getSearchTasks();
+		DeleteTask deleteTask = wm.getDeleteTask();
 		AddTask addTask = wm.getAddTask();
 		clearState(state);
 		
@@ -41,36 +44,31 @@ public class SearchTasksTest {
 		 */
 		createDeadlineTaskState(state, startTest, endTestSecond, addTask, "A");
 		createDeadlineTaskState(state, startTest, endTestFirst, addTask, "C");
-		createDeadlineTaskState(state, startTest, endTestThird, addTask, "unique");
+		createDeadlineTaskState(state, startTest, endTestThird, addTask, "D");
 		
 		ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
 		assertEquals(endTestFirst, deadlineTasks.get(0).getEndDate());
 		assertEquals(endTestSecond, deadlineTasks.get(1).getEndDate());
 		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
-		
-		
-		assertEquals("A", deadlineTasks.get(1).getContent());
 
-		ArrayList<String> keywords = new ArrayList<String>();
-		keywords.add("unique");
-		state.setSearchKey(keywords);
-		searchTask.process();
-		assertEquals(ViewMode.SEARCH, state.getViewMode());
-		assertEquals(1, state.getSearchResultTasks().size());
-		assertEquals("unique", state.getSearchResultTasks().get(0).getContent());
-		assertEquals(endTestThird, state.getSearchResultTasks().get(0).getEndDate());
+		
+		state.setViewMode(ViewMode.DEADLINE);
+		state.setPositionIndex(1);
+		boolean isDeleteSuccessful = deleteTask.process();
+		assertEquals(true, isDeleteSuccessful);
+		assertEquals(endTestSecond, deadlineTasks.get(0).getEndDate());
+		assertEquals(endTestThird, deadlineTasks.get(1).getEndDate());
 
 	}
 	
-
 	private void createDeadlineTaskState(State state, Date start, Date end, AddTask addTask, String content) {
 		state.setIsValid(true);
 		state.setIsContentChanged(true);
 		state.setContent(content);
 		state.setIsVenueChanged(true);
-		state.setVenue("");
+		state.setVenue("testingVenue");
 		state.setIsDetailChanged(true);
-		state.setDetail("");
+		state.setDetail("testingDetail");
 		state.setTaskType(TaskType.DEADLINE);
 		state.setIsStartDateChanged(true);
 		state.setStartDate(start);
@@ -84,7 +82,6 @@ public class SearchTasksTest {
 		pause(100);
 
 	}
-	
 	private void clearState(State state) {
 		//Storage storage = new Storage(state);
 	    //state.setNewDirectory("/Users/Boxin_Yang/testing");

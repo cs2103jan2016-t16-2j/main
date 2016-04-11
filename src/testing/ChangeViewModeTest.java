@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +7,7 @@ import org.junit.Test;
 
 import common.State;
 import common.ViewMode;
+import logic.ChangeViewMode;
 import model.WallistModel;
 
 public class ChangeViewModeTest {

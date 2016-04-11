@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -13,15 +14,17 @@ import common.State;
 import common.Task;
 import common.TaskType;
 import common.ViewMode;
+import logic.AddTask;
+import logic.UpdateTask;
 import model.WallistModel;
 
-public class DeleteTaskTest {
+public class UpdateTaskTest {
 
 	@Test
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		DeleteTask deleteTask = wm.getDeleteTask();
+		UpdateTask updateTask = wm.getUpdateTask();
 		AddTask addTask = wm.getAddTask();
 		clearState(state);
 		
@@ -41,31 +44,42 @@ public class DeleteTaskTest {
 		 */
 		createDeadlineTaskState(state, startTest, endTestSecond, addTask, "A");
 		createDeadlineTaskState(state, startTest, endTestFirst, addTask, "C");
-		createDeadlineTaskState(state, startTest, endTestThird, addTask, "D");
+		createDeadlineTaskState(state, startTest, endTestThird, addTask, "unique");
 		
 		ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
 		assertEquals(endTestFirst, deadlineTasks.get(0).getEndDate());
 		assertEquals(endTestSecond, deadlineTasks.get(1).getEndDate());
 		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
-
 		
+		// update second task
 		state.setViewMode(ViewMode.DEADLINE);
-		state.setPositionIndex(1);
-		boolean isDeleteSuccessful = deleteTask.process();
-		assertEquals(true, isDeleteSuccessful);
-		assertEquals(endTestSecond, deadlineTasks.get(0).getEndDate());
-		assertEquals(endTestThird, deadlineTasks.get(1).getEndDate());
+		state.setPositionIndex(2);
+		state.setIsContentChanged(true);
+		state.setContent("newContent");
+		state.setIsEndDateChanged(false);
+		state.setIsDetailChanged(false);
+		state.setIsVenueChanged(false);
+		state.setIsStartDateChanged(false);
+		boolean isUpdateSuccessful = updateTask.process();
+		assertEquals(true, isUpdateSuccessful);
+
+		assertEquals(endTestFirst, deadlineTasks.get(0).getEndDate());
+		assertEquals(endTestSecond, deadlineTasks.get(1).getEndDate());
+		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
+		
+		assertEquals("newContent", deadlineTasks.get(1).getContent());
 
 	}
 	
+
 	private void createDeadlineTaskState(State state, Date start, Date end, AddTask addTask, String content) {
 		state.setIsValid(true);
 		state.setIsContentChanged(true);
 		state.setContent(content);
 		state.setIsVenueChanged(true);
-		state.setVenue("testingVenue");
+		state.setVenue("");
 		state.setIsDetailChanged(true);
-		state.setDetail("testingDetail");
+		state.setDetail("");
 		state.setTaskType(TaskType.DEADLINE);
 		state.setIsStartDateChanged(true);
 		state.setStartDate(start);
@@ -79,6 +93,7 @@ public class DeleteTaskTest {
 		pause(100);
 
 	}
+	
 	private void clearState(State state) {
 		//Storage storage = new Storage(state);
 	    //state.setNewDirectory("/Users/Boxin_Yang/testing");

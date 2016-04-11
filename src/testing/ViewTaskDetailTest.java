@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -13,68 +14,63 @@ import common.State;
 import common.Task;
 import common.TaskType;
 import common.ViewMode;
+import logic.AddTask;
+import logic.ViewTaskDetail;
 import model.WallistModel;
 
-public class LogicUtilsTest {
+public class ViewTaskDetailTest {
 
 	@Test
 	public void test() {
 		WallistModel wm = new WallistModel();
 		State state = wm.getState();
-		LogicUtils logicUtils = wm.getLogicUtils();
+		ViewTaskDetail viewTaskDetail = wm.getViewTaskDetail();
 		AddTask addTask = wm.getAddTask();
+		clearState(state);
 		
-		testGetAndValidatePositionIndex(state, logicUtils);
-	
-		// clear the state before testing
-	    clearState(state);
-	    
-		testCollapseAllTasks(state, logicUtils, addTask);
-
-	}
-
-	private void testCollapseAllTasks(State state, LogicUtils logicUtils, AddTask addTask) {
 		Date startTest = stringToDate("18 MAR 6 00:00");
 		Date endTestSecond = stringToDate("19 MAR 6 00:00");
 		Date endTestFirst = stringToDate("17 MAR 6 00:00");
 		Date endTestThird = stringToDate("20 MAR 6 00:00");
-	    	
+		
+		
+		//more testing on ordering of deadline task
+		/*
+		 * The correct list of deadline tasklist should be : (content , endDate)
+		 * C 17 MAR 6 00:00
+		 * A 19 MAR 6 00:00
+		 * D 20 MAR 6 00:00
+		 * Testing focus on the first and last instantce
+		 */
 		createDeadlineTaskState(state, startTest, endTestSecond, addTask, "A");
 		createDeadlineTaskState(state, startTest, endTestFirst, addTask, "C");
-		createDeadlineTaskState(state, startTest, endTestThird, addTask, "D");
+		createDeadlineTaskState(state, startTest, endTestThird, addTask, "unique");
 		
 		ArrayList<Task> deadlineTasks = state.getDeadlineTasks();
-		for(int i = 0; i < deadlineTasks.size(); i++){
-			deadlineTasks.get(i).setIsDetailDisplayed(true);
-		}
-		logicUtils.collapseAllTasks();
-		for(int i = 0; i < deadlineTasks.size(); i++){
-			assertEquals(false, deadlineTasks.get(i).getIsDetailDisplayed());
-		}
-	}
+		assertEquals(endTestFirst, deadlineTasks.get(0).getEndDate());
+		assertEquals(endTestSecond, deadlineTasks.get(1).getEndDate());
+		assertEquals(endTestThird, deadlineTasks.get(2).getEndDate());
+		
+		state.setPositionIndex(1);
+		assertEquals(false, deadlineTasks.get(0).getIsDetailDisplayed());
+		boolean isSuccessful = viewTaskDetail.process();
+		assertEquals(true, isSuccessful);
+		assertEquals(true, deadlineTasks.get(0).getIsDetailDisplayed());
+		isSuccessful = viewTaskDetail.process();
+		assertEquals(true, isSuccessful);
+		assertEquals(false, deadlineTasks.get(0).getIsDetailDisplayed());
 
-	private void testGetAndValidatePositionIndex(State state, LogicUtils logicUtils) {
-		state.setPositionIndex(2);
-		assertEquals(1, logicUtils.getAndValidatePositionIndex());
-
-		boolean isErrorThrown = false;
-		try {
-			state.setPositionIndex(0);
-			logicUtils.getAndValidatePositionIndex();
-		} catch (IndexOutOfBoundsException e){
-			isErrorThrown = true;
-		}
-		assertEquals(true, isErrorThrown);
 	}
+	
 
 	private void createDeadlineTaskState(State state, Date start, Date end, AddTask addTask, String content) {
 		state.setIsValid(true);
 		state.setIsContentChanged(true);
 		state.setContent(content);
 		state.setIsVenueChanged(true);
-		state.setVenue("testingVenue");
+		state.setVenue("");
 		state.setIsDetailChanged(true);
-		state.setDetail("testingDetail");
+		state.setDetail("");
 		state.setTaskType(TaskType.DEADLINE);
 		state.setIsStartDateChanged(true);
 		state.setStartDate(start);
@@ -88,6 +84,7 @@ public class LogicUtilsTest {
 		pause(100);
 
 	}
+	
 	private void clearState(State state) {
 		//Storage storage = new Storage(state);
 	    //state.setNewDirectory("/Users/Boxin_Yang/testing");
@@ -120,4 +117,6 @@ public class LogicUtilsTest {
 			e.printStackTrace();
 		}
 	}
+
 }
+

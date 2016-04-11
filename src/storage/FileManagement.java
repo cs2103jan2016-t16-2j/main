@@ -299,10 +299,6 @@ public class FileManagement {
 	 * @param writer
 	 * @throws IOException
 	 */
-	
-	
-	
-	
 	private void initialiseFontInConfig(BufferedWriter writer) throws IOException {
 		String defaultFont = DEFAULT_FONT;
 		saveDirectorySetting(defaultFont, writer);

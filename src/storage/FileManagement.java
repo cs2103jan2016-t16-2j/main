@@ -77,7 +77,6 @@ public class FileManagement {
 	//       Functions
 	//============================
 	
-	// configuration file
 	/**
 	 * This method creates a default configuration file.
 	 * @return boolean value of whether it is successful
@@ -86,48 +85,30 @@ public class FileManagement {
 		LOGGER.log(Level.INFO, CREATE_CONFIG);
 		
 		try {
-			configFile.createNewFile();
-			
-			//default configuration setting
-			String defaultDataDirectory = DEFAULT_DIRECTORY;
-			String defaultTheme = DEFAULT_THEME;
-			String defaultFont = DEFAULT_FONT;
-			this.directory = new File(defaultDataDirectory);
+			configFile.createNewFile(); // create a new empty text file
 			BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
-			writer.write(defaultDataDirectory);
-			writer.newLine();
-			writer.write(defaultTheme);
-			writer.newLine();
-			writer.write(defaultFont);
-			writer.newLine();
+			initialiseConfigFile(writer);
 			writer.close();
-			
 		} catch (IOException e) {
 			LOGGER.log(Level.WARNING, CREATE_CONFIG_FAILURE, e);
 			e.printStackTrace();
 			return false;
 		}
+		
 		LOGGER.log(Level.INFO, CREATE_CONFIG_SUCCESS);
 		return true;
 	}
 	
 	/**
-	 * This method loads the configuration file and update the state with its setting.
-	 * @return boolean value of whether it is successful
+	 * This method loads the configuration file.
+	 * @return whether loading is successful
 	 */
 	private boolean loadConfigFile() {
 		LOGGER.log(Level.INFO, LOAD_CONFIG);
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
-			String currentConfigLine = reader.readLine();
-			this.state.setCurrentDirectory(currentConfigLine);
-			this.directory = new File(currentConfigLine);
-			String themeString = reader.readLine();
-			this.state.setTheme(Theme.valueOf(themeString));
-			
-			String fontString = reader.readLine();
-			this.state.setFont(Font.valueOf(fontString));
+			setStateAsConfigured(reader);
 			reader.close();
 		} catch (IOException e){
 			LOGGER.log(Level.WARNING, LOAD_CONFIG_FAILURE);
@@ -138,6 +119,72 @@ public class FileManagement {
 		LOGGER.log(Level.INFO, LOAD_CONFIG_SUCCESS);
 		return true;
 	}
+
+	
+
+	//=============================
+	//       Helper Functions
+	//=============================
+	
+	/**
+	 * This method set the state object according to the settings in the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setStateAsConfigured(BufferedReader reader) throws IOException {
+		setDirectoryInConfig(reader);
+		setThemeInConfig(reader);
+		setFontInConfig(reader);
+	}
+
+	/**
+	 * This method set the font according to the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setFontInConfig(BufferedReader reader) throws IOException {
+		String fontString = reader.readLine();
+		this.state.setFont(Font.valueOf(fontString));
+	}
+
+	/**
+	 * This method set the theme according to the configuration file
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setThemeInConfig(BufferedReader reader) throws IOException {
+		String themeString = reader.readLine();
+		this.state.setTheme(Theme.valueOf(themeString));
+	}
+
+	/**
+	 * @param reader
+	 * @throws IOException
+	 */
+	private void setDirectoryInConfig(BufferedReader reader) throws IOException {
+		String currentConfigLine = reader.readLine();
+		this.state.setCurrentDirectory(currentConfigLine);
+		this.directory = new File(currentConfigLine);
+	}
+	
+	/**
+	 * This method writes the default configration setting into the configuration file
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseConfigFile(BufferedWriter writer) throws IOException {
+		//default configuration setting
+		initialiseDirectoryInConfig(writer);
+		initialiseThemeInConfig(writer);
+		initialiseFontInConfig(writer);
+	}
+
+	
+	/**
+	 * This method loads the configuration file and update the state with its setting.
+	 * @return boolean value of whether it is successful
+	 */
+	
 	
 
 	/**
@@ -263,6 +310,36 @@ public class FileManagement {
 		return true;
  	}
  	
+ 	/**
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseFontInConfig(BufferedWriter writer) throws IOException {
+		String defaultFont = DEFAULT_FONT;
+		writer.write(defaultFont);
+		writer.newLine();
+	}
+
+	/**
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseThemeInConfig(BufferedWriter writer) throws IOException {
+		String defaultTheme = DEFAULT_THEME;
+		writer.write(defaultTheme);
+		writer.newLine();
+	}
+
+	/**
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void initialiseDirectoryInConfig(BufferedWriter writer) throws IOException {
+		String defaultDataDirectory = DEFAULT_DIRECTORY;
+		this.directory = new File(defaultDataDirectory);
+		writer.write(defaultDataDirectory);
+		writer.newLine();
+	}
  	
 
 }

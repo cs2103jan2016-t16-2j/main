@@ -51,7 +51,6 @@ public class Config implements Operation {
 			state.setNewDirectory(newDir);
 			storage.executeChangeDirectory();
 		}
-		
 		return true;
 	}
 

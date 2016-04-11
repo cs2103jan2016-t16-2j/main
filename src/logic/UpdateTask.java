@@ -1,10 +1,12 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import common.Constant;
 import common.State;
 import common.Task;
+import common.TaskComparators;
 import common.TaskType;
 import common.ViewMode;
 
@@ -182,7 +184,9 @@ public class UpdateTask implements Operation {
 		
 		if(state.getIsEndDateChanged()){
 			task.setEndDate(state.getEndDate());
-			task.setTaskType(TaskType.DEADLINE);
+			if(task.getTaskType() == TaskType.FLOATING){
+				transferFromFloatToDeadline(task);
+			}
 		}
 		
 		if(task.getTaskType() == TaskType.DEADLINE){
@@ -192,6 +196,19 @@ public class UpdateTask implements Operation {
 		if(task.getTaskType() == TaskType.FLOATING){
 			state.setViewMode(ViewMode.FLOATING);
 		}
+	}
+
+	/**
+	 * find the task to be updated from floating tasks list to deadline taskslist
+	 * task must be in floating tasks before transferring
+	 * @param task   task to be transfered
+	 * @return the task at postionIndexLocal position
+	 */
+	private void transferFromFloatToDeadline(Task task) {
+		task.setTaskType(TaskType.DEADLINE);
+		state.getFloatingTasks().remove(task);
+		state.getDeadlineTasks().add(task);
+		Collections.sort(state.getDeadlineTasks(), TaskComparators.compareByEndDate);
 	}
 	
 	/**
@@ -304,26 +321,10 @@ public class UpdateTask implements Operation {
 	 * @return position of the task to be deleted in zero based index
 	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
 	 */
-	private int getAndValidatePositionIndex() {
-		int positionIndex = state.getPositionIndex();
-
-		// Convert 1 base index to 0 base index
-		int localPositionIndex = fromOneBaseToZeroBase(positionIndex);
-
-		if(localPositionIndex < 0){
-			throw new IndexOutOfBoundsException();
-		}
+	private int getAndValidatePositionIndex() throws IndexOutOfBoundsException{
+		LogicUtils logicUtils = new LogicUtils(state);
+		int localPositionIndex = logicUtils.getAndValidatePositionIndex();
 		return localPositionIndex;
-	}
-	
-	/**
-	 * return a number that is 1 less than the input
-	 * @param num   number to be subtracted
-	 * @return subtracted number that is 1 less than the input
-	 */
-	private int fromOneBaseToZeroBase(int num) {
-		int newNew = num - 1;
-		return newNew;
 	}
 
 }

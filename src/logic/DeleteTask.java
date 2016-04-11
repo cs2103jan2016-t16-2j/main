@@ -99,22 +99,6 @@ public class DeleteTask implements Operation {
 	
 	
 	/**
-	 * check and return the index of task to be deleted 
-	 * @return position of the task to be deleted in zero based index
-	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
-	 */
-	private int getAndValidatePositionIndex() throws IndexOutOfBoundsException{
-		int positionIndex = state.getPositionIndex();
-		int positionIndexLocal = fromOneBaseToZeroBase(positionIndex);
-
-		if(positionIndexLocal <0){
-			throw new IndexOutOfBoundsException();
-		}
-		return positionIndexLocal;
-	}
-
-	
-	/**
 	 * delete tasks under start mode
 	 * @param positionIndexLocal   position of the task to be deleted in zero based index
 	 * @throws IndexOutOfBoundsException  If positionIndexLocal is > max index in starting tasks list.
@@ -234,14 +218,15 @@ public class DeleteTask implements Operation {
 		}
 	}
 	
-	
 	/**
-	 * return a number that is 1 less than the input
-	 * @param num   number to be subtracted
-	 * @return subtracted number that is 1 less than the input
+	 * check and return the index of task to be ticked 
+	 * @return position of the task to be deleted in zero based index
+	 * @throws IndexOutOfBoundsException  If positionIndexLocal is < 0.
 	 */
-	private int fromOneBaseToZeroBase(int num) {
-		int newNum = num - 1;
-		return newNum;
+	private int getAndValidatePositionIndex() throws IndexOutOfBoundsException{
+		LogicUtils logicUtils = new LogicUtils(state);
+		int localPositionIndex = logicUtils.getAndValidatePositionIndex();
+		return localPositionIndex;
 	}
+	
 }

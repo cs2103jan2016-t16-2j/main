@@ -49,8 +49,10 @@ public class Config implements Operation {
 		
 		if(newDir != null){
 			state.setNewDirectory(newDir);
-			storage.executeChangeDirectory();
+			
 		}
+		
+		storage.executeSaveConfig();
 		return true;
 	}
 

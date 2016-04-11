@@ -140,7 +140,7 @@ public class Task {
 		result += detail;
 		result += taskType;
 		
-		return result;
+		return result.toLowerCase();
 	}
 
 	@Override

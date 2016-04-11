@@ -336,6 +336,10 @@ public class WallistModel{
 	public ViewTaskDetail getViewTaskDetail(){
 		return viewTaskDetail;
 	}
+	
+	public LogicUtils getLogicUtils(){
+		return logicUtils;
+	}
 }
 
 

@@ -138,9 +138,8 @@ public class Task {
 		result += content;
 		result += venue;
 		result += detail;
-		result += taskType;
 		
-		return result;
+		return result.toLowerCase();
 	}
 
 	@Override

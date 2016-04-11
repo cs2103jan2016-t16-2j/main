@@ -19,7 +19,7 @@ public class FileManagement {
 	// basic attributes
 	protected File dataFile;
 	protected File configFile;
-	protected File finishedFile;
+	protected File archiveFile;
 	private State state;
 	
 	// configuration attributes
@@ -201,9 +201,9 @@ public class FileManagement {
  	 */
  	private boolean connectArchiveFile() {
  		LOGGER.log(Level.INFO,CONNECT_ARCHIVE);
- 		this.finishedFile = new File(this.directory, ARCHIVE_FILE_NAME);
+ 		this.archiveFile = new File(this.directory, ARCHIVE_FILE_NAME);
  		
- 		if (!finishedFile.exists()) {
+ 		if (!archiveFile.exists()) {
  			createArchiveFile();
  		}
 
@@ -219,7 +219,7 @@ public class FileManagement {
  		LOGGER.log(Level.INFO, CREATE_ARCHIVE);
 		
 		try {
-			finishedFile.createNewFile();
+			archiveFile.createNewFile();
 		} catch (IOException e) {
 			LOGGER.log(Level.WARNING, CREATE_ARCHIVE_FAILURE, e);
 			e.printStackTrace();
@@ -233,8 +233,6 @@ public class FileManagement {
 	
 	//=============================
 	//       Helper Functions
-	//=============================
-	// 		Helper functions
 	//=============================
 	
 	/**
@@ -381,6 +379,6 @@ public class FileManagement {
 	 * @return
 	 */
 	public File getFinishedFile() {
-		return this.finishedFile;
+		return this.archiveFile;
 	}
 }

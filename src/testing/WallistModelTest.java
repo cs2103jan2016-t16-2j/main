@@ -70,7 +70,7 @@ public class WallistModelTest {
 	public void testAddScheduled(){	
 		wm.processInputString("Add camp from: 3/3/16 00:00 to: 4/3/16 22:00 at: Malaysia detail: with Max");
 		assertEquals(4, state.getCurrentTasks().size());
-		currentTask = state.getCurrentTasks().get(3);
+		currentTask = state.getCurrentTasks().get(1);
 		assertEquals(TaskType.DEADLINE, currentTask.getTaskType());
 		assertEquals(ViewMode.DEADLINE, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
@@ -185,25 +185,65 @@ public class WallistModelTest {
 	@Test
 	public void testTick(){	
 		wm.processInputString("Tick 3");
-		assertEquals(2, state.getCurrentTasks().size());
-		assertEquals(1, state.getFinishedTasks().size());
-		assertEquals(ViewMode.FLOATING, state.getViewMode());
-		wm.processInputString("View Finished");
 		assertEquals(1, state.getCurrentTasks().size());
+		assertEquals(1, state.getFinishedTasks().size());
 		assertEquals(ViewMode.FINISHED, state.getViewMode());
 	}
 	
 	@Test
-	public void update(){	
-		wm.processInputString("Update 2 cs2103 homework at: SOC");
+	public void testUpdate(){	
+		wm.processInputString("Update 2 cs2103 homework");
 		assertEquals(3, state.getCurrentTasks().size());
 		currentTask = state.getCurrentTasks().get(1);
 		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
-		assertEquals(ViewMode.DEADLINE, state.getViewMode());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.UPDATE, state.getCommandType());
+		assertEquals("cs2103 homework", currentTask.getDisplayContent());
+	}
+
+	@Test
+	public void testUndo(){	
+		wm.processInputString("Undo");
+		assertEquals(2, state.getCurrentTasks().size());
+		currentTask = state.getCurrentTasks().get(0);
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
 		assertEquals(CommandType.ADD, state.getCommandType());
-		assertEquals("camp\n\nVenue: Malaysia\nDetail: with Max", currentTask.getDisplayContent());
-		assertEquals(TimeParser.stringToDate("3/3/16 00:00"), state.getStartDate());
-		assertEquals(TimeParser.stringToDate("4/3/16 22:00"), state.getEndDate());
+		assertEquals("cs2103 revision", currentTask.getDisplayContent());
+	}
+	
+	@Test
+	public void testUndoOldest(){	
+		wm.processInputString("Undo");
+		wm.processInputString("Undo");
+		wm.processInputString("Undo");
+		wm.processInputString("Undo");
+		wm.processInputString("Undo");
+		wm.processInputString("Undo");
+		wm.processInputString("Undo");
+		assertEquals(Constant.MESSAGE_EMPTY_STACK, state.getDisplayMessage());
+		assertEquals(ViewMode.START, state.getViewMode());
+		assertEquals(CommandType.UNDO, state.getCommandType());
+	}
+	
+	@Test
+	public void testRedo(){	
+		wm.processInputString("Undo");
+		wm.processInputString("Redo");
+		assertEquals(3, state.getCurrentTasks().size());
+		currentTask = state.getCurrentTasks().get(0);
+		assertEquals(TaskType.FLOATING, currentTask.getTaskType());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.ADD, state.getCommandType());
+		assertEquals("bt3101 assignment", currentTask.getDisplayContent());
+	}
+	
+	@Test
+	public void testRedoNewest(){	
+		wm.processInputString("Redo");
+		assertEquals(Constant.MESSAGE_EMPTY_STACK, state.getDisplayMessage());
+		assertEquals(ViewMode.FLOATING, state.getViewMode());
+		assertEquals(CommandType.REDO, state.getCommandType());
 	}
 
 	@Before

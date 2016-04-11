@@ -10,17 +10,17 @@ import javafx.scene.layout.StackPane;
 public class ThemeSelector {
 
 	private GridPane themes;
-	private final int HGAP = 60;
-	private final int VGAP = 20;
+	private final int H_GAP = 60;
+	private final int V_GAP = 20;
 	private final int WIDTH = 160;
 	private final int HEIGHT = 90;
 	private String[] schemes = {"light", "dark"};
-	private final String source = "/resources/%1$s.jpg";
+	private final String SOURCE = "/resources/%1$s.jpg";
 	
 	public ThemeSelector(){
 		themes = new GridPane();
-		themes.setHgap(HGAP);
-		themes.setVgap(VGAP);
+		themes.setHgap(H_GAP);
+		themes.setVgap(V_GAP);
 		addTheme(Constant.STYLE_AUTUMN, 0, 0, 0);
 		addTheme(Constant.STYLE_BOKEH, 1, 0, 0);
 		addTheme(Constant.STYLE_BRANCH, 2, 0, 1);
@@ -35,7 +35,7 @@ public class ThemeSelector {
 	
 	private void addTheme(String theme, int col, int row, int scheme){
 		StackPane display = new StackPane();
-		String imageName = String.format(source, theme);
+		String imageName = String.format(SOURCE, theme);
 		ImageView image= new ImageView(imageName);
 		image.setFitHeight(HEIGHT);
 		image.setFitWidth(WIDTH);

@@ -7,23 +7,23 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 public class FadeAnimation {
-	FadeTransition ft;
+	private FadeTransition fadeTransition;
 	public FadeAnimation(Label comm) {
-		ft = new FadeTransition(Duration.millis(1000), comm);
-		ft.setFromValue(0);
-		ft.setToValue(1);
-		ft.setCycleCount(2);
-		ft.setAutoReverse(true);
+		fadeTransition = new FadeTransition(Duration.millis(1000), comm);
+		fadeTransition.setFromValue(0);
+		fadeTransition.setToValue(1);
+		fadeTransition.setCycleCount(2);
+		fadeTransition.setAutoReverse(true);
 	}
 
 	public FadeAnimation(GridPane pane) {
-		ft = new FadeTransition(Duration.millis(500), pane);
-		ft.setFromValue(0);
-		ft.setToValue(1);
+		fadeTransition = new FadeTransition(Duration.millis(500), pane);
+		fadeTransition.setFromValue(0);
+		fadeTransition.setToValue(1);
 	}
 	
 	public void playAnimation(){
-		ft.play();
+		fadeTransition.play();
 	}
 
 }

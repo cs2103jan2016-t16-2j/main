@@ -45,10 +45,8 @@ public class Constant {
 		
 		//Setting displaying message
 		public static final String CONFIG_INTRO = "Welcome to Wallist Setting";
-		public static final String CONFIG_DIR = "1. To change the Storage Directory, input the absolute path\n" +
-												"	  Current Directory: %s\n" + 
-												"(E.g. for Mac user, input: /Users/username/folder/subfolder,\n" +
-												"for Windows users, input: C:\\Users\\username\\folder)";
+		public static final String CONFIG_DIR = "1. Your current Directory is %s\n" + 
+		                                        "You will be able to customize this in our next version";
 		public static final String CONFIG_THEME = "2. To change the theme, input the theme name: (E.g. input: theme autumn)";
 		public static final String CONFIG_FONT = "3. To change the font, input the font name: (E.g. input: font segoe)";
 		

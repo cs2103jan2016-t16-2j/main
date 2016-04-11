@@ -637,6 +637,5 @@ public class Gui extends Application{
 		end.setId("zoom");
 		help.getChildren().addAll(intro, add, delete, tick, update, view, exit, end);
 	}
-	
-	
+
 }

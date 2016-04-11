@@ -1,3 +1,4 @@
+//@@author A0107354L
 package logic;
 
 import java.util.ArrayList;
@@ -187,6 +188,10 @@ public class UpdateTask implements Operation {
 			if(task.getTaskType() == TaskType.FLOATING){
 				transferFromFloatToDeadline(task);
 			}
+			
+			if(task.getTaskType() == null){
+				transferFromDeadlineToFLoating(task);
+			}
 		}
 		
 		if(task.getTaskType() == TaskType.DEADLINE){
@@ -208,6 +213,19 @@ public class UpdateTask implements Operation {
 		task.setTaskType(TaskType.DEADLINE);
 		state.getFloatingTasks().remove(task);
 		state.getDeadlineTasks().add(task);
+		Collections.sort(state.getDeadlineTasks(), TaskComparators.compareByEndDate);
+	}
+	
+	/**
+	 * find the task to be updated from floating tasks list to deadline taskslist
+	 * task must be in floating tasks before transferring
+	 * @param task   task to be transfered
+	 * @return the task at postionIndexLocal position
+	 */
+	private void transferFromDeadlineToFLoating(Task task) {
+		task.setTaskType(TaskType.DEADLINE);
+		state.getDeadlineTasks().remove(task);
+		state.getFloatingTasks().add(task);
 		Collections.sort(state.getDeadlineTasks(), TaskComparators.compareByEndDate);
 	}
 	

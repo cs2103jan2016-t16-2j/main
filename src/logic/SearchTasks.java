@@ -1,3 +1,4 @@
+//@@author A0107354L
 package logic;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class SearchTasks implements Operation {
 
 		for (int i = 0 ; i < keysToSearch.size(); i++) {
 			String key = keysToSearch.get(i);
-			searchWord(key, searchedTasks);
+			searchWord(key.toLowerCase(), searchedTasks);
 		}
 		
 		state.setViewMode(ViewMode.SEARCH);

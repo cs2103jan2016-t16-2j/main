@@ -1,3 +1,5 @@
+//@@author A0107354L
+
 package common;
 import java.util.Calendar;
 import java.util.Date;
@@ -138,9 +140,8 @@ public class Task {
 		result += content;
 		result += venue;
 		result += detail;
-		result += taskType;
 		
-		return result;
+		return result.toLowerCase();
 	}
 
 	@Override

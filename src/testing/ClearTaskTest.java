@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +10,10 @@ import org.junit.Test;
 
 import common.State;
 import common.ViewMode;
+import logic.AddTask;
+import logic.ClearTask;
+import logic.SearchTasks;
+import logic.TickTask;
 import model.WallistModel;
 
 public class ClearTaskTest {

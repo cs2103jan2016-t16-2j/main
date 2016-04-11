@@ -1,4 +1,5 @@
-package logic;
+//@@author A0107354L
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +13,7 @@ import common.State;
 import common.Task;
 import common.TaskType;
 import common.ViewMode;
+import logic.AddTask;
 import model.WallistModel;
 
 public class AddTaskTest {

@@ -160,9 +160,9 @@ public class Gui extends Application{
 		command = inputBox.getText();
 		boolean isSuccess = wallistModel.processInputString(command);
 		state = wallistModel.getState();
-		loadStyleSheet();
 		if (isSuccess){
 			refreshTaskPane();
+			loadStyleSheet();
 		} else {
 			displayMessage();
 		}
